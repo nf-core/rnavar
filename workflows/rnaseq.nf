@@ -8,7 +8,7 @@
 
 
 def valid_params = [
-    aligners       : ['star_salmon']
+    aligners       : ['star_salmon', 'star_rsem', 'hisat2'],
 ]
 
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)

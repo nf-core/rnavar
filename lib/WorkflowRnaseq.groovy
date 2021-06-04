@@ -55,12 +55,6 @@ class WorkflowRnaseq {
             }
         }
 
-        // Check which RSeQC modules we are running
-        def rseqc_modules = params.rseqc_modules ? params.rseqc_modules.split(',').collect{ it.trim().toLowerCase() } : []
-        if ((valid_params['rseqc_modules'] + rseqc_modules).unique().size() != valid_params['rseqc_modules'].size()) {
-            log.error "Invalid option: ${params.rseqc_modules}. Valid options for '--rseqc_modules': ${valid_params['rseqc_modules'].join(', ')}"
-            System.exit(1)
-        }
     }
 
     //
