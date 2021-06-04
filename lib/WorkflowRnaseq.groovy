@@ -45,18 +45,6 @@ class WorkflowRnaseq {
             skipAlignmentWarn(log)
         }
 
-        if (params.pseudo_aligner) {
-            if (!valid_params['pseudoaligners'].contains(params.pseudo_aligner)) {
-                log.error "Invalid option: '${params.pseudo_aligner}'. Valid options for '--pseudo_aligner': ${valid_params['pseudoaligners'].join(', ')}."
-                System.exit(1)
-            } else {
-                if (!(params.salmon_index || params.transcript_fasta || (params.fasta && (params.gtf || params.gff)))) {
-                    log.error "To use `--pseudo_aligner 'salmon'`, you must provide either --salmon_index or --transcript_fasta or both --fasta and --gtf / --gff."
-                    System.exit(1)
-                }
-            }
-        }
-
         // Checks when running --aligner star_rsem
         if (!params.skip_alignment && params.aligner == 'star_rsem') {
             if (params.with_umi) {

@@ -8,9 +8,7 @@
 
 
 def valid_params = [
-    aligners       : ['star_salmon', 'star_rsem', 'hisat2'],
-    pseudoaligners : ['salmon'],
-    rseqc_modules  : ['bam_stat', 'inner_distance', 'infer_experiment', 'junction_annotation', 'junction_saturation', 'read_distribution', 'read_duplication']
+    aligners       : ['star_salmon']
 ]
 
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
