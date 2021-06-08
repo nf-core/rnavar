@@ -39,7 +39,7 @@ RUN THE WORKFLOW
 */
 
 workflow {
-    include { RNASEQ_VAR } from './workflows/rnaseq'
+    include { RNASEQ_VAR } from './workflows/rnavar'
     RNASEQ_VAR ()
   
 }

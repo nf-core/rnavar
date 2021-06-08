@@ -14,7 +14,7 @@ def valid_params = [
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowRnaseq.initialise(params, log, valid_params)
+WorkflowRnavar.initialise(params, log, valid_params)
 
 // Check input path parameters to see if they exist
 checkPathParamList = [
