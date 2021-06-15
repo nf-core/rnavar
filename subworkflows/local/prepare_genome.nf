@@ -132,7 +132,7 @@ workflow PREPARE_GENOME {
     //
     ch_star_index   = Channel.empty()
     ch_star_version = Channel.empty()
-    if ('star_salmon' in prepare_tool_indices) {
+    if ('star' in prepare_tool_indices) {
         if (params.star_index) {
             if (params.star_index.endsWith('.tar.gz')) {
                 ch_star_index = UNTAR_STAR_INDEX ( params.star_index ).untar

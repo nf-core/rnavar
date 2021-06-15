@@ -8,7 +8,7 @@
 
 
 def valid_params = [
-    aligners       : ['star_salmon'],
+    aligners       : ['star'],
 ]
 
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
@@ -44,7 +44,7 @@ if (!params.save_reference)     { star_genomegenerate_options['publish_files'] =
 def samtools_sort_genome_options  = modules['samtools_sort_genome']
 def samtools_index_genome_options = modules['samtools_index_genome']
 samtools_index_genome_options.args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
-if (['star_salmon','hisat2'].contains(params.aligner)) {
+if (['star'].contains(params.aligner)) {
     if (params.save_align_intermeds || (!params.with_umi && params.skip_markduplicates)) {
         samtools_sort_genome_options.publish_files.put('bam','')
         samtools_index_genome_options.publish_files.put('bai','')
@@ -138,7 +138,7 @@ workflow RNASEQ_VAR {
     ch_aligner_pca_multiqc        = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
 
-    if (!params.skip_alignment && params.aligner == 'star_salmon') {
+    if (!params.skip_alignment && params.aligner == 'star') {
         ALIGN_STAR (
             ch_cat_fastq,
             PREPARE_GENOME.out.star_index,
