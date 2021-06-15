@@ -33,6 +33,8 @@ include { GTF2BED                     } from '../../modules/local/gtf2bed'      
 include { CAT_ADDITIONAL_FASTA        } from '../../modules/local/cat_additional_fasta' addParams( options: params.genome_options )
 include { GTF_GENE_FILTER             } from '../../modules/local/gtf_gene_filter'      addParams( options: params.genome_options )
 include { GET_CHROM_SIZES             } from '../../modules/local/get_chrom_sizes'      addParams( options: params.genome_options )
+include { SAMTOOLS_FAIDX              } from '../../modules/nf-core/software/samtools/faidx/main' addParams( options: params.genome_options )
+include { GATK4_CREATESEQUENCEDICTIONARY } from '../../modules/nf-core/software/gatk4/createsequencedictionary/main' addParams( options: params.genome_options )
 
 workflow PREPARE_GENOME {
     take:
@@ -113,6 +115,13 @@ workflow PREPARE_GENOME {
         ch_rsem_version     = RSEM_PREPAREREFERENCE_TRANSCRIPTS.out.version
     }
 
+    // Index the genome fasta
+    ch_fasta_fai = Channel.empty()
+    ch_fasta_fai = SAMTOOLS_FAIDX ( ch_fasta ).fai
+
+    // Create dictionary file for the genome fasta
+    ch_fasta_dict = Channel.empty()
+    ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY ( ch_fasta ).dict
     //
     // Create chromosome sizes file
     //
@@ -198,6 +207,8 @@ workflow PREPARE_GENOME {
 
     emit:
     fasta            = ch_fasta            // path: genome.fasta
+    fai              = ch_fasta_fai        // path: genome.fasta.fai
+    dict             = ch_fasta_dict       // path: genome.fasta.dict
     gtf              = ch_gtf              // path: genome.gtf
     gene_bed         = ch_gene_bed         // path: gene.bed
     transcript_fasta = ch_transcript_fasta // path: transcript.fasta
