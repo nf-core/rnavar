@@ -4,9 +4,9 @@ include { initOptions; saveFiles; getSoftwareName } from './functions'
 params.options = [:]
 options        = initOptions(params.options)
 
-process GATK4_BASERECALIBRATOR {
+process GATK4_HAPLOTYPECALLER {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
@@ -19,37 +19,35 @@ process GATK4_BASERECALIBRATOR {
     }
 
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(bam)
     path fasta
-    path fastaidx
+    path fai
     path dict
     path intervalsBed
-    path dbsnp
-    path dbsnp_index
-    path knownSites
-    path knownSites_index
 
-    //output:
-    //tuple val(meta), path("*.table"), emit: table
     output:
-    path "*.table"                , emit: table
-    path "*.version.txt"          , emit: version
+    tuple val(meta), path("*.vcf.gz"), emit: vcf
+    tuple val(meta), path("*.tbi")   , emit: tbi
+    path "*.version.txt"             , emit: version
 
     script:
-    def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
+    def software  = getSoftwareName(task.process)
+    def prefix    = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     def intervalsCommand = intervalsBed ? "-L ${intervalsBed}" : ""
-    def dbsnpOptions = dbsnp ? "--known-sites ${dbsnp}" : ""
-    def sitesCommand = knownSites.collect{"--known-sites ${it}"}.join(' ')
+    def avail_mem = 3
+    if (!task.memory) {
+        log.info '[GATK HaplotypeCaller] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+    } else {
+        avail_mem = task.memory.giga
+    }
     """
-    gatk BaseRecalibrator  \
-        -R $fasta \
-        -I $bam \
-        $dbsnpOptions \
-        $sitesCommand \
-        $intervalsCommand \
-        $options.args \
-        -O ${prefix}.table
+    gatk \\
+        --java-options "-Xmx${avail_mem}g" \\
+        HaplotypeCaller \\
+        -R $fasta \\
+        -I $bam \\
+        -O ${prefix}.vcf.gz \\
+        $options.args
 
     gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
     """

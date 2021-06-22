@@ -4,7 +4,7 @@ include { initOptions; saveFiles; getSoftwareName } from './functions'
 params.options = [:]
 options        = initOptions(params.options)
 
-process GATK4_BASERECALIBRATOR {
+process GATK4_APPLYBQSR {
     tag "$meta.id"
     label 'process_low'
     publishDir "${params.outdir}",
@@ -20,36 +20,29 @@ process GATK4_BASERECALIBRATOR {
 
     input:
     tuple val(meta), path(bam), path(bai)
+    path bqsr_table
     path fasta
     path fastaidx
     path dict
     path intervalsBed
-    path dbsnp
-    path dbsnp_index
-    path knownSites
-    path knownSites_index
 
-    //output:
-    //tuple val(meta), path("*.table"), emit: table
     output:
-    path "*.table"                , emit: table
+    tuple val(meta), path("*.bam"), emit: bam
     path "*.version.txt"          , emit: version
 
     script:
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     def intervalsCommand = intervalsBed ? "-L ${intervalsBed}" : ""
-    def dbsnpOptions = dbsnp ? "--known-sites ${dbsnp}" : ""
-    def sitesCommand = knownSites.collect{"--known-sites ${it}"}.join(' ')
+
     """
-    gatk BaseRecalibrator  \
-        -R $fasta \
-        -I $bam \
-        $dbsnpOptions \
-        $sitesCommand \
-        $intervalsCommand \
-        $options.args \
-        -O ${prefix}.table
+    gatk ApplyBQSR \\
+        -R $fasta \\
+        -I $bam \\
+        --bqsr-recal-file $bqsr_table \\
+        $intervalsCommand \\
+        -O ${prefix}.recalibrated.bam \\
+        $options.args
 
     gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
     """

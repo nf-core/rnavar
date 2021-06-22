@@ -14,9 +14,9 @@ process STAR_ALIGN {
     // Note: 2.7X indices incompatible with AWS iGenomes.
     conda (params.enable_conda ? 'bioconda::star=2.6.1d' : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
-        container 'https://depot.galaxyproject.org/singularity/star:2.6.1d--0'
+        container 'https://depot.galaxyproject.org/singularity/star:2.7.9a--h9ee0642_0'
     } else {
-        container 'quay.io/biocontainers/star:2.6.1d--0'
+        container 'quay.io/biocontainers/star:2.7.9a--h9ee0642_0'
     }
 
     input:
@@ -41,7 +41,7 @@ process STAR_ALIGN {
     def software   = getSoftwareName(task.process)
     def prefix     = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     def ignore_gtf = params.star_ignore_sjdbgtf ? '' : "--sjdbGTFfile $gtf"
-    def seq_center = params.seq_center ? "--outSAMattrRGline ID:$prefix 'CN:$params.seq_center' 'SM:$prefix'" : "--outSAMattrRGline ID:$prefix 'SM:$prefix'"
+    def seq_center = params.seq_center ? "--outSAMattrRGline ID:$prefix 'CN:$params.seq_center' 'SM:$prefix' 'PL:illumina'" : "--outSAMattrRGline ID:$prefix 'SM:$prefix' 'PL:illumina'"
     def out_sam_type = (options.args.contains('--outSAMtype')) ? '' : '--outSAMtype BAM Unsorted'
     def mv_unsorted_bam = (options.args.contains('--outSAMtype BAM Unsorted SortedByCoordinate')) ? "mv ${prefix}.Aligned.out.bam ${prefix}.Aligned.unsort.out.bam" : ''
     """

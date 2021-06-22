@@ -117,11 +117,20 @@ workflow PREPARE_GENOME {
 
     // Index the genome fasta
     ch_fasta_fai = Channel.empty()
-    ch_fasta_fai = SAMTOOLS_FAIDX ( ch_fasta ).fai
+    if( params.fasta_fai){
+        ch_fasta_fai = file(params.fasta_fai)    
+    } else {    
+        ch_fasta_fai = SAMTOOLS_FAIDX ( ch_fasta ).fai
+    }
 
     // Create dictionary file for the genome fasta
     ch_fasta_dict = Channel.empty()
-    ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY ( ch_fasta ).dict
+    if( params.fasta_dict){
+        ch_fasta_dict = file(params.fasta_dict)
+    }
+    else{
+        ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY ( ch_fasta ).dict
+    }
     //
     // Create chromosome sizes file
     //
