@@ -83,13 +83,7 @@ include { ALIGN_STAR } from '../subworkflows/nf-core/align_star'       addParams
 include { MARK_DUPLICATES_PICARD } from '../subworkflows/nf-core/mark_duplicates_picard' addParams( markduplicates_options: modules['picard_markduplicates'], samtools_index_options: picard_markduplicates_samtools, samtools_stats_options:  picard_markduplicates_samtools )
 include { GATK4_SPLITNCIGARREADS } from '../modules/nf-core/software/gatk4/splitncigarreads/main' addParams( options: publish_genome_options, splitncigar_options: modules['gatk_splitncigar_options'] )
 include { GATK4_BASERECALIBRATOR } from '../modules/nf-core/software/gatk4/baserecalibrator/main' addParams( options: modules['gatk_baserecalibrator'])
-include { RECALIBRATE } from '../subworkflows/nf-core/recalibrate' addParams(
-    applybqsr_options:               modules['applybqsr'],
-    merge_bam_options:               modules['merge_bam_recalibrate'],
-    qualimap_bamqc_options:          modules['qualimap_bamqc_recalibrate'],
-    samtools_index_options:          modules['samtools_index_recalibrate'],
-    samtools_stats_options:          modules['samtools_stats_recalibrate']
-)
+include { GATK4_APPLYBQSR } from '../modules/nf-core/software/gatk4/applybqsr/main' addParams( options: modules['gatk_applybqsr'])
 include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/software/gatk4/intervallisttools/main' addParams( options: intervaltools_options )
 include { GATK4_HAPLOTYPECALLER } from '../modules/nf-core/software/gatk4/haplotypecaller/main' addParams( options: modules['gatk_haplotypecaller'])
 
@@ -188,7 +182,7 @@ workflow RNASEQ_VAR {
         }
         // MODULE: SplitNCigarReads from GATK4
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data). 
-        bam_splitncigar = Channel.empty()
+
         if(!params.skip_splitncigar){
 
             GATK4_SPLITNCIGARREADS (
@@ -203,14 +197,12 @@ workflow RNASEQ_VAR {
             ch_genome_bam           = GATK4_SPLITNCIGARREADS.out.bam
             ch_genome_bam_index     = SAMTOOLS_INDEX.out.bai
             ch_software_versions    = ch_software_versions.mix(GATK4_SPLITNCIGARREADS.out.version.first().ifEmpty(null))
-            bam_splitncigar = ch_genome_bam.join(ch_genome_bam_index, by: [0])
         }
 
         ch_bqsr_table = Channel.empty()
-
         if(!params.skip_basecalibrator){
             GATK4_BASERECALIBRATOR(
-                bam_splitncigar,
+                ch_genome_bam.join(ch_genome_bam_index, by: [0]),
                 PREPARE_GENOME.out.fasta,
                 PREPARE_GENOME.out.fai,
                 PREPARE_GENOME.out.dict,
@@ -223,59 +215,36 @@ workflow RNASEQ_VAR {
             ch_bqsr_table = GATK4_BASERECALIBRATOR.out.table
         }
 
-        bam_applybqsr = bam_splitncigar.combine(ch_bqsr_table)
-        bam_recalibrated    = Channel.empty()
-        bam_recalibrated_qc = Channel.empty()
-
-
         if(!params.skip_applybqsr){
-            RECALIBRATE(
-                ('bamqc' in params.skip_qc),
-                ('samtools' in params.skip_qc),
-                bam_applybqsr,
-                PREPARE_GENOME.out.dict,
-                PREPARE_GENOME.out.fai,
+            GATK4_APPLYBQSR(
+                ch_genome_bam.join(ch_genome_bam_index, by: [0]),
+                ch_bqsr_table,
                 PREPARE_GENOME.out.fasta,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.dict,
                 ch_interval_list
             )
-
-            bam_recalibrated    = RECALIBRATE.out.bam
-            bam_recalibrated_qc = RECALIBRATE.out.qc
-
+            ch_genome_bam = GATK4_APPLYBQSR.out.bam
+            ch_genome_bam_index = SAMTOOLS_INDEX (ch_genome_bam).out.bai
         }
-
-        ch_interval_list_split = Channel.empty()
 
         if(!params.skip_intervallisttools){
             GATK4_INTERVALLISTTOOLS(
                 ch_interval_list
             )
-            ch_interval_list_split = Channel.from(GATK4_INTERVALLISTTOOLS.out.interval_list)
+            ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list
         }
         else{
             ch_interval_list_split = ch_interval_list
         }
 
         interval_flag = true
-        ch_interval_list_split.view()
 
-        
+
         if(!params.skip_haplotypecaller){
 
-            haplotypecaller_interval_bam = bam_recalibrated.combine(ch_interval_list_split)
-
-            bam_recalibrated.combine(ch_interval_list_split).map{ meta, bam, bai, interval_list ->
-                [meta, bam, bai, interval_list]
-                //new_meta = meta.clone()
-                //new_meta.id = meta.id + "_" + interval_list.baseName
-                //[new_meta, bam, bai, interval_list]
-            }
-            .set{haplotypecaller_interval_bam}
-
-            haplotypecaller_interval_bam.view()
-
-            /*
-
+            ch_genome_bam.combine(ch_genome_bam_index).combine(ch_interval_list).set{haplotypecaller_interval_bam}
+            
             GATK4_HAPLOTYPECALLER(
                 haplotypecaller_interval_bam,
                 params.dbsnp_vcf,
@@ -286,15 +255,14 @@ workflow RNASEQ_VAR {
                 interval_flag
             )
 
-            
-
             haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta,vcf ->
             meta.id = meta.sample
             [meta, vcf]
             }.groupTuple()
 
-            */
+            
 
-        } 
+        }
+
     }
 }
