@@ -74,6 +74,13 @@ picard_markduplicates_samtools.args += params.bam_csi_index ? Utils.joinModuleAr
 def intervaltools_options        = modules['gatk_intervallisttools']
 intervaltools_options.args      += Utils.joinModuleArgs(["--SCATTER_COUNT $params.scatter_count"])
 
+
+def gatk_variant_filter_options   = modules['gatk_variantfilter']
+if (params.window)     { gatk_variant_filter_options.args += Utils.joinModuleArgs(["--window $params.window"]) }
+if (params.cluster)    { gatk_variant_filter_options.args += Utils.joinModuleArgs(["--cluster $params.cluster"]) }
+if (params.fs_filter)  { gatk_variant_filter_options.args += Utils.joinModuleArgs(["--filter-name \"FS\" --filter \"FS > $params.fs_filter\" "]) }
+if (params.qd_filter)  { gatk_variant_filter_options.args += Utils.joinModuleArgs(["--filter-name \"QD\" --filter \"QD < $params.qd_filter\" "]) }
+
 include { INPUT_CHECK } from '../subworkflows/local/input_check'    addParams( options: [:] )
 include { CAT_FASTQ             } from '../modules/nf-core/software/cat/fastq/main' addParams( options: cat_fastq_options )
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams( genome_options: publish_genome_options, index_options: publish_index_options, star_index_options: star_genomegenerate_options)
@@ -92,6 +99,8 @@ include { RECALIBRATE } from '../subworkflows/nf-core/recalibrate' addParams(
 )
 include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/software/gatk4/intervallisttools/main' addParams( options: intervaltools_options )
 include { GATK4_HAPLOTYPECALLER } from '../modules/nf-core/software/gatk4/haplotypecaller/main' addParams( options: modules['gatk_haplotypecaller'])
+include { GATK4_MERGEVCFS } from '../modules/nf-core/software/gatk4/mergevcfs/main' addParams( options: modules['gatk_mergevcfs'])
+include { GATK4_VARIANTFILTRATION } from '../modules/nf-core/software/gatk4/variantfiltration/main' addParams( options: gatk_variant_filter_options)
 
 workflow RNASEQ_VAR {
 
@@ -250,31 +259,28 @@ workflow RNASEQ_VAR {
             GATK4_INTERVALLISTTOOLS(
                 ch_interval_list
             )
-            ch_interval_list_split = Channel.from(GATK4_INTERVALLISTTOOLS.out.interval_list)
+            ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.flatten()
         }
         else{
             ch_interval_list_split = ch_interval_list
         }
 
-        interval_flag = true
-        ch_interval_list_split.view()
+        interval_flag = false
+        //ch_interval_list_split.view()
 
-        
+        haplotypecaller_vcf = Channel.empty()
+
         if(!params.skip_haplotypecaller){
 
             haplotypecaller_interval_bam = bam_recalibrated.combine(ch_interval_list_split)
 
             bam_recalibrated.combine(ch_interval_list_split).map{ meta, bam, bai, interval_list ->
                 [meta, bam, bai, interval_list]
-                //new_meta = meta.clone()
-                //new_meta.id = meta.id + "_" + interval_list.baseName
-                //[new_meta, bam, bai, interval_list]
+                new_meta = meta.clone()
+                new_meta.id = meta.id + "_" + interval_list.baseName
+                [new_meta, bam, bai, interval_list]
             }
             .set{haplotypecaller_interval_bam}
-
-            haplotypecaller_interval_bam.view()
-
-            /*
 
             GATK4_HAPLOTYPECALLER(
                 haplotypecaller_interval_bam,
@@ -286,15 +292,33 @@ workflow RNASEQ_VAR {
                 interval_flag
             )
 
-            
-
             haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta,vcf ->
             meta.id = meta.sample
             [meta, vcf]
             }.groupTuple()
 
-            */
+            use_ref_dict = true
+            GATK4_MERGEVCFS(
+                haplotypecaller_raw,
+                PREPARE_GENOME.out.dict,
+                use_ref_dict
+            )
 
-        } 
+            haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf_index
+        }
+
+        if(!params.skip_variantfiltration){
+
+            GATK4_VARIANTFILTRATION(
+                haplotypecaller_vcf,
+                PREPARE_GENOME.out.fasta,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.dict
+            )
+
+            filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
+
+        }
+
     }
 }

@@ -41,7 +41,7 @@ process GATK4_INTERVALLISTTOOLS {
     python3 <<CODE
     import glob, os
     # The following python code snippet rename the output files into different name to avoid overwriting or name conflict
-    intervals = sorted(glob.glob("*_split/*/*.interval_list"))
+    intervals = sorted(glob.glob("${prefix}_split/*/*.interval_list"))
     for i, interval in enumerate(intervals):
         (directory, filename) = os.path.split(interval)
         newName = os.path.join(directory, str(i + 1) + filename)
