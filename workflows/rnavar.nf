@@ -232,7 +232,8 @@ workflow RNASEQ_VAR {
             ch_bqsr_table = GATK4_BASERECALIBRATOR.out.table
         }
 
-        bam_applybqsr = bam_splitncigar.combine(ch_bqsr_table)
+        bam_applybqsr = bam_splitncigar.join(ch_bqsr_table, by: [0])
+
         bam_recalibrated    = Channel.empty()
         bam_recalibrated_qc = Channel.empty()
 
@@ -266,7 +267,6 @@ workflow RNASEQ_VAR {
         }
 
         interval_flag = false
-        //ch_interval_list_split.view()
 
         haplotypecaller_vcf = Channel.empty()
 

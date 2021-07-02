@@ -25,8 +25,9 @@ process GATK4_VARIANTFILTRATION {
     path dict
 
     output:
-    tuple val(meta), path("*.vcf"), emit: vcf
-    path "*.version.txt"          , emit: version
+    tuple val(meta), path("*.vcf.gz")                           , emit: vcf
+    tuple val(meta), path('*.vcf.gz'), path('*.vcf.gz.tbi')     , emit: vcf_index
+    path "*.version.txt"                                        , emit: version
 
 
     script:
@@ -36,7 +37,7 @@ process GATK4_VARIANTFILTRATION {
     gatk VariantFiltration \\
         -R $fasta \\
         -V $vcf \\
-        -O ${prefix}.vcf \\
+        -O ${prefix}.vcf.gz \\
         $options.args
 
     gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
