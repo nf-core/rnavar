@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/rnaseq/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/rnavar/master/nextflow_schema.json",
     "title": "nf-core/rnaseq pipeline parameters",
     "description": "Nextflow RNA-Seq analysis pipeline, part of the nf-core community.",
     "type": "object",
@@ -399,6 +399,44 @@
                 }
             }
         },
+        "analysis_options": {
+            "title": "Analysis options",
+            "type": "object",
+            "fa_icon": "fas fa-fast-forward",
+            "description": "Module parameters of GATK.",
+            "properties": {
+                "scatter_count": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Set the scatter count for the intervalListTools. This parameter defines how many chunks to prepare from the bed file. Default 6."
+                },
+                "no_intervals": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Flag to set the presence or absence of an Interval bed file. Default true."
+                },
+                "window": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "GATK Variant filtering parameter -window. The window size (in bases) in which to evaluate clustered SNPs. Default is 35."
+                },
+                "cluster": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "GATK Variant filtering parameter -cluster. The number of SNPs which make up a cluster. Default is 3."
+                },
+                "fs_filter": {
+                    "type": "number",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "GATK Variant filtering parameter - FisherStrand (FS). Default is FS > 30.0"
+                },
+                "qd_filter": {
+                    "type": "number",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "GATK Variant filtering parameter - Quality-by-Depth. Default is QD < 2.0"
+                }
+            }
+        },
         "process_skipping_options": {
             "title": "Process skipping options",
             "type": "object",
@@ -471,7 +509,38 @@
                     "type": "boolean",
                     "fa_icon": "fas fa-fast-forward",
                     "description": "Skip all QC steps except for MultiQC."
-                }
+                },
+                "skip_splitncigar": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip SplitNCigar module of GATK."
+                },
+                "skip_basecalibrator": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip GATK base calibration step."
+                },
+                "skip_applybqsr": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip GATK applying base calibration step."
+                },
+                "skip_haplotypecaller": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip GATK variant calling."
+                },
+                "skip_intervallisttools": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip splitting of interval BED file into chucks for parallel threads."
+                },
+                "skip_variantfiltration": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Skip variant filtering step."
+                }               
+
             }
         },
         "institutional_config_options": {
@@ -671,6 +740,9 @@
         },
         {
             "$ref": "#/definitions/read_filtering_options"
+        },
+        {
+            "$ref": "#/definitions/analysis_options"
         },
         {
             "$ref": "#/definitions/reference_genome_options"

@@ -1,15 +1,15 @@
 # You can use this file to create a conda environment for this pipeline:
 #   conda env create -f environment.yml
-name: nf-core-rnavar-1.0dev
+name: nf-core-rnavar-3.1
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - conda-forge::python=3.7.3
-  - conda-forge::markdown=3.1.1
-  - conda-forge::pymdown-extensions=6.0
-  - conda-forge::pygments=2.5.2
+  - conda-forge::python=3.9.5
+  - conda-forge::markdown=3.3.4
+  - conda-forge::pymdown-extensions=8.2
+  - conda-forge::pygments=2.9.0
   # TODO nf-core: Add required software dependencies here
-  - bioconda::fastqc=0.11.8
-  - bioconda::multiqc=1.7
+  - bioconda::fastqc=0.11.9
+  - bioconda::multiqc=1.11
