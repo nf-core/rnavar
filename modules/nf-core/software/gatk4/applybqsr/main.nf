@@ -19,13 +19,11 @@ process GATK4_APPLYBQSR {
     }
 
     input:
-    tuple val(meta), path(bam), path(bai)
-    path bqsr_table
+    tuple val(meta), path(bam), path(bai), path(bqsr_table), path(intervalsBed)
     path fasta
     path fastaidx
     path dict
-    path intervalsBed
-
+    
     output:
     tuple val(meta), path("*.bam"), emit: bam
     path "*.version.txt"          , emit: version

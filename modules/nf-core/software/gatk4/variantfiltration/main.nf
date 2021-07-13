@@ -2,11 +2,11 @@
 include { initOptions; saveFiles; getSoftwareName } from './functions'
 
 params.options = [:]
-options        = initOptions(params.options)
+def options    = initOptions(params.options)
 
-process GATK4_BASERECALIBRATOR {
+process GATK4_VARIANTFILTRATION {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
@@ -19,37 +19,26 @@ process GATK4_BASERECALIBRATOR {
     }
 
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(vcf), path(tbi)
     path fasta
-    path fastaidx
+    path fai
     path dict
-    path intervalsBed
-    path dbsnp
-    path dbsnp_index
-    path knownSites
-    path knownSites_index
 
-    //output:
-    //tuple val(meta), path("*.table"), emit: table
     output:
-    tuple val(meta), path("*.table")    , emit: table
-    path "*.version.txt"                , emit: version
+    tuple val(meta), path("*.vcf.gz")                           , emit: vcf
+    tuple val(meta), path('*.vcf.gz'), path('*.vcf.gz.tbi')     , emit: vcf_index
+    path "*.version.txt"                                        , emit: version
+
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    def intervalsCommand = intervalsBed ? "-L ${intervalsBed}" : ""
-    def dbsnpOptions = dbsnp ? "--known-sites ${dbsnp}" : ""
-    def sitesCommand = knownSites.collect{"--known-sites ${it}"}.join(' ')
+    def prefix   = options.suffix ? "${meta.id}.${options.suffix}" : "${meta.id}"
     """
-    gatk BaseRecalibrator  \
-        -R $fasta \
-        -I $bam \
-        $dbsnpOptions \
-        $sitesCommand \
-        $intervalsCommand \
-        $options.args \
-        -O ${prefix}.table
+    gatk VariantFiltration \\
+        -R $fasta \\
+        -V $vcf \\
+        -O ${prefix}.vcf.gz \\
+        $options.args
 
     gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
     """

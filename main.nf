@@ -1,11 +1,11 @@
 #!/usr/bin/env nextflow
 /*
 ========================================================================================
-                         nf-core/rnavar
+nf-core/rnavar
 ========================================================================================
- nf-core/rnavar Analysis Pipeline.
- #### Homepage / Documentation
- https://github.com/nf-core/rnavar
+nf-core/rnavar Analysis Pipeline.
+#### Homepage / Documentation
+https://github.com/nf-core/rnavar
 ----------------------------------------------------------------------------------------
 */
 
@@ -41,7 +41,6 @@ RUN THE WORKFLOW
 workflow {
     include { RNASEQ_VAR } from './workflows/rnavar'
     RNASEQ_VAR ()
-  
 }
 
 /*
