@@ -18,10 +18,10 @@
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "pattern": "\\.csv$",
+                    "pattern": "^\\S+\\.csv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/rnavar/usage#samplesheet-input).",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re//usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -60,7 +60,7 @@
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/plain",
-                    "pattern": "\\.fn?a(sta)?(\\.gz)?$",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
@@ -287,5 +287,125 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "save_reference": {
+            "type": "string"
+        },
+        "aligner": {
+            "type": "string",
+            "default": "star"
+        },
+        "seq_center": {
+            "type": "string"
+        },
+        "save_merged_fastq": {
+            "type": "string"
+        },
+        "save_unaligned": {
+            "type": "string"
+        },
+        "save_align_intermeds": {
+            "type": "string"
+        },
+        "skip_markduplicates": {
+            "type": "string"
+        },
+        "skip_alignment": {
+            "type": "string"
+        },
+        "skip_splitncigar": {
+            "type": "string"
+        },
+        "skip_basecalibrator": {
+            "type": "string"
+        },
+        "skip_applybqsr": {
+            "type": "string"
+        },
+        "skip_haplotypecaller": {
+            "type": "string"
+        },
+        "skip_intervallisttools": {
+            "type": "string"
+        },
+        "skip_variantfiltration": {
+            "type": "string"
+        },
+        "scatter_count": {
+            "type": "integer",
+            "default": 6
+        },
+        "no_intervals": {
+            "type": "string"
+        },
+        "skip_qc": {
+            "type": "string"
+        },
+        "window": {
+            "type": "integer",
+            "default": 35
+        },
+        "cluster": {
+            "type": "integer",
+            "default": 3
+        },
+        "fs_filter": {
+            "type": "integer",
+            "default": 30
+        },
+        "qd_filter": {
+            "type": "integer",
+            "default": 2
+        },
+        "skip_bigwig": {
+            "type": "string"
+        },
+        "skip_stringtie": {
+            "type": "string"
+        },
+        "skip_fastqc": {
+            "type": "string"
+        },
+        "skip_preseq": {
+            "type": "string"
+        },
+        "skip_dupradar": {
+            "type": "string"
+        },
+        "skip_qualimap": {
+            "type": "string"
+        },
+        "skip_rseqc": {
+            "type": "string"
+        },
+        "skip_biotype_qc": {
+            "type": "string"
+        },
+        "skip_deseq2_qc": {
+            "type": "string"
+        },
+        "skip_multiqc": {
+            "type": "string"
+        },
+        "deseq2_vst": {
+            "type": "string"
+        },
+        "rseqc_modules": {
+            "type": "string",
+            "default": "bam_stat,inner_distance,infer_experiment,junction_annotation,junction_saturation,read_distribution,read_duplication"
+        },
+        "gtf": {
+            "type": "string"
+        },
+        "gff": {
+            "type": "string"
+        },
+        "gene_bed": {
+            "type": "string"
+        },
+        "star_index": {
+            "type": "string"
+        }
+    }
 }
