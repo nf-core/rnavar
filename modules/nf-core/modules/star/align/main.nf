@@ -12,7 +12,7 @@ process STAR_ALIGN {
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
 
     // Note: 2.7X indices incompatible with AWS iGenomes.
-    conda (params.enable_conda ? 'bioconda::star=2.6.1d' : null)
+    conda (params.enable_conda ? 'bioconda::star=2.7.9a' : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
         container 'https://depot.galaxyproject.org/singularity/star:2.7.9a--h9ee0642_0'
     } else {
@@ -36,12 +36,13 @@ process STAR_ALIGN {
     tuple val(meta), path('*Aligned.unsort.out.bam') , optional:true, emit: bam_unsorted
     tuple val(meta), path('*fastq.gz')               , optional:true, emit: fastq
     tuple val(meta), path('*.tab')                   , optional:true, emit: tab
+    tuple val(meta), path('*.out.junction')          , optional:true, emit: junction
 
     script:
     def software   = getSoftwareName(task.process)
     def prefix     = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     def ignore_gtf = params.star_ignore_sjdbgtf ? '' : "--sjdbGTFfile $gtf"
-    def seq_center = params.seq_center ? "--outSAMattrRGline ID:$prefix 'CN:$params.seq_center' 'SM:$prefix' 'PL:illumina'" : "--outSAMattrRGline ID:$prefix 'SM:$prefix' 'PL:illumina'"
+    def seq_center = params.seq_center ? "--outSAMattrRGline ID:$prefix 'CN:$params.seq_center' 'SM:$prefix'" : "--outSAMattrRGline ID:$prefix 'SM:$prefix'"
     def out_sam_type = (options.args.contains('--outSAMtype')) ? '' : '--outSAMtype BAM Unsorted'
     def mv_unsorted_bam = (options.args.contains('--outSAMtype BAM Unsorted SortedByCoordinate')) ? "mv ${prefix}.Aligned.out.bam ${prefix}.Aligned.unsort.out.bam" : ''
     """

@@ -19,11 +19,12 @@ process GATK4_APPLYBQSR {
     }
 
     input:
-    tuple val(meta), path(bam), path(bai), path(bqsr_table), path(intervalsBed)
-    path fasta
-    path fastaidx
-    path dict
-    
+    tuple val(meta), path(bam), path(bai), path(bqsr_table)
+    path  fasta
+    path  fastaidx
+    path  dict
+    path  intervals
+
     output:
     tuple val(meta), path("*.bam"), emit: bam
     path "*.version.txt"          , emit: version
@@ -31,17 +32,16 @@ process GATK4_APPLYBQSR {
     script:
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    def intervalsCommand = intervalsBed ? "-L ${intervalsBed}" : ""
-
+    def interval = intervals ? "-L ${intervals}" : ""
     """
     gatk ApplyBQSR \\
         -R $fasta \\
         -I $bam \\
         --bqsr-recal-file $bqsr_table \\
-        $intervalsCommand \\
-        -O ${prefix}.recalibrated.bam \\
+        $interval \\
+        -O ${prefix}.bam \\
         $options.args
 
-    gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
+    echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//' > ${software}.version.txt
     """
 }

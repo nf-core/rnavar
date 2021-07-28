@@ -24,33 +24,27 @@ process GATK4_BASERECALIBRATOR {
     path fastaidx
     path dict
     path intervalsBed
-    path dbsnp
-    path dbsnp_index
     path knownSites
-    path knownSites_index
+    path knownSites_tbi
 
-    //output:
-    //tuple val(meta), path("*.table"), emit: table
     output:
-    tuple val(meta), path("*.table")    , emit: table
-    path "*.version.txt"                , emit: version
+    tuple val(meta), path("*.table"), emit: table
+    path "*.version.txt"          , emit: version
 
     script:
     def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     def intervalsCommand = intervalsBed ? "-L ${intervalsBed}" : ""
-    def dbsnpOptions = dbsnp ? "--known-sites ${dbsnp}" : ""
     def sitesCommand = knownSites.collect{"--known-sites ${it}"}.join(' ')
     """
     gatk BaseRecalibrator  \
         -R $fasta \
         -I $bam \
-        $dbsnpOptions \
         $sitesCommand \
         $intervalsCommand \
         $options.args \
         -O ${prefix}.table
 
-    gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
+    echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//' > ${software}.version.txt
     """
 }

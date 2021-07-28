@@ -19,53 +19,10 @@ process GATK4_HAPLOTYPECALLER {
     }
 
     input:
-    tuple val(meta), path(bam), path(bai), path(interval)
-    path dbsnp
-    path dbsnp_tbi
-    path dict
-    path fasta
-    path fai
-    val no_intervals
-
-    output:
-    tuple val(meta), path("*.vcf"),                 emit: vcf
-    tuple val(meta), path(interval), path("*.vcf"), emit: interval_vcf
-    path "*.version.txt",                           emit: version
-
-    script:
-    def software  = getSoftwareName(task.process)
-    def prefix    = options.suffix ? "${interval.baseName}_${meta.id}${options.suffix}" : "${interval.baseName}_${meta.id}"
-    def avail_mem = 3
-    if (!task.memory) {
-        log.info '[GATK HaplotypeCaller] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
-    } else {
-        avail_mem = task.memory.giga
-    }
-    def intervalsOptions = no_intervals ? "" : "-L ${interval}"
-    def dbsnpOptions = dbsnp ? "--D ${dbsnp}" : ""
-    """
-    gatk \\
-        --java-options "-Xmx${avail_mem}g" \\
-        HaplotypeCaller \\
-        -R $fasta \\
-        -I $bam \\
-        ${intervalsOptions} \\
-        ${dbsnpOptions} \\
-        -O ${prefix}.vcf \\
-        $options.args
-
-    gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
-    """
-}
-
-/*
-
-    input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(bam), path(bai)
     path fasta
     path fai
     path dict
-    path intervalsBed
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf
@@ -75,7 +32,6 @@ process GATK4_HAPLOTYPECALLER {
     script:
     def software  = getSoftwareName(task.process)
     def prefix    = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    def intervalsCommand = intervalsBed ? "-L ${intervalsBed}" : ""
     def avail_mem = 3
     if (!task.memory) {
         log.info '[GATK HaplotypeCaller] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
@@ -91,8 +47,6 @@ process GATK4_HAPLOTYPECALLER {
         -O ${prefix}.vcf.gz \\
         $options.args
 
-    gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
+    echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//' > ${software}.version.txt
     """
 }
-
-*/
