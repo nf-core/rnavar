@@ -406,6 +406,9 @@
         },
         "star_index": {
             "type": "string"
+        },
+        "star_ignore_sjdbgtf": {
+            "type": "string"
         }
     }
 }
