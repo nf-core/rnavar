@@ -19,7 +19,7 @@ process GATK4_HAPLOTYPECALLER {
     }
 
     input:
-    tuple val(meta), path(cram), path(crai), path(interval)
+    tuple val(meta), path(bam), path(bai), path(interval)
     path dbsnp
     path dbsnp_tbi
     path dict
@@ -49,12 +49,12 @@ process GATK4_HAPLOTYPECALLER {
         --java-options "-Xmx${avail_mem}g" \\
         HaplotypeCaller \\
         -R $fasta \\
-        -I $cram \\
+        -I $bam \\
         ${dbsnpOptions} \\
         ${intervalsOptions} \\
         -O ${prefix}.vcf \\
-        --tmp-dir . \
         $options.args
+
     gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
     """
 }

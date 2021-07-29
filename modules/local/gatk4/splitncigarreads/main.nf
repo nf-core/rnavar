@@ -20,11 +20,13 @@ process GATK4_SPLITNCIGARREADS {
 
     input:
     tuple val(meta), path(bam)
-    tuple path(fasta), path(fai), path(dict)
+    path(fasta)
+    path(fai)
+    path(dict)
 
     output:
-    tuple val(meta), path('*.bam'), emit: bam
-    path  '*.version.txt'         , emit: version
+    tuple val(meta), path('*.bam'), path('*.bai'), emit: bam
+    path  '*.version.txt'                        , emit: version
 
     script:
     def software = getSoftwareName(task.process)

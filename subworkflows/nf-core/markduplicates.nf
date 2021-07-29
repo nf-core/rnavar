@@ -6,40 +6,32 @@ params.markduplicates_options = [:]
 params.samtools_index_options = [:]
 params.samtools_stats_options = [:]
 
-include { PICARD_MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams( options: params.markduplicates_options )
-include { SAMTOOLS_INDEX        } from '../../modules/nf-core/modules/samtools/index/main'        addParams( options: params.samtools_index_options )
-include { BAM_STATS_SAMTOOLS    } from './bam_stats_samtools'                                     addParams( options: params.samtools_stats_options )
+include { BAM_STATS_SAMTOOLS    } from './bam_stats_samtools'                                     addParams(options: params.samtools_stats_options)
+include { PICARD_MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams(options: params.markduplicates_options)
+include { SAMTOOLS_INDEX        } from '../../modules/nf-core/modules/samtools/index/main'        addParams(options: params.samtools_index_options)
 
-workflow MARK_DUPLICATES_PICARD {
+workflow MARKDUPLICATES {
     take:
     bam // channel: [ val(meta), [ bam ] ]
 
     main:
 
-    //
-    // Picard MarkDuplicates
-    //
-    PICARD_MARKDUPLICATES ( bam )
+    PICARD_MARKDUPLICATES(bam)
 
     //
     // Index BAM file and run samtools stats, flagstat and idxstats
     //
-    SAMTOOLS_INDEX ( PICARD_MARKDUPLICATES.out.bam )
+    SAMTOOLS_INDEX(PICARD_MARKDUPLICATES.out.bam)
 
     PICARD_MARKDUPLICATES.out.bam
         .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
         .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
-        .map {
-            meta, bam, bai, csi ->
-                if (bai) {
-                    [ meta, bam, bai ]
-                } else {
-                    [ meta, bam, csi ]
-                }
-        }
-        .set { ch_bam_bai }
+        .map{meta, bam, bai, csi ->
+            if (bai) [meta, bam, bai]
+            else [meta, bam, csi]}
+        .set{ch_bam_bai}
 
-    BAM_STATS_SAMTOOLS ( ch_bam_bai )
+    BAM_STATS_SAMTOOLS(ch_bam_bai)
 
     emit:
     bam              = PICARD_MARKDUPLICATES.out.bam     // channel: [ val(meta), [ bam ] ]
