@@ -24,9 +24,6 @@
             "gatk4/mergevcfs": {
                 "git_sha": "e7be649029b97d12ddf33baec8e85e141f3ece1c"
             },
-            "gatk4/splitncigarreads": {
-                "git_sha": "b3c466773207002060efbeff384b6f03ec0d7d9f"
-            },
             "gatk4/variantfiltration": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },
