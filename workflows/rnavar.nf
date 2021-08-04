@@ -119,9 +119,9 @@ include { GATK4_BASERECALIBRATOR }  from '../modules/nf-core/modules/gatk4/baser
 include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' addParams(options: [:])
 include { GATK4_HAPLOTYPECALLER   } from '../modules/local/gatk4/haplotypecaller/main'             addParams(options: modules['gatk_haplotypecaller'])
 include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/modules/gatk4/intervallisttools/main' addParams(options: modules['gatk_intervallisttools'])
-include { GATK4_MERGEVCFS         } from '../modules/nf-core/modules/gatk4/mergevcfs/main'         addParams(options: modules['gatk_mergevcfs'])
+include { GATK4_MERGEVCFS         } from '../modules/local/gatk4/mergevcfs/main'                   addParams(options: modules['gatk_mergevcfs'])
 include { GATK4_SPLITNCIGARREADS }  from '../modules/local/gatk4/splitncigarreads/main'            addParams(options: modules['gatk_splitncigar_options'])
-include { GATK4_VARIANTFILTRATION } from '../modules/nf-core/modules/gatk4/variantfiltration/main' addParams(options: modules['gatk_variantfilter'])
+include { GATK4_VARIANTFILTRATION } from '../modules/local/gatk4/variantfiltration/main'           addParams(options: modules['gatk_variantfilter'])
 include { SAMTOOLS_INDEX }          from '../modules/nf-core/modules/samtools/index/main'          addParams(options: modules['samtools_index_genome'])
 
 include { PREPARE_GENOME }          from '../subworkflows/local/prepare_genome'                    addParams(
@@ -133,7 +133,8 @@ include { ALIGN_STAR }              from '../subworkflows/nf-core/align_star'   
     align_options: modules['star_align'],
     samtools_index_options: modules['samtools_index_genome'],
     samtools_sort_options:  modules['samtools_sort_genome'],
-    samtools_stats_options: modules['samtools_index_genome']
+    samtools_stats_options: modules['samtools_index_genome'],
+    seq_platform: params.seq_platform
 )
 include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates'                  addParams(
     markduplicates_options: modules['picard_markduplicates'],
@@ -268,6 +269,8 @@ workflow RNAVAR {
         bam_recalibrated_qc = Channel.empty()
 
         if (!params.skip_applybqsr) {
+
+            ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }
             RECALIBRATE(
                 ('bamqc' in params.skip_qc),
                 ('samtools' in params.skip_qc),
@@ -275,7 +278,7 @@ workflow RNAVAR {
                 PREPARE_GENOME.out.dict,
                 PREPARE_GENOME.out.fai,
                 PREPARE_GENOME.out.fasta,
-                ch_interval_list
+                ch_interval_list_applybqsr
             )
 
             bam_recalibrated    = RECALIBRATE.out.bam
@@ -287,7 +290,7 @@ workflow RNAVAR {
 
         if (!params.skip_intervallisttools) {
             GATK4_INTERVALLISTTOOLS(ch_interval_list)
-            ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.flatten()
+            ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
         }
         else ch_interval_list_split = ch_interval_list
 
@@ -298,13 +301,10 @@ workflow RNAVAR {
         if (!params.skip_haplotypecaller) {
 
             haplotypecaller_interval_bam = bam_recalibrated.combine(ch_interval_list_split)
-
-            bam_recalibrated.combine(ch_interval_list_split)
                 .map{ meta, bam, bai, interval_list ->
                     new_meta = meta.clone()
                     new_meta.id = meta.id + "_" + interval_list.baseName
                     [new_meta, bam, bai, interval_list]}
-                .set{haplotypecaller_interval_bam}
 
             GATK4_HAPLOTYPECALLER(
                 haplotypecaller_interval_bam,

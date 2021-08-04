@@ -19,7 +19,7 @@ process GATK4_VARIANTFILTRATION {
     }
 
     input:
-    tuple val(meta), path(vcf)
+    tuple val(meta), path(vcf), path (tbi)
     path  fasta
     path  fai
     path  dict

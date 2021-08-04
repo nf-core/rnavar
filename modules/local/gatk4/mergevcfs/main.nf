@@ -24,8 +24,8 @@ process GATK4_MERGEVCFS {
     val   use_ref_dict
 
     output:
-    tuple val(meta), path('*.vcf.gz'), emit: vcf
-    path  '*.version.txt'            , emit: version
+    tuple val(meta), path('*.vcf.gz'), path('*.vcf.gz.tbi'), emit: vcf
+    path  '*.version.txt'                                  , emit: version
 
     script:
     def software = getSoftwareName(task.process)
