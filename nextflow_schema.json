@@ -351,12 +351,12 @@
             "default": 3
         },
         "fs_filter": {
-            "type": "integer",
-            "default": 30
+            "type": "number",
+            "default": 30.0
         },
         "qd_filter": {
-            "type": "integer",
-            "default": 2
+            "type": "number",
+            "default": 2.0
         },
         "skip_bigwig": {
             "type": "string"
