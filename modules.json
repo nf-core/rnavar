@@ -21,12 +21,6 @@
             "gatk4/intervallisttools": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },
-            "gatk4/mergevcfs": {
-                "git_sha": "e7be649029b97d12ddf33baec8e85e141f3ece1c"
-            },
-            "gatk4/variantfiltration": {
-                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
-            },
             "gffread": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },

@@ -409,6 +409,10 @@
         },
         "star_ignore_sjdbgtf": {
             "type": "string"
+        },
+        "seq_platform": {
+            "type": "string",
+            "default": "illumina"
         }
     }
 }
