@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the main.nf workflow in the nf-core/rnaseq pipeline
+// This file holds several functions specific to the main.nf workflow in the nf-core/rnavar pipeline
 //
 
 class WorkflowMain {
@@ -8,22 +8,21 @@ class WorkflowMain {
     // Citation string for pipeline
     //
     public static String citation(workflow) {
-	return "Unpublished"
-        /*
-	return "If you use ${workflow.manifest.name} for your analysis please cite:\n\n" +
-            "* The pipeline\n" +
-            "  https://doi.org/10.5281/zenodo.1400710\n\n" +
+        return "If you use ${workflow.manifest.name} for your analysis please cite:\n\n" +
+            // TODO nf-core: Add Zenodo DOI for pipeline after first release
+            //"* The pipeline\n" +
+            //"  https://doi.org/10.5281/zenodo.XXXXXXX\n\n" +
             "* The nf-core framework\n" +
             "  https://doi.org/10.1038/s41587-020-0439-x\n\n" +
             "* Software dependencies\n" +
-            "  https://github.com/${workflow.manifest.name}/blob/master/CITATIONS.md" */
+            "  https://github.com/${workflow.manifest.name}/blob/master/CITATIONS.md"
     }
 
     //
     // Print help to screen if required
     //
     public static String help(workflow, params, log) {
-        def command = "nextflow run nf-core/rnaseq --input samplesheet.csv --genome GRCh37 -profile docker"
+        def command = "nextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker"
         def help_string = ''
         help_string += NfcoreTemplate.logo(workflow, params.monochrome_logs)
         help_string += NfcoreSchema.paramsHelp(workflow, params, command)
@@ -73,9 +72,9 @@ class WorkflowMain {
         // Check the hostnames against configured profiles
         NfcoreTemplate.hostName(workflow, params, log)
 
-        // Check at least one form of input has been provided
-        if (!params.public_data_ids && !params.input) {
-            log.error "Please specify at least one form of input for the pipeline e.g. '--input samplsheet.csv' or '--public_data_ids ids.txt'."
+        // Check input has been provided
+        if (!params.input) {
+            log.error "Please provide an input samplesheet to the pipeline e.g. '--input samplesheet.csv'"
             System.exit(1)
         }
     }

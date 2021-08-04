@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/rnavar/master/nextflow_schema.json",
-    "title": "nf-core/rnaseq pipeline parameters",
+    "title": "nf-core/rnavar pipeline parameters",
     "description": "Nextflow RNA-Seq analysis pipeline, part of the nf-core community.",
     "type": "object",
     "definitions": {
@@ -10,15 +10,18 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
+            "required": [
+                "input"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/csv",
-                    "pattern": "\\.csv$",
+                    "pattern": "^\\S+\\.csv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 4 columns, and a header row. See [usage docs](https://nf-co.re/rnaseq/usage#samplesheet-input).",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re//usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -26,15 +29,6 @@
                     "description": "Path to the output directory where the results will be saved.",
                     "default": "./results",
                     "fa_icon": "fas fa-folder-open"
-                },
-                "public_data_ids": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "\\.txt$",
-                    "schema": "assets/schema_public_data_ids.json",
-                    "fa_icon": "fas fa-database",
-                    "description": "File containing SRA/ENA/GEO identifiers one per line in order to download their associated FastQ files."
                 },
                 "email": {
                     "type": "string",
@@ -47,77 +41,8 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
-                },
-                "skip_sra_fastq_download": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Only download metadata for public data database ids and don't download the FastQ files."
-                },
-                "save_merged_fastq": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-save",
-                    "description": "Save FastQ files after merging re-sequenced libraries in the results directory."
                 }
             }
-        },
-        "umi_options": {
-            "title": "UMI options",
-            "type": "object",
-            "description": "Options for processing reads with unique molecular identifiers",
-            "default": "",
-            "properties": {
-                "with_umi": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-barcode",
-                    "description": "Enable UMI-based read deduplication."
-                },
-                "umitools_extract_method": {
-                    "type": "string",
-                    "default": "string",
-                    "fa_icon": "fas fa-barcode",
-                    "description": "UMI pattern to use. Can be either 'string' (default) or 'regex'.",
-                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).\n"
-                },
-                "umitools_bc_pattern": {
-                    "type": "string",
-                    "fa_icon": "fas fa-barcode",
-                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).",
-                    "description": "The UMI barcode pattern to use e.g. 'NNNNNN' indicates that the first 6 nucleotides of the read are from the UMI."
-                },
-                "save_umi_intermeds": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-save",
-                    "description": "If this option is specified, intermediate FastQ and BAM files produced by UMI-tools are also saved in the results directory."
-                }
-            },
-            "fa_icon": "fas fa-barcode"
-        },
-        "read_filtering_options": {
-            "title": "Read filtering options",
-            "type": "object",
-            "description": "Options for filtering reads prior to alignment",
-            "default": "",
-            "properties": {
-                "remove_ribo_rna": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-trash-alt",
-                    "description": "Enable the removal of reads derived from ribosomal RNA using SortMeRNA.",
-                    "help_text": "Any patterns found in the sequences defined by the '--ribo_database_manifest' parameter will be used."
-                },
-                "ribo_database_manifest": {
-                    "type": "string",
-                    "default": "${projectDir}/assets/rrna-db-defaults.txt",
-                    "fa_icon": "fas fa-database",
-                    "description": "Text file containing paths to fasta files (one per line) that will be used to create the database for SortMeRNA.",
-                    "help_text": "By default, [rRNA databases](https://github.com/biocore/sortmerna/tree/master/data/rRNA_databases) defined in the SortMeRNA GitHub repo are used. You can see an example in the pipeline Github repository in `assets/rrna-default-dbs.txt`.\nPlease note that commercial/non-academic entities require [`licensing for SILVA`](https://www.arb-silva.de/silva-license-information) for these default databases."
-                },
-                "save_non_ribo_reads": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-save",
-                    "description": "If this option is specified, intermediate FastQ files containing non-rRNA reads will be saved in the results directory."
-                }
-            },
-            "fa_icon": "fas fa-trash-alt"
         },
         "reference_genome_options": {
             "title": "Reference genome options",
@@ -135,130 +60,10 @@
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/plain",
-                    "pattern": "\\.fn?a(sta)?(\\.gz)?$",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
-                },
-                "gtf": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "\\.gtf(\\.gz)?$",
-                    "description": "Path to GTF annotation file.",
-                    "fa_icon": "fas fa-code-branch",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified."
-                },
-                "gff": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "\\.gff(\\.gz)?$",
-                    "fa_icon": "fas fa-code-branch",
-                    "description": "Path to GFF3 annotation file.",
-                    "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
-                },
-                "gene_bed": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "\\.bed(\\.gz)?$",
-                    "fa_icon": "fas fa-procedures",
-                    "description": "Path to BED file containing gene intervals. This will be created from the GTF file if not specified."
-                },
-                "transcript_fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "\\.fn?a(sta)?(\\.gz)?$",
-                    "fa_icon": "far fa-file-code",
-                    "description": "Path to FASTA transcriptome file."
-                },
-                "additional_fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "\\.fn?a(sta)?(\\.gz)?$",
-                    "fa_icon": "far fa-file-code",
-                    "description": "FASTA file to concatenate to genome FASTA file e.g. containing spike-in sequences.",
-                    "help_text": "If provided, the sequences in this file will get concatenated to the existing genome FASTA file, a GTF file will be automatically created using the entire sequence as the gene, transcript, and exon features, and any alignment index will get created from the combined FASTA and GTF. It is recommended to save the reference with `--save_reference` to re-use the index for future runs so you do not need to create it again."
-                },
-                "splicesites": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "fa_icon": "fas fa-hand-scissors",
-                    "description": "Splice sites file required for HISAT2."
-                },
-                "star_index": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built STAR index."
-                },
-                "hisat2_index": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built HISAT2 index."
-                },
-                "rsem_index": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built RSEM index."
-                },
-                "salmon_index": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory or tar.gz archive for pre-built Salmon index."
-                },
-                "hisat2_build_memory": {
-                    "type": "string",
-                    "default": "200.GB",
-                    "fa_icon": "fas fa-memory",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "description": "Minimum memory required to use splice sites and exons in the HiSAT2 index build process.",
-                    "help_text": "HiSAT2 requires a huge amount of RAM to build a genome index for larger genomes, if including splice sites and exons e.g. the human genome might typically require 200GB. If you specify less than this threshold for the `HISAT2_BUILD` process then the splice sites and exons will be ignored, meaning that the process will require a lot less memory. If you are working with a small genome, set this parameter to a lower value to reduce the threshold for skipping this check. If using a larger genome, consider supplying more memory to the `HISAT2_BUILD` process."
-                },
-                "gencode": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-code-branch",
-                    "description": "Specify if your GTF annotation is in GENCODE format.",
-                    "help_text": "If your GTF file is in GENCODE format and you would like to run Salmon i.e. `--pseudo_aligner salmon`, you will need to provide this parameter in order to build the Salmon index appropriately."
-                },
-                "gtf_extra_attributes": {
-                    "type": "string",
-                    "default": "gene_name",
-                    "fa_icon": "fas fa-plus-square",
-                    "description": "By default, the pipeline uses the `gene_name` field to obtain additional gene identifiers from the input GTF file when running Salmon.",
-                    "help_text": "This behaviour can be modified by specifying `--gtf_extra_attributes` when running the pipeline. Note that you can also specify more than one desired value, separated by a comma e.g. `--gtf_extra_attributes gene_id,...`.\n"
-                },
-                "gtf_group_features": {
-                    "type": "string",
-                    "default": "gene_id",
-                    "description": "Define the attribute type used to group features in the GTF file when running Salmon.",
-                    "fa_icon": "fas fa-layer-group"
-                },
-                "featurecounts_group_type": {
-                    "type": "string",
-                    "default": "gene_biotype",
-                    "fa_icon": "fas fa-layer-group",
-                    "description": "The attribute type used to group feature types in the GTF file when generating the biotype plot with featureCounts."
-                },
-                "featurecounts_feature_type": {
-                    "type": "string",
-                    "default": "exon",
-                    "description": "By default, the pipeline assigns reads based on the 'exon' attribute within the GTF file.",
-                    "fa_icon": "fas fa-indent",
-                    "help_text": "The feature type used from the GTF file when generating the biotype plot with featureCounts."
-                },
-                "save_reference": {
-                    "type": "boolean",
-                    "description": "If generated by the pipeline save the BWA index in the results directory.",
-                    "help_text": "If the BWA index is generated by the pipeline use this parameter to save it to your results folder. These can then be used for future pipeline runs, reducing processing times.",
-                    "fa_icon": "fas fa-save"
                 },
                 "igenomes_base": {
                     "type": "string",
@@ -275,272 +80,6 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 }
-            }
-        },
-        "read_trimming_options": {
-            "title": "Read trimming options",
-            "type": "object",
-            "fa_icon": "fas fa-cut",
-            "description": "Options to adjust read trimming criteria.",
-            "properties": {
-                "clip_r1": {
-                    "type": "integer",
-                    "description": "Instructs Trim Galore to remove bp from the 5' end of read 1 (or single-end reads).",
-                    "fa_icon": "fas fa-cut"
-                },
-                "clip_r2": {
-                    "type": "integer",
-                    "description": "Instructs Trim Galore to remove bp from the 5' end of read 2 (paired-end reads only).",
-                    "fa_icon": "fas fa-cut"
-                },
-                "three_prime_clip_r1": {
-                    "type": "integer",
-                    "description": "Instructs Trim Galore to remove bp from the 3' end of read 1 AFTER adapter/quality trimming has been performed.",
-                    "fa_icon": "fas fa-cut"
-                },
-                "three_prime_clip_r2": {
-                    "type": "integer",
-                    "description": "Instructs Trim Galore to remove bp from the 3' end of read 2 AFTER adapter/quality trimming has been performed.",
-                    "fa_icon": "fas fa-cut"
-                },
-                "trim_nextseq": {
-                    "type": "integer",
-                    "description": "Instructs Trim Galore to apply the --nextseq=X option, to trim based on quality after removing poly-G tails.",
-                    "help_text": "This enables the option Cutadapt `--nextseq-trim=3'CUTOFF` option via Trim Galore, which will set a quality cutoff (that is normally given with -q instead), but qualities of G bases are ignored. This trimming is in common for the NextSeq- and NovaSeq-platforms, where basecalls without any signal are called as high-quality G bases.",
-                    "fa_icon": "fas fa-cut"
-                },
-                "skip_trimming": {
-                    "type": "boolean",
-                    "description": "Skip the adapter trimming step.",
-                    "help_text": "Use this if your input FastQ files have already been trimmed outside of the workflow or if you're very confident that there is no adapter contamination in your data.",
-                    "fa_icon": "fas fa-fast-forward"
-                },
-                "save_trimmed": {
-                    "type": "boolean",
-                    "description": "Save the trimmed FastQ files in the results directory.",
-                    "help_text": "By default, trimmed FastQ files will not be saved to the results directory. Specify this flag (or set to true in your config file) to copy these files to the results directory when complete.",
-                    "fa_icon": "fas fa-save"
-                }
-            }
-        },
-        "alignment_options": {
-            "title": "Alignment options",
-            "type": "object",
-            "fa_icon": "fas fa-map-signs",
-            "description": "Options to adjust parameters and filtering criteria for read alignments.",
-            "properties": {
-                "aligner": {
-                    "type": "string",
-                    "default": "star",
-                    "description": "Specifies the alignment algorithm to use - available options are 'star', 'star_rsem' and 'hisat2'.",
-                    "fa_icon": "fas fa-map-signs",
-                    "enum": [
-                        "star",
-                        "star_rsem",
-                        "hisat2"
-                    ]
-                },
-                "pseudo_aligner": {
-                    "type": "string",
-                    "description": "Specifies the pseudo aligner to use - available options are 'salmon'. Runs in addition to '--aligner'.",
-                    "fa_icon": "fas fa-hamburger",
-                    "enum": [
-                        "salmon"
-                    ]
-                },
-                "bam_csi_index": {
-                    "type": "boolean",
-                    "description": "Create a CSI index for BAM files instead of the traditional BAI index. This will be required for genomes with larger chromosome sizes.",
-                    "fa_icon": "fas fa-sort-alpha-down"
-                },
-                "star_ignore_sjdbgtf": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-ban",
-                    "description": "When using pre-built STAR indices do not re-extract and use splice junctions from the GTF file."
-                },
-                "min_mapped_reads": {
-                    "type": "integer",
-                    "default": 5,
-                    "fa_icon": "fas fa-percentage",
-                    "description": "Minimum percentage of uniquely mapped reads below which samples are removed from further processing.",
-                    "help_text": "Some downstream steps in the pipeline will fail if this threshold is too low."
-                },
-                "seq_center": {
-                    "type": "string",
-                    "description": "Sequencing center information to be added to read group of BAM files.",
-                    "fa_icon": "fas fa-synagogue"
-                },
-                "stringtie_ignore_gtf": {
-                    "type": "boolean",
-                    "description": "Perform reference-guided de novo assembly of transcripts using StringTie i.e. dont restrict to those in GTF file.",
-                    "fa_icon": "fas fa-ban"
-                },
-                "save_unaligned": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-save",
-                    "description": "Where possible, save unaligned reads from either STAR, HISAT2 or Salmon to the results directory.",
-                    "help_text": "This may either be in the form of FastQ or BAM files depending on the options available for that particular tool."
-                },
-                "save_align_intermeds": {
-                    "type": "boolean",
-                    "description": "Save the intermediate BAM files from the alignment step.",
-                    "help_text": "By default, intermediate BAM files will not be saved. The final BAM files created after the appropriate filtering step are always saved to limit storage usage. Set this parameter to also save other intermediate BAM files.",
-                    "fa_icon": "fas fa-save"
-                },
-                "skip_markduplicates": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip picard MarkDuplicates step."
-                },
-                "skip_alignment": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip all of the alignment-based processes within the pipeline."
-                }
-            }
-        },
-        "analysis_options": {
-            "title": "Analysis options",
-            "type": "object",
-            "fa_icon": "fas fa-fast-forward",
-            "description": "Module parameters of GATK.",
-            "properties": {
-                "scatter_count": {
-                    "type": "integer",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Set the scatter count for the intervalListTools. This parameter defines how many chunks to prepare from the bed file. Default 6."
-                },
-                "no_intervals": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Flag to set the presence or absence of an Interval bed file. Default true."
-                },
-                "window": {
-                    "type": "integer",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "GATK Variant filtering parameter -window. The window size (in bases) in which to evaluate clustered SNPs. Default is 35."
-                },
-                "cluster": {
-                    "type": "integer",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "GATK Variant filtering parameter -cluster. The number of SNPs which make up a cluster. Default is 3."
-                },
-                "fs_filter": {
-                    "type": "number",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "GATK Variant filtering parameter - FisherStrand (FS). Default is FS > 30.0"
-                },
-                "qd_filter": {
-                    "type": "number",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "GATK Variant filtering parameter - Quality-by-Depth. Default is QD < 2.0"
-                }
-            }
-        },
-        "process_skipping_options": {
-            "title": "Process skipping options",
-            "type": "object",
-            "fa_icon": "fas fa-fast-forward",
-            "description": "Options to skip various steps within the workflow.",
-            "properties": {
-                "rseqc_modules": {
-                    "type": "string",
-                    "default": "bam_stat,inner_distance,infer_experiment,junction_annotation,junction_saturation,read_distribution,read_duplication",
-                    "fa_icon": "fas fa-chart-pie",
-                    "description": "Specify the RSeQC modules to run."
-                },
-                "deseq2_vst": {
-                    "type": "boolean",
-                    "description": "Use vst transformation instead of rlog with DESeq2.",
-                    "help_text": "See [DESeq2 docs](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#data-transformations-and-visualization).",
-                    "fa_icon": "fas fa-dolly"
-                },
-                "skip_bigwig": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip bigWig file creation."
-                },
-                "skip_stringtie": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip StringTie."
-                },
-                "skip_fastqc": {
-                    "type": "boolean",
-                    "description": "Skip FastQC.",
-                    "fa_icon": "fas fa-fast-forward"
-                },
-                "skip_preseq": {
-                    "type": "boolean",
-                    "description": "Skip Preseq.",
-                    "fa_icon": "fas fa-fast-forward"
-                },
-                "skip_dupradar": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip dupRadar."
-                },
-                "skip_qualimap": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip Qualimap."
-                },
-                "skip_rseqc": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip RSeQC."
-                },
-                "skip_biotype_qc": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip additional featureCounts process for biotype QC."
-                },
-                "skip_deseq2_qc": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip DESeq2 PCA and heatmap plotting."
-                },
-                "skip_multiqc": {
-                    "type": "boolean",
-                    "description": "Skip MultiQC.",
-                    "fa_icon": "fas fa-fast-forward"
-                },
-                "skip_qc": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip all QC steps except for MultiQC."
-                },
-                "skip_splitncigar": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip SplitNCigar module of GATK."
-                },
-                "skip_basecalibrator": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip GATK base calibration step."
-                },
-                "skip_applybqsr": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip GATK applying base calibration step."
-                },
-                "skip_haplotypecaller": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip GATK variant calling."
-                },
-                "skip_intervallisttools": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip splitting of interval BED file into chucks for parallel threads."
-                },
-                "skip_variantfiltration": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-fast-forward",
-                    "description": "Skip variant filtering step."
-                }               
-
             }
         },
         "institutional_config_options": {
@@ -678,6 +217,7 @@
                 "max_multiqc_email_size": {
                     "type": "string",
                     "description": "File size limit when attaching MultiQC reports to summary emails.",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
                     "default": "25.MB",
                     "fa_icon": "fas fa-file-upload",
                     "hidden": true
@@ -736,25 +276,7 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/umi_options"
-        },
-        {
-            "$ref": "#/definitions/read_filtering_options"
-        },
-        {
-            "$ref": "#/definitions/analysis_options"
-        },
-        {
             "$ref": "#/definitions/reference_genome_options"
-        },
-        {
-            "$ref": "#/definitions/read_trimming_options"
-        },
-        {
-            "$ref": "#/definitions/alignment_options"
-        },
-        {
-            "$ref": "#/definitions/process_skipping_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
@@ -765,5 +287,132 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "save_reference": {
+            "type": "string"
+        },
+        "aligner": {
+            "type": "string",
+            "default": "star"
+        },
+        "seq_center": {
+            "type": "string"
+        },
+        "save_merged_fastq": {
+            "type": "string"
+        },
+        "save_unaligned": {
+            "type": "string"
+        },
+        "save_align_intermeds": {
+            "type": "string"
+        },
+        "skip_markduplicates": {
+            "type": "string"
+        },
+        "skip_alignment": {
+            "type": "string"
+        },
+        "skip_splitncigar": {
+            "type": "string"
+        },
+        "skip_basecalibrator": {
+            "type": "string"
+        },
+        "skip_applybqsr": {
+            "type": "string"
+        },
+        "skip_haplotypecaller": {
+            "type": "string"
+        },
+        "skip_intervallisttools": {
+            "type": "string"
+        },
+        "skip_variantfiltration": {
+            "type": "string"
+        },
+        "scatter_count": {
+            "type": "integer",
+            "default": 6
+        },
+        "no_intervals": {
+            "type": "string"
+        },
+        "skip_qc": {
+            "type": "string"
+        },
+        "window": {
+            "type": "integer",
+            "default": 35
+        },
+        "cluster": {
+            "type": "integer",
+            "default": 3
+        },
+        "fs_filter": {
+            "type": "number",
+            "default": 30.0
+        },
+        "qd_filter": {
+            "type": "number",
+            "default": 2.0
+        },
+        "skip_bigwig": {
+            "type": "string"
+        },
+        "skip_stringtie": {
+            "type": "string"
+        },
+        "skip_fastqc": {
+            "type": "string"
+        },
+        "skip_preseq": {
+            "type": "string"
+        },
+        "skip_dupradar": {
+            "type": "string"
+        },
+        "skip_qualimap": {
+            "type": "string"
+        },
+        "skip_rseqc": {
+            "type": "string"
+        },
+        "skip_biotype_qc": {
+            "type": "string"
+        },
+        "skip_deseq2_qc": {
+            "type": "string"
+        },
+        "skip_multiqc": {
+            "type": "string"
+        },
+        "deseq2_vst": {
+            "type": "string"
+        },
+        "rseqc_modules": {
+            "type": "string",
+            "default": "bam_stat,inner_distance,infer_experiment,junction_annotation,junction_saturation,read_distribution,read_duplication"
+        },
+        "gtf": {
+            "type": "string"
+        },
+        "gff": {
+            "type": "string"
+        },
+        "gene_bed": {
+            "type": "string"
+        },
+        "star_index": {
+            "type": "string"
+        },
+        "star_ignore_sjdbgtf": {
+            "type": "string"
+        },
+        "seq_platform": {
+            "type": "string",
+            "default": "illumina"
+        }
+    }
 }
