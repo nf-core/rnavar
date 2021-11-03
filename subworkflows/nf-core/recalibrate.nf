@@ -11,7 +11,6 @@ params.samtools_index_options = [:]
 params.samtools_stats_options = [:]
 
 include { GATK4_APPLYBQSR as APPLYBQSR } from '../../modules/local/gatk4/applybqsr/main'           addParams(options: params.applybqsr_options)
-include { QUALIMAP_BAMQC }               from '../../modules/nf-core/modules/qualimap/bamqc/main'  addParams(options: params.qualimap_bamqc_options)
 include { SAMTOOLS_INDEX }               from '../../modules/nf-core/modules/samtools/index/main'  addParams(options: params.samtools_index_options)
 include { SAMTOOLS_MERGE }               from '../../modules/nf-core/modules/samtools/merge/main'  addParams(options: params.merge_bam_options)
 include { SAMTOOLS_STATS }               from '../../modules/nf-core/modules/samtools/stats/main'  addParams(options: params.samtools_stats_options)
@@ -55,14 +54,13 @@ workflow RECALIBRATE {
         SAMTOOLS_INDEX(bam_recalibrated)
         bam_recalibrated_index = bam_recalibrated.join(SAMTOOLS_INDEX.out.bai)
 
-        qualimap_bamqc = Channel.empty()
         samtools_stats = Channel.empty()
 
         if (!skip_samtools) {
             SAMTOOLS_STATS(bam_recalibrated_index)
             samtools_stats = SAMTOOLS_STATS.out.stats
         }
-        bam_reports = samtools_stats.mix(qualimap_bamqc)
+        bam_reports = samtools_stats
     }
 
     emit:
