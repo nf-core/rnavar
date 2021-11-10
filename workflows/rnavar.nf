@@ -26,6 +26,10 @@ for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 if (params.input) ch_input = file(params.input)
 else exit 1, 'Input samplesheet not specified!'
 
+if(!params.star_index and !params.gtf){
+    exit 1, "GTF file is required to build a STAR reference index! Use option -gtf to provide a GTF file."
+}
+
 /*
 ========================================================================================
     CONFIG FILES
@@ -91,8 +95,6 @@ if (params.save_align_intermeds) {
     modules['samtools_index_genome'].publish_files.put('csi','')
 }
 
-def biotype = params.gencode ? "gene_type" : params.featurecounts_group_type
-
 if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
 
 modules['star_align'].args += params.save_unaligned ? Utils.joinModuleArgs(['--outReadsUnmapped Fastx']) : ''
@@ -109,7 +111,7 @@ if (params.qd_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs
 
 include { CAT_FASTQ }               from '../modules/nf-core/modules/cat/fastq/main'               addParams(options: modules['cat_fastq'])
 include { GATK4_BASERECALIBRATOR }  from '../modules/nf-core/modules/gatk4/baserecalibrator/main'  addParams(options: modules['gatk_baserecalibrator'])
-include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' addParams(options: [:])
+include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' addParams(options: modules['gatk_bedtointervallist'])
 include { GATK4_HAPLOTYPECALLER   } from '../modules/local/gatk4/haplotypecaller/main'             addParams(options: modules['gatk_haplotypecaller'])
 include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/modules/gatk4/intervallisttools/main' addParams(options: modules['gatk_intervallisttools'])
 include { GATK4_MERGEVCFS         } from '../modules/local/gatk4/mergevcfs/main'                   addParams(options: modules['gatk_mergevcfs'])
@@ -148,13 +150,14 @@ workflow RNAVAR {
 
     ch_software_versions = Channel.empty()
 
-    PREPARE_GENOME(prepareToolIndices, biotype)
-    ch_genome_gtf = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.gene_bed)
+    PREPARE_GENOME(prepareToolIndices)
+    ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.gene_bed)
 
     ch_software_versions = Channel.empty()
     ch_software_versions = ch_software_versions.mix(PREPARE_GENOME.out.gffread_version.ifEmpty(null))
 
     INPUT_CHECK(ch_input)
+        .reads
         .map{ meta, fastq ->
             meta.id = meta.id.split('_')[0..-2].join('_')
             [meta, fastq]}
@@ -165,11 +168,16 @@ workflow RNAVAR {
             multiple: fastq.size() > 1
                 return [meta, fastq.flatten()]}
         .set{ch_fastq}
+    //ch_software_versions = ch_software_versions.mix(INPUT_CHECK.out.version.first().ifEmpty(null))
+
+    ch_fastq.multiple.view()
 
     // MODULE: Concatenate FastQ files from same sample if required
     CAT_FASTQ(ch_fastq.multiple)
+        .reads
         .mix(ch_fastq.single)
         .set{ch_cat_fastq}
+    //ch_software_versions = ch_software_versions.mix(CAT_FASTQ.out.version.first().ifEmpty(null))
 
     // MODULE: Run FastQC
     FASTQC(ch_cat_fastq)
@@ -178,7 +186,7 @@ workflow RNAVAR {
 
     // PREPARE THE INTERVAL LIST FROM GTF FILE
     ch_interval_list = Channel.empty()
-    GATK4_BEDTOINTERVALLIST(ch_genome_gtf, PREPARE_GENOME.out.dict)
+    GATK4_BEDTOINTERVALLIST(ch_genome_bed, PREPARE_GENOME.out.dict)
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_software_versions = ch_software_versions.mix(GATK4_BEDTOINTERVALLIST.out.version.first().ifEmpty(null))
 
@@ -235,7 +243,7 @@ workflow RNAVAR {
         known_sites     = Channel.from([params.dbsnp_vcf, params.known_indels]).collect()
         known_sites_tbi = Channel.from([params.dbsnp_vcf_index, params.known_indels_index]).collect()
 
-        ch_interval_list_baserecalibrator = ch_interval_list.map{ meta, bed -> [bed] }
+        ch_interval_list_baserecalibrator = ch_interval_list.map{ meta, bed -> [bed] }.collect()
 
         GATK4_BASERECALIBRATOR(
             bam_splitncigar,
@@ -254,7 +262,8 @@ workflow RNAVAR {
         bam_recalibrated    = Channel.empty()
         bam_recalibrated_qc = Channel.empty()
 
-        ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }
+        ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.collect()
+
         RECALIBRATE(
             ('bamqc' in params.skip_qc),
             ('samtools' in params.skip_qc),
