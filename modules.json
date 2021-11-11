@@ -3,13 +3,64 @@
     "homePage": "https://github.com/nf-core/rnavar",
     "repos": {
         "nf-core/modules": {
+            "cat/fastq": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
             "custom/dumpsoftwareversions": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
             "fastqc": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
+            "gatk4/baserecalibrator": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
+            "gatk4/bedtointervallist": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
+            "gatk4/createsequencedictionary": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
+            "gatk4/intervallisttools": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
+            "gffread": {
+                "git_sha": "49da8642876ae4d91128168cd0db4f1c858d7792"
+            },
+            "gunzip": {
+                "git_sha": "e560fbbc3ed68e62bc810a50f552394056f81762"
+            },
             "multiqc": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "samtools/faidx": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "samtools/flagstat": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "samtools/idxstats": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "samtools/index": {
+                "git_sha": "1abe23e1592f7cf6a3724589061827df0d8a0252"
+            },
+            "samtools/merge": {
+                "git_sha": "ac1e6df076195cec553a2079c9cebd94026a0d47"
+            },
+            "samtools/sort": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "samtools/stats": {
+                "git_sha": "ac1e6df076195cec553a2079c9cebd94026a0d47"
+            },
+            "star/align": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "star/genomegenerate": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "untar": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             }
         }

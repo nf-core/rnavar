@@ -9,7 +9,6 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowRnavar.initialise(params, log)
 
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
 def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -61,6 +60,72 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
     RUN MAIN WORKFLOW
 ========================================================================================
 */
+
+// Check alignment parameters
+def prepareToolIndices  = []
+prepareToolIndices = params.aligner
+
+def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
+def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
+
+if (!params.save_reference) modules['star_genomegenerate']['publish_files'] = false
+
+modules['samtools_index_genome'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
+
+if (params.save_align_intermeds) {
+    modules['samtools_sort_genome'].publish_files.put('bam','')
+    modules['samtools_index_genome'].publish_files.put('bai','')
+    modules['samtools_index_genome'].publish_files.put('csi','')
+}
+
+if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
+
+modules['star_align'].args += params.save_unaligned ? Utils.joinModuleArgs(['--outReadsUnmapped Fastx']) : ''
+if (params.save_align_intermeds) modules['star_align'].publish_files.put('bam','')
+if (params.save_unaligned)       modules['star_align'].publish_files.put('fastq.gz','unmapped')
+
+modules['picard_markduplicates_samtools'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
+modules['gatk_intervallisttools'].args += Utils.joinModuleArgs(["--SCATTER_COUNT $params.scatter_count"])
+
+if (params.window)    modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--window $params.window"])
+if (params.cluster)   modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--cluster $params.cluster"])
+if (params.fs_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"FS\" --filter \"FS > $params.fs_filter\" "])
+if (params.qd_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"QD\" --filter \"QD < $params.qd_filter\" "])
+
+include { CAT_FASTQ }               from '../modules/nf-core/modules/cat/fastq/main'               addParams(options: modules['cat_fastq'])
+include { GATK4_BASERECALIBRATOR }  from '../modules/nf-core/modules/gatk4/baserecalibrator/main'  addParams(options: modules['gatk_baserecalibrator'])
+include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' addParams(options: modules['gatk_bedtointervallist'])
+include { GATK4_HAPLOTYPECALLER   } from '../modules/local/gatk4/haplotypecaller/main'             addParams(options: modules['gatk_haplotypecaller'])
+include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/modules/gatk4/intervallisttools/main' addParams(options: modules['gatk_intervallisttools'])
+include { GATK4_MERGEVCFS         } from '../modules/local/gatk4/mergevcfs/main'                   addParams(options: modules['gatk_mergevcfs'])
+include { GATK4_SPLITNCIGARREADS }  from '../modules/local/gatk4/splitncigarreads/main'            addParams(options: modules['gatk_splitncigar_options'])
+include { GATK4_VARIANTFILTRATION } from '../modules/local/gatk4/variantfiltration/main'           addParams(options: modules['gatk_variantfilter'])
+include { SAMTOOLS_INDEX }          from '../modules/nf-core/modules/samtools/index/main'          addParams(options: modules['samtools_index_genome'])
+
+include { PREPARE_GENOME }          from '../subworkflows/local/prepare_genome'                    addParams(
+    genome_options:     publish_genome_options,
+    index_options:      publish_index_options,
+    star_index_options: modules['star_genomegenerate']
+)
+include { ALIGN_STAR }              from '../subworkflows/nf-core/align_star'                      addParams(
+    align_options: modules['star_align'],
+    samtools_index_options: modules['samtools_index_genome'],
+    samtools_sort_options:  modules['samtools_sort_genome'],
+    samtools_stats_options: modules['samtools_index_genome'],
+    seq_platform: params.seq_platform
+)
+include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates'                  addParams(
+    markduplicates_options: modules['picard_markduplicates'],
+    samtools_index_options: modules['picard_markduplicates_samtools'],
+    samtools_stats_options: modules['picard_markduplicates_samtools']
+)
+include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'                     addParams(
+    applybqsr_options:      modules['applybqsr'],
+    merge_bam_options:      modules['merge_bam_recalibrate'],
+    samtools_index_options: modules['samtools_index_recalibrate'],
+    samtools_stats_options: modules['samtools_stats_recalibrate']
+)
+
 
 // Info required for completion email and summary
 def multiqc_report = []
