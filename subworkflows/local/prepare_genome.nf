@@ -6,6 +6,7 @@ params.genome_options       = [:]
 params.gffread_options      = [:]
 params.index_options        = [:]
 params.star_index_options   = [:]
+params.star_untar_options   = [:]
 
 include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main' addParams(options: params.genome_options)
 include { GET_CHROM_SIZES }                   from '../../modules/local/get_chrom_sizes'                               addParams(options: params.genome_options)
@@ -17,7 +18,7 @@ include { GUNZIP as GUNZIP_GFF }              from '../../modules/nf-core/module
 include { GUNZIP as GUNZIP_GTF }              from '../../modules/nf-core/modules/gunzip/main'                         addParams(options: params.genome_options)
 include { SAMTOOLS_FAIDX }                    from '../../modules/nf-core/modules/samtools/faidx/main'                 addParams(options: params.genome_options)
 include { STAR_GENOMEGENERATE }               from '../../modules/nf-core/modules/star/genomegenerate/main'            addParams(options: params.star_index_options)
-include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/modules/untar/main'                          addParams(options: params.star_index_options)
+include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/modules/untar/main'                          addParams(options: params.star_untar_options)
 
 
 workflow PREPARE_GENOME {
@@ -26,11 +27,14 @@ workflow PREPARE_GENOME {
 
     main:
 
+    ch_versions = Channel.empty()
+
     //
     // Uncompress genome fasta file if required
     //
     if (params.fasta.endsWith('.gz')) {
         ch_fasta = GUNZIP_FASTA ( params.fasta ).gunzip
+        ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     } else {
         ch_fasta = file(params.fasta)
     }
@@ -42,17 +46,19 @@ workflow PREPARE_GENOME {
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
             ch_gtf = GUNZIP_GTF ( params.gtf ).gunzip
+            ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
         } else {
             ch_gtf = file(params.gtf)
         }
     } else if (params.gff) {
         if (params.gff.endsWith('.gz')) {
             ch_gff = GUNZIP_GFF ( params.gff ).gunzip
+            ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
         } else {
             ch_gff = file(params.gff)
         }
         ch_gtf = GFFREAD ( ch_gff ).gtf
-        ch_gffread_version = GFFREAD.out.version
+        ch_versions = ch_versions.mix(GFFREAD.out.versions)
     }
 
     //
@@ -61,11 +67,13 @@ workflow PREPARE_GENOME {
     if (params.gene_bed) {
         if (params.gene_bed.endsWith('.gz')) {
             ch_gene_bed = GUNZIP_GENE_BED ( params.gene_bed ).gunzip
+            ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
             ch_gene_bed = file(params.gene_bed)
         }
     } else {
-        ch_gene_bed = GTF2BED ( ch_gtf )
+        ch_gene_bed = GTF2BED ( ch_gtf ).bed
+        ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
 
     // Index the genome fasta
@@ -92,12 +100,13 @@ workflow PREPARE_GENOME {
         if (params.star_index) {
             if (params.star_index.endsWith('.tar.gz')) {
                 ch_star_index = UNTAR_STAR_INDEX ( params.star_index ).untar
+                ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
             } else {
                 ch_star_index = file(params.star_index)
             }
         } else {
             ch_star_index   = STAR_GENOMEGENERATE ( ch_fasta, ch_gtf ).index
-            ch_star_version = STAR_GENOMEGENERATE.out.version
+            ch_versions   = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
         }
     }
 
@@ -109,6 +118,5 @@ workflow PREPARE_GENOME {
     gene_bed         = ch_gene_bed         // path: gene.bed
     chrom_sizes      = ch_chrom_sizes      // path: genome.sizes
     star_index       = ch_star_index       // path: star/index/
-    star_version     = ch_star_version     // path: *.version.txt
-    gffread_version  = ch_gffread_version  // path: *.version.txt
+    versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

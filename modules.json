@@ -33,6 +33,9 @@
             "multiqc": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
+            "picard/markduplicates": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
             "samtools/faidx": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },

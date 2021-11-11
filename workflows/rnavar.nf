@@ -10,11 +10,23 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 WorkflowRnavar.initialise(params, log)
 
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+// Check input path parameters to see if they exist
+def checkPathParamList = [
+    params.input,
+    params.fasta,
+    params.gtf,
+    params.dbsnp_vcf,
+    params.dbsnp_vcf_index,
+    params.known_indels,
+    params.known_indels_index,
+    params.star_index]
+
+for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+
+if(!params.star_index and !params.gtf){ exit 1, "GTF file is required to build a STAR reference index! Use option -gtf to provide a GTF file." }
 
 /*
 ========================================================================================
@@ -126,13 +138,18 @@ include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'  
     samtools_stats_options: modules['samtools_stats_recalibrate']
 )
 
-
 // Info required for completion email and summary
 def multiqc_report = []
 
 workflow RNAVAR {
 
     ch_versions = Channel.empty()
+
+        //
+    // SUBWORKFLOW: Uncompress and prepare reference genome files
+    //
+    PREPARE_GENOME (prepareToolIndices)
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
