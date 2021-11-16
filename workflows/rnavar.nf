@@ -110,7 +110,6 @@ include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedto
 include { GATK4_HAPLOTYPECALLER   } from '../modules/local/gatk4/haplotypecaller/main'             addParams(options: modules['gatk_haplotypecaller'])
 include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/modules/gatk4/intervallisttools/main' addParams(options: modules['gatk_intervallisttools'])
 include { GATK4_MERGEVCFS         } from '../modules/local/gatk4/mergevcfs/main'                   addParams(options: modules['gatk_mergevcfs'])
-include { GATK4_SPLITNCIGARREADS }  from '../modules/local/gatk4/splitncigarreads/main'            addParams(options: modules['gatk_splitncigar_options'])
 include { GATK4_VARIANTFILTRATION } from '../modules/local/gatk4/variantfiltration/main'           addParams(options: modules['gatk_variantfilter'])
 include { SAMTOOLS_INDEX }          from '../modules/nf-core/modules/samtools/index/main'          addParams(options: modules['samtools_index_genome'])
 
@@ -131,6 +130,10 @@ include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates
     samtools_index_options: modules['picard_markduplicates_samtools'],
     samtools_stats_options: modules['picard_markduplicates_samtools']
 )
+include { GATK4_SPLITNCIGAR }  from '../subworkflows/nf-core/splitn_cigar_reads'                  addParams(
+    gatk_splitncigar_options: modules['gatk_splitncigar_options'],
+    samtools_index_options: modules['picard_markduplicates_samtools']
+)
 include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'                     addParams(
     applybqsr_options:      modules['applybqsr'],
     merge_bam_options:      modules['merge_bam_recalibrate'],
@@ -145,10 +148,11 @@ workflow RNAVAR {
 
     ch_versions = Channel.empty()
 
-        //
+    //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (prepareToolIndices)
+    ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.gene_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     //
@@ -157,15 +161,114 @@ workflow RNAVAR {
     INPUT_CHECK (
         ch_input
     )
+    .reads
+    .map {
+        meta, fastq ->
+            meta.id = meta.id.split('_')[0..-2].join('_')
+            [ meta, fastq ] }
+    .groupTuple(by: [0])
+    .branch {
+        meta, fastq ->
+            single  : fastq.size() == 1
+                return [ meta, fastq.flatten() ]
+            multiple: fastq.size() > 1
+                return [ meta, fastq.flatten() ]
+    }
+    .set { ch_fastq }
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+
+    //
+    // MODULE: Concatenate FastQ files from same sample if required
+    //
+    CAT_FASTQ (
+        ch_fastq.multiple
+    )
+    .reads
+    .mix(ch_fastq.single)
+    .set { ch_cat_fastq }
+    ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
 
     //
     // MODULE: Run FastQC
     //
     FASTQC (
-        INPUT_CHECK.out.reads
+        ch_cat_fastq
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+
+    // PREPARE THE INTERVAL LIST FROM GTF FILE
+    ch_interval_list = Channel.empty()
+    GATK4_BEDTOINTERVALLIST(ch_genome_bed, PREPARE_GENOME.out.dict)
+    ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
+    ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
+
+    //
+    // SUBWORKFLOW: Alignment with STAR
+    //
+    ch_genome_bam                 = Channel.empty()
+    ch_genome_bam_index           = Channel.empty()
+    ch_samtools_stats             = Channel.empty()
+    ch_samtools_flagstat          = Channel.empty()
+    ch_samtools_idxstats          = Channel.empty()
+    ch_star_multiqc               = Channel.empty()
+    ch_aligner_pca_multiqc        = Channel.empty()
+    ch_aligner_clustering_multiqc = Channel.empty()
+
+    if (params.aligner == 'star') {
+        ALIGN_STAR (
+            ch_cat_fastq,
+            PREPARE_GENOME.out.star_index,
+            PREPARE_GENOME.out.gtf
+        )
+        ch_genome_bam        = ALIGN_STAR.out.bam
+        ch_genome_bam_index  = ALIGN_STAR.out.bai
+        ch_transcriptome_bam = ALIGN_STAR.out.bam_transcript
+        ch_samtools_stats    = ALIGN_STAR.out.stats
+        ch_samtools_flagstat = ALIGN_STAR.out.flagstat
+        ch_samtools_idxstats = ALIGN_STAR.out.idxstats
+        ch_star_multiqc      = ALIGN_STAR.out.log_final
+        if (params.bam_csi_index) ch_genome_bam_index = ALIGN_STAR.out.csi
+        ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
+
+       // SUBWORKFLOW: Mark duplicates with Picard
+        MARKDUPLICATES(ch_genome_bam)
+        ch_genome_bam             = MARKDUPLICATES.out.bam
+        ch_genome_bam_index       = MARKDUPLICATES.out.bai
+        ch_samtools_stats         = MARKDUPLICATES.out.stats
+        ch_samtools_flagstat      = MARKDUPLICATES.out.flagstat
+        ch_samtools_idxstats      = MARKDUPLICATES.out.idxstats
+        ch_markduplicates_multiqc = MARKDUPLICATES.out.metrics
+        if (params.bam_csi_index) ch_genome_bam_index = MARKDUPLICATES.out.csi
+        ch_versions               = ch_versions.mix(MARKDUPLICATES.out.versions.first().ifEmpty(null))
+
+        // MODULE: SplitNCigarReads from GATK4
+        // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
+        bam_splitncigar         = Channel.empty()
+        GATK4_SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict)
+        bam_splitncigar         = GATK4_SPLITNCIGAR.out.bam
+        ch_versions             = ch_versions.mix(GATK4_SPLITNCIGAR.out.versions.first().ifEmpty(null))
+
+        ch_bqsr_table = Channel.empty()
+
+        // MODULE: BaseRecalibrator from GATK4
+        known_sites     = Channel.from([params.dbsnp_vcf, params.known_indels]).collect()
+        known_sites_tbi = Channel.from([params.dbsnp_vcf_index, params.known_indels_index]).collect()
+
+        ch_interval_list_baserecalibrator = ch_interval_list.map{ meta, bed -> [bed] }.collect()
+
+        GATK4_BASERECALIBRATOR(
+            bam_splitncigar,
+            PREPARE_GENOME.out.fasta,
+            PREPARE_GENOME.out.fai,
+            PREPARE_GENOME.out.dict,
+            ch_interval_list_baserecalibrator,
+            known_sites,
+            known_sites_tbi
+        )
+        ch_bqsr_table = GATK4_BASERECALIBRATOR.out.table
+
+
+    }
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')

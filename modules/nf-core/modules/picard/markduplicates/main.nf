@@ -40,9 +40,9 @@ process PICARD_MARKDUPLICATES {
         -Xmx${avail_mem}g \\
         MarkDuplicates \\
         $options.args \\
-        -I $bam \\
-        -O ${prefix}.bam \\
-        -M ${prefix}.MarkDuplicates.metrics.txt
+        INPUT=$bam \\
+        OUTPUT=${prefix}.bam \\
+        METRICS_FILE=${prefix}.MarkDuplicates.metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     ${getProcessName(task.process)}:

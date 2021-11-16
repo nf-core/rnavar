@@ -24,6 +24,9 @@
             "gatk4/intervallisttools": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
             },
+            "gatk4/splitncigarreads": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
             "gffread": {
                 "git_sha": "49da8642876ae4d91128168cd0db4f1c858d7792"
             },
