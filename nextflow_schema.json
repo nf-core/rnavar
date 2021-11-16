@@ -224,7 +224,7 @@
                     "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
                 },
                 "no_intervals": {
-                    "type": "string",
+                    "type": "boolean",
                     "description": "Do not use gene interval file during variant calling",
                     "help_text": "This parameter, if set to True, does not use the gene intervals during the variant calling step, which then results in variants from all regions including non-genic. Default is False",
                     "default": "False"

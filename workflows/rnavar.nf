@@ -245,12 +245,11 @@ workflow RNAVAR {
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
         bam_splitncigar         = Channel.empty()
         GATK4_SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict)
-        bam_splitncigar         = GATK4_SPLITNCIGAR.out.bam
+        bam_splitncigar         = GATK4_SPLITNCIGAR.out.bam.join(GATK4_SPLITNCIGAR.out.bai, by: [0])
         ch_versions             = ch_versions.mix(GATK4_SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
-        ch_bqsr_table = Channel.empty()
-
         // MODULE: BaseRecalibrator from GATK4
+        ch_bqsr_table = Channel.empty()
         known_sites     = Channel.from([params.dbsnp_vcf, params.known_indels]).collect()
         known_sites_tbi = Channel.from([params.dbsnp_vcf_index, params.known_indels_index]).collect()
 
@@ -265,8 +264,29 @@ workflow RNAVAR {
             known_sites,
             known_sites_tbi
         )
-        ch_bqsr_table = GATK4_BASERECALIBRATOR.out.table
+        ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
+        ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
+        // MODULE: ApplyBaseRecalibrator from GATK4
+        bam_applybqsr       = bam_splitncigar.join(ch_bqsr_table, by: [0])
+        bam_recalibrated    = Channel.empty()
+        bam_recalibrated_qc = Channel.empty()
+
+        ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.collect()
+
+        RECALIBRATE(
+            ('bamqc' in params.skip_qc),
+            ('samtools' in params.skip_qc),
+            bam_applybqsr,
+            PREPARE_GENOME.out.dict,
+            PREPARE_GENOME.out.fai,
+            PREPARE_GENOME.out.fasta,
+            ch_interval_list_applybqsr
+        )
+
+        bam_recalibrated    = RECALIBRATE.out.bam
+        bam_recalibrated_qc = RECALIBRATE.out.qc
+        ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
 
     }
 

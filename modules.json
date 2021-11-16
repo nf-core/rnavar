@@ -12,6 +12,9 @@
             "fastqc": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
+            "gatk4/applybqsr": {
+                "git_sha": "34268347447cd60013b69279a42aa9d081592735"
+            },
             "gatk4/baserecalibrator": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
             },
