@@ -150,6 +150,7 @@ def multiqc_report = []
 workflow RNAVAR {
 
     ch_versions = Channel.empty()
+    ch_fastq    = Channel.empty()
 
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
@@ -307,7 +308,7 @@ workflow RNAVAR {
         haplotypecaller_interval_bam = bam_recalibrated.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
                 new_meta = meta.clone()
-                new_meta.id = meta.id + "_" + interval_list.baseName
+                new_meta.id = meta.id
                 [new_meta, bam, bai, interval_list]}
 
         GATK4_HAPLOTYPECALLER(
@@ -322,7 +323,7 @@ workflow RNAVAR {
 
         haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
             .map{ meta, vcf ->
-                meta.id = meta.sample
+                meta.id = meta.id
                 [meta, vcf]}
             .groupTuple()
 
