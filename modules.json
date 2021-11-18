@@ -16,7 +16,7 @@
                 "git_sha": "34268347447cd60013b69279a42aa9d081592735"
             },
             "gatk4/baserecalibrator": {
-                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+                "git_sha": "34268347447cd60013b69279a42aa9d081592735"
             },
             "gatk4/bedtointervallist": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
@@ -34,7 +34,7 @@
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
             },
             "gatk4/splitncigarreads": {
-                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+                "git_sha": "691feeafdcd8b7874f540695ece122cce01a524f"
             },
             "gatk4/variantfiltration": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
