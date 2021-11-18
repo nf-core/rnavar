@@ -24,10 +24,19 @@
             "gatk4/createsequencedictionary": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
             },
+            "gatk4/indexfeaturefile": {
+                "git_sha": "1a4c7cec1b9d82fdaa15897d8e9a9e9a4767444d"
+            },
             "gatk4/intervallisttools": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
             },
+            "gatk4/mergevcfs": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
             "gatk4/splitncigarreads": {
+                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+            },
+            "gatk4/variantfiltration": {
                 "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
             },
             "gffread": {

@@ -79,6 +79,7 @@ prepareToolIndices = params.aligner
 
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
+def untar_options          = [publish_files: false]
 
 if (!params.save_reference) modules['star_genomegenerate']['publish_files'] = false
 
@@ -109,14 +110,16 @@ include { GATK4_BASERECALIBRATOR }  from '../modules/nf-core/modules/gatk4/baser
 include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' addParams(options: modules['gatk_bedtointervallist'])
 include { GATK4_HAPLOTYPECALLER   } from '../modules/local/gatk4/haplotypecaller/main'             addParams(options: modules['gatk_haplotypecaller'])
 include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/modules/gatk4/intervallisttools/main' addParams(options: modules['gatk_intervallisttools'])
-include { GATK4_MERGEVCFS         } from '../modules/local/gatk4/mergevcfs/main'                   addParams(options: modules['gatk_mergevcfs'])
-include { GATK4_VARIANTFILTRATION } from '../modules/local/gatk4/variantfiltration/main'           addParams(options: modules['gatk_variantfilter'])
+include { GATK4_MERGEVCFS         } from '../modules/nf-core/modules/gatk4/mergevcfs/main'         addParams(options: modules['gatk_mergevcfs'])
+include { GATK4_INDEXFEATUREFILE  } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'  addParams(options: modules['gatk_indexfeaturefile'])
+include { GATK4_VARIANTFILTRATION } from '../modules/nf-core/modules/gatk4/variantfiltration/main' addParams(options: modules['gatk_variantfilter'])
 include { SAMTOOLS_INDEX }          from '../modules/nf-core/modules/samtools/index/main'          addParams(options: modules['samtools_index_genome'])
 
 include { PREPARE_GENOME }          from '../subworkflows/local/prepare_genome'                    addParams(
     genome_options:     publish_genome_options,
     index_options:      publish_index_options,
-    star_index_options: modules['star_genomegenerate']
+    star_index_options: modules['star_genomegenerate'],
+    star_untar_options: untar_options
 )
 include { ALIGN_STAR }              from '../subworkflows/nf-core/align_star'                      addParams(
     align_options: modules['star_align'],
@@ -287,6 +290,73 @@ workflow RNAVAR {
         bam_recalibrated    = RECALIBRATE.out.bam
         bam_recalibrated_qc = RECALIBRATE.out.qc
         ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
+
+        // MODULE: IntervalListTools from GATK4
+        ch_interval_list_split = Channel.empty()
+
+        if (!params.skip_intervallisttools) {
+            GATK4_INTERVALLISTTOOLS(ch_interval_list)
+            ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
+        }
+        else ch_interval_list_split = ch_interval_list
+
+        // MODULE: HaplotypeCaller from GATK4
+        interval_flag = params.no_intervals
+        haplotypecaller_vcf = Channel.empty()
+
+        haplotypecaller_interval_bam = bam_recalibrated.combine(ch_interval_list_split)
+            .map{ meta, bam, bai, interval_list ->
+                new_meta = meta.clone()
+                new_meta.id = meta.id + "_" + interval_list.baseName
+                [new_meta, bam, bai, interval_list]}
+
+        GATK4_HAPLOTYPECALLER(
+            haplotypecaller_interval_bam,
+            params.dbsnp_vcf,
+            params.dbsnp_vcf_index,
+            PREPARE_GENOME.out.dict,
+            PREPARE_GENOME.out.fasta,
+            PREPARE_GENOME.out.fai,
+            interval_flag
+        )
+
+        haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
+            .map{ meta, vcf ->
+                meta.id = meta.sample
+                [meta, vcf]}
+            .groupTuple()
+
+        ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
+        use_ref_dict = true
+
+        GATK4_MERGEVCFS(
+            haplotypecaller_raw,
+            PREPARE_GENOME.out.dict,
+            use_ref_dict
+        )
+        haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
+        ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
+
+        GATK4_INDEXFEATUREFILE(
+            haplotypecaller_vcf
+        )
+        haplotypecaller_vcf_tbi = haplotypecaller_vcf.join(GATK4_INDEXFEATUREFILE.out.index, by: [0])
+        ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+
+        // MODULE: VariantFiltration from GATK4
+        if (!params.skip_variantfiltration) {
+
+            GATK4_VARIANTFILTRATION(
+                haplotypecaller_vcf_tbi,
+                PREPARE_GENOME.out.fasta,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.dict
+            )
+
+            filtered_vcf     = GATK4_VARIANTFILTRATION.out.vcf
+            filtered_vcf_tbi = GATK4_VARIANTFILTRATION.out.tbi
+            ch_versions      = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
+        }
 
     }
 

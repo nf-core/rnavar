@@ -1,12 +1,12 @@
 // Import generic module functions
-include { initOptions; saveFiles; getSoftwareName } from './functions'
+include { initOptions; saveFiles; getSoftwareName; getProcessName } from './functions'
 
 params.options = [:]
 options        = initOptions(params.options)
 
-process GATK4_SPLITNCIGARREADS {
+process GATK4_INDEXFEATUREFILE {
     tag "$meta.id"
-    label 'process_medium'
+    label 'process_low'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
@@ -19,25 +19,22 @@ process GATK4_SPLITNCIGARREADS {
     }
 
     input:
-    tuple val(meta), path(bam)
-    path(fasta)
-    path(fai)
-    path(dict)
+    tuple val(meta), path(feature_file)
 
     output:
-    tuple val(meta), path('*.bam'), path('*.bai'), emit: bam
-    path  '*.version.txt'                        , emit: version
+    tuple val(meta), path("*.{tbi,idx}"), emit: index
+    path  "versions.yml"                , emit: versions
 
     script:
-    def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    gatk SplitNCigarReads \\
-        -R $fasta \\
-        -I $bam \\
-        -O ${prefix}.bam \\
-        $options.args
+    gatk \\
+        IndexFeatureFile \\
+        $options.args \\
+        -I $feature_file
 
-    echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//' > ${software}.version.txt
+    cat <<-END_VERSIONS > versions.yml
+    ${getProcessName(task.process)}:
+        ${getSoftwareName(task.process)}: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
+    END_VERSIONS
     """
 }
