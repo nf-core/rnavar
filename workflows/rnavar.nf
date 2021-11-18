@@ -234,7 +234,7 @@ workflow RNAVAR {
         if (params.bam_csi_index) ch_genome_bam_index = ALIGN_STAR.out.csi
         ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
-       // SUBWORKFLOW: Mark duplicates with Picard
+        // SUBWORKFLOW: Mark duplicates with Picard
         MARKDUPLICATES(ch_genome_bam)
         ch_genome_bam             = MARKDUPLICATES.out.bam
         ch_genome_bam_index       = MARKDUPLICATES.out.bai
