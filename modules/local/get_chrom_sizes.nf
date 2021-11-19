@@ -21,8 +21,8 @@ process GET_CHROM_SIZES {
     path fasta
 
     output:
-    path '*.sizes'     , emit: sizes
-    path '*.fai'       , emit: fai
+    path "*.sizes"     , emit: sizes
+    path "*.fai"       , emit: fai
     path "versions.yml", emit: versions
 
     script:

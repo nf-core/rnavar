@@ -21,7 +21,7 @@ process GTF2BED {
     path gtf
 
     output:
-    path '*.bed'       , emit: bed
+    path "*.bed"       , emit: bed
     path "versions.yml", emit: versions
 
     script: // This script is bundled with the pipeline, in nf-core/chipseq/bin/

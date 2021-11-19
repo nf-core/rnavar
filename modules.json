@@ -37,7 +37,7 @@
                 "git_sha": "691feeafdcd8b7874f540695ece122cce01a524f"
             },
             "gatk4/variantfiltration": {
-                "git_sha": "3b600af50eae8264960df817277cfe303d2acd47"
+                "git_sha": "43a1c1c6d18d7d9395846503046f1649ba72a06e"
             },
             "gffread": {
                 "git_sha": "49da8642876ae4d91128168cd0db4f1c858d7792"
@@ -49,28 +49,28 @@
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
             "picard/markduplicates": {
-                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+                "git_sha": "4e5b6ed843ee0691848aba58088e4347cd3aae98"
             },
             "samtools/faidx": {
-                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "samtools/flagstat": {
-                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "samtools/idxstats": {
-                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "samtools/index": {
-                "git_sha": "1abe23e1592f7cf6a3724589061827df0d8a0252"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "samtools/merge": {
-                "git_sha": "ac1e6df076195cec553a2079c9cebd94026a0d47"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "samtools/sort": {
-                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "samtools/stats": {
-                "git_sha": "ac1e6df076195cec553a2079c9cebd94026a0d47"
+                "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
             "star/align": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
