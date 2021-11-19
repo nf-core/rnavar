@@ -83,7 +83,7 @@ workflow PREPARE_GENOME {
 
     // Create dictionary file for the genome fasta
     ch_fasta_dict = Channel.empty()
-    if (params.fasta_dict) ch_fasta_dict = file(params.fasta_dict)
+    if (params.dict) ch_fasta_dict = file(params.dict)
     else                   ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY(ch_fasta).dict
 
     //

@@ -14,11 +14,13 @@ WorkflowRnavar.initialise(params, log)
 def checkPathParamList = [
     params.input,
     params.fasta,
+    params.fasta_fai,
+    params.dict,
     params.gtf,
-    params.dbsnp_vcf,
-    params.dbsnp_vcf_index,
+    params.dbsnp,
+    params.dbsnp_tbi,
     params.known_indels,
-    params.known_indels_index,
+    params.known_indels_tbi,
     params.star_index]
 
 for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
@@ -206,6 +208,14 @@ workflow RNAVAR {
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
 
+    // MODULE: IntervalListTools from GATK4
+    ch_interval_list_split = Channel.empty()
+    if (!params.skip_intervallisttools) {
+        GATK4_INTERVALLISTTOOLS(ch_interval_list)
+        ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
+    }
+    else ch_interval_list_split = ch_interval_list
+
     //
     // SUBWORKFLOW: Alignment with STAR
     //
@@ -254,8 +264,8 @@ workflow RNAVAR {
 
         // MODULE: BaseRecalibrator from GATK4
         ch_bqsr_table = Channel.empty()
-        known_sites     = Channel.from([params.dbsnp_vcf, params.known_indels]).collect()
-        known_sites_tbi = Channel.from([params.dbsnp_vcf_index, params.known_indels_index]).collect()
+        known_sites     = Channel.from([params.dbsnp, params.known_indels]).collect()
+        known_sites_tbi = Channel.from([params.dbsnp_tbi, params.known_indels_tbi]).collect()
 
         ch_interval_list_baserecalibrator = ch_interval_list.map{ meta, bed -> [bed] }.collect()
 
@@ -292,15 +302,6 @@ workflow RNAVAR {
         bam_recalibrated_qc = RECALIBRATE.out.qc
         ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
 
-        // MODULE: IntervalListTools from GATK4
-        ch_interval_list_split = Channel.empty()
-
-        if (!params.skip_intervallisttools) {
-            GATK4_INTERVALLISTTOOLS(ch_interval_list)
-            ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
-        }
-        else ch_interval_list_split = ch_interval_list
-
         // MODULE: HaplotypeCaller from GATK4
         interval_flag = params.no_intervals
         haplotypecaller_vcf = Channel.empty()
@@ -313,8 +314,8 @@ workflow RNAVAR {
 
         GATK4_HAPLOTYPECALLER(
             haplotypecaller_interval_bam,
-            params.dbsnp_vcf,
-            params.dbsnp_vcf_index,
+            params.dbsnp,
+            params.dbsnp_tbi,
             PREPARE_GENOME.out.dict,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,

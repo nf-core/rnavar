@@ -16,7 +16,7 @@
 
 ## Introduction
 
-**nf-core/rnavar** bioinformatics best-practice pipeline for RNA-Seq variant analysis.
+**nf-core/rnavar** is a bioinformatics best-practice pipeline for RNA-Seq variant analysis.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
@@ -65,7 +65,7 @@ The nf-core/rnavar pipeline comes with documentation about the pipeline [usage](
 
 ## Credits
 
-These scripts were originally written in Nextflow DSL2 for use at the [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken) by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U. Garcia ([@maxulysse](https://github.com/maxulysse)).
+These scripts were originally written in Nextflow DSL2 for use at the [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken), by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U. Garcia ([@maxulysse](https://github.com/maxulysse)).
 
 The pipeline is primarily maintained by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U. Garcia ([@maxulysse](https://github.com/maxulysse)) from [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken).
 

@@ -69,7 +69,7 @@
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
-                "fasta_dict": {
+                "dict": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
                     "description": "Path to FASTA dictionary file.",
@@ -125,15 +125,15 @@
                     "type": "string",
                     "description": "Path to known indels VCF file"
                 },
-                "known_indels_index": {
+                "known_indels_tbi": {
                     "type": "string",
                     "description": "Path to known indels index file"
                 },
-                "dbsnp_vcf": {
+                "dbsnp": {
                     "type": "string",
                     "description": "Path to dbSNP VCF file"
                 },
-                "dbsnp_vcf_index": {
+                "dbsnp_tbi": {
                     "type": "string",
                     "description": "Path to dbSNP VCF index file"
                 }
