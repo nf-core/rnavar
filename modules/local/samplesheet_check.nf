@@ -1,10 +1,11 @@
 // Import generic module functions
-include { saveFiles } from './functions'
+include { saveFiles; getProcessName } from './functions'
 
 params.options = [:]
 
 process SAMPLESHEET_CHECK {
     tag "$samplesheet"
+    label "process_medium"
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:'pipeline_info', meta:[:], publish_by_meta:[]) }
@@ -20,12 +21,18 @@ process SAMPLESHEET_CHECK {
     path samplesheet
 
     output:
-    path '*.csv'
+    path "*.csv"       , emit: csv
+    path "versions.yml", emit: versions
 
     script: // This script is bundled with the pipeline, in nf-core/rnavar/bin/
     """
     check_samplesheet.py \\
         $samplesheet \\
         samplesheet.valid.csv
+
+    cat <<-END_VERSIONS > versions.yml
+    ${getProcessName(task.process)}:
+        python: \$(python --version | sed 's/Python //g')
+    END_VERSIONS
     """
 }

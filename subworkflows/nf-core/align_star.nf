@@ -19,15 +19,19 @@ workflow ALIGN_STAR {
 
     main:
 
+    ch_versions = Channel.empty()
+
     //
     // Map reads with STAR
     //
     STAR_ALIGN ( reads, index, gtf )
+    ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
     //
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
     BAM_SORT_SAMTOOLS ( STAR_ALIGN.out.bam )
+    ch_versions = ch_versions.mix(BAM_SORT_SAMTOOLS.out.versions.first())
 
     emit:
     orig_bam         = STAR_ALIGN.out.bam             // channel: [ val(meta), bam            ]
@@ -38,7 +42,6 @@ workflow ALIGN_STAR {
     bam_transcript   = STAR_ALIGN.out.bam_transcript  // channel: [ val(meta), bam_transcript ]
     fastq            = STAR_ALIGN.out.fastq           // channel: [ val(meta), fastq          ]
     tab              = STAR_ALIGN.out.tab             // channel: [ val(meta), tab            ]
-    star_version     = STAR_ALIGN.out.version         // path: *.version.txt
 
     bam              = BAM_SORT_SAMTOOLS.out.bam      // channel: [ val(meta), [ bam ] ]
     bai              = BAM_SORT_SAMTOOLS.out.bai      // channel: [ val(meta), [ bai ] ]
@@ -46,5 +49,7 @@ workflow ALIGN_STAR {
     stats            = BAM_SORT_SAMTOOLS.out.stats    // channel: [ val(meta), [ stats ] ]
     flagstat         = BAM_SORT_SAMTOOLS.out.flagstat // channel: [ val(meta), [ flagstat ] ]
     idxstats         = BAM_SORT_SAMTOOLS.out.idxstats // channel: [ val(meta), [ idxstats ] ]
-    samtools_version = BAM_SORT_SAMTOOLS.out.version  //    path: *.version.txt
+
+    versions         = ch_versions                    // channel: [ versions.yml ]
+
 }

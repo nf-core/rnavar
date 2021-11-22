@@ -1,21 +1,21 @@
 // Import generic module functions
-include { initOptions; saveFiles; getSoftwareName } from './functions'
+include { initOptions; saveFiles; getSoftwareName; getProcessName } from './functions'
 
 params.options = [:]
 options        = initOptions(params.options)
 
 process GATK4_HAPLOTYPECALLER {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
 
-    conda (params.enable_conda ? "bioconda::gatk4=4.2.0.0" : null)
+    conda (params.enable_conda ? "bioconda::gatk4=4.2.3.0" : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
-        container "https://depot.galaxyproject.org/singularity/gatk4:4.2.0.0--0"
+        container "https://depot.galaxyproject.org/singularity/gatk4:4.2.3.0--hdfd78af_0"
     } else {
-        container "quay.io/biocontainers/gatk4:4.2.0.0--0"
+        container "quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_0"
     }
 
     input:
@@ -28,33 +28,35 @@ process GATK4_HAPLOTYPECALLER {
     val no_intervals
 
     output:
-    tuple val(meta), path("*.vcf")                , emit: vcf
-    tuple val(meta), path(interval), path("*.vcf"), emit: interval_vcf
-    path "*.version.txt"                          , emit: version
+    tuple val(meta), path("*.vcf.gz")                   , emit: vcf
+    tuple val(meta), path(interval), path("*.vcf.gz")   , emit: interval_vcf
+    path "versions.yml"                                 , emit: versions
 
     script:
-    def software  = getSoftwareName(task.process)
     def prefix    = options.suffix ? "${interval.baseName}_${meta.id}${options.suffix}" : "${interval.baseName}_${meta.id}"
-    def avail_mem = 3
+    def avail_mem       = 3
     if (!task.memory) {
         log.info '[GATK HaplotypeCaller] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
-    def intervalsOptions = no_intervals ? "" : "-L ${interval}"
-    def dbsnpOptions = dbsnp ? "-D ${dbsnp}" : ""
-    //TODO allow ploidy argument here since we allow it for the cnv callers? or is this covered with options? Might unintuitive to use
+    def interval_option = no_intervals ? "" : "-L ${interval}"
+    def dbsnp_option = dbsnp ? "-D ${dbsnp}" : ""
     """
     gatk \\
         --java-options "-Xmx${avail_mem}g" \\
         HaplotypeCaller \\
         -R $fasta \\
         -I $bam \\
-        ${dbsnpOptions} \\
-        ${intervalsOptions} \\
-        -O ${prefix}.vcf \\
-        $options.args
+        ${dbsnp_option} \\
+        ${interval_option} \\
+        -O ${prefix}.vcf.gz \\
+        $options.args \\
+        --tmp-dir .
 
-    gatk --version | grep Picard | sed "s/Picard Version: //g" > ${software}.version.txt
+    cat <<-END_VERSIONS > versions.yml
+    ${getProcessName(task.process)}:
+        ${getSoftwareName(task.process)}: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
+    END_VERSIONS
     """
 }
