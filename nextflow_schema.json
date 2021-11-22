@@ -210,8 +210,8 @@
                 }
             }
         },
-        "annotation": {
-            "title": "Annotation",
+        "variant_annotation": {
+            "title": "Variant Annotation",
             "type": "object",
             "description": "",
             "default": "",
@@ -569,7 +569,7 @@
         }
         ,
         {
-            "$ref": "#/definitions/annotation"
+            "$ref": "#/definitions/variant_annotation"
         }
     ],
     "required": [
