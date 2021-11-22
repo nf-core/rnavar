@@ -402,6 +402,7 @@ workflow RNAVAR {
                 vep_species,
                 vep_cache_version,
                 vep_cache)
+            ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
         }
 
     }
