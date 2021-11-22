@@ -21,6 +21,8 @@ def checkPathParamList = [
     params.dbsnp_tbi,
     params.known_indels,
     params.known_indels_tbi,
+    params.snpeff_cache,
+    params.vep_cache,
     params.star_index]
 
 for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
@@ -107,6 +109,16 @@ if (params.cluster)   modules['gatk_variantfilter'].args += Utils.joinModuleArgs
 if (params.fs_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"FS\" --filter \"FS > $params.fs_filter\" "])
 if (params.qd_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"QD\" --filter \"QD < $params.qd_filter\" "])
 
+// Initialize varaint annotation associated channels
+def tools               = params.annotate_tools    ? params.annotate_tools.split(',').collect{it.trim().toLowerCase().replaceAll('-', '').replaceAll('_', '')} : []
+def snpeff_db           = params.snpeff_db         ?: Channel.empty()
+def vep_cache_version   = params.vep_cache_version ?: Channel.empty()
+def vep_genome          = params.vep_genome        ?: Channel.empty()
+def vep_species         = params.vep_species       ?: Channel.empty()
+def snpeff_cache        = params.snpeff_cache      ? params.snpeff_cache : []
+def vep_cache           = params.vep_cache         ? params.vep_cache : []
+
+// Include all the modules required for the pipeline
 include { CAT_FASTQ }               from '../modules/nf-core/modules/cat/fastq/main'               addParams(options: modules['cat_fastq'])
 include { GATK4_BASERECALIBRATOR }  from '../modules/nf-core/modules/gatk4/baserecalibrator/main'  addParams(options: modules['gatk_baserecalibrator'])
 include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' addParams(options: modules['gatk_bedtointervallist'])
@@ -117,12 +129,16 @@ include { GATK4_INDEXFEATUREFILE  } from '../modules/nf-core/modules/gatk4/index
 include { GATK4_VARIANTFILTRATION } from '../modules/nf-core/modules/gatk4/variantfiltration/main' addParams(options: modules['gatk_variantfilter'])
 include { SAMTOOLS_INDEX }          from '../modules/nf-core/modules/samtools/index/main'          addParams(options: modules['samtools_index_genome'])
 
+// Include all the subworkflows required for the pipeline
+
+// Build the genome index and other reference files
 include { PREPARE_GENOME }          from '../subworkflows/local/prepare_genome'                    addParams(
     genome_options:     publish_genome_options,
     index_options:      publish_index_options,
     star_index_options: modules['star_genomegenerate'],
     star_untar_options: untar_options
 )
+// Align reads to genome and sort and index the alignment file
 include { ALIGN_STAR }              from '../subworkflows/nf-core/align_star'                      addParams(
     align_options: modules['star_align'],
     samtools_index_options: modules['samtools_index_genome'],
@@ -130,20 +146,35 @@ include { ALIGN_STAR }              from '../subworkflows/nf-core/align_star'   
     samtools_stats_options: modules['samtools_index_genome'],
     seq_platform: params.seq_platform
 )
+// Mark duplicates in the BAM file
 include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates'                  addParams(
     markduplicates_options: modules['picard_markduplicates'],
     samtools_index_options: modules['picard_markduplicates_samtools'],
     samtools_stats_options: modules['picard_markduplicates_samtools']
 )
+// Splits reads that contain Ns in their cigar string
 include { GATK4_SPLITNCIGAR }  from '../subworkflows/nf-core/splitn_cigar_reads'                  addParams(
     gatk_splitncigar_options: modules['gatk_splitncigar_options'],
     samtools_index_options: modules['picard_markduplicates_samtools']
 )
+// Estimate and correct systematic bias
 include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'                     addParams(
     applybqsr_options:      modules['applybqsr'],
     merge_bam_options:      modules['merge_bam_recalibrate'],
     samtools_index_options: modules['samtools_index_recalibrate'],
     samtools_stats_options: modules['samtools_stats_recalibrate']
+)
+// Annotate variants using snpEff or VEP or both
+include { ANNOTATE } from '../subworkflows/local/annotate' addParams(
+    annotation_cache:                  params.annotation_cache,
+    bgziptabix_merge_vep_options:      modules['bgziptabix_merge_vep'],
+    bgziptabix_snpeff_options:         modules['bgziptabix_snpeff'],
+    bgziptabix_vep_options:            modules['bgziptabix_vep'],
+    merge_vep_options:                 modules['merge_vep'],
+    snpeff_options:                    modules['snpeff'],
+    snpeff_tag:                        "${modules['snpeff'].tag_base}.${params.genome}",
+    vep_options:                       modules['ensemblvep'],
+    vep_tag:                           "${modules['ensemblvep'].tag_base}.${params.genome}"
 )
 
 // Info required for completion email and summary
@@ -344,6 +375,7 @@ workflow RNAVAR {
         )
         haplotypecaller_vcf_tbi = haplotypecaller_vcf.join(GATK4_INDEXFEATUREFILE.out.index, by: [0])
         ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+        final_vcf_tbi = haplotypecaller_vcf_tbi
 
         // MODULE: VariantFiltration from GATK4
         if (!params.skip_variantfiltration) {
@@ -355,9 +387,21 @@ workflow RNAVAR {
                 PREPARE_GENOME.out.dict
             )
 
-            filtered_vcf     = GATK4_VARIANTFILTRATION.out.vcf
-            filtered_vcf_tbi = GATK4_VARIANTFILTRATION.out.tbi
-            ch_versions      = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
+            filtered_vcf_tbi = GATK4_VARIANTFILTRATION.out.vcf.join(GATK4_VARIANTFILTRATION.out.tbi, by: [0])
+            final_vcf_tbi = filtered_vcf_tbi
+            ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
+        }
+
+        if(!params.skip_variantannotation && ('merge' in tools || 'snpeff' in tools || 'vep' in tools)) {
+            ANNOTATE(
+                final_vcf_tbi,
+                tools,
+                snpeff_db,
+                snpeff_cache,
+                vep_genome,
+                vep_species,
+                vep_cache_version,
+                vep_cache)
         }
 
     }

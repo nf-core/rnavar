@@ -136,6 +136,28 @@
                 "dbsnp_tbi": {
                     "type": "string",
                     "description": "Path to dbSNP VCF index file"
+                },
+                "snpeff_db": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "snpEff DB version"
+                },
+                "vep_genome": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP genome",
+                    "help_text": "If you use AWS iGenomes or a local resource with genomes.conf, this has already been set for you appropriately."
+                },
+                "vep_species": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP species",
+                    "help_text": "If you use AWS iGenomes or a local resource with genomes.conf, this has already been set for you appropriately."
+                },
+                "vep_cache_version": {
+                    "type": "string",
+                    "fa_icon": "fas fa-tag",
+                    "description": "VEP cache version"
                 }
             }
         },
@@ -188,6 +210,80 @@
                 }
             }
         },
+        "annotation": {
+            "title": "Annotation",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
+                "annotate_tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify which tools RNAvar should use for annotating variants. Values can be 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "help_text": "List of tools to be used for variant annotation.",
+                    "pattern": "^((snpeff|vep|merge)*(,)*)*$",
+                    "hidden": true
+                },
+                "annotation_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-database",
+                    "description": "Enable the use of cache for annotation",
+                    "help_text": "And disable usage of snpeff and vep specific containers for annotation\n\nTo be used with `--snpeff_cache` and/or `--vep_cache`",
+                    "hidden": true
+                },
+                "cadd_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-database",
+                    "description": "Enable CADD cache.",
+                    "hidden": true
+                },
+                "cadd_indels": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD InDels file.",
+                    "hidden": true
+                },
+                "cadd_indels_tbi": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD InDels index.",
+                    "hidden": true
+                },
+                "cadd_wg_snvs": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD SNVs file.",
+                    "hidden": true
+                },
+                "cadd_wg_snvs_tbi": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD SNVs index.",
+                    "hidden": true
+                },
+                "genesplicer": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-gavel",
+                    "description": "Enable the use of the VEP GeneSplicer plugin.",
+                    "hidden": true
+                },
+                "snpeff_cache": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "Path to snpEff cache",
+                    "help_text": "To be used with `--annotation_cache`",
+                    "hidden": true
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "Path to VEP cache",
+                    "help_text": "To be used with `--annotation_cache`",
+                    "hidden": true
+                }
+            }
+        },
         "pipeline_stage_options": {
             "title": "Pipeline stage options",
             "type": "object",
@@ -202,7 +298,12 @@
                 "skip_variantfiltration": {
                     "type": "string",
                     "description": "Skip variant filtering of GATK",
-                    "help_text": "Set this parameter if you don't want to filter any variants. "
+                    "help_text": "Set this parameter if you don't want to filter any variants."
+                },
+                "skip_variantannotation": {
+                    "type": "string",
+                    "description": "Skip variant annotation",
+                    "help_text": "Set this parameter if you don't want to run variant annotation."
                 },
                 "skip_qc": {
                     "type": "string",
@@ -465,6 +566,10 @@
         ,
         {
             "$ref": "#/definitions/alignment_options"
+        }
+        ,
+        {
+            "$ref": "#/definitions/annotation"
         }
     ],
     "required": [

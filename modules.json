@@ -9,6 +9,9 @@
             "custom/dumpsoftwareversions": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
+            "ensemblvep": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
             "fastqc": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
@@ -43,7 +46,7 @@
                 "git_sha": "49da8642876ae4d91128168cd0db4f1c858d7792"
             },
             "gunzip": {
-                "git_sha": "e560fbbc3ed68e62bc810a50f552394056f81762"
+                "git_sha": "d30bf235b1524327703591c9ce2f372bfb2d474f"
             },
             "multiqc": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
@@ -72,10 +75,16 @@
             "samtools/stats": {
                 "git_sha": "19035c99d1cd8412b5046c6bb4af787658b84e5b"
             },
+            "snpeff": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
             "star/align": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
             "star/genomegenerate": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
+            "tabix/bgziptabix": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
             "untar": {
