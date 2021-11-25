@@ -98,10 +98,12 @@ if (params.save_align_intermeds) {
 if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
 
 modules['star_align'].args += params.save_unaligned ? Utils.joinModuleArgs(['--outReadsUnmapped Fastx']) : ''
+modules['star_align'].args += params.star_twopass ? Utils.joinModuleArgs(['--twopassMode Basic']) : ''
 if (params.save_align_intermeds) modules['star_align'].publish_files.put('bam','')
 if (params.save_unaligned)       modules['star_align'].publish_files.put('fastq.gz','unmapped')
 
 modules['picard_markduplicates_samtools'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
+modules['picard_markduplicates'].args += params.remove_duplicates ? Utils.joinModuleArgs(['REMOVE_DUPLICATES=true']) : ''
 modules['gatk_intervallisttools'].args += Utils.joinModuleArgs(["--SCATTER_COUNT $params.scatter_count"])
 
 if (params.window)    modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--window $params.window"])

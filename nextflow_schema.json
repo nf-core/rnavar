@@ -178,6 +178,11 @@
                     "description": "Path to STAR index folder or compressed file (tar.gz)",
                     "help_text": "This parameter can be used if there is an pre-defined STAR index available. You can either give the full path to the index directory or a compressed file in tar.gz format."
                 },
+                "star_twopass": {
+                    "type": "boolean",
+                    "description": "Enable STAR 2-pass mapping mode.",
+                    "help_text": "This parameter enables STAR to perform 2-pass mapping. Default true."
+                },
                 "star_ignore_sjdbgtf": {
                     "type": "string",
                     "description": "Do not use GTF file during STAR index buidling step",
@@ -207,6 +212,22 @@
                 "bam_csi_index": {
                     "type": "boolean",
                     "description": "Create a CSI index for BAM files instead of the traditional BAI index. This will be required for genomes with larger chromosome sizes."
+                }
+            }
+        },
+        "preprocessing": {
+            "title": "Preprocessing of alignment",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
+                "remove_duplicates": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
+                    "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
+                    "hidden": false
                 }
             }
         },
@@ -554,22 +575,21 @@
         },
         {
             "$ref": "#/definitions/generic_options"
-        }
-        ,
+        },
         {
             "$ref": "#/definitions/tool_parameters"
-        }
-        ,
+        },
         {
             "$ref": "#/definitions/pipeline_stage_options"
-        }
-        ,
+        },
         {
             "$ref": "#/definitions/alignment_options"
-        }
-        ,
+        },
         {
             "$ref": "#/definitions/variant_annotation"
+        },
+        {
+            "$ref": "#/definitions/preprocessing"
         }
     ],
     "required": [
