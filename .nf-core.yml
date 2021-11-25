@@ -1,0 +1,6 @@
+lint:
+  files_unchanged:
+    - .github/workflows/linting.yml
+    - assets/multiqc_config.yaml
+    - assets/nf-core-rnavar_logo.png
+    - docs/images/nf-core-rnavar_logo.png
