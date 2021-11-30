@@ -6,15 +6,15 @@ params.gatk_splitncigar_options = [:]
 params.samtools_index_options   = [:]
 params.samtools_stats_options   = [:]
 
-include { GATK4_SPLITNCIGARREADS } from '../../modules/nf-core/modules/gatk4/splitncigarreads/main' addParams( options: params.gatk_splitncigar_options )
-include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main'         addParams( options: params.samtools_index_options )
+include { GATK4_SPLITNCIGARREADS } from '../../modules/local/gatk4/splitncigarreads/main'   addParams( options: params.gatk_splitncigar_options )
+include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_index_options )
 
 workflow GATK4_SPLITNCIGAR {
     take:
-    bam             // channel: [ val(meta), [ bam ] ]
+    bam_interval    // channel: [ val(meta), [ bam ], [bai], [interval] ]
     fasta           // channel: [ fasta ]
-    fasta_fai      // channel: [ fai ]
-    fasta_dict     // channel: [ dict ]
+    fasta_fai       // channel: [ fai ]
+    fasta_dict      // channel: [ dict ]
 
     main:
 
@@ -23,7 +23,7 @@ workflow GATK4_SPLITNCIGAR {
     //
     // GATK4
     //
-    GATK4_SPLITNCIGARREADS ( bam, fasta, fasta_fai, fasta_dict)
+    GATK4_SPLITNCIGARREADS ( bam_interval, fasta, fasta_fai, fasta_dict)
     ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
 
     //

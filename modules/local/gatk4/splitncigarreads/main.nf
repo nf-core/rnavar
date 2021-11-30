@@ -19,7 +19,7 @@ process GATK4_SPLITNCIGARREADS {
     }
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(bam), path(bai), path(interval)
     path  fasta
     path  fai
     path  dict
@@ -30,10 +30,12 @@ process GATK4_SPLITNCIGARREADS {
 
     script:
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
+    def interval_option = interval ? "-L ${interval}" : ""
     """
     gatk SplitNCigarReads \\
         -R $fasta \\
         -I $bam \\
+        ${interval_option} \\
         -O ${prefix}.bam \\
         $options.args
 
