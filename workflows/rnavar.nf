@@ -154,11 +154,13 @@ include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates
     samtools_index_options: modules['picard_markduplicates_samtools'],
     samtools_stats_options: modules['picard_markduplicates_samtools']
 )
-// Splits reads that contain Ns in their cigar string
-include { GATK4_SPLITNCIGAR }  from '../subworkflows/nf-core/splitn_cigar_reads'                  addParams(
+// Subworkflow - splits reads that contain Ns in their cigar string
+include { PREPROCESS } from '../subworkflows/local/preprocess'                                    addParams(
     gatk_splitncigar_options: modules['gatk_splitncigar_options'],
-    samtools_index_options: modules['picard_markduplicates_samtools']
+    samtools_index_options: modules['samtools_index_genome'],
+    samtools_merge_options: modules['samtools_merge_genome']
 )
+
 // Estimate and correct systematic bias
 include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'                     addParams(
     applybqsr_options:      modules['applybqsr'],
@@ -279,8 +281,7 @@ workflow RNAVAR {
 
         // SUBWORKFLOW: Mark duplicates with Picard
         MARKDUPLICATES(ch_genome_bam)
-        ch_genome_bam             = MARKDUPLICATES.out.bam
-        ch_genome_bam_index       = MARKDUPLICATES.out.bai
+        ch_genome_bam             = MARKDUPLICATES.out.bam.join(MARKDUPLICATES.out.bai, by: [0])
         ch_samtools_stats         = MARKDUPLICATES.out.stats
         ch_samtools_flagstat      = MARKDUPLICATES.out.flagstat
         ch_samtools_idxstats      = MARKDUPLICATES.out.idxstats
@@ -288,12 +289,12 @@ workflow RNAVAR {
         if (params.bam_csi_index) ch_genome_bam_index = MARKDUPLICATES.out.csi
         ch_versions               = ch_versions.mix(MARKDUPLICATES.out.versions.first().ifEmpty(null))
 
-        // MODULE: SplitNCigarReads from GATK4
+        // Subworkflow - SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
         bam_splitncigar         = Channel.empty()
-        GATK4_SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict)
-        bam_splitncigar         = GATK4_SPLITNCIGAR.out.bam.join(GATK4_SPLITNCIGAR.out.bai, by: [0])
-        ch_versions             = ch_versions.mix(GATK4_SPLITNCIGAR.out.versions.first().ifEmpty(null))
+        PREPROCESS(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict, ch_interval_list_split)
+        bam_splitncigar         = PREPROCESS.out.bam.join(PREPROCESS.out.bai, by: [0])
+        ch_versions             = ch_versions.mix(PREPROCESS.out.versions.first().ifEmpty(null))
 
         // MODULE: BaseRecalibrator from GATK4
         ch_bqsr_table = Channel.empty()
@@ -343,7 +344,8 @@ workflow RNAVAR {
             .map{ meta, bam, bai, interval_list ->
                 new_meta = meta.clone()
                 new_meta.id = meta.id
-                [new_meta, bam, bai, interval_list]}
+                [new_meta, bam, bai, interval_list]
+            }
 
         GATK4_HAPLOTYPECALLER(
             haplotypecaller_interval_bam,
