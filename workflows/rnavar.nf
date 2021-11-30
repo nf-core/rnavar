@@ -155,7 +155,7 @@ include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates
     samtools_stats_options: modules['picard_markduplicates_samtools']
 )
 // Subworkflow - splits reads that contain Ns in their cigar string
-include { PREPROCESS } from '../subworkflows/local/preprocess'                                    addParams(
+include { SPLITNCIGAR } from '../subworkflows/local/splitncigar'                                    addParams(
     gatk_splitncigar_options: modules['gatk_splitncigar_options'],
     samtools_index_options: modules['samtools_index_genome'],
     samtools_merge_options: modules['samtools_merge_genome']
@@ -292,9 +292,9 @@ workflow RNAVAR {
         // Subworkflow - SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
         bam_splitncigar         = Channel.empty()
-        PREPROCESS(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict, ch_interval_list_split)
-        bam_splitncigar         = PREPROCESS.out.bam.join(PREPROCESS.out.bai, by: [0])
-        ch_versions             = ch_versions.mix(PREPROCESS.out.versions.first().ifEmpty(null))
+        SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict, ch_interval_list_split)
+        bam_splitncigar         = GATK4_SPLITNCIGAR.out.bam.join(GATK4_SPLITNCIGAR.out.bai, by: [0])
+        ch_versions             = ch_versions.mix(GATK4_SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
         // MODULE: BaseRecalibrator from GATK4
         ch_bqsr_table = Channel.empty()

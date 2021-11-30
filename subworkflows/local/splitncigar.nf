@@ -10,7 +10,7 @@ include { GATK4_SPLITNCIGAR }   from '../nf-core/splitn_cigar_reads'            
 include { SAMTOOLS_MERGE }      from '../../modules/nf-core/modules/samtools/merge/main' addParams(options: params.samtools_merge_options)
 include { SAMTOOLS_INDEX }      from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_index_options)
 
-workflow PREPROCESS {
+workflow SPLITNCIGAR {
     take:
     bam             // channel: [ val(meta), [ bam ], [bai] ]
     fasta           // channel: [ fasta ]

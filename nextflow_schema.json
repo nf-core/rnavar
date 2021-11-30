@@ -312,17 +312,17 @@
             "description": "Define parameters that control the stages in the pipeline",
             "properties": {
                 "skip_intervallisttools": {
-                    "type": "string",
+                    "type": "boolean",
                     "description": "Skip the process of preparing interval lists for the GATK variant calling step",
                     "help_text": "This parameter disable preparing multiple interval lists to use with HaplotypeCaller module of GATK. It is recommended not to disable the step as it is required to run the variant calling correctly."
                 },
                 "skip_variantfiltration": {
-                    "type": "string",
+                    "type": "boolean",
                     "description": "Skip variant filtering of GATK",
                     "help_text": "Set this parameter if you don't want to filter any variants."
                 },
                 "skip_variantannotation": {
-                    "type": "string",
+                    "type": "boolean",
                     "description": "Skip variant annotation",
                     "help_text": "Set this parameter if you don't want to run variant annotation."
                 },
