@@ -293,8 +293,8 @@ workflow RNAVAR {
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
         bam_splitncigar         = Channel.empty()
         SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict, ch_interval_list_split)
-        bam_splitncigar         = GATK4_SPLITNCIGAR.out.bam.join(GATK4_SPLITNCIGAR.out.bai, by: [0])
-        ch_versions             = ch_versions.mix(GATK4_SPLITNCIGAR.out.versions.first().ifEmpty(null))
+        bam_splitncigar         = SPLITNCIGAR.out.bam.join(SPLITNCIGAR.out.bai, by: [0])
+        ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
         // MODULE: BaseRecalibrator from GATK4
         ch_bqsr_table = Channel.empty()
