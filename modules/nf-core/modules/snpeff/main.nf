@@ -41,7 +41,7 @@ process SNPEFF {
         avail_mem = task.memory.giga
     }
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    cache        = params.use_cache ? "-dataDir \${PWD}/${snpeff_cache}" : ""
+    cache        = params.use_cache ? "-dataDir \${PWD}/${cache}" : ""
     """
     snpEff -Xmx${avail_mem}g \\
         $db \\
