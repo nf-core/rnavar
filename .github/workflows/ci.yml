@@ -18,13 +18,12 @@ jobs:
     if: ${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/rnavar') }}
     runs-on: ubuntu-latest
     env:
-      NXF_VER: ${{ matrix.nxf_ver }}
       NXF_ANSI_LOG: false
     strategy:
       matrix:
         # Nextflow versions: check pipeline minimum and current latest
         nxf_ver:
-          - '21.10.3'
+          - 'NXF_VER=21.10.3'
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
