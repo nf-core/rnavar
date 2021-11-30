@@ -53,7 +53,7 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 
 ## Alignment options
 
-The pipeline uses [STAR](https://github.com/alexdobin/STAR) to map the raw FastQ reads to the reference genome, project the alignments onto the transcriptome and to perform the downstream BAM-level quantification with [Salmon](https://salmon.readthedocs.io/en/latest/salmon.html). STAR is fast but requires a lot of memory to run, typically around 38GB for the Human GRCh37 reference genome.
+The pipeline uses [STAR](https://github.com/alexdobin/STAR) to map the raw FastQ reads to the reference genome. STAR is fast but requires a lot of memory to run, typically around 38GB for the Human GRCh37 reference genome.
 
 ## Reference genome files
 
@@ -62,16 +62,8 @@ The minimum reference genome requirements are a FASTA and GTF file, all other fi
 * If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
 * If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
 * If `--gene_bed` is not provided then it will be generated from the GTF file.
-* If `--additional_fasta` is provided then the features in this file (e.g. ERCC spike-ins) will be automatically concatenated onto both the reference FASTA file as well as the GTF annotation before building the appropriate indices.
-
-When using `--aligner star_rsem`, both the STAR and RSEM indices should be present in the path specified by `--rsem_index` (see [#568](https://github.com/nf-core/rnavar/issues/568))
 
 > **NB:** Compressed reference files are also supported by the pipeline i.e. standard files with the `.gz` extension and indices folders with the `tar.gz` extension.
-
-If you are using [GENCODE](https://www.gencodegenes.org/) reference genome files please specify the `--gencode` parameter because the format of these files is slightly different to ENSEMBL genome files:
-
-* The `--gtf_group_features_type` parameter will automatically be set to `gene_type` as opposed to `gene_biotype`, respectively.
-* If you are running Salmon, the `--gencode` flag will also be passed to the index building step to overcome parsing issues resulting from the transcript IDs in GENCODE fasta files being separated by vertical pipes (`|`) instead of spaces (see [this issue](https://github.com/COMBINE-lab/salmon/issues/15)).
 
 ## Running the pipeline
 
