@@ -40,14 +40,14 @@ process SNPEFF {
     } else {
         avail_mem = task.memory.giga
     }
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    cache        = params.use_cache ? "-dataDir \${PWD}/${snpeff_cache}" : ""
+    def prefix = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
+    def dir_cache = params.use_cache ? "-dataDir \${PWD}/${cache}" : ""
     """
     snpEff -Xmx${avail_mem}g \\
         $db \\
         $options.args \\
         -csvStats ${prefix}.csv \\
-        $cache \\
+        $dir_cache \\
         $vcf \\
         > ${prefix}.ann.vcf
 
