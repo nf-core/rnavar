@@ -97,6 +97,7 @@ if (params.save_align_intermeds) {
 
 if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
 
+// Additional paramaters to modules based on params
 modules['star_align'].args += params.save_unaligned ? Utils.joinModuleArgs(['--outReadsUnmapped Fastx']) : ''
 modules['star_align'].args += params.star_twopass ? Utils.joinModuleArgs(['--twopassMode Basic']) : ''
 if (params.save_align_intermeds) modules['star_align'].publish_files.put('bam','')
@@ -105,6 +106,8 @@ if (params.save_unaligned)       modules['star_align'].publish_files.put('fastq.
 modules['picard_markduplicates_samtools'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
 modules['picard_markduplicates'].args += params.remove_duplicates ? Utils.joinModuleArgs(['REMOVE_DUPLICATES=true']) : ''
 modules['gatk_intervallisttools'].args += Utils.joinModuleArgs(["--SCATTER_COUNT $params.scatter_count"])
+
+modules['gatk_haplotypecaller'].args += Utils.joinModuleArgs(["--standard-min-confidence-threshold-for-calling $params.stand_call_conf"])
 
 if (params.window)    modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--window $params.window"])
 if (params.cluster)   modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--cluster $params.cluster"])

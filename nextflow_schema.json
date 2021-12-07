@@ -112,7 +112,7 @@
                 },
                 "read_length": {
                     "type": "number",
-                    "default": 150,
+                    "default": 151,
                     "description": "Read length",
                     "help_text": "Specify the read length for the STAR aligner."
                 },
@@ -227,6 +227,23 @@
                     "fa_icon": "fas fa-hammer",
                     "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
                     "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
+                    "hidden": false
+                }
+            }
+        },
+        "variant_calling": {
+            "title": "Variant calling",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
+                "stand_call_conf": {
+                    "type": "number",
+                    "default": 20,
+                    "fa_icon": "fas fa-hammer",
+                    "description": "The minimum phred-scaled confidence threshold at which variants should be called.",
+                    "help_text": "Specify the minimum phred-scaled confidence threshold at which variants should be called.",
                     "hidden": false
                 }
             }
