@@ -109,17 +109,12 @@ workflow PREPARE_GENOME {
 
             // Check version of STAR index for compatibility with pipeline STAR version 2.7.9a
             allowed_star_versions = ["2.7.4a"] //STAR version 2.7.9a writes 2.7.4a in the genomeParameters file.
-            star_genome_file = file("${ch_star_index}/genomeParameters.txt", checkIfExits: true)
-            for (line: star_genome_file.readLines()){
-                if(line.startsWith("versionGenome")){
-                    fields = line.split("\t")
-                    custom_star_version = fields[1].trim()
-                    if (!(custom_star_version in allowed_star_versions)){
-                        run_star_index = true
-                    }
-                    break
-                }
-            }
+            ch_star_index.map{ dir -> getIndexVersion(dir) }.view()
+
+            //custom_star_version = getVersion(ch_star_index)
+            //if (!(custom_star_version in allowed_star_versions)){
+            //    run_star_index = true
+            //}
         }
         else {
             run_star_index = true
@@ -131,6 +126,7 @@ workflow PREPARE_GENOME {
         ch_versions   = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
     }
 
+
     emit:
     fasta            = ch_fasta            // path: genome.fasta
     fai              = ch_fasta_fai        // path: genome.fasta.fai
@@ -140,4 +136,15 @@ workflow PREPARE_GENOME {
     chrom_sizes      = ch_chrom_sizes      // path: genome.sizes
     star_index       = ch_star_index       // path: star/index/
     versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+}
+
+def getIndexVersion( index_path ) {
+    genomeParameters = new File("$index_path/genomeParameters.txt")
+    if ( genomeParameters.exists() ) {
+        genomeParameters.text.eachLine() { line ->
+            if(line.startsWith("versionGenome")){
+                return line.split("\t")[1].trim()
+            }
+        }
+    }
 }
