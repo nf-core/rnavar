@@ -33,7 +33,7 @@ workflow PREPARE_GENOME {
     // Uncompress genome fasta file if required
     //
     if (params.fasta.endsWith('.gz')) {
-        ch_fasta = GUNZIP_FASTA ( params.fasta ).gunzip
+        ch_fasta = (GUNZIP_FASTA ( params.fasta ).gunzip)
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     } else {
         ch_fasta = file(params.fasta)
@@ -42,6 +42,7 @@ workflow PREPARE_GENOME {
     //
     // Uncompress GTF annotation file or create from GFF3 if required
     //
+
     ch_gffread_version = Channel.empty()
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
@@ -94,9 +95,8 @@ workflow PREPARE_GENOME {
     //
     // Uncompress STAR index or generate from scratch if required
     //
-    ch_star_index   = Channel.empty()
-    ch_star_version = Channel.empty()
-    run_star_index  = false
+    ch_star_index       = Channel.empty()
+    ch_fasta_for_index  = Channel.empty()
 
     if ('star' in prepare_tool_indices) {
         if (params.star_index) {
@@ -104,28 +104,32 @@ workflow PREPARE_GENOME {
                 ch_star_index = UNTAR_STAR_INDEX ( params.star_index ).untar
                 ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
             } else {
-                ch_star_index = file(params.star_index)
+                ch_star_index = Channel.fromPath(params.star_index)
             }
 
-            // Check version of STAR index for compatibility with pipeline STAR version 2.7.9a
-            allowed_star_versions = ["2.7.4a"] //STAR version 2.7.9a writes 2.7.4a in the genomeParameters file.
-            ch_star_index.map{ dir -> getIndexVersion(dir) }.view()
+            // Get the version of the index and branch into valid or invalid
+            ch_star_index.branch { dir ->
+                valid_index: getIndexVersion(dir) == '2.7.4a'
+                            return ch_star_index
+                invalid_index: getIndexVersion(dir) != '2.7.4a'
+                            return ch_fasta
+            }.set{result}
 
-            //custom_star_version = getVersion(ch_star_index)
-            //if (!(custom_star_version in allowed_star_versions)){
-            //    run_star_index = true
-            //}
+            ch_fasta_for_index = result.invalid_index
         }
         else {
-            run_star_index = true
+            ch_fasta_for_index = ch_fasta
         }
-    }
 
-    if (run_star_index){
-        ch_star_index   = STAR_GENOMEGENERATE ( ch_fasta, ch_gtf ).index
+        //ch_star_index.view()
+        //ch_fasta_for_index.view()
+
+        ch_star_index = STAR_GENOMEGENERATE (ch_fasta_for_index,ch_gtf).index
         ch_versions   = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
-    }
 
+        //ch_star_index.view()
+
+    }
 
     emit:
     fasta            = ch_fasta            // path: genome.fasta
@@ -141,7 +145,7 @@ workflow PREPARE_GENOME {
 def getIndexVersion( index_path ) {
     genomeParameters = new File("$index_path/genomeParameters.txt")
     if ( genomeParameters.exists() ) {
-        genomeParameters.text.eachLine() { line ->
+        for(line: genomeParameters.readLines()){
             if(line.startsWith("versionGenome")){
                 return line.split("\t")[1].trim()
             }
