@@ -1,6 +1,10 @@
 lint:
   files_unchanged:
     - .github/workflows/linting.yml
+    - .github/CONTRIBUTING.md
     - assets/multiqc_config.yaml
-    - assets/nf-core-rnavar_logo.png
-    - docs/images/nf-core-rnavar_logo.png
+    - assets/nf-core-rnavar_logo_light.png
+    - docs/images/nf-core-rnavar_logo_light.png
+    - docs/images/nf-core-rnavar_logo_dark.png
+    - lib/NfcoreTemplate.groovy
+    - lib/NfcoreSchema.groovy
