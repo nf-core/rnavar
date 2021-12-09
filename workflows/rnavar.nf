@@ -84,15 +84,16 @@ prepareToolIndices = params.aligner
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 def untar_options          = [publish_files: false]
+def samtools_sort_genome_options = modules['samtools_sort_genome']
 
 if (!params.save_reference) modules['star_genomegenerate']['publish_files'] = false
 
 modules['samtools_index_genome'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
 
 if (params.save_align_intermeds) {
-    modules['samtools_sort_genome'].publish_files.put('bam','')
-    modules['samtools_index_genome'].publish_files.put('bai','')
-    modules['samtools_index_genome'].publish_files.put('csi','')
+    samtools_sort_genome_options.publish_files.put('bam','')
+    samtools_sort_genome_options.publish_files.put('bai','')
+    samtools_sort_genome_options.publish_files.put('csi','')
 }
 
 if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
