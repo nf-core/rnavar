@@ -96,6 +96,7 @@ workflow PREPARE_GENOME {
     // Uncompress STAR index or generate from scratch if required
     //
     ch_star_index       = Channel.empty()
+    ch_fasta_for_index  = Channel.empty()
 
     if ('star' in prepare_tool_indices) {
         if (params.star_index) {
@@ -103,12 +104,28 @@ workflow PREPARE_GENOME {
                 ch_star_index = UNTAR_STAR_INDEX ( params.star_index ).untar
                 ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
             } else {
-                ch_star_index = file(params.star_index)
+                ch_star_index = Channel.fromPath(params.star_index)
             }
-        } else {
-            ch_star_index   = STAR_GENOMEGENERATE ( ch_fasta, ch_gtf ).index
-            ch_versions   = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+
+            // Get the version of the index and branch into valid or invalid
+            ch_star_index.branch { dir ->
+                valid_index: getIndexVersion(dir) == '2.7.4a'
+                            return dir
+                invalid_index: getIndexVersion(dir) != '2.7.4a'
+                            return ch_fasta
+            }.set{result}
+
+            ch_star_index      = result.valid_index
+            ch_fasta_for_index = result.invalid_index
         }
+        else {
+            ch_fasta_for_index = ch_fasta
+        }
+
+            ch_star_index_optional = STAR_GENOMEGENERATE (ch_fasta_for_index,ch_gtf).index
+            ch_versions            = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+
+            ch_star_index          = ch_star_index.mix(ch_star_index_optional)
     }
 
     emit:
@@ -120,4 +137,15 @@ workflow PREPARE_GENOME {
     chrom_sizes      = ch_chrom_sizes      // path: genome.sizes
     star_index       = ch_star_index       // path: star/index/
     versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+}
+
+def getIndexVersion( index_path ) {
+    genomeParameters = new File("$index_path/genomeParameters.txt")
+    if ( genomeParameters.exists() ) {
+        for(line: genomeParameters.readLines()){
+            if(line.startsWith("versionGenome")){
+                return line.split("\t")[1].trim()
+            }
+        }
+    }
 }
