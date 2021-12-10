@@ -34,21 +34,8 @@ workflow RECALIBRATE {
     bam_reports            = Channel.empty()
 
     APPLYBQSR(bam, fasta, fai, dict, intervals)
+    bam_recalibrated = APPLYBQSR.out.bam
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
-
-    // STEP 4.5: MERGING AND INDEXING THE RECALIBRATED BAM FILES
-    if (params.no_intervals) {
-        bam_recalibrated = APPLYBQSR.out.bam
-    } else {
-        APPLYBQSR.out.bam.map{ meta, bam ->
-            meta.id = meta.id
-            [meta, bam]
-        }.groupTuple().set{bam_recalibrated_interval}
-
-        SAMTOOLS_MERGE(bam_recalibrated_interval, fasta)
-        bam_recalibrated = SAMTOOLS_MERGE.out.bam
-        ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
-    }
 
     SAMTOOLS_INDEX(bam_recalibrated)
     bam_recalibrated_index = bam_recalibrated.join(SAMTOOLS_INDEX.out.bai)
