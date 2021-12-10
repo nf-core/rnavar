@@ -1,7 +1,7 @@
-- name: Run default pipeline
+- name: Run pipeline with duplicate reads removed
   command: nextflow run main.nf -profile test,docker --remove_duplicates true
   tags:
-    - default
+    - removeduplicates
     - preprocessing
   files:
     - path: results/reports/multiqc_report.html
