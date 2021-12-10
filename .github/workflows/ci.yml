@@ -26,6 +26,10 @@ jobs:
           # Test latest edge release of Nextflow
           - NXF_VER: ''
             NXF_EDGE: '1'
+        test:
+          - 'default'
+          - 'annotation'
+          - 'removeduplicates'
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
@@ -49,4 +53,4 @@ jobs:
         run: python -m pip install --upgrade pip pytest-workflow
 
       - name: Run pipeline with tests settings
-        run: nextflow run {GITHUB_WORKSPACE} -profile test,docker
+        run: pytest --tag ${{matrix.test}} --kwdof

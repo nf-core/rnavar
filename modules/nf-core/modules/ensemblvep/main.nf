@@ -24,7 +24,7 @@ process ENSEMBLVEP {
     }
 
     input:
-    tuple val(meta), path(vcf)
+    tuple val(meta), path(vcf), path(tbi)
     val   genome
     val   species
     val   cache_version
