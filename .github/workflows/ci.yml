@@ -29,7 +29,7 @@ jobs:
         test:
           - 'default'
           - 'annotation'
-          # - 'removeduplicates'
+          - 'removeduplicates'
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
