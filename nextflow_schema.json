@@ -364,7 +364,7 @@
             "properties": {
                 "scatter_count": {
                     "type": "integer",
-                    "default": 50,
+                    "default": 25,
                     "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
                     "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
                 },
