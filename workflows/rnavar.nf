@@ -84,19 +84,21 @@ prepareToolIndices = params.aligner
 def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
 def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
 def untar_options          = [publish_files: false]
+def samtools_sort_genome_options = modules['samtools_sort_genome']
 
 if (!params.save_reference) modules['star_genomegenerate']['publish_files'] = false
 
 modules['samtools_index_genome'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
 
 if (params.save_align_intermeds) {
-    modules['samtools_sort_genome'].publish_files.put('bam','')
-    modules['samtools_index_genome'].publish_files.put('bai','')
-    modules['samtools_index_genome'].publish_files.put('csi','')
+    samtools_sort_genome_options.publish_files.put('bam','')
+    samtools_sort_genome_options.publish_files.put('bai','')
+    samtools_sort_genome_options.publish_files.put('csi','')
 }
 
 if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
 
+// Additional paramaters to modules based on params
 modules['star_align'].args += params.save_unaligned ? Utils.joinModuleArgs(['--outReadsUnmapped Fastx']) : ''
 modules['star_align'].args += params.star_twopass ? Utils.joinModuleArgs(['--twopassMode Basic']) : ''
 if (params.save_align_intermeds) modules['star_align'].publish_files.put('bam','')
@@ -105,6 +107,8 @@ if (params.save_unaligned)       modules['star_align'].publish_files.put('fastq.
 modules['picard_markduplicates_samtools'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
 modules['picard_markduplicates'].args += params.remove_duplicates ? Utils.joinModuleArgs(['REMOVE_DUPLICATES=true']) : ''
 modules['gatk_intervallisttools'].args += Utils.joinModuleArgs(["--SCATTER_COUNT $params.scatter_count"])
+
+modules['gatk_haplotypecaller'].args += Utils.joinModuleArgs(["--standard-min-confidence-threshold-for-calling $params.stand_call_conf"])
 
 if (params.window)    modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--window $params.window"])
 if (params.cluster)   modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--cluster $params.cluster"])
@@ -163,8 +167,7 @@ include { SPLITNCIGAR } from '../subworkflows/local/splitncigar'                
 
 // Estimate and correct systematic bias
 include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'                     addParams(
-    applybqsr_options:      modules['applybqsr'],
-    merge_bam_options:      modules['merge_bam_recalibrate'],
+    applybqsr_options: modules['gatk_applybqsr'],
     samtools_index_options: modules['samtools_index_recalibrate'],
     samtools_stats_options: modules['samtools_stats_recalibrate']
 )
