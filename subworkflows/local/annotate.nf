@@ -63,7 +63,7 @@ workflow ANNOTATE {
     }
 
     if ('merge' in tools) {
-        vcf_ann_for_merge = snpeff_vcf_ann.map{ meta, vcf, tbi -> [meta, vcf] }
+        vcf_ann_for_merge = snpeff_vcf_ann.map{ meta, vcf, tbi -> [meta, vcf, tbi] }
         (merge_vcf_ann, merge_vep_report, merge_vep_version) = MERGE_ANNOTATE(vcf_ann_for_merge, vep_genome, vep_species, vep_cache_version, vep_cache)
         ch_versions = ch_versions.mix(MERGE_ANNOTATE.out.versions.first())
     }
