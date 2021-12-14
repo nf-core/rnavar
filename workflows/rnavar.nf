@@ -167,8 +167,7 @@ include { SPLITNCIGAR } from '../subworkflows/local/splitncigar'                
 
 // Estimate and correct systematic bias
 include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'                     addParams(
-    applybqsr_options:      modules['applybqsr'],
-    merge_bam_options:      modules['merge_bam_recalibrate'],
+    applybqsr_options: modules['gatk_applybqsr'],
     samtools_index_options: modules['samtools_index_recalibrate'],
     samtools_stats_options: modules['samtools_stats_recalibrate']
 )
