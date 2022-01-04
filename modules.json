@@ -76,13 +76,13 @@
                 "git_sha": "3b366c7c6aac446c1a4ea7c2016092344633b2ec"
             },
             "star/align": {
-                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
             "star/genomegenerate": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
             "tabix/bgziptabix": {
-                "git_sha": "123"
+                "git_sha": "e22966ce74340cb671576143e5fdbbd71670cffa"
             },
             "untar": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
