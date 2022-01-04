@@ -2,20 +2,23 @@
 // Alignment with STAR
 //
 
-params.align_options          = [:]
-params.samtools_index_options = [:]
-params.samtools_sort_options  = [:]
-params.samtools_stats_options = [:]
-params.seq_platform           = [:]
+//params.align_options          = [:]
+//params.samtools_index_options = [:]
+//params.samtools_sort_options  = [:]
+//params.samtools_stats_options = [:]
+//params.seq_platform           = [:]
 
-include { STAR_ALIGN        } from '../../modules/nf-core/modules/star/align/main' addParams( options: params.align_options, seq_platform: params.seq_platform)
-include { BAM_SORT_SAMTOOLS } from './bam_sort_samtools'                           addParams( sort_options: params.samtools_sort_options, index_options: params.samtools_index_options, stats_options: params.samtools_stats_options )
+include { STAR_ALIGN        } from '../../modules/nf-core/modules/star/align/main' //addParams( options: params.align_options, seq_platform: params.seq_platform)
+include { BAM_SORT_SAMTOOLS } from './bam_sort_samtools'                           //addParams( sort_options: params.samtools_sort_options, index_options: params.samtools_index_options, stats_options: params.samtools_stats_options )
 
 workflow ALIGN_STAR {
     take:
-    reads // channel: [ val(meta), [ reads ] ]
-    index // channel: /path/to/star/index/
-    gtf   // channel: /path/to/genome.gtf
+    reads                   // channel: [ val(meta), [ reads ] ]
+    index                   // channel: /path/to/star/index/
+    gtf                     // channel: /path/to/genome.gtf
+    star_ignore_sjdbgtf     // value:   ignore gtf
+    seq_platform            // value:   sequencing platform
+    seq_center              // value:   sequencing centre
 
     main:
 
@@ -24,7 +27,7 @@ workflow ALIGN_STAR {
     //
     // Map reads with STAR
     //
-    STAR_ALIGN ( reads, index, gtf )
+    STAR_ALIGN ( reads, index, gtf, star_ignore_sjdbgtf, seq_platform, seq_center )
     ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
     //

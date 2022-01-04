@@ -2,36 +2,9 @@
 // ANNOTATION
 //
 
-params.annotation_cache             = [:]
-params.bgziptabix_merge_vep_options = [:]
-params.bgziptabix_snpeff_options    = [:]
-params.bgziptabix_vep_options       = [:]
-params.merge_vep_options            = [:]
-params.snpeff_options               = [:]
-params.snpeff_tag                   = [:]
-params.vep_options                  = [:]
-params.vep_tag                      = [:]
-
-include { SNPEFF_ANNOTATE } from '../nf-core/snpeff_annotate' addParams(
-    bgziptabix_snpeff_options: params.bgziptabix_snpeff_options,
-    snpeff_options:            params.snpeff_options,
-    snpeff_tag:                params.snpeff_tag,
-    use_cache:                 params.annotation_cache
-)
-
-include { ENSEMBLVEP_ANNOTATE as MERGE_ANNOTATE } from '../nf-core/ensemblvep_annotate' addParams(
-    bgziptabix_vep_options:    params.bgziptabix_merge_vep_options,
-    use_cache:                 params.annotation_cache,
-    vep_options:               params.merge_vep_options,
-    vep_tag:                   params.vep_tag
-)
-
-include { ENSEMBLVEP_ANNOTATE } from '../nf-core/ensemblvep_annotate' addParams(
-    bgziptabix_vep_options:    params.bgziptabix_vep_options,
-    use_cache:                 params.annotation_cache,
-    vep_options:               params.vep_options,
-    vep_tag:                   params.vep_tag
-)
+include { SNPEFF_ANNOTATE } from '../nf-core/snpeff_annotate'
+include { ENSEMBLVEP_ANNOTATE as MERGE_ANNOTATE } from '../nf-core/ensemblvep_annotate'
+include { ENSEMBLVEP_ANNOTATE } from '../nf-core/ensemblvep_annotate'
 
 workflow ANNOTATE {
     take:

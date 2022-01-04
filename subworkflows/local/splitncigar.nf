@@ -2,13 +2,13 @@
 // PREPROCESSING OF ALIGNMENT FILE OVER THE INTERVALS IN PARALLEL
 //
 
-params.gatk_splitncigar_options     = [:]
-params.samtools_index_options       = [:]
-params.samtools_merge_options       = [:]
+//params.gatk_splitncigar_options     = [:]
+//params.samtools_index_options       = [:]
+//params.samtools_merge_options       = [:]
 
-include { GATK4_SPLITNCIGAR }   from '../nf-core/splitn_cigar_reads'                     addParams(gatk_splitncigar_options: params.gatk_splitncigar_options, samtools_index_options: params.samtools_index_options)
-include { SAMTOOLS_MERGE }      from '../../modules/nf-core/modules/samtools/merge/main' addParams(options: params.samtools_merge_options)
-include { SAMTOOLS_INDEX }      from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_index_options)
+include { GATK4_SPLITNCIGAR }   from '../nf-core/splitn_cigar_reads'                     //addParams(gatk_splitncigar_options: params.gatk_splitncigar_options, samtools_index_options: params.samtools_index_options)
+include { SAMTOOLS_MERGE }      from '../../modules/nf-core/modules/samtools/merge/main' //addParams(options: params.samtools_merge_options)
+include { SAMTOOLS_INDEX }      from '../../modules/nf-core/modules/samtools/index/main' //addParams(options: params.samtools_index_options)
 
 workflow SPLITNCIGAR {
     take:
