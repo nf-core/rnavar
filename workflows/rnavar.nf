@@ -10,7 +10,6 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 WorkflowRnavar.initialise(params, log)
 
 // Check input path parameters to see if they exist
-// Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input,
     params.fasta,
@@ -29,7 +28,6 @@ for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
 if(!params.star_index and !params.gtf){ exit 1, "GTF file is required to build a STAR reference index! Use option -gtf to provide a GTF file." }
 
 /*
@@ -47,76 +45,50 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 ========================================================================================
 */
 
-// Don't overwrite global params.modules, create a copy instead and use that within the main script.
-// def modules = params.modules.clone()
-
-//
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
-//
-include { INPUT_CHECK } from '../subworkflows/local/input_check' //addParams( options: [:] )
+include { INPUT_CHECK                   } from '../subworkflows/local/input_check'              // Validate the input samplesheet.csv and prepare input channels
+include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome'           // Build the genome index and other reference files
+include { SPLITNCIGAR                   } from '../subworkflows/local/splitncigar'              // Splits reads that contain Ns in their cigar string
+include { GATK4_HAPLOTYPECALLER         } from '../modules/local/gatk4/haplotypecaller/main'    // Haplotyper caller that runs on split interval files
+include { ANNOTATE                      } from '../subworkflows/local/annotate'                 // Annotate variants using snpEff or VEP or both
 
 /*
 ========================================================================================
-    IMPORT NF-CORE MODULES/SUBWORKFLOWS
+    IMPORT NF-CORE MODULES
 ========================================================================================
 */
 
-//def multiqc_options   = modules['multiqc']
-//multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
-
-//
-// MODULE: Installed directly from nf-core/modules
-//
-include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'  //addParams( options: modules['fastqc'] )
-include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' //addParams( options: multiqc_options   )
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'  //addParams( options: [publish_files : ['_versions.yml':'']] )
+include { FASTQC                        } from '../modules/nf-core/modules/fastqc/main'
+include { MULTIQC                       } from '../modules/nf-core/modules/multiqc/main'
+include { CAT_FASTQ                     } from '../modules/nf-core/modules/cat/fastq/main'
+include { GATK4_BASERECALIBRATOR        } from '../modules/nf-core/modules/gatk4/baserecalibrator/main'
+include { GATK4_BEDTOINTERVALLIST       } from '../modules/nf-core/modules/gatk4/bedtointervallist/main'
+include { GATK4_INTERVALLISTTOOLS       } from '../modules/nf-core/modules/gatk4/intervallisttools/main'
+include { GATK4_MERGEVCFS               } from '../modules/nf-core/modules/gatk4/mergevcfs/main'
+include { GATK4_INDEXFEATUREFILE        } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
+include { GATK4_VARIANTFILTRATION       } from '../modules/nf-core/modules/gatk4/variantfiltration/main'
+include { SAMTOOLS_INDEX                } from '../modules/nf-core/modules/samtools/index/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS   } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
 /*
 ========================================================================================
-    RUN MAIN WORKFLOW
+    IMPORT NF-CORE SUBWORKFLOWS
 ========================================================================================
 */
 
-// Check alignment parameters
-def prepareToolIndices  = []
-prepareToolIndices = params.aligner
+include { ALIGN_STAR                    } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
+include { MARKDUPLICATES                } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
+include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
 
-//def publish_genome_options = params.save_reference ? [publish_dir: 'genome']       : [publish_files: false]
-//def publish_index_options  = params.save_reference ? [publish_dir: 'genome/index'] : [publish_files: false]
-//def untar_options          = [publish_files: false]
-//def samtools_sort_genome_options = modules['samtools_sort_genome']
+/*
+========================================================================================
+    VARIABLES
+========================================================================================
+*/
 
-//if (!params.save_reference) modules['star_genomegenerate']['publish_files'] = false
-
-//modules['samtools_index_genome'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
-
-//if (params.save_align_intermeds) {
-//    samtools_sort_genome_options.publish_files.put('bam','')
-//    samtools_sort_genome_options.publish_files.put('bai','')
-//    samtools_sort_genome_options.publish_files.put('csi','')
-//}
-
-//if (!params.save_merged_fastq) modules['cat_fastq']['publish_files'] = false
-
-// Additional paramaters to modules based on params
-//modules['star_align'].args += params.save_unaligned ? Utils.joinModuleArgs(['--outReadsUnmapped Fastx']) : ''
-//modules['star_align'].args += params.star_twopass ? Utils.joinModuleArgs(['--twopassMode Basic']) : ''
-def seq_platform            = params.seq_platform ? params.seq_platform : []
-def seq_center              = params.seq_center ? params.seq_center : []
-
-//if (params.save_align_intermeds) modules['star_align'].publish_files.put('bam','')
-//if (params.save_unaligned)       modules['star_align'].publish_files.put('fastq.gz','unmapped')
-
-//modules['picard_markduplicates_samtools'].args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
-//modules['picard_markduplicates'].args += params.remove_duplicates ? Utils.joinModuleArgs(['REMOVE_DUPLICATES=true']) : ''
-//modules['gatk_intervallisttools'].args += Utils.joinModuleArgs(["--SCATTER_COUNT $params.scatter_count"])
-
-//modules['gatk_haplotypecaller'].args += Utils.joinModuleArgs(["--standard-min-confidence-threshold-for-calling $params.stand_call_conf"])
-
-//if (params.window)    modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--window $params.window"])
-//if (params.cluster)   modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--cluster $params.cluster"])
-//if (params.fs_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"FS\" --filter \"FS > $params.fs_filter\" "])
-//if (params.qd_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"QD\" --filter \"QD < $params.qd_filter\" "])
+// Check STAR alignment parameters
+def prepareToolIndices  = params.aligner
+def seq_platform        = params.seq_platform ? params.seq_platform : []
+def seq_center          = params.seq_center ? params.seq_center : []
 
 // Initialize varaint annotation associated channels
 def snpeff_db           = params.snpeff_db         ?: Channel.empty()
@@ -126,39 +98,14 @@ def vep_species         = params.vep_species       ?: Channel.empty()
 def snpeff_cache        = params.snpeff_cache      ? params.snpeff_cache : []
 def vep_cache           = params.vep_cache         ? params.vep_cache : []
 
-// Include all the modules required for the pipeline
-include { CAT_FASTQ }               from '../modules/nf-core/modules/cat/fastq/main'               //addParams(options: modules['cat_fastq'])
-include { GATK4_BASERECALIBRATOR }  from '../modules/nf-core/modules/gatk4/baserecalibrator/main'  //addParams(options: modules['gatk_baserecalibrator'])
-include { GATK4_BEDTOINTERVALLIST } from '../modules/nf-core/modules/gatk4/bedtointervallist/main' //addParams(options: modules['gatk_bedtointervallist'])
-include { GATK4_HAPLOTYPECALLER   } from '../modules/local/gatk4/haplotypecaller/main'             //addParams(options: modules['gatk_haplotypecaller'])
-include { GATK4_INTERVALLISTTOOLS } from '../modules/nf-core/modules/gatk4/intervallisttools/main' //addParams(options: modules['gatk_intervallisttools'])
-include { GATK4_MERGEVCFS         } from '../modules/nf-core/modules/gatk4/mergevcfs/main'         //addParams(options: modules['gatk_mergevcfs'])
-include { GATK4_INDEXFEATUREFILE  } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'  //addParams(options: modules['gatk_indexfeaturefile'])
-include { GATK4_VARIANTFILTRATION } from '../modules/nf-core/modules/gatk4/variantfiltration/main' //addParams(options: modules['gatk_variantfilter'])
-include { SAMTOOLS_INDEX }          from '../modules/nf-core/modules/samtools/index/main'          //addParams(options: modules['samtools_index_genome'])
-
-// Include all the subworkflows required for the pipeline
-
-// Build the genome index and other reference files
-include { PREPARE_GENOME }          from '../subworkflows/local/prepare_genome'
-
-// Align reads to genome and sort and index the alignment file
-include { ALIGN_STAR }              from '../subworkflows/nf-core/align_star'
-
-// Mark duplicates in the BAM file
-include { MARKDUPLICATES }          from '../subworkflows/nf-core/markduplicates'
-
-// Subworkflow - splits reads that contain Ns in their cigar string
-include { SPLITNCIGAR }             from '../subworkflows/local/splitncigar'
-
-// Estimate and correct systematic bias
-include { RECALIBRATE }             from '../subworkflows/nf-core/recalibrate'
-
-// Annotate variants using snpEff or VEP or both
-include { ANNOTATE }                from '../subworkflows/local/annotate'
-
-// Info required for completion email and summary
+// MultiQC reporting
 def multiqc_report = []
+
+/*
+========================================================================================
+    RUN MAIN WORKFLOW RNAVAR
+========================================================================================
+*/
 
 workflow RNAVAR {
 

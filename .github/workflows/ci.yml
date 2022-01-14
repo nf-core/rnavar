@@ -28,7 +28,6 @@ jobs:
             NXF_EDGE: '1'
         test:
           - 'default'
-          - 'defaultmultiplesamples'
           - 'annotation'
           - 'removeduplicates'
     steps:
