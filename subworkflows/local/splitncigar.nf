@@ -41,16 +41,14 @@ workflow SPLITNCIGAR {
     }.groupTuple().set{bam_splitncigar_interval}
 
     SAMTOOLS_MERGE(bam_splitncigar_interval, fasta)
-    bam_splitncigar_merged = SAMTOOLS_MERGE.out.bam
+    splitncigar_bam = SAMTOOLS_MERGE.out.bam
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
 
-    SAMTOOLS_INDEX(bam_splitncigar_merged)
-    bam_splitncigar_merged_index = SAMTOOLS_INDEX.out.bai
+    SAMTOOLS_INDEX(splitncigar_bam)
+    splitncigar_bam_bai = splitncigar_bam.join(SAMTOOLS_INDEX.out.bai)
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     emit:
-
-        bam      = bam_splitncigar_merged
-        bai      = bam_splitncigar_merged_index
-        versions = ch_versions
+        bam_bai     = splitncigar_bam_bai
+        versions    = ch_versions
 }

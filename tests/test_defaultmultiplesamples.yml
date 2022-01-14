@@ -1,0 +1,19 @@
+- name: Run default pipeline on all samples
+  command: nextflow run main.nf -profile test,docker
+  tags:
+    - defaultmultiplesamples
+    - preprocessing
+  files:
+    - path: results/reports/multiqc_report.html
+    - path: results/preprocessing/GM12878/GM12878.recal.bam
+    - path: results/preprocessing/GM12878/GM12878.recal.bam.bai
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi
+    - path: results/variant_calling/GM12878/GM12878.filtered.vcf.gz
+    - path: results/variant_calling/GM12878/GM12878.filtered.vcf.gz.tbi
+    - path: results/preprocessing/TEST123/TEST123.recal.bam
+    - path: results/preprocessing/TEST123/TEST123.recal.bam.bai
+    - path: results/variant_calling/TEST123/TEST123.haplotypecaller.vcf.gz
+    - path: results/variant_calling/TEST123/TEST123.haplotypecaller.vcf.gz.tbi
+    - path: results/variant_calling/TEST123/TEST123.filtered.vcf.gz
+    - path: results/variant_calling/TEST123/TEST123.filtered.vcf.gz.tbi

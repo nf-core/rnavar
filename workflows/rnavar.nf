@@ -119,7 +119,6 @@ def seq_center              = params.seq_center ? params.seq_center : []
 //if (params.qd_filter) modules['gatk_variantfilter'].args += Utils.joinModuleArgs(["--filter-name \"QD\" --filter \"QD < $params.qd_filter\" "])
 
 // Initialize varaint annotation associated channels
-def tools               = params.annotate_tools    ? params.annotate_tools.split(',').collect{it.trim().toLowerCase().replaceAll('-', '').replaceAll('_', '')} : []
 def snpeff_db           = params.snpeff_db         ?: Channel.empty()
 def vep_cache_version   = params.vep_cache_version ?: Channel.empty()
 def vep_genome          = params.vep_genome        ?: Channel.empty()
@@ -164,7 +163,6 @@ def multiqc_report = []
 workflow RNAVAR {
 
     ch_versions = Channel.empty()
-    ch_fastq    = Channel.empty()
 
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
@@ -209,18 +207,25 @@ workflow RNAVAR {
     //
     // MODULE: Run FastQC
     //
+
     FASTQC (
         ch_cat_fastq
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
+    //
     // PREPARE THE INTERVAL LIST FROM GTF FILE
+    //
+
     ch_interval_list = Channel.empty()
     GATK4_BEDTOINTERVALLIST(ch_genome_bed, PREPARE_GENOME.out.dict)
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
 
+    //
     // MODULE: IntervalListTools from GATK4
+    //
+
     ch_interval_list_split = Channel.empty()
     if (!params.skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(ch_interval_list)
@@ -231,6 +236,7 @@ workflow RNAVAR {
     //
     // SUBWORKFLOW: Alignment with STAR
     //
+
     ch_genome_bam                 = Channel.empty()
     ch_genome_bam_index           = Channel.empty()
     ch_samtools_stats             = Channel.empty()
@@ -271,21 +277,23 @@ workflow RNAVAR {
 
         // Subworkflow - SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
-        bam_splitncigar         = Channel.empty()
+        splitncigar_bam_bai = Channel.empty()
         SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict, ch_interval_list_split)
-        bam_splitncigar         = SPLITNCIGAR.out.bam.join(SPLITNCIGAR.out.bai, by: [0])
-        ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
+        splitncigar_bam_bai = SPLITNCIGAR.out.bam_bai
+        ch_versions         = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
         // MODULE: BaseRecalibrator from GATK4
         ch_bqsr_table = Channel.empty()
         known_sites     = Channel.from([params.dbsnp, params.known_indels]).collect()
         known_sites_tbi = Channel.from([params.dbsnp_tbi, params.known_indels_tbi]).collect()
-        //ch_interval_list_baserecalibrator = ch_interval_list.map{ meta, bed -> [bed] }.collect()
-        bam_splitncigar_interval = Channel.empty()
-        bam_splitncigar_interval = bam_splitncigar.join(ch_interval_list)
+
+        ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
+        splitncigar_bam_bai.combine(ch_interval_list_recalib)
+            .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval]
+        }.set{splitncigar_bam_bai_interval}
 
         GATK4_BASERECALIBRATOR(
-            bam_splitncigar_interval,
+            splitncigar_bam_bai_interval,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,
             PREPARE_GENOME.out.dict,
@@ -296,16 +304,19 @@ workflow RNAVAR {
         ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
         // MODULE: ApplyBaseRecalibrator from GATK4
-        bam_applybqsr       = bam_splitncigar.join(ch_bqsr_table, by: [0])
+        bam_applybqsr       = splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
         bam_recalibrated    = Channel.empty()
         bam_recalibrated_qc = Channel.empty()
-        //ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.collect()
-        bam_applybqsr.join(ch_interval_list)
+
+        ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
+        bam_applybqsr.combine(ch_interval_list_applybqsr)
+            .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]
+        }.set{applybqsr_bam_bai_interval}
 
         RECALIBRATE(
             ('bamqc' in params.skip_qc),
             ('samtools' in params.skip_qc),
-            bam_applybqsr,
+            applybqsr_bam_bai_interval,
             PREPARE_GENOME.out.dict,
             PREPARE_GENOME.out.fai,
             PREPARE_GENOME.out.fasta
@@ -356,9 +367,10 @@ workflow RNAVAR {
         GATK4_INDEXFEATUREFILE(
             haplotypecaller_vcf
         )
+        haplotypecaller_vcf     = haplotypecaller_vcf   //.join(GATK4_INDEXFEATUREFILE.out.index, by: [0])
         haplotypecaller_vcf_tbi = haplotypecaller_vcf.join(GATK4_INDEXFEATUREFILE.out.index, by: [0])
-        ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
-        final_vcf_tbi = haplotypecaller_vcf_tbi
+        ch_versions             = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+        final_vcf               = haplotypecaller_vcf
 
         // MODULE: VariantFiltration from GATK4
         if (!params.skip_variantfiltration) {
@@ -370,15 +382,15 @@ workflow RNAVAR {
                 PREPARE_GENOME.out.dict
             )
 
-            filtered_vcf_tbi = GATK4_VARIANTFILTRATION.out.vcf.join(GATK4_VARIANTFILTRATION.out.tbi, by: [0])
-            final_vcf_tbi = filtered_vcf_tbi
-            ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
+            filtered_vcf    = GATK4_VARIANTFILTRATION.out.vcf  //.join(GATK4_VARIANTFILTRATION.out.tbi, by: [0])
+            final_vcf       = filtered_vcf
+            ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
         }
 
-        if(!params.skip_variantannotation && ('merge' in tools || 'snpeff' in tools || 'vep' in tools)) {
+        if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
             ANNOTATE(
-                final_vcf_tbi,
-                tools,
+                final_vcf,
+                params.annotate_tools,
                 snpeff_db,
                 snpeff_cache,
                 vep_genome,
