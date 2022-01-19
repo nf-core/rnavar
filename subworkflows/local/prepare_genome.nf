@@ -2,23 +2,17 @@
 // Uncompress and prepare reference genome files
 //
 
-params.genome_options       = [:]
-params.gffread_options      = [:]
-params.index_options        = [:]
-params.star_index_options   = [:]
-params.star_untar_options   = [:]
-
-include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main' addParams(options: params.genome_options)
-include { GET_CHROM_SIZES }                   from '../../modules/local/get_chrom_sizes'                               addParams(options: params.genome_options)
-include { GFFREAD }                           from '../../modules/nf-core/modules/gffread/main'                        addParams(options: params.gffread_options)
-include { GTF2BED }                           from '../../modules/local/gtf2bed'                                       addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_FASTA }            from '../../modules/nf-core/modules/gunzip/main'                         addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_GENE_BED }         from '../../modules/nf-core/modules/gunzip/main'                         addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_GFF }              from '../../modules/nf-core/modules/gunzip/main'                         addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_GTF }              from '../../modules/nf-core/modules/gunzip/main'                         addParams(options: params.genome_options)
-include { SAMTOOLS_FAIDX }                    from '../../modules/nf-core/modules/samtools/faidx/main'                 addParams(options: params.genome_options)
-include { STAR_GENOMEGENERATE }               from '../../modules/nf-core/modules/star/genomegenerate/main'            addParams(options: params.star_index_options)
-include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/modules/untar/main'                          addParams(options: params.star_untar_options)
+include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main' //addParams(options: params.genome_options)
+include { GET_CHROM_SIZES }                   from '../../modules/local/get_chrom_sizes'                               //addParams(options: params.genome_options)
+include { GFFREAD }                           from '../../modules/nf-core/modules/gffread/main'                        //addParams(options: params.gffread_options)
+include { GTF2BED }                           from '../../modules/local/gtf2bed'                                       //addParams(options: params.genome_options)
+include { GUNZIP as GUNZIP_FASTA }            from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
+include { GUNZIP as GUNZIP_GENE_BED }         from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
+include { GUNZIP as GUNZIP_GFF }              from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
+include { GUNZIP as GUNZIP_GTF }              from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
+include { SAMTOOLS_FAIDX }                    from '../../modules/nf-core/modules/samtools/faidx/main'                 //addParams(options: params.genome_options)
+include { STAR_GENOMEGENERATE }               from '../../modules/nf-core/modules/star/genomegenerate/main'            //addParams(options: params.star_index_options)
+include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/modules/untar/main'                          //addParams(options: params.star_untar_options)
 
 
 workflow PREPARE_GENOME {
@@ -95,8 +89,8 @@ workflow PREPARE_GENOME {
     //
     // Uncompress STAR index or generate from scratch if required
     //
-    ch_star_index       = Channel.empty()
-    ch_fasta_for_index  = Channel.empty()
+
+    ch_star_index = Channel.empty()
 
     if ('star' in prepare_tool_indices) {
         if (params.star_index) {
@@ -104,29 +98,16 @@ workflow PREPARE_GENOME {
                 ch_star_index = UNTAR_STAR_INDEX ( params.star_index ).untar
                 ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
             } else {
-                ch_star_index = Channel.fromPath(params.star_index)
+                ch_star_index = file(params.star_index)
             }
-
-            // Get the version of the index and branch into valid or invalid
-            ch_star_index.branch { dir ->
-                valid_index: getIndexVersion(dir) == '2.7.4a'
-                            return dir
-                invalid_index: getIndexVersion(dir) != '2.7.4a'
-                            return ch_fasta
-            }.set{result}
-
-            ch_star_index      = result.valid_index
-            ch_fasta_for_index = result.invalid_index
-        }
-        else {
-            ch_fasta_for_index = ch_fasta
         }
 
-            ch_star_index_optional = STAR_GENOMEGENERATE (ch_fasta_for_index,ch_gtf).index
-            ch_versions            = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
-
-            ch_star_index          = ch_star_index.mix(ch_star_index_optional)
+        if((!ch_star_index) || getIndexVersion(ch_star_index) != '2.7.4a'){
+            ch_star_index   = STAR_GENOMEGENERATE(ch_fasta,ch_gtf).index
+            ch_versions     = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+        }
     }
+
 
     emit:
     fasta            = ch_fasta            // path: genome.fasta

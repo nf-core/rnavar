@@ -2,13 +2,13 @@
 // PREPROCESSING OF ALIGNMENT FILE OVER THE INTERVALS IN PARALLEL
 //
 
-params.gatk_splitncigar_options     = [:]
-params.samtools_index_options       = [:]
-params.samtools_merge_options       = [:]
+//params.gatk_splitncigar_options     = [:]
+//params.samtools_index_options       = [:]
+//params.samtools_merge_options       = [:]
 
-include { GATK4_SPLITNCIGAR }   from '../nf-core/splitn_cigar_reads'                     addParams(gatk_splitncigar_options: params.gatk_splitncigar_options, samtools_index_options: params.samtools_index_options)
-include { SAMTOOLS_MERGE }      from '../../modules/nf-core/modules/samtools/merge/main' addParams(options: params.samtools_merge_options)
-include { SAMTOOLS_INDEX }      from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_index_options)
+include { GATK4_SPLITNCIGAR }   from '../nf-core/splitn_cigar_reads'                     //addParams(gatk_splitncigar_options: params.gatk_splitncigar_options, samtools_index_options: params.samtools_index_options)
+include { SAMTOOLS_MERGE }      from '../../modules/nf-core/modules/samtools/merge/main' //addParams(options: params.samtools_merge_options)
+include { SAMTOOLS_INDEX }      from '../../modules/nf-core/modules/samtools/index/main' //addParams(options: params.samtools_index_options)
 
 workflow SPLITNCIGAR {
     take:
@@ -41,16 +41,14 @@ workflow SPLITNCIGAR {
     }.groupTuple().set{bam_splitncigar_interval}
 
     SAMTOOLS_MERGE(bam_splitncigar_interval, fasta)
-    bam_splitncigar_merged = SAMTOOLS_MERGE.out.bam
+    splitncigar_bam = SAMTOOLS_MERGE.out.bam
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
 
-    SAMTOOLS_INDEX(bam_splitncigar_merged)
-    bam_splitncigar_merged_index = SAMTOOLS_INDEX.out.bai
+    SAMTOOLS_INDEX(splitncigar_bam)
+    splitncigar_bam_bai = splitncigar_bam.join(SAMTOOLS_INDEX.out.bai)
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     emit:
-
-        bam      = bam_splitncigar_merged
-        bai      = bam_splitncigar_merged_index
-        versions = ch_versions
+        bam_bai     = splitncigar_bam_bai
+        versions    = ch_versions
 }
