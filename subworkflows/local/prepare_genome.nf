@@ -74,7 +74,11 @@ workflow PREPARE_GENOME {
     // Index the genome fasta
     ch_fasta_fai = Channel.empty()
     if (params.fasta_fai) ch_fasta_fai = file(params.fasta_fai)
-    else                  ch_fasta_fai = SAMTOOLS_FAIDX(ch_fasta).fai
+    if (!params.fasta_fai) {
+        SAMTOOLS_FAIDX(Channel.fromPath(ch_fasta).map{ it -> [[id:it[0].getName()], it]})
+        ch_fasta_fai = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+    }
 
     // Create dictionary file for the genome fasta
     ch_fasta_dict = Channel.empty()
