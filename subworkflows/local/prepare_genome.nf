@@ -3,7 +3,6 @@
 //
 
 include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main' //addParams(options: params.genome_options)
-include { GET_CHROM_SIZES }                   from '../../modules/local/get_chrom_sizes'                               //addParams(options: params.genome_options)
 include { GFFREAD }                           from '../../modules/nf-core/modules/gffread/main'                        //addParams(options: params.gffread_options)
 include { GTF2BED }                           from '../../modules/local/gtf2bed'                                       //addParams(options: params.genome_options)
 include { GUNZIP as GUNZIP_FASTA }            from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
@@ -74,17 +73,16 @@ workflow PREPARE_GENOME {
     // Index the genome fasta
     ch_fasta_fai = Channel.empty()
     if (params.fasta_fai) ch_fasta_fai = file(params.fasta_fai)
-    else                  ch_fasta_fai = SAMTOOLS_FAIDX(ch_fasta).fai
+    if (!params.fasta_fai) {
+        SAMTOOLS_FAIDX(Channel.fromPath(ch_fasta).map{ it -> [[id:it[0].getName()], it]})
+        ch_fasta_fai = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+    }
 
     // Create dictionary file for the genome fasta
     ch_fasta_dict = Channel.empty()
     if (params.dict) ch_fasta_dict = file(params.dict)
-    else                   ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY(ch_fasta).dict
-
-    //
-    // Create chromosome sizes file
-    //
-    ch_chrom_sizes = GET_CHROM_SIZES ( ch_fasta ).sizes
+    else ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY(ch_fasta).dict
 
     //
     // Uncompress STAR index or generate from scratch if required
@@ -115,7 +113,6 @@ workflow PREPARE_GENOME {
     dict             = ch_fasta_dict       // path: genome.fasta.dict
     gtf              = ch_gtf              // path: genome.gtf
     gene_bed         = ch_gene_bed         // path: gene.bed
-    chrom_sizes      = ch_chrom_sizes      // path: genome.sizes
     star_index       = ch_star_index       // path: star/index/
     versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
