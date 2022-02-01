@@ -161,7 +161,13 @@
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version"
                 }
-            }
+            },
+            "required": [
+                "dbsnp",
+                "dbsnp_tbi",
+                "known_indels_tbi",
+                "known_indels"
+            ]
         },
         "alignment_options": {
             "title": "Alignment options",
