@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline based on public data. The directories listed below are created in the `results/` directory after the pipeline has finished. All paths are relative to the top-level results directory.
+This document describes the output produced by the pipeline based on public data.
+
+The directories listed below are created in the `results/` directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
 ### Dataset
 
