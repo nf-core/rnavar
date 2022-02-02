@@ -178,7 +178,7 @@ To enable the use of the `VEP` `CADD` plugin:
 Example:
 
 ```bash
-nextflow run nf-core/sarek --input samplesheet.csv --genome GRCh38 -profile docker --annotate_tools VEP VEP --cadd_cache \
+nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annotate_tools VEP VEP --cadd_cache \
     --cadd_indels </path/to/CADD/cache/InDels.tsv.gz> \
     --cadd_indels_tbi </path/to/CADD/cache/InDels.tsv.gz.tbi> \
     --cadd_wg_snvs </path/to/CADD/cache/whole_genome_SNVs.tsv.gz> \
@@ -194,7 +194,7 @@ Such files are meant to be share between multiple users, so this script is mainl
 nextflow run download_cache.nf --cadd_cache </path/to/CADD/cache> --cadd_version <CADD version> --genome <GENOME>
 ```
 
-## GENERAL NEXTFLOW AGRUMENTS
+## GENERAL NEXTFLOW ARGUMENTS
 
 > **NB:** These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
 

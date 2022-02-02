@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline based on public data.
+This document describes the output produced by the pipeline based on public data. The directories listed below are created in the `results/` directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
 ### Dataset
 
@@ -26,8 +26,6 @@ nextflow run nf-core/rnavar -profile munin,docker --input samplesheet.csv --geno
 ```
 
 It used an institutional profile `munin` from [nf-core/configs](https://github.com/nf-core/configs/blob/master/conf/pipeline/rnavar/munin.config)
-
-The directories listed below are created in the `results/` directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
 ## Pipeline overview
 
@@ -65,24 +63,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 </details>
 
 If multiple libraries/runs have been provided for the same sample in the input samplesheet (e.g. to increase sequencing depth) then these will be merged at the very beginning of the pipeline in order to have consistent sample naming throughout the pipeline. Please refer to the [usage documentation](https://nf-co.re/rnavar/usage#samplesheet-input) to see how to specify these samples in the input samplesheet.
-
-### MultiQC report with FASTQC read summary
-
-[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
-
-It integrates [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) which gives general quality metrics about your sequenced reads. It provides information about the quality score distribution across your reads, per base sequence content (%A/T/G/C), adapter contamination and overrepresented sequences. For further reading and documentation see the [FastQC help pages](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
-
-The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-* `reports/`
-    * `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
-    * `multiqc_data/`: directory containing parsed statistics from FASTQC tools used in the pipeline.
-    * `multiqc_plots/`: directory containing static images from the report in various formats.
-
-</details>
 
 ## Alignment
 
@@ -248,6 +228,24 @@ When `--annotate_tools merge` option is used, the annotation from both `snpeff` 
 </details>
 
 For further reading and documentation see the [VEP manual](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+### MultiQC report with FASTQC read summary
+
+[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
+
+It integrates [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) which gives general quality metrics about your sequenced reads. It provides information about the quality score distribution across your reads, per base sequence content (%A/T/G/C), adapter contamination and overrepresented sequences. For further reading and documentation see the [FastQC help pages](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
+
+The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+* `reports/`
+    * `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
+    * `multiqc_data/`: directory containing parsed statistics from FASTQC tools used in the pipeline.
+    * `multiqc_plots/`: directory containing static images from the report in various formats.
+
+</details>
 
 ## Pipeline information
 
