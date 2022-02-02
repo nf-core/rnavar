@@ -38,6 +38,7 @@ It is a good idea to specify a pipeline version when running the pipeline on you
 First, go to the [nf-core/rnavar releases page](https://github.com/nf-core/rnavar/releases) and find the latest version number - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future.
+
 ## Samplesheet input
 
 You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 4 columns, and a header row as shown in the examples below.
@@ -46,7 +47,7 @@ You will need to create a samplesheet with information about the samples you wou
 --input '[path to samplesheet file]'
 ```
 
-#### Multiple runs of the same sample
+### Multiple runs of the same sample
 
 The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
 
@@ -86,6 +87,7 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 > **NB:** The `group` and `replicate` columns were replaced with a single `sample` column as of v3.1 of the pipeline. The `sample` column is essentially a concatenation of the `group` and `replicate` columns, however it now also offers more flexibility in instances where replicate information is not required e.g. when sequencing clinical samples. If all values of `sample` have the same number of underscores, fields defined by these underscore-separated names may be used in the PCA plots produced by the pipeline, to regain the ability to represent different groupings.
 
 ## PIPELINE PARAMETERS AND DESCRIPTION
+
 ## Reference genome files
 
 The minimum reference genome requirements are a FASTA and GTF file, all other files required to run the pipeline can be generated from these files. However, it is more storage and compute friendly if you are able to re-use reference genome files as efficiently as possible. It is recommended to use the `--save_reference` parameter if you are using the pipeline to build new indices (e.g. those unavailable on [AWS iGenomes](https://nf-co.re/usage/reference_genomes)) so that you can save them somewhere locally.
@@ -140,6 +142,7 @@ Variant filtering is an optional step. You can skip it using `--skip_variantfilt
 The annotation of variants is performed using snpEff and VEP. The parameter to use is `--annotate_tools snpeff` or `--annotate_tools vep`. You can even run both snpEff and VEP using `--annotate_tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
 
 You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--annotate_tools` options.
+
 ### Annotation cache
 
 Both `snpEff` and `VEP` enable usage of cache.
