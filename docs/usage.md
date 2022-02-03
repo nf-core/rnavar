@@ -122,6 +122,8 @@ Marking duplicate reads is performed using `Picard MarkDuplicates` tool. The too
 
 GATK best practices has been followed in this pipeline for RNA analysis, hence it uses GATK modules such as `SplitNCigarReads`, `BaseRecalibrator`, `ApplyBQSR`. The `BaseRecalibrator` process requires known variants sites VCF. ExAc, gnomAD, or dbSNP resources can be used as known sites of variation.You can supply the VCF and index files using parameters such as `--dbsnp`, `--dbsnp_tbi`, `--known_indels`, `--known_indels_tbi`.
 
+> **NB:** Base recalibration can be turned off using `--skip_baserecalibration true` option. This is useful when you are analyzing data from non-model organisms where there is no known variant datasets exist.
+
 `GATK SplitNCigarReads` is very time consuming step, therefore we made an attempt to break the GTF file into multiple chunks (scatters) using `GATK IntervalListTools` to run the process independently on each chunk in a parallel way to speed up the analysis. The default number of splits is set to 25, that means the GTF file is split into 25 smaller files and run `GATK SplitNCigarReads` on each of them in parallel. You can modify the number of splits using parameter `--scatter_count`.
 
 ## Variant calling and filtering
