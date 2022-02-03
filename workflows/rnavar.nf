@@ -90,6 +90,10 @@ def prepareToolIndices  = params.aligner
 def seq_platform        = params.seq_platform ? params.seq_platform : []
 def seq_center          = params.seq_center ? params.seq_center : []
 
+// Initialize file channels based on params
+dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()       : []
+dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()   : []
+
 // Initialize varaint annotation associated channels
 def snpeff_db           = params.snpeff_db         ?: Channel.empty()
 def vep_cache_version   = params.vep_cache_version ?: Channel.empty()
@@ -229,55 +233,60 @@ workflow RNAVAR {
         splitncigar_bam_bai = SPLITNCIGAR.out.bam_bai
         ch_versions         = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
-        // MODULE: BaseRecalibrator from GATK4
-        ch_bqsr_table = Channel.empty()
-        known_sites     = Channel.from([params.dbsnp, params.known_indels]).collect()
-        known_sites_tbi = Channel.from([params.dbsnp_tbi, params.known_indels_tbi]).collect()
+        bam_variant_calling = Channel.empty()
 
-        ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-        splitncigar_bam_bai.combine(ch_interval_list_recalib)
-            .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval]
-        }.set{splitncigar_bam_bai_interval}
+        if(!params.skip_baserecalibration) {
+            // MODULE: BaseRecalibrator from GATK4
+            ch_bqsr_table = Channel.empty()
+            known_sites     = Channel.from([params.dbsnp, params.known_indels]).collect()
+            known_sites_tbi = Channel.from([params.dbsnp_tbi, params.known_indels_tbi]).collect()
 
-        GATK4_BASERECALIBRATOR(
-            splitncigar_bam_bai_interval,
-            PREPARE_GENOME.out.fasta,
-            PREPARE_GENOME.out.fai,
-            PREPARE_GENOME.out.dict,
-            known_sites,
-            known_sites_tbi
-        )
-        ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
-        ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
+            ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
+            splitncigar_bam_bai.combine(ch_interval_list_recalib)
+                .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval]
+            }.set{splitncigar_bam_bai_interval}
 
-        // MODULE: ApplyBaseRecalibrator from GATK4
-        bam_applybqsr       = splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
-        bam_recalibrated    = Channel.empty()
-        bam_recalibrated_qc = Channel.empty()
+            GATK4_BASERECALIBRATOR(
+                splitncigar_bam_bai_interval,
+                PREPARE_GENOME.out.fasta,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.dict,
+                known_sites,
+                known_sites_tbi
+            )
+            ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
+            ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
-        ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-        bam_applybqsr.combine(ch_interval_list_applybqsr)
-            .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]
-        }.set{applybqsr_bam_bai_interval}
+            // MODULE: ApplyBaseRecalibrator from GATK4
+            bam_applybqsr       = splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
+            bam_recalibrated_qc = Channel.empty()
 
-        RECALIBRATE(
-            ('bamqc' in params.skip_qc),
-            ('samtools' in params.skip_qc),
-            applybqsr_bam_bai_interval,
-            PREPARE_GENOME.out.dict,
-            PREPARE_GENOME.out.fai,
-            PREPARE_GENOME.out.fasta
-        )
+            ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
+            bam_applybqsr.combine(ch_interval_list_applybqsr)
+                .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]
+            }.set{applybqsr_bam_bai_interval}
 
-        bam_recalibrated    = RECALIBRATE.out.bam
-        bam_recalibrated_qc = RECALIBRATE.out.qc
-        ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
+            RECALIBRATE(
+                ('bamqc' in params.skip_qc),
+                ('samtools' in params.skip_qc),
+                applybqsr_bam_bai_interval,
+                PREPARE_GENOME.out.dict,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.fasta
+            )
+
+            bam_variant_calling = RECALIBRATE.out.bam
+            bam_recalibrated_qc = RECALIBRATE.out.qc
+            ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
+        } else {
+            bam_variant_calling = splitncigar_bam_bai
+        }
 
         // MODULE: HaplotypeCaller from GATK4
         interval_flag = params.no_intervals
         haplotypecaller_vcf = Channel.empty()
 
-        haplotypecaller_interval_bam = bam_recalibrated.combine(ch_interval_list_split)
+        haplotypecaller_interval_bam = bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
                 new_meta = meta.clone()
                 new_meta.id = meta.id
@@ -286,8 +295,8 @@ workflow RNAVAR {
 
         GATK4_HAPLOTYPECALLER(
             haplotypecaller_interval_bam,
-            params.dbsnp,
-            params.dbsnp_tbi,
+            dbsnp,
+            dbsnp_tbi,
             PREPARE_GENOME.out.dict,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,

@@ -159,13 +159,7 @@
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version"
                 }
-            },
-            "required": [
-                "dbsnp",
-                "dbsnp_tbi",
-                "known_indels_tbi",
-                "known_indels"
-            ]
+            }
         },
         "alignment_options": {
             "title": "Alignment options",
@@ -334,6 +328,11 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define parameters that control the stages in the pipeline",
             "properties": {
+                "skip_baserecalibration": {
+                    "type": "boolean",
+                    "description": "Skip the process of base recalibration steps i.e., GATK BaseRecalibrator and GATK ApplyBQSR.",
+                    "help_text": "This parameter disable the base recalibration step, thus using a un-calibrated BAM file for variant calling."
+                },
                 "skip_intervallisttools": {
                     "type": "boolean",
                     "description": "Skip the process of preparing interval lists for the GATK variant calling step",
