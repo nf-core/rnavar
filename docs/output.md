@@ -118,6 +118,8 @@ Currently, the pipeline does not produce the new BAM file in the output director
 
 ### Base (Quality Score) Recalibration
 
+Base quality recalibration step runs by default and it produces the recalibrated BAM file for variant calling, as described below. However, you can turn off this step by using `--skip_baserecalibration true` option, and in that case, no recalibrated BAM file is produced and the pipeline uses the un-calibrated BAM file will be used for variant calling.
+
 #### GATK BaseRecalibrator
 
 [GATK BaseRecalibrator](https://gatk.broadinstitute.org/hc/en-us/articles/360042477672-BaseRecalibrator) generates a recalibration table based on various co-variates.

@@ -30,6 +30,7 @@ jobs:
           - 'default'
           - 'annotation'
           - 'removeduplicates'
+          - 'skipbasecalib'
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2

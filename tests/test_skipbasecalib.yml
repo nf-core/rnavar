@@ -1,0 +1,11 @@
+- name: Run pipeline without base calibration step
+  command: nextflow run main.nf -profile test,docker --skip_baserecalibration true
+  tags:
+    - skipbasecalib
+    - preprocessing
+  files:
+    - path: results/reports/multiqc_report.html
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi
