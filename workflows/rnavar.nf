@@ -16,6 +16,7 @@ def checkPathParamList = [
     params.fasta_fai,
     params.dict,
     params.gtf,
+    params.gff,
     params.dbsnp,
     params.dbsnp_tbi,
     params.known_indels,
@@ -28,7 +29,7 @@ for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if(!params.star_index and !params.gtf){ exit 1, "GTF file is required to build a STAR reference index! Use option -gtf to provide a GTF file." }
+if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option -gtf|-gff to provide a GTF|GFF file." }
 
 /*
 ========================================================================================
