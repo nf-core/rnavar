@@ -110,6 +110,10 @@
                     "type": "string",
                     "description": "Path to BED file containing gene intervals. This will be created from the GTF file if not specified."
                 },
+                "interval_list_featureType": {
+                    "type": "string",
+                    "description": "Feature type name to define intervals in BED file. These intervals are passed to HaplotypeCaller. Possible options are: gene, transcript, exon, CDS, five_prime_utr, three_prime_utr."
+                },
                 "read_length": {
                     "type": "number",
                     "default": 151,

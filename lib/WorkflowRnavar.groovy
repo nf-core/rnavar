@@ -7,7 +7,7 @@ class WorkflowRnavar {
     //
     // Check and validate parameters
     //
-    public static void initialise(params, log) {
+    public static void initialise(params, log, valid_params) {
         genomeExistsError(params, log)
 
         if (!params.fasta) {
@@ -23,6 +23,13 @@ class WorkflowRnavar {
         if ((!params.skip_baserecalibration) && (!params.known_indels || !params.known_indels_tbi)) {
             log.error "Known variants VCF file or its index is missing!. Use --known_indels and --known_indels_tbi to supply the files."
             System.exit(1)
+        }
+
+        if (params.interval_list_featureType) {
+            if (!valid_params['interval_list_featureType_options'].contains(params.interval_list_featureType)) {
+                log.error "Invalid option: '${params.interval_list_featureType}'. Valid options for '--interval_list_featureType' are: ${valid_params['interval_list_featureType_options'].join(', ')}."
+                System.exit(1)
+            }
         }
 
     }

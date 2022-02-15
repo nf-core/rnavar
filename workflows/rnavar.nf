@@ -4,10 +4,14 @@
 ========================================================================================
 */
 
+def valid_params = [
+    interval_list_featureType_options   : ['gene', 'transcript', 'exon', 'CDS', 'five_prime_utr', 'three_prime_utr']
+]
+
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowRnavar.initialise(params, log)
+WorkflowRnavar.initialise(params, log, valid_params)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [
