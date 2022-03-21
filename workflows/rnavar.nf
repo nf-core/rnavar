@@ -49,7 +49,6 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 include { INPUT_CHECK                   } from '../subworkflows/local/input_check'              // Validate the input samplesheet.csv and prepare input channels
 include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome'           // Build the genome index and other reference files
 include { SPLITNCIGAR                   } from '../subworkflows/local/splitncigar'              // Splits reads that contain Ns in their cigar string
-include { GATK4_HAPLOTYPECALLER         } from '../modules/local/gatk4/haplotypecaller/main'    // Haplotyper caller that runs on split interval files
 include { ANNOTATE                      } from '../subworkflows/local/annotate'                 // Annotate variants using snpEff or VEP or both
 
 /*
@@ -64,6 +63,7 @@ include { CAT_FASTQ                     } from '../modules/nf-core/modules/cat/f
 include { GATK4_BASERECALIBRATOR        } from '../modules/nf-core/modules/gatk4/baserecalibrator/main'
 include { GATK4_BEDTOINTERVALLIST       } from '../modules/nf-core/modules/gatk4/bedtointervallist/main'
 include { GATK4_INTERVALLISTTOOLS       } from '../modules/nf-core/modules/gatk4/intervallisttools/main'
+include { GATK4_HAPLOTYPECALLER         } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
 include { GATK4_MERGEVCFS               } from '../modules/nf-core/modules/gatk4/mergevcfs/main'
 include { GATK4_INDEXFEATUREFILE        } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
 include { GATK4_VARIANTFILTRATION       } from '../modules/nf-core/modules/gatk4/variantfiltration/main'
@@ -296,12 +296,11 @@ workflow RNAVAR {
 
         GATK4_HAPLOTYPECALLER(
             haplotypecaller_interval_bam,
-            dbsnp,
-            dbsnp_tbi,
-            PREPARE_GENOME.out.dict,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,
-            interval_flag
+            PREPARE_GENOME.out.dict,
+            dbsnp,
+            dbsnp_tbi
         )
 
         haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf

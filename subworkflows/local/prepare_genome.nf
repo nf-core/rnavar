@@ -25,8 +25,10 @@ workflow PREPARE_GENOME {
     //
     // Uncompress genome fasta file if required
     //
+
     if (params.fasta.endsWith('.gz')) {
-        ch_fasta = (GUNZIP_FASTA ( params.fasta ).gunzip)
+        GUNZIP_FASTA ( Channel.fromPath(params.fasta).map{ it -> [[id:it[0].baseName], it] } )
+        ch_fasta = GUNZIP_FASTA.out.gunzip.map{ meta, fasta -> [fasta] }
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     } else {
         ch_fasta = file(params.fasta)
@@ -39,14 +41,16 @@ workflow PREPARE_GENOME {
     ch_gffread_version = Channel.empty()
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
-            ch_gtf = GUNZIP_GTF ( params.gtf ).gunzip
+            GUNZIP_GTF ( Channel.fromPath(params.gtf).map{ it -> [[id:it[0].baseName], it] } )
+            ch_gtf = GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }
             ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
         } else {
             ch_gtf = file(params.gtf)
         }
     } else if (params.gff) {
         if (params.gff.endsWith('.gz')) {
-            ch_gff = GUNZIP_GFF ( params.gff ).gunzip
+            GUNZIP_GFF ( Channel.fromPath(params.gff).map{ it -> [[id:it[0].baseName], it] } )
+            ch_gff = GUNZIP_GFF.out.gunzip.map{ meta, gff -> [gff] }
             ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
         } else {
             ch_gff = file(params.gff)
@@ -60,7 +64,8 @@ workflow PREPARE_GENOME {
     //
     if (params.gene_bed) {
         if (params.gene_bed.endsWith('.gz')) {
-            ch_gene_bed = GUNZIP_GENE_BED ( params.gene_bed ).gunzip
+            GUNZIP_GENE_BED ( Channel.fromPath(params.gene_bed).map{ it -> [[id:it[0].baseName], it] } )
+            ch_gene_bed = GUNZIP_GENE_BED.out.gunzip.map{ meta, bed -> [bed] }
             ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
             ch_gene_bed = file(params.gene_bed)
@@ -93,17 +98,20 @@ workflow PREPARE_GENOME {
     if ('star' in prepare_tool_indices) {
         if (params.star_index) {
             if (params.star_index.endsWith('.tar.gz')) {
-                ch_star_index = UNTAR_STAR_INDEX ( params.star_index ).untar
+                UNTAR_STAR_INDEX (Channel.fromPath(params.star_index).map{ it -> [[id:it[0].baseName], it] })
+                ch_star_index = UNTAR_STAR_INDEX.out.untar.map{ meta, star_index -> [star_index] }.collect()
                 ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
             } else {
                 ch_star_index = file(params.star_index)
             }
         }
 
-        if((!ch_star_index) || getIndexVersion(ch_star_index) != '2.7.4a'){
-            ch_star_index   = STAR_GENOMEGENERATE(ch_fasta,ch_gtf).index
-            ch_versions     = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
-        }
+        //print(getIndexVersion(ch_star_index))
+        //ch_star_index.view()
+        //if((!ch_star_index) || getIndexVersion(ch_star_index) != '2.7.4a'){
+        //    ch_star_index   = STAR_GENOMEGENERATE(ch_fasta,ch_gtf).index
+        //    ch_versions     = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+        //}
     }
 
 
