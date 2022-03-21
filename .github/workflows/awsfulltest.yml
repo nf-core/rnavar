@@ -30,4 +30,3 @@ jobs:
               "outdir": "s3://${{ secrets.AWS_S3_BUCKET }}/rnavar/results-${{ github.sha }}"
             }
           profiles: '[ "test_full", "aws_tower" ]'
-
