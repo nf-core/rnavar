@@ -14,6 +14,17 @@ class WorkflowRnavar {
             log.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
             System.exit(1)
         }
+
+        if (!params.gtf && !params.gff) {
+            log.error "No GTF or GFF3 annotation specified! The pipeline requires at least one of these files."
+            System.exit(1)
+        }
+
+        if ((!params.skip_baserecalibration) && (!params.known_indels || !params.known_indels_tbi)) {
+            log.error "Known variants VCF file or its index is missing!. Use --known_indels and --known_indels_tbi to supply the files."
+            System.exit(1)
+        }
+
     }
 
     //

@@ -23,11 +23,16 @@ jobs:
         # Nextflow versions
         include:
           # Test pipeline minimum Nextflow version
-          - NXF_VER: "21.10.3"
-            NXF_EDGE: ""
+          - NXF_VER: '21.10.3'
+            NXF_EDGE: ''
           # Test latest edge release of Nextflow
-          - NXF_VER: ""
-            NXF_EDGE: "1"
+          - NXF_VER: ''
+            NXF_EDGE: '1'
+        test:
+          - 'default'
+          - 'annotation'
+          - 'removeduplicates'
+          - 'skipbasecalib'
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
@@ -41,12 +46,13 @@ jobs:
         run: |
           wget -qO- get.nextflow.io | bash
           sudo mv nextflow /usr/local/bin/
+          nextflow self-update
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pytest-workflow
 
-      - name: Run pipeline with test data
-        # TODO nf-core: You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
-        run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
-
-#
+      - name: Run pipeline with tests settings
+        run: pytest --tag ${{matrix.test}} --kwdof
