@@ -23,6 +23,13 @@ input:
       type: list
       description: BAM/SAM/CRAM file containing reads
       pattern: "*.{bam,sam,cram}"
+  - bai:
+      type: file
+      description: BAI/CRAI file from alignment
+      pattern: "*.{bai,crai}"
+  - interval:
+      type: file
+      description: Bed file with the genomic regions included in the library
   - fasta:
       type: file
       description: The reference fasta file
