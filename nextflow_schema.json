@@ -600,8 +600,5 @@
             "$ref": "#/definitions/preprocessing"
         }
     ],
-    "required": [
-        "aligner",
-        "seq_platform"
-    ]
+    "required": ["aligner", "seq_platform"]
 }

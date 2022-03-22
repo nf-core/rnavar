@@ -33,24 +33,24 @@ It used an institutional profile `munin` from [nf-core/configs](https://github.c
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-* [Preprocessing](#preprocessing)
-    * [cat](#cat) - Merge re-sequenced FastQ files
-    * [FastQC](#fastqc) - Raw read QC
-* [Alignment](#alignment)
-    * [STAR](#star) - Fast spliced aware genome alignment
-* [Alignment post-processing](#alignment-post-processing)
-    * [Picard MarkDuplicates](#picard-markduplicates) - Duplicate read marking
-    * [GATK4 SplitNCigarReads](#gatk4-splitncigarreads) - Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data)
-    * [GATK4 Base Quality Score Recalibration (BQSR)](#gatk4-bqsr) - Estimate and correct systematic bias that affect the assignment of base quality scores by the sequencer
-* [Variant calling](#other-steps)
-    * [GATK4 HaplotypeCaller](#gatk4-haplotypecaller) - Call SNPs and indels via local re-assembly of haplotypes
-* [Variant filtering](#other-steps)
-    * [GATK4 VariantFiltration](#gatk4-variantfiltration) - Hard-filtering variant calls based on certain criteria
-* [Quality control](#quality-control)
-    * [MultiQC](#multiqc) - Present QC for raw reads, alignment, read counting and sample similiarity
-* [Workflow reporting and genomes](#workflow-reporting-and-genomes)
-    * [Reference genome files](#reference-genome-files) - Saving reference genome indices/files
-    * [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+- [Preprocessing](#preprocessing)
+  - [cat](#cat) - Merge re-sequenced FastQ files
+  - [FastQC](#fastqc) - Raw read QC
+- [Alignment](#alignment)
+  - [STAR](#star) - Fast spliced aware genome alignment
+- [Alignment post-processing](#alignment-post-processing)
+  - [Picard MarkDuplicates](#picard-markduplicates) - Duplicate read marking
+  - [GATK4 SplitNCigarReads](#gatk4-splitncigarreads) - Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data)
+  - [GATK4 Base Quality Score Recalibration (BQSR)](#gatk4-bqsr) - Estimate and correct systematic bias that affect the assignment of base quality scores by the sequencer
+- [Variant calling](#other-steps)
+  - [GATK4 HaplotypeCaller](#gatk4-haplotypecaller) - Call SNPs and indels via local re-assembly of haplotypes
+- [Variant filtering](#other-steps)
+  - [GATK4 VariantFiltration](#gatk4-variantfiltration) - Hard-filtering variant calls based on certain criteria
+- [Quality control](#quality-control)
+  - [MultiQC](#multiqc) - Present QC for raw reads, alignment, read counting and sample similiarity
+- [Workflow reporting and genomes](#workflow-reporting-and-genomes)
+  - [Reference genome files](#reference-genome-files) - Saving reference genome indices/files
+  - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
 ## Preprocessing
 
@@ -59,8 +59,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-* `fastq/`
-    * `*.merged.fastq.gz`: If `--save_merged_fastq` is specified, concatenated FastQ files will be placed in this directory.
+- `fastq/`
+  - `*.merged.fastq.gz`: If `--save_merged_fastq` is specified, concatenated FastQ files will be placed in this directory.
 
 </details>
 
@@ -75,18 +75,18 @@ If multiple libraries/runs have been provided for the same sample in the input s
 <details markdown="1">
 <summary>Output files</summary>
 
-* `preprocessing/[SAMPLE]/`
-    * `[SAMPLE].aligned.bam`: If `--save_align_intermeds` is specified the original BAM file containing read alignments to the reference genome will be placed in this directory.
-    * `[SAMPLE].aligned.bam.bai`: This is the index of the above *.aligned.bam
-* `preprocessing/[SAMPLE]/log`
-    * `[SAMPLE].Log.final.out`: STAR alignment report containing the mapping results summary.
-    * `[SAMPLE].Log.out` and `[SAMPLE].Log.progress.out`: STAR log files containing detailed information about the run. Typically only useful for debugging purposes.
-    * `[SAMPLE].SJ.out.tab`: File containing filtered splice junctions detected after mapping the reads.
-* `preprocessing/[SAMPLE]/unmapped`
-    * `[SAMPLE].unmapped_*.fastq.gz`: If `--save_unaligned` is specified, FastQ files containing unmapped reads will be placed in this directory.
-* `reports/samtools_stats/[SAMPLE]/`
-    * `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat summary of the alignment
-    * `[SAMPLE].aligned.bam.stats`: Samtools stat output
+- `preprocessing/[SAMPLE]/`
+  - `[SAMPLE].aligned.bam`: If `--save_align_intermeds` is specified the original BAM file containing read alignments to the reference genome will be placed in this directory.
+  - `[SAMPLE].aligned.bam.bai`: This is the index of the above \*.aligned.bam
+- `preprocessing/[SAMPLE]/log`
+  - `[SAMPLE].Log.final.out`: STAR alignment report containing the mapping results summary.
+  - `[SAMPLE].Log.out` and `[SAMPLE].Log.progress.out`: STAR log files containing detailed information about the run. Typically only useful for debugging purposes.
+  - `[SAMPLE].SJ.out.tab`: File containing filtered splice junctions detected after mapping the reads.
+- `preprocessing/[SAMPLE]/unmapped`
+  - `[SAMPLE].unmapped_*.fastq.gz`: If `--save_unaligned` is specified, FastQ files containing unmapped reads will be placed in this directory.
+- `reports/samtools_stats/[SAMPLE]/`
+  - `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat summary of the alignment
+  - `[SAMPLE].aligned.bam.stats`: Samtools stat output
 
 </details>
 
@@ -101,18 +101,18 @@ If desired, duplicates can be removed using the `--remove_duplicates true` optio
 <details markdown="1">
 <summary>Output files</summary>
 
-* `preprocessing/[SAMPLE]/`
-    * `[SAMPLE].markdup.sorted.bam`: Picard Markduplicate bam file.
-    * `[SAMPLE].markdup.sorted.bam.bai`: This is the index of the above *.aligned.bam
-* `reports/samtools_stats/[SAMPLE]/`
-    * `[SAMPLE].markdup.sorted.bam.flagstat`: Samtools flagstat summary of the alignment
-    * `[SAMPLE].markdup.sorted.bam.stats`: Samtools stat output
+- `preprocessing/[SAMPLE]/`
+  - `[SAMPLE].markdup.sorted.bam`: Picard Markduplicate bam file.
+  - `[SAMPLE].markdup.sorted.bam.bai`: This is the index of the above \*.aligned.bam
+- `reports/samtools_stats/[SAMPLE]/`
+  - `[SAMPLE].markdup.sorted.bam.flagstat`: Samtools flagstat summary of the alignment
+  - `[SAMPLE].markdup.sorted.bam.stats`: Samtools stat output
 
 </details>
 
 ### SplitNCigarReads
 
-[GATK SplitNCigarReads](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads) is executed for post-processing RNA reads aligned against the reference.  The tool's main output is a new BAM file with reads split at N CIGAR elements and CIGAR strings updated.
+[GATK SplitNCigarReads](https://gatk.broadinstitute.org/hc/en-us/articles/360036858811-SplitNCigarReads) is executed for post-processing RNA reads aligned against the reference. The tool's main output is a new BAM file with reads split at N CIGAR elements and CIGAR strings updated.
 
 Currently, the pipeline does not produce the new BAM file in the output directory.
 
@@ -133,9 +133,9 @@ Currently, the pipeline does not produce the recalibration table file in the out
 <details markdown="1">
 <summary>Output files</summary>
 
-* `preprocessing/[SAMPLE]/`
-    * `[SAMPLE].recal.bam`: Recalibrated bam file.
-    * `[SAMPLE].recal.bam.bai`: This is the index of the above recalibrated bam.
+- `preprocessing/[SAMPLE]/`
+  - `[SAMPLE].recal.bam`: Recalibrated bam file.
+  - `[SAMPLE].recal.bam.bai`: This is the index of the above recalibrated bam.
 
 </details>
 
@@ -146,9 +146,9 @@ Currently, the pipeline does not produce the recalibration table file in the out
 <details markdown="1">
 <summary>Output files</summary>
 
-* `results/variant_calling/[SAMPLE]/`
-    * `[SAMPLE].haplotypecaller.vcf.gz`: Variant calls in VCF format.
-    * `[SAMPLE].haplotypecaller.vcf.gz.tbi`: This is the index of the above VCF file.
+- `results/variant_calling/[SAMPLE]/`
+  - `[SAMPLE].haplotypecaller.vcf.gz`: Variant calls in VCF format.
+  - `[SAMPLE].haplotypecaller.vcf.gz.tbi`: This is the index of the above VCF file.
 
 </details>
 
@@ -159,9 +159,9 @@ Currently, the pipeline does not produce the recalibration table file in the out
 <details markdown="1">
 <summary>Output files</summary>
 
-* `results/variant_calling/[SAMPLE]/`
-    * `[SAMPLE].haplotypecaller.filtered.vcf.gz`: Variant VCF with updated FILTER field.
-    * `[SAMPLE].haplotypecaller.filtered.vcf.gz.tbi`: This is the index of the above VCF file.
+- `results/variant_calling/[SAMPLE]/`
+  - `[SAMPLE].haplotypecaller.filtered.vcf.gz`: Variant VCF with updated FILTER field.
+  - `[SAMPLE].haplotypecaller.filtered.vcf.gz.tbi`: This is the index of the above VCF file.
 
 </details>
 
@@ -181,9 +181,9 @@ The annotated variant files in VCF format can be found in `results/variant_annot
 <details markdown="1">
 <summary>Output files</summary>
 
-* `results/variant_annotation/[SAMPLE]/`
-    * `[SAMPLE]_snpEff.ann.vcf.gz`: Annotated VCF from snpEff process.
-    * `[SAMPLE]_snpEff.ann.vcf.gz.tbi`: This is the index of the above VCF file.
+- `results/variant_annotation/[SAMPLE]/`
+  - `[SAMPLE]_snpEff.ann.vcf.gz`: Annotated VCF from snpEff process.
+  - `[SAMPLE]_snpEff.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
 </details>
 
@@ -196,17 +196,17 @@ The format of the [consequence annotations](https://www.ensembl.org/info/genome/
 
 Currently, it contains:
 
-* `Consequence`: impact of the variation, if there is any
-* `Codons`: the codon change, i.e. cGt/cAt
-* `Amino_acids`: change in amino acids, i.e. R/H if there is any
-* `Gene`: ENSEMBL gene name
-* `SYMBOL`: gene symbol
-* `Feature`: actual transcript name
-* `EXON`: affected exon
-* `PolyPhen`: prediction based on [PolyPhen](http://genetics.bwh.harvard.edu/pph2/)
-* `SIFT`: prediction by [SIFT](http://sift.bii.a-star.edu.sg/)
-* `Protein_position`: Relative position of amino acid in protein
-* `BIOTYPE`: Biotype of transcript or regulatory feature
+- `Consequence`: impact of the variation, if there is any
+- `Codons`: the codon change, i.e. cGt/cAt
+- `Amino_acids`: change in amino acids, i.e. R/H if there is any
+- `Gene`: ENSEMBL gene name
+- `SYMBOL`: gene symbol
+- `Feature`: actual transcript name
+- `EXON`: affected exon
+- `PolyPhen`: prediction based on [PolyPhen](http://genetics.bwh.harvard.edu/pph2/)
+- `SIFT`: prediction by [SIFT](http://sift.bii.a-star.edu.sg/)
+- `Protein_position`: Relative position of amino acid in protein
+- `BIOTYPE`: Biotype of transcript or regulatory feature
 
 To annotate variants using `vep`, you can use `--annotate_tools vep`.
 The annotated variant files in VCF format can be found in `results/variant_annotation` folder.
@@ -214,9 +214,9 @@ The annotated variant files in VCF format can be found in `results/variant_annot
 <details markdown="1">
 <summary>Output files</summary>
 
-* `results/variant_annotation/[SAMPLE]/`
-    * `[SAMPLE]_VEP.ann.vcf.gz`: Annotated VCF from VEP process.
-    * `[SAMPLE]_VEP.ann.vcf.gz.tbi`: This is the index of the above VCF file.
+- `results/variant_annotation/[SAMPLE]/`
+  - `[SAMPLE]_VEP.ann.vcf.gz`: Annotated VCF from VEP process.
+  - `[SAMPLE]_VEP.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
 </details>
 
@@ -225,9 +225,9 @@ When `--annotate_tools merge` option is used, the annotation from both `snpeff` 
 <details markdown="1">
 <summary>Output files</summary>
 
-* `results/variant_annotation/[SAMPLE]/`
-    * `[SAMPLE]_snpEff_VEP.ann.vcf.gz`: Combined annotation from both snpEff and VEP.
-    * `[SAMPLE]_snpEff_VEP.ann.vcf.gz.tbi`: This is the index of the above VCF file.
+- `results/variant_annotation/[SAMPLE]/`
+  - `[SAMPLE]_snpEff_VEP.ann.vcf.gz`: Combined annotation from both snpEff and VEP.
+  - `[SAMPLE]_snpEff_VEP.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
 </details>
 
@@ -244,10 +244,10 @@ The pipeline has special steps which also allow the software versions to be repo
 <details markdown="1">
 <summary>Output files</summary>
 
-* `reports/`
-    * `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
-    * `multiqc_data/`: directory containing parsed statistics from FASTQC tools used in the pipeline.
-    * `multiqc_plots/`: directory containing static images from the report in various formats.
+- `reports/`
+  - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
+  - `multiqc_data/`: directory containing parsed statistics from FASTQC tools used in the pipeline.
+  - `multiqc_plots/`: directory containing static images from the report in various formats.
 
 </details>
 
@@ -256,10 +256,10 @@ The pipeline has special steps which also allow the software versions to be repo
 <details markdown="1">
 <summary>Output files</summary>
 
-* `pipeline_info/`
-    * Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
-    * Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
-    * Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
+- `pipeline_info/`
+  - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
+  - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
+  - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
 
 </details>
 

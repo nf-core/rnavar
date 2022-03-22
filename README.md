@@ -60,9 +60,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 4. Start running your own analysis!
 
-    ```console
-    nextflow run nf-core/rnavar -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv --genome GRCh38
-    ```
+   ```console
+   nextflow run nf-core/rnavar -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv --genome GRCh38
+   ```
 
 ## Documentation
 

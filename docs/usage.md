@@ -76,7 +76,7 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,,reverse
 ```
 
 | Column         | Description                                                                                                                                                                            |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
 | `fastq_1`      | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 | `fastq_2`      | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
@@ -98,10 +98,10 @@ The index building step can be quite a time-consuming process and it permits the
 
 > **NB:** If you are supplying a pre-built genome index file via `--star_index`, please ensure that the index has been generated with the latest STAR version i.e. v2.7.9a or above. In case if the pipeline found an incompatible index, it will generate a new one using the reference genome which will consume time and memory unnecessarily.
 
-* If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
-* If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
-* If `--gene_bed` is not provided then it will be generated from the GTF file.
-* If `--star_index` is not provided then it will be generated from the reference genome FASTA file using `STAR --runmode genomeGenerate` command.
+- If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
+- If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
+- If `--gene_bed` is not provided then it will be generated from the GTF file.
+- If `--star_index` is not provided then it will be generated from the reference genome FASTA file using `STAR --runmode genomeGenerate` command.
 
 > **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. Otherwise `GATK BedToIntervalList` module is likely to fail if the chromosomes/contigs do not match with the reference genome data.
 
@@ -132,10 +132,10 @@ GATK best practices has been followed in this pipeline for RNA analysis, hence i
 
 The pipeline runs a hard-filtering step on the variants by default. It does not filter out any variants, rather it flags i.e. PASS or other flags such as FS, QD, SnpCluster, etc. in FILTER column of the VCF. The following are the default filter criteria, however it can be changed using the respective parameters.
 
-* `--cluster` is set to 3. It is the number of SNPs which make up a cluster.
-* `--window` is set to 35. The window size (in bases) in which to evaluate clustered SNPs.
-* `--fs_filter` is set to 30.0. Filter based on FisherStrand > 30.0. It is the Phred-scaled probability that there is strand bias at the site.
-* `--qd_filter` is set to 2.0 meaning filter variants if Quality By Depth filter is < 2.0.
+- `--cluster` is set to 3. It is the number of SNPs which make up a cluster.
+- `--window` is set to 35. The window size (in bases) in which to evaluate clustered SNPs.
+- `--fs_filter` is set to 30.0. Filter based on FisherStrand > 30.0. It is the Phred-scaled probability that there is strand bias at the site.
+- `--qd_filter` is set to 2.0 meaning filter variants if Quality By Depth filter is < 2.0.
 
 Variant filtering is an optional step. You can skip it using `--skip_variantfiltration` parameter.
 
@@ -173,9 +173,9 @@ nextflow run download_cache.nf --vep_cache </path/to/VEP/cache> --species <speci
 
 To enable the use of the `VEP` `CADD` plugin:
 
-* Download the `CADD` files
-* Specify them (either on the command line, like in the example or in a configuration file)
-* use the `--cadd_cache` flag
+- Download the `CADD` files
+- Specify them (either on the command line, like in the example or in a configuration file)
+- use the `--cadd_cache` flag
 
 Example:
 
@@ -296,9 +296,9 @@ For the ultimate flexibility, we have implemented and are using Nextflow DSL2 mo
 
 The command-line arguments passed to STAR in the `STAR_ALIGN` module are a combination of:
 
-* Mandatory arguments or those that need to be evaluated within the scope of the module, as supplied in the [`script`](https://github.com/nf-core/rnavar/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/modules/nf-core/software/star/align/main.nf#L49-L55) section of the module file.
+- Mandatory arguments or those that need to be evaluated within the scope of the module, as supplied in the [`script`](https://github.com/nf-core/rnavar/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/modules/nf-core/software/star/align/main.nf#L49-L55) section of the module file.
 
-* An [`options.args`](https://github.com/nf-core/rnavar/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/modules/nf-core/software/star/align/main.nf#L56) string of non-mandatory parameters that is set to be empty by default in the module but can be overwritten when including the module in the sub-workflow / workflow context via the `addParams` Nextflow option.
+- An [`options.args`](https://github.com/nf-core/rnavar/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/modules/nf-core/software/star/align/main.nf#L56) string of non-mandatory parameters that is set to be empty by default in the module but can be overwritten when including the module in the sub-workflow / workflow context via the `addParams` Nextflow option.
 
 The nf-core/rnavar pipeline has a sub-workflow (see [terminology](https://github.com/nf-core/modules#terminology)) specifically to align reads with STAR and to sort, index and generate some basic stats on the resulting BAM files using SAMtools. At the top of this file we import the `STAR_ALIGN` module via the Nextflow [`include`](https://github.com/nf-core/rnavar/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/subworkflows/nf-core/align_star.nf#L10) keyword and by default the options passed to the module via the `addParams` option are set as an empty Groovy map [here](https://github.com/nf-core/rnavar/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/subworkflows/nf-core/align_star.nf#L5); this in turn means `options.args` will be set to empty by default in the module file too. This is an intentional design choice and allows us to implement well-written sub-workflows composed of a chain of tools that by default run with the bare minimum parameter set for any given tool in order to make it much easier to share across pipelines and to provide the flexibility for users and developers to customise any non-mandatory arguments.
 
@@ -310,9 +310,9 @@ Say for example we want to append an additional, non-mandatory parameter (i.e. `
 
 As you will see in the example below, we have:
 
-* appended `--outFilterMismatchNmax 16` to the default `args` used by the module.
-* changed the default `publish_dir` value to where the files will eventually be published in the main results directory.
-* appended `'bam':''` to the default value of `publish_files` so that the BAM files generated by the process will also be saved in the top-level results directory for the module. Note: `'out':'log'` means any file/directory ending in `out` will now be saved in a separate directory called `my_star_directory/log/`.
+- appended `--outFilterMismatchNmax 16` to the default `args` used by the module.
+- changed the default `publish_dir` value to where the files will eventually be published in the main results directory.
+- appended `'bam':''` to the default value of `publish_files` so that the BAM files generated by the process will also be saved in the top-level results directory for the module. Note: `'out':'log'` means any file/directory ending in `out` will now be saved in a separate directory called `my_star_directory/log/`.
 
 ```nextflow
 params {
