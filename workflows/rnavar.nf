@@ -115,8 +115,6 @@ def multiqc_report = []
 workflow RNAVAR {
 
     ch_versions = Channel.empty()
-<<<<<<< HEAD
-=======
 
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
@@ -124,7 +122,6 @@ workflow RNAVAR {
     PREPARE_GENOME (prepareToolIndices)
     ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.gene_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
->>>>>>> upstream/dev
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -132,9 +129,6 @@ workflow RNAVAR {
     INPUT_CHECK (
         ch_input
     )
-<<<<<<< HEAD
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-=======
     .reads
     .map {
         meta, fastq ->
@@ -161,7 +155,6 @@ workflow RNAVAR {
     .mix(ch_fastq.single)
     .set { ch_cat_fastq }
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
->>>>>>> upstream/dev
 
     //
     // MODULE: Run FastQC
@@ -172,8 +165,6 @@ workflow RNAVAR {
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
-<<<<<<< HEAD
-=======
     //
     // PREPARE THE INTERVAL LIST FROM GTF FILE
     //
@@ -368,7 +359,6 @@ workflow RNAVAR {
 
     }
 
->>>>>>> upstream/dev
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )

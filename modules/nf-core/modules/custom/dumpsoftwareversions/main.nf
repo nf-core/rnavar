@@ -15,12 +15,9 @@ process CUSTOM_DUMPSOFTWAREVERSIONS {
     path "software_versions_mqc.yml", emit: mqc_yml
     path "versions.yml"             , emit: versions
 
-<<<<<<< HEAD
     when:
     task.ext.when == null || task.ext.when
 
-=======
->>>>>>> upstream/dev
     script:
     def args = task.ext.args ?: ''
     template 'dumpsoftwareversions.py'
