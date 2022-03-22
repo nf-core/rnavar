@@ -7,13 +7,13 @@
                 "git_sha": "826a5603db5cf5b4f1e55cef9cc0b7c37d3c7e70"
             },
             "custom/dumpsoftwareversions": {
-                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
             "ensemblvep": {
                 "git_sha": "3b366c7c6aac446c1a4ea7c2016092344633b2ec"
             },
             "fastqc": {
-                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
             "gatk4/applybqsr": {
                 "git_sha": "598d7abdb2a8df1aa3471c48d9186a9e3465983f"
@@ -46,7 +46,7 @@
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
             "multiqc": {
-                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
             "picard/markduplicates": {
                 "git_sha": "e751e5040af57e1b4e06ed4e0f3efe6de25c1683"
