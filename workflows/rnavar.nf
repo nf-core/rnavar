@@ -37,7 +37,7 @@ if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is 
 ========================================================================================
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
+ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
 ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
 /*
