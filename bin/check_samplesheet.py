@@ -97,6 +97,8 @@ class RowChecker:
         """Assert that read pairs have the same file extension. Report pair status."""
         if row[self._first_col] and row[self._second_col]:
             row[self._single_col] = False
+            print(Path(row[self._first_col]).suffixes)
+            print(Path(row[self._second_col]).suffixes)
             assert (
                 Path(row[self._first_col]).suffixes == Path(row[self._second_col]).suffixes
             ), "FASTQ pairs must have the same file extensions."
