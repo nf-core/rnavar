@@ -1,4 +1,4 @@
-process GATK4_SPLITNCIGARREADS {
+process GATK4_HAPLOTYPECALLER {
     tag "$meta.id"
     label 'process_medium'
 
@@ -8,14 +8,17 @@ process GATK4_SPLITNCIGARREADS {
         'quay.io/biocontainers/gatk4:4.2.5.0--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(bam), path(bai), path(interval)
-    path  fasta
-    path  fai
-    path  dict
+    tuple val(meta), path(input), path(input_index), path(intervals)
+    path fasta
+    path fai
+    path dict
+    path dbsnp
+    path dbsnp_tbi
 
     output:
-    tuple val(meta), path('*.bam'), emit: bam
-    path  "versions.yml"          , emit: versions
+    tuple val(meta), path("*.vcf.gz"), emit: vcf
+    tuple val(meta), path("*.tbi")   , emit: tbi
+    path "versions.yml"              , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -23,20 +26,25 @@ process GATK4_SPLITNCIGARREADS {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def interval_option = interval ? "-L ${interval}" : ""
-    def avail_mem = 3
+    def interval_option = intervals ? "-L ${intervals}" : ""
+    def dbsnp_option    = dbsnp ? "-D ${dbsnp}" : ""
+    def avail_mem       = 3
     if (!task.memory) {
-        log.info '[GATK SplitNCigarReads] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[GATK HaplotypeCaller] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" SplitNCigarReads \\
+    gatk \\
+        --java-options "-Xmx${avail_mem}g" \\
+        HaplotypeCaller \\
         -R $fasta \\
-        -I $bam \\
+        -I $input \\
+        ${dbsnp_option} \\
         ${interval_option} \\
-        -O ${prefix}.bam \\
-        $args
+        -O ${prefix}.vcf.gz \\
+        $args \\
+        --tmp-dir .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
