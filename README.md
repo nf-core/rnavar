@@ -25,20 +25,33 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ## Pipeline summary
 
 1. Merge re-sequenced FastQ files ([`cat`](http://www.linfo.org/cat.html))
-2. Read QC ([`FastQC v0.11.9`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-3. Align reads to reference genome ([`STAR v2.7.9a`](https://github.com/alexdobin/STAR))
-4. Sort and index alignments ([`SAMtools v1.15`](https://sourceforge.net/projects/samtools/files/samtools/))
-5. Duplicate read marking ([`Picard MarkDuplicates v2.26.10`](https://broadinstitute.github.io/picard/))
-6. Splits reads that contain Ns in their cigar string ([`GATK v4.2.5.0 SplitNCigarReads`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917482651-SplitNCigarReads))
-7. Estimate and correct systematic bias using base quality score recalibration ([`GATK v4.2.5.0 BaseRecalibrator`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897206043-BaseRecalibrator), [`GATK v4.2.5.0 ApplyBQSR`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897168667-ApplyBQSR))
-8. Convert a BED file to a Picard Interval List ([`GATK v4.2.5.0 BedToIntervalList`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924780827-BedToIntervalList-Picard-))
-9. Scatter one interval-list into many interval-files ([`GATK v4.2.5.0 IntervalListTools`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917392155-IntervalListTools-Picard-))
-10. Call SNPs and indels ([`GATK v4.2.5.0 HaplotypeCaller`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897180827-HaplotypeCaller))
-11. Merge multiple VCF files into one VCF ([`GATK v4.2.5.0 MergeVCFs`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924817691-MergeVcfs-Picard-))
-12. Index the VCF ([`GATK v4.2.5.0 IndexFeatureFile`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917499931-IndexFeatureFile))
-13. Filter variant calls based on certain criteria ([`GATK v4.2.5.0 VariantFiltration`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897204763-VariantFiltration))
-14. Annotate variants ([`snpEff v5.0`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP v104.3](https://www.ensembl.org/info/docs/tools/vep/index.html))
-15. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC v1.12`](http://multiqc.info/), [`R`](https://www.r-project.org/))
+2. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+3. Align reads to reference genome ([`STAR`](https://github.com/alexdobin/STAR))
+4. Sort and index alignments ([`SAMtools`](https://sourceforge.net/projects/samtools/files/samtools/))
+5. Duplicate read marking ([`Picard MarkDuplicates`](https://broadinstitute.github.io/picard/))
+6. Splits reads that contain Ns in their cigar string ([`GATK4 SplitNCigarReads`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917482651-SplitNCigarReads))
+7. Estimate and correct systematic bias using base quality score recalibration ([`GATK4 BaseRecalibrator`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897206043-BaseRecalibrator), [`GATK4 ApplyBQSR`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897168667-ApplyBQSR))
+8. Convert a BED file to a Picard Interval List ([`GATK4 BedToIntervalList`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924780827-BedToIntervalList-Picard-))
+9. Scatter one interval-list into many interval-files ([`GATK4 IntervalListTools`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917392155-IntervalListTools-Picard-))
+10. Call SNPs and indels ([`GATK4 HaplotypeCaller`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897180827-HaplotypeCaller))
+11. Merge multiple VCF files into one VCF ([`GATK4 MergeVCFs`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924817691-MergeVcfs-Picard-))
+12. Index the VCF ([`GATK4 IndexFeatureFile`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917499931-IndexFeatureFile))
+13. Filter variant calls based on certain criteria ([`GATK4 VariantFiltration`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897204763-VariantFiltration))
+14. Annotate variants ([`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))
+15. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC`](http://multiqc.info/), [`R`](https://www.r-project.org/))
+
+### Summary of tools and versions used in the pipeline:
+
+| Tool        | Version |
+|-------------|---------|
+| FastQC      | 0.11.9  |
+| STAR        | 2.7.9a  |
+| Samtools    | 1.15    |
+| Picard      | 2.26.10 |
+| GATK        | 4.2.5.0 |
+| SnpEff      | 5.0     |
+| Ensembl VEP | 104.3   |
+| MultiQC     | 1.12    |
 
 ## Quick Start
 
