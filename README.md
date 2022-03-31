@@ -40,7 +40,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 14. Annotate variants ([`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))
 15. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC`](http://multiqc.info/), [`R`](https://www.r-project.org/))
 
-### Summary of tools and versions used in the pipeline:
+### Summary of tools and version used in the pipeline:
 
 | Tool        | Version |
 |-------------|---------|
