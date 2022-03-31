@@ -43,7 +43,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ### Summary of tools and version used in the pipeline:
 
 | Tool        | Version |
-|-------------|---------|
+| ----------- | ------- |
 | FastQC      | 0.11.9  |
 | STAR        | 2.7.9a  |
 | Samtools    | 1.15    |
