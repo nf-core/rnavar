@@ -290,7 +290,8 @@ workflow RNAVAR {
         haplotypecaller_interval_bam = bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
                 new_meta = meta.clone()
-                new_meta.id = meta.id
+                new_meta.id = meta.id + "_" + interval_list.baseName
+                new_meta.sample = meta.id
                 [new_meta, bam, bai, interval_list]
             }
 
@@ -305,7 +306,7 @@ workflow RNAVAR {
 
         haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
             .map{ meta, vcf ->
-                meta.id = meta.id
+                meta.id = meta.sample
                 [meta, vcf]}
             .groupTuple()
 
