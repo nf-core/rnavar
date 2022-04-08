@@ -41,7 +41,7 @@ workflow PREPARE_GENOME {
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
             GUNZIP_GTF ( Channel.fromPath(params.gtf).map{ it -> [[id:it[0].baseName], it] } )
-            ch_gtf = GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }
+            ch_gtf = GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect()
             ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
         } else {
             ch_gtf = Channel.fromPath(params.gtf).collect()
