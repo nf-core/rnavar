@@ -116,6 +116,8 @@ Read length is an important parameter therefore it has to be used carefully. The
 
 > **NB:** Read length `--read_length` is an important parameter, therefore it has to set according to the input read length. If you are supplying a pre-built genome index, please make sure that you have used the same (read_length -1) during the genomeGenerate step.
 
+STAR alignment generates a coordinated-sorted BAM file as output. The coordinate-sorting process can be very memory intensive when the input data is deep sequenced or the genome has many highly expressed loci. When the pipeline runs on memory constrained environment, sorting step may fail due to low memory. In such cases you may adjust the limit parameters such as `--star_limitBAMsortRAM`, `--star_outBAMsortingBinsN` and `--star_limitOutSJcollapsed` to increase the sorting memory and genomic bins. Refer the parameter documentation for the default values and adjust as appropriate based on your memory availability.
+
 ## Preprocessing options
 
 Marking duplicate reads is performed using `Picard MarkDuplicates` tool. The tool does not remove duplicate reads by default, however you can set `--remove_duplicates true` to remove them.
