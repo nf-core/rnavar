@@ -27,10 +27,10 @@ workflow PREPARE_GENOME {
     //
     if (params.fasta.endsWith('.gz')) {
         GUNZIP_FASTA ( Channel.fromPath(params.fasta).map{ it -> [[id:it[0].baseName], it] } )
-        ch_fasta = GUNZIP_FASTA.out.gunzip.map{ meta, fasta -> [fasta] }
+        ch_fasta = GUNZIP_FASTA.out.gunzip.map{ meta, fasta -> [fasta] }.collect()
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     } else {
-        ch_fasta = file(params.fasta)
+        ch_fasta = Channel.fromPath(params.fasta).collect()
     }
 
     //
@@ -41,18 +41,18 @@ workflow PREPARE_GENOME {
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
             GUNZIP_GTF ( Channel.fromPath(params.gtf).map{ it -> [[id:it[0].baseName], it] } )
-            ch_gtf = GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }
+            ch_gtf = GUNZIP_GTF.out.gunzip.map{ meta, gtf -> [gtf] }.collect()
             ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
         } else {
-            ch_gtf = file(params.gtf)
+            ch_gtf = Channel.fromPath(params.gtf).collect()
         }
     } else if (params.gff) {
         if (params.gff.endsWith('.gz')) {
             GUNZIP_GFF ( Channel.fromPath(params.gff).map{ it -> [[id:it[0].baseName], it] } )
-            ch_gff = GUNZIP_GFF.out.gunzip.map{ meta, gff -> [gff] }
+            ch_gff = GUNZIP_GFF.out.gunzip.map{ meta, gff -> [gff] }.collect()
             ch_versions = ch_versions.mix(GUNZIP_GFF.out.versions)
         } else {
-            ch_gff = file(params.gff)
+            ch_gff = Channel.fromPath(params.gff).collect()
         }
         ch_gtf = GFFREAD ( ch_gff ).gtf
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
@@ -64,28 +64,28 @@ workflow PREPARE_GENOME {
     if (params.gene_bed) {
         if (params.gene_bed.endsWith('.gz')) {
             GUNZIP_GENE_BED ( Channel.fromPath(params.gene_bed).map{ it -> [[id:it[0].baseName], it] } )
-            ch_gene_bed = GUNZIP_GENE_BED.out.gunzip.map{ meta, bed -> [bed] }
+            ch_gene_bed = GUNZIP_GENE_BED.out.gunzip.map{ meta, bed -> [bed] }.collect()
             ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
-            ch_gene_bed = file(params.gene_bed)
+            ch_gene_bed = Channel.fromPath(params.gene_bed).collect()
         }
     } else {
-        ch_gene_bed = GTF2BED ( ch_gtf ).bed
+        ch_gene_bed = GTF2BED ( ch_gtf ).bed.collect()
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
 
     // Index the genome fasta
     ch_fasta_fai = Channel.empty()
-    if (params.fasta_fai) ch_fasta_fai = file(params.fasta_fai)
+    if (params.fasta_fai) ch_fasta_fai = Channel.fromPath(params.fasta_fai).collect()
     if (!params.fasta_fai) {
-        SAMTOOLS_FAIDX(Channel.fromPath(ch_fasta).map{ it -> [[id:it[0].getName()], it]})
+        SAMTOOLS_FAIDX(ch_fasta.map{ it -> [[id:it[0].getName()], it]})
         ch_fasta_fai    = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }.collect()
         ch_versions     = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
     }
 
     // Create dictionary file for the genome fasta
     ch_fasta_dict = Channel.empty()
-    if (params.dict) ch_fasta_dict = file(params.dict)
+    if (params.dict) ch_fasta_dict = Channel.fromPath(params.dict).collect()
     else ch_fasta_dict = GATK4_CREATESEQUENCEDICTIONARY(ch_fasta).dict
 
     //
@@ -101,7 +101,7 @@ workflow PREPARE_GENOME {
                 ch_star_index = UNTAR_STAR_INDEX.out.untar.map{ meta, star_index -> [star_index] }.collect()
                 ch_versions   = ch_versions.mix(UNTAR_STAR_INDEX.out.versions)
             } else {
-                ch_star_index = file(params.star_index)
+                ch_star_index = Channel.fromPath(params.star_index).collect()
             }
         }
         else {
