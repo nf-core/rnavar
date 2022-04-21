@@ -55,25 +55,25 @@
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "samtools/faidx": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/flagstat": {
-                "git_sha": "1ad73f1b2abdea9398680d6d20014838135c9a35"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/idxstats": {
-                "git_sha": "1ad73f1b2abdea9398680d6d20014838135c9a35"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/index": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/merge": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/sort": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/stats": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "snpeff": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
@@ -82,13 +82,13 @@
                 "git_sha": "1dddf1ce9443e3d93853d86e7a7aab52e5b4d614"
             },
             "star/genomegenerate": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "tabix/bgziptabix": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "untar": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "9ae34a01d1747019fd37753ff4cafb05aec35a2b"
             }
         }
     }
