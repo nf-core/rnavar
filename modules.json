@@ -16,13 +16,13 @@
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "gatk4/applybqsr": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/baserecalibrator": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/bedtointervallist": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/createsequencedictionary": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
@@ -34,10 +34,10 @@
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/intervallisttools": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/mergevcfs": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/variantfiltration": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"

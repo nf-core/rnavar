@@ -311,12 +311,10 @@ workflow RNAVAR {
             .groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
-        use_ref_dict = true
 
         GATK4_MERGEVCFS(
             haplotypecaller_raw,
-            PREPARE_GENOME.out.dict,
-            use_ref_dict
+            PREPARE_GENOME.out.dict
         )
         haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
