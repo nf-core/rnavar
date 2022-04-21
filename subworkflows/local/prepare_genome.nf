@@ -59,18 +59,18 @@ workflow PREPARE_GENOME {
     }
 
     //
-    // Uncompress gene BED annotation file or create from GTF if required
+    // Uncompress exon BED annotation file or create from GTF if required
     //
-    if (params.gene_bed) {
-        if (params.gene_bed.endsWith('.gz')) {
-            GUNZIP_GENE_BED ( Channel.fromPath(params.gene_bed).map{ it -> [[id:it[0].baseName], it] } )
+    if (params.exon_bed) {
+        if (params.exon_bed.endsWith('.gz')) {
+            GUNZIP_GENE_BED ( Channel.fromPath(params.exon_bed).map{ it -> [[id:it[0].baseName], it] } )
             ch_gene_bed = GUNZIP_GENE_BED.out.gunzip.map{ meta, bed -> [bed] }.collect()
             ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
-            ch_gene_bed = Channel.fromPath(params.gene_bed).collect()
+            ch_gene_bed = Channel.fromPath(params.exon_bed).collect()
         }
     } else {
-        ch_gene_bed = GTF2BED ( ch_gtf ).bed.collect()
+        ch_exon_bed = GTF2BED ( ch_gtf ).bed.collect()
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
 
@@ -121,7 +121,7 @@ workflow PREPARE_GENOME {
     fai              = ch_fasta_fai        // path: genome.fasta.fai
     dict             = ch_fasta_dict       // path: genome.fasta.dict
     gtf              = ch_gtf              // path: genome.gtf
-    gene_bed         = ch_gene_bed         // path: gene.bed
+    exon_bed         = ch_exon_bed         // path: exon.bed
     star_index       = ch_star_index       // path: star/index/
     versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

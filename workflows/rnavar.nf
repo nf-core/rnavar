@@ -120,7 +120,7 @@ workflow RNAVAR {
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (prepareToolIndices)
-    ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.gene_bed)
+    ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     //

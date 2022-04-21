@@ -104,9 +104,9 @@
                     "description": "Path to GFF3 annotation file.",
                     "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
                 },
-                "gene_bed": {
+                "exon_bed": {
                     "type": "string",
-                    "description": "Path to BED file containing gene intervals. This will be created from the GTF file if not specified."
+                    "description": "Path to BED file containing exon intervals. This will be created from the GTF file if not specified."
                 },
                 "read_length": {
                     "type": "number",
