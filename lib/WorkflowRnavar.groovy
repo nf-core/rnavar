@@ -25,6 +25,16 @@ class WorkflowRnavar {
             System.exit(1)
         }
 
+        if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('vep')) && (!params.genome || !params.vep_genome)) {
+            log.error "Either --genome or --vep_genome is required to run VEP variant annotation."
+            System.exit(1)
+        }
+
+        if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff')) && (!params.genome || !params.snpeff_db)) {
+            log.error "Either --genome or --snpeff_db is required to run snpEff variant annotation."
+            System.exit(1)
+        }
+
     }
 
     //

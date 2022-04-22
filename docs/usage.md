@@ -100,7 +100,7 @@ The index building step can be quite a time-consuming process and it permits the
 
 - If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
 - If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
-- If `--exon_bed` is not provided then it will be generated from the GTF file.
+- The `--exon_bed` parameter file is expected to be exon coordinates with at least three columns i.e., <chrom> <exon_position_start> <exon_position_end> in the file. The <exon_postion_start> should be 0-based. If this parameter is not provided, the exon coordinates are extracted from the GTF file and generates a bed file by the process `GTF2BED`.
 - If `--star_index` is not provided then it will be generated from the reference genome FASTA file using `STAR --runmode genomeGenerate` command.
 
 > **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. Otherwise `GATK BedToIntervalList` module is likely to fail if the chromosomes/contigs do not match with the reference genome data.
