@@ -96,12 +96,12 @@ dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbs
 dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()   : []
 
 // Initialize varaint annotation associated channels
-def snpeff_db           = params.snpeff_db         ?: Channel.empty()
-def vep_cache_version   = params.vep_cache_version ?: Channel.empty()
-def vep_genome          = params.vep_genome        ?: Channel.empty()
-def vep_species         = params.vep_species       ?: Channel.empty()
-def snpeff_cache        = params.snpeff_cache      ? params.snpeff_cache : []
-def vep_cache           = params.vep_cache         ? params.vep_cache : []
+def snpeff_db           = params.snpeff_db         ?:   Channel.empty()
+def vep_cache_version   = params.vep_cache_version ?:   Channel.empty()
+def vep_genome          = params.vep_genome        ?:   Channel.empty()
+def vep_species         = params.vep_species       ?:   Channel.empty()
+def snpeff_cache        = params.snpeff_cache      ?    Channel.fromPath(params.snpeff_cache).collect()  : []
+def vep_cache           = params.vep_cache         ?    Channel.fromPath(params.vep_cache).collect()     : []
 
 // MultiQC reporting
 def multiqc_report = []

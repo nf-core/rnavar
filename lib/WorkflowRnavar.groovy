@@ -25,8 +25,8 @@ class WorkflowRnavar {
             System.exit(1)
         }
 
-        if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('vep')) && (!params.genome || !params.vep_genome)) {
-            log.error "Either --genome or --vep_genome is required to run VEP variant annotation."
+        if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('vep')) && (!params.genome || !params.vep_genome || !params.vep_species || !params.vep_cache_version)) {
+            log.error "Species name (using --vep_species), genome assembly (either --genome or --vep_genome) and cache version (--vep_cache_version) are required to run VEP variant annotation."
             System.exit(1)
         }
 
