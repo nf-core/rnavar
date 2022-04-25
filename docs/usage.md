@@ -82,7 +82,7 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,,reverse
 | `fastq_2`      | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 | `strandedness` | Sample strand-specificity. Must be one of `unstranded`, `forward` or `reverse`.                                                                                                        |
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+An [example samplesheet](../assets/samplesheet_test.csv) has been provided with the pipeline.
 
 > **NB:** The `group` and `replicate` columns were replaced with a single `sample` column as of v3.1 of the pipeline. The `sample` column is essentially a concatenation of the `group` and `replicate` columns, however it now also offers more flexibility in instances where replicate information is not required e.g. when sequencing clinical samples. If all values of `sample` have the same number of underscores, fields defined by these underscore-separated names may be used in the PCA plots produced by the pipeline, to regain the ability to represent different groupings.
 
@@ -100,7 +100,7 @@ The index building step can be quite a time-consuming process and it permits the
 
 - If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
 - If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
-- If `--gene_bed` is not provided then it will be generated from the GTF file.
+- The `--exon_bed` parameter file is expected to be exon coordinates with at least three columns i.e., <chrom> <exon_position_start> <exon_position_end> in the file. The <exon_postion_start> should be 0-based. If this parameter is not provided, the exon coordinates are extracted from the GTF file and generates a bed file by the process `GTF2BED`.
 - If `--star_index` is not provided then it will be generated from the reference genome FASTA file using `STAR --runmode genomeGenerate` command.
 
 > **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. Otherwise `GATK BedToIntervalList` module is likely to fail if the chromosomes/contigs do not match with the reference genome data.

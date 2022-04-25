@@ -96,12 +96,12 @@ dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbs
 dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()   : []
 
 // Initialize varaint annotation associated channels
-def snpeff_db           = params.snpeff_db         ?: Channel.empty()
-def vep_cache_version   = params.vep_cache_version ?: Channel.empty()
-def vep_genome          = params.vep_genome        ?: Channel.empty()
-def vep_species         = params.vep_species       ?: Channel.empty()
-def snpeff_cache        = params.snpeff_cache      ? params.snpeff_cache : []
-def vep_cache           = params.vep_cache         ? params.vep_cache : []
+def snpeff_db           = params.snpeff_db         ?:   Channel.empty()
+def vep_cache_version   = params.vep_cache_version ?:   Channel.empty()
+def vep_genome          = params.vep_genome        ?:   Channel.empty()
+def vep_species         = params.vep_species       ?:   Channel.empty()
+def snpeff_cache        = params.snpeff_cache      ?    Channel.fromPath(params.snpeff_cache).collect()  : []
+def vep_cache           = params.vep_cache         ?    Channel.fromPath(params.vep_cache).collect()     : []
 
 // MultiQC reporting
 def multiqc_report = []
@@ -120,7 +120,7 @@ workflow RNAVAR {
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (prepareToolIndices)
-    ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.gene_bed)
+    ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     //
@@ -311,12 +311,10 @@ workflow RNAVAR {
             .groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
-        use_ref_dict = true
 
         GATK4_MERGEVCFS(
             haplotypecaller_raw,
-            PREPARE_GENOME.out.dict,
-            use_ref_dict
+            PREPARE_GENOME.out.dict
         )
         haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
