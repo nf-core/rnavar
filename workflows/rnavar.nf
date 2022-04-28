@@ -93,8 +93,10 @@ def seq_platform        = params.seq_platform ? params.seq_platform : []
 def seq_center          = params.seq_center ? params.seq_center : []
 
 // Initialize file channels based on params
-dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()       : []
-dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()   : []
+dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
+dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
+known_sites             = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
+known_sites_tbi         = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
 // Initialize varaint annotation associated channels
 def snpeff_db           = params.snpeff_db         ?:   Channel.empty()
@@ -237,9 +239,12 @@ workflow RNAVAR {
 
         if(!params.skip_baserecalibration) {
             // MODULE: BaseRecalibrator from GATK4
-            ch_bqsr_table = Channel.empty()
-            known_sites     = Channel.from([params.dbsnp, params.known_indels]).collect()
-            known_sites_tbi = Channel.from([params.dbsnp_tbi, params.known_indels_tbi]).collect()
+            ch_bqsr_table   = Channel.empty()
+
+            // known_sites is made by grouping both the dbsnp and the known indels ressources
+            // they can either or both be optional
+            known_sites     = dbsnp.concat(known_indels).collect()
+            known_sites_tbi = dbsnp_tbi.concat(known_indels_tbi).collect()
 
             ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
             splitncigar_bam_bai.combine(ch_interval_list_recalib)
