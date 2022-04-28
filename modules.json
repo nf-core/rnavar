@@ -4,7 +4,7 @@
     "repos": {
         "nf-core/modules": {
             "cat/fastq": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
             },
             "custom/dumpsoftwareversions": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
@@ -28,7 +28,7 @@
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
             "gatk4/haplotypecaller": {
-                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+                "git_sha": "68f1c27169946f931ea4318911de5681f88b2961"
             },
             "gatk4/indexfeaturefile": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
@@ -46,7 +46,7 @@
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
             "gunzip": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
             },
             "multiqc": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
@@ -87,8 +87,11 @@
             "tabix/bgziptabix": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "tabix/tabix": {
+                "git_sha": "b3e9b88e80880f450ad79a95b2b7aa05e1de5484"
+            },
             "untar": {
-                "git_sha": "9ae34a01d1747019fd37753ff4cafb05aec35a2b"
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
             }
         }
     }

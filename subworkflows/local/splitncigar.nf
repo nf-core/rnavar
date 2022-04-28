@@ -45,7 +45,13 @@ workflow SPLITNCIGAR {
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
 
     SAMTOOLS_INDEX(splitncigar_bam)
-    splitncigar_bam_bai = splitncigar_bam.join(SAMTOOLS_INDEX.out.bai)
+    splitncigar_bam_bai = splitncigar_bam
+        .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
+        .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
+        .map{meta, bam, bai, csi ->
+            if (bai) [meta, bam, bai]
+            else [meta, bam, csi]
+        }
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     emit:
