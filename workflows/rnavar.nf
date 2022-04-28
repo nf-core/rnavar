@@ -95,8 +95,8 @@ def seq_center          = params.seq_center ? params.seq_center : []
 // Initialize file channels based on params
 dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
 dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
-known_sites             = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
-known_sites_tbi         = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
+known_indels            = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
+known_indels_tbi        = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
 // Initialize varaint annotation associated channels
 def snpeff_db           = params.snpeff_db         ?:   Channel.empty()
