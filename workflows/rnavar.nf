@@ -334,7 +334,7 @@ workflow RNAVAR {
         final_vcf               = haplotypecaller_vcf
 
         // MODULE: VariantFiltration from GATK4
-        if (!params.skip_variantfiltration) {
+        if (!params.skip_variantfiltration && !params.bam_csi_index ) {
 
             GATK4_VARIANTFILTRATION(
                 haplotypecaller_vcf_tbi,

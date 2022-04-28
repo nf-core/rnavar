@@ -105,6 +105,12 @@ The index building step can be quite a time-consuming process and it permits the
 
 > **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. Otherwise `GATK BedToIntervalList` module is likely to fail if the chromosomes/contigs do not match with the reference genome data.
 
+### Recommendation when using very large genomes
+
+When the pipeline is used on very large genomes having chromosome size greater than 512Mb (e.g. Chromosome 1 of Monodelphis domestica has a size of 748055161bp), please make sure that `--bam_csi_index` parameter is provided in order to use coordinate sorted index (CSI) instead of standard binary alignment index (BAI).
+
+> **NB:** When `--bam_csi_index` is used, variant filtration step will be disabled as `GATK VariantFiltration` does not currently support CSI index for the input VCF. It may be incorporated in the future when newer GATK versions support CSI for VCF inputs.
+
 ## Alignment options
 
 The pipeline uses [STAR](https://github.com/alexdobin/STAR) to map the raw FastQ reads to the reference genome. STAR is fast but requires a lot of memory to run, typically around 38GB for the Human GRCh37 reference genome.
