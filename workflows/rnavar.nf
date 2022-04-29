@@ -289,6 +289,12 @@ workflow RNAVAR {
 
         // MODULE: HaplotypeCaller from GATK4
         interval_flag = params.no_intervals
+        // Run haplotyper even in the absence of dbSNP files
+        if (!params.dbsnp){
+            dbsnp = []
+            dbsnp_tbi = []
+        }
+
         haplotypecaller_vcf = Channel.empty()
 
         haplotypecaller_interval_bam = bam_variant_calling.combine(ch_interval_list_split)
