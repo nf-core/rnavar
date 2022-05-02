@@ -6,8 +6,8 @@
 //params.samtools_index_options   = [:]
 //params.samtools_stats_options   = [:]
 
-include { GATK4_SPLITNCIGARREADS } from '../../modules/local/gatk4/splitncigarreads/main'   //addParams( options: params.gatk_splitncigar_options )
-include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main' //addParams( options: params.samtools_index_options )
+include { GATK4_SPLITNCIGARREADS } from '../../modules/nf-core/modules/gatk4/splitncigarreads/main'     //addParams( options: params.gatk_splitncigar_options )
+include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main'             //addParams( options: params.samtools_index_options )
 
 workflow GATK4_SPLITNCIGAR {
     take:

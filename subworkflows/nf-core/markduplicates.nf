@@ -1,5 +1,5 @@
 //
-// Picard MarkDuplicates, index BAM file and run samtools stats, flagstat and idxstats
+// GATK4 MarkDuplicates, index BAM file and run samtools stats, flagstat and idxstats
 //
 
 //params.markduplicates_options = [:]
@@ -7,7 +7,7 @@
 //params.samtools_stats_options = [:]
 
 include { BAM_STATS_SAMTOOLS    } from './bam_stats_samtools'                                     //addParams(options: params.samtools_stats_options)
-include { PICARD_MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' //addParams(options: params.markduplicates_options)
+include { GATK4_MARKDUPLICATES  } from '../../modules/nf-core/modules/gatk4/markduplicates/main'  //addParams(options: params.markduplicates_options)
 include { SAMTOOLS_INDEX        } from '../../modules/nf-core/modules/samtools/index/main'        //addParams(options: params.samtools_index_options)
 
 workflow MARKDUPLICATES {
@@ -18,16 +18,16 @@ workflow MARKDUPLICATES {
 
     ch_versions = Channel.empty()
 
-    PICARD_MARKDUPLICATES(bam)
-    ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
+    GATK4_MARKDUPLICATES(bam)
+    ch_versions = ch_versions.mix(GATK4_MARKDUPLICATES.out.versions.first())
 
     //
     // Index BAM file and run samtools stats, flagstat and idxstats
     //
-    SAMTOOLS_INDEX(PICARD_MARKDUPLICATES.out.bam)
+    SAMTOOLS_INDEX(GATK4_MARKDUPLICATES.out.bam)
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
-    PICARD_MARKDUPLICATES.out.bam
+    GATK4_MARKDUPLICATES.out.bam
         .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
         .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
         .map{meta, bam, bai, csi ->
@@ -39,8 +39,9 @@ workflow MARKDUPLICATES {
     ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions.first())
 
     emit:
-    bam              = PICARD_MARKDUPLICATES.out.bam     // channel: [ val(meta), [ bam ] ]
-    metrics          = PICARD_MARKDUPLICATES.out.metrics // channel: [ val(meta), [ metrics ] ]
+    bam              = GATK4_MARKDUPLICATES.out.bam     // channel: [ val(meta), [ bam ] ]
+    bam_bai          = ch_bam_bai                        // channel: [ val(meta), [ bam ], [bai or csi] ]
+    metrics          = GATK4_MARKDUPLICATES.out.metrics // channel: [ val(meta), [ metrics ] ]
 
     bai              = SAMTOOLS_INDEX.out.bai            // channel: [ val(meta), [ bai ] ]
     csi              = SAMTOOLS_INDEX.out.csi            // channel: [ val(meta), [ csi ] ]

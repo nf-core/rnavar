@@ -68,6 +68,7 @@ include { GATK4_MERGEVCFS               } from '../modules/nf-core/modules/gatk4
 include { GATK4_INDEXFEATUREFILE        } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
 include { GATK4_VARIANTFILTRATION       } from '../modules/nf-core/modules/gatk4/variantfiltration/main'
 include { SAMTOOLS_INDEX                } from '../modules/nf-core/modules/samtools/index/main'
+include { TABIX_TABIX as TABIX          } from '../modules/nf-core/modules/tabix/tabix/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS   } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
 /*
@@ -92,8 +93,10 @@ def seq_platform        = params.seq_platform ? params.seq_platform : []
 def seq_center          = params.seq_center ? params.seq_center : []
 
 // Initialize file channels based on params
-dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()       : []
-dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()   : []
+dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
+dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
+known_indels            = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
+known_indels_tbi        = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
 // Initialize varaint annotation associated channels
 def snpeff_db           = params.snpeff_db         ?:   Channel.empty()
@@ -214,17 +217,15 @@ workflow RNAVAR {
         ch_samtools_flagstat = ALIGN_STAR.out.flagstat
         ch_samtools_idxstats = ALIGN_STAR.out.idxstats
         ch_star_multiqc      = ALIGN_STAR.out.log_final
-        if (params.bam_csi_index) ch_genome_bam_index = ALIGN_STAR.out.csi
         ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
         // SUBWORKFLOW: Mark duplicates with Picard
         MARKDUPLICATES(ch_genome_bam)
-        ch_genome_bam             = MARKDUPLICATES.out.bam.join(MARKDUPLICATES.out.bai, by: [0])
+        ch_genome_bam             = MARKDUPLICATES.out.bam_bai
         ch_samtools_stats         = MARKDUPLICATES.out.stats
         ch_samtools_flagstat      = MARKDUPLICATES.out.flagstat
         ch_samtools_idxstats      = MARKDUPLICATES.out.idxstats
         ch_markduplicates_multiqc = MARKDUPLICATES.out.metrics
-        if (params.bam_csi_index) ch_genome_bam_index = MARKDUPLICATES.out.csi
         ch_versions               = ch_versions.mix(MARKDUPLICATES.out.versions.first().ifEmpty(null))
 
         // Subworkflow - SplitNCigarReads from GATK4 over the intervals
@@ -238,9 +239,12 @@ workflow RNAVAR {
 
         if(!params.skip_baserecalibration) {
             // MODULE: BaseRecalibrator from GATK4
-            ch_bqsr_table = Channel.empty()
-            known_sites     = Channel.from([params.dbsnp, params.known_indels]).collect()
-            known_sites_tbi = Channel.from([params.dbsnp_tbi, params.known_indels_tbi]).collect()
+            ch_bqsr_table   = Channel.empty()
+
+            // known_sites is made by grouping both the dbsnp and the known indels ressources
+            // they can either or both be optional
+            known_sites     = dbsnp.concat(known_indels).collect()
+            known_sites_tbi = dbsnp_tbi.concat(known_indels_tbi).collect()
 
             ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
             splitncigar_bam_bai.combine(ch_interval_list_recalib)
@@ -285,6 +289,12 @@ workflow RNAVAR {
 
         // MODULE: HaplotypeCaller from GATK4
         interval_flag = params.no_intervals
+        // Run haplotyper even in the absence of dbSNP files
+        if (!params.dbsnp){
+            dbsnp = []
+            dbsnp_tbi = []
+        }
+
         haplotypecaller_vcf = Channel.empty()
 
         haplotypecaller_interval_bam = bam_variant_calling.combine(ch_interval_list_split)
@@ -319,16 +329,23 @@ workflow RNAVAR {
         haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
-        GATK4_INDEXFEATUREFILE(
+        TABIX(
             haplotypecaller_vcf
         )
-        haplotypecaller_vcf     = haplotypecaller_vcf   //.join(GATK4_INDEXFEATUREFILE.out.index, by: [0])
-        haplotypecaller_vcf_tbi = haplotypecaller_vcf.join(GATK4_INDEXFEATUREFILE.out.index, by: [0])
-        ch_versions             = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+
+        haplotypecaller_vcf_tbi = haplotypecaller_vcf
+            .join(TABIX.out.tbi, by: [0], remainder: true)
+            .join(TABIX.out.csi, by: [0], remainder: true)
+            .map{meta, vcf, tbi, csi ->
+                if (tbi) [meta, vcf, tbi]
+                else [meta, vcf, csi]
+            }
+
+        ch_versions             = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
         final_vcf               = haplotypecaller_vcf
 
         // MODULE: VariantFiltration from GATK4
-        if (!params.skip_variantfiltration) {
+        if (!params.skip_variantfiltration && !params.bam_csi_index ) {
 
             GATK4_VARIANTFILTRATION(
                 haplotypecaller_vcf_tbi,
@@ -337,7 +354,7 @@ workflow RNAVAR {
                 PREPARE_GENOME.out.dict
             )
 
-            filtered_vcf    = GATK4_VARIANTFILTRATION.out.vcf  //.join(GATK4_VARIANTFILTRATION.out.tbi, by: [0])
+            filtered_vcf    = GATK4_VARIANTFILTRATION.out.vcf
             final_vcf       = filtered_vcf
             ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
         }

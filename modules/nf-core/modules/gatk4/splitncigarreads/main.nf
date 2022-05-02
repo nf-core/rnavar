@@ -1,4 +1,4 @@
-process GATK4_HAPLOTYPECALLER {
+process GATK4_SPLITNCIGARREADS {
     tag "$meta.id"
     label 'process_medium'
 
@@ -8,17 +8,14 @@ process GATK4_HAPLOTYPECALLER {
         'quay.io/biocontainers/gatk4:4.2.5.0--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(input), path(input_index), path(intervals)
+    tuple val(meta), path(bam), path(bai), path(intervals)
     path  fasta
     path  fai
     path  dict
-    path  dbsnp
-    path  dbsnp_tbi
 
     output:
-    tuple val(meta), path("*.vcf.gz"), emit: vcf
-    tuple val(meta), path("*.tbi")   , optional:true, emit: tbi
-    path "versions.yml"              , emit: versions
+    tuple val(meta), path('*.bam'), emit: bam
+    path  "versions.yml"          , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -26,21 +23,19 @@ process GATK4_HAPLOTYPECALLER {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def dbsnp_command = dbsnp ? "--dbsnp $dbsnp" : ""
     def interval_command = intervals ? "--intervals $intervals" : ""
 
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[GATK HaplotypeCaller] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[GATK SplitNCigarReads] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" HaplotypeCaller \\
-        --input $input \\
-        --output ${prefix}.vcf.gz \\
+    gatk --java-options "-Xmx${avail_mem}g" SplitNCigarReads \\
+        --input $bam \\
+        --output ${prefix}.bam \\
         --reference $fasta \\
-        $dbsnp_command \\
         $interval_command \\
         --tmp-dir . \\
         $args
