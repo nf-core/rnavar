@@ -21,7 +21,7 @@ class WorkflowRnavar {
         }
 
         if ((!params.skip_baserecalibration) && (!params.dbsnp && !params.known_indels)) {
-            log.error "Known variants VCF file or its index is missing!. Atleast --dbsnp (and its index) or --known_indels (and its index) is required."
+            log.error "Known variants VCF file or its index is missing!. At least --dbsnp (and its index) or --known_indels (and its index) is required."
             System.exit(1)
         }
 
