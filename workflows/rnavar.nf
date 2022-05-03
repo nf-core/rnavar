@@ -48,7 +48,6 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 include { INPUT_CHECK                   } from '../subworkflows/local/input_check'              // Validate the input samplesheet.csv and prepare input channels
 include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome'           // Build the genome index and other reference files
-include { SPLITNCIGAR                   } from '../subworkflows/local/splitncigar'              // Splits reads that contain Ns in their cigar string
 include { ANNOTATE                      } from '../subworkflows/local/annotate'                 // Annotate variants using snpEff or VEP or both
 
 /*
@@ -79,6 +78,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS   } from '../modules/nf-core/modules/custo
 
 include { ALIGN_STAR                    } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
 include { MARKDUPLICATES                } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
+include { SPLITNCIGAR                   } from '../subworkflows/nf-core/splitncigar'        // Splits reads that contain Ns in their cigar string
 include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
 
 /*

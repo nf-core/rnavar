@@ -33,6 +33,7 @@ jobs:
           - "annotation"
           - "removeduplicates"
           - "skipbasecalib"
+          - "bamcsiindex"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
