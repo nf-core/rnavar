@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/rnavar/master/assets/schema_input.json",
-    "title": "nf-core/rnavar pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/rnaseq/master/assets/schema_input.json",
+    "title": "nf-core/rnaseq pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
@@ -29,8 +29,13 @@
                         "maxLength": 0
                     }
                 ]
+            },
+            "strandedness": {
+                "type": "string",
+                "errorMessage": "Strandedness must be provided and be one of 'forward', 'reverse' or 'unstranded'",
+                "enum": ["forward", "reverse", "unstranded"]
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "fastq_1", "strandedness"]
     }
 }
