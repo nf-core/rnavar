@@ -29,7 +29,7 @@ for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option -gtf|-gff to provide a GTF|GFF file." }
+if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option --gtf|--gff to provide a GTF|GFF file." }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -219,7 +219,7 @@ workflow RNAVAR {
         ch_star_multiqc      = ALIGN_STAR.out.log_final
         ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
-        // SUBWORKFLOW: Mark duplicates with Picard
+        // SUBWORKFLOW: Mark duplicates with GATK4
         MARKDUPLICATES(ch_genome_bam)
         ch_genome_bam             = MARKDUPLICATES.out.bam_bai
         ch_samtools_stats         = MARKDUPLICATES.out.stats
