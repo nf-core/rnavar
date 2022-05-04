@@ -16,7 +16,7 @@
 
 ## Introduction
 
-**nf-core/rnavar** is a bioinformatics best-practice analysis pipeline for GATK4 RNA variant calling pipeline.
+**nf-core/rnavar** is a bioinformatics best-practice analysis pipeline for GATK4 RNA variant calling.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
@@ -28,7 +28,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 2. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 3. Align reads to reference genome ([`STAR`](https://github.com/alexdobin/STAR))
 4. Sort and index alignments ([`SAMtools`](https://sourceforge.net/projects/samtools/files/samtools/))
-5. Duplicate read marking ([`Picard MarkDuplicates`](https://broadinstitute.github.io/picard/))
+5. Duplicate read marking ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard))
 6. Splits reads that contain Ns in their cigar string ([`GATK4 SplitNCigarReads`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917482651-SplitNCigarReads))
 7. Estimate and correct systematic bias using base quality score recalibration ([`GATK4 BaseRecalibrator`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897206043-BaseRecalibrator), [`GATK4 ApplyBQSR`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897168667-ApplyBQSR))
 8. Convert a BED file to a Picard Interval List ([`GATK4 BedToIntervalList`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924780827-BedToIntervalList-Picard-))
@@ -47,7 +47,6 @@ On release, automated continuous integration tests run the pipeline on a full-si
 | FastQC      | 0.11.9  |
 | STAR        | 2.7.9a  |
 | Samtools    | 1.15    |
-| Picard      | 2.26.10 |
 | GATK        | 4.2.5.0 |
 | SnpEff      | 5.0     |
 | Ensembl VEP | 104.3   |
