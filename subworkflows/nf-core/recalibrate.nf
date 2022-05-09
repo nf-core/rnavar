@@ -4,14 +4,9 @@
 ========================================================================================
 */
 
-//params.applybqsr_options        = [:]
-//params.qualimap_bamqc_options   = [:]
-//params.samtools_index_options   = [:]
-//params.samtools_stats_options   = [:]
-
-include { GATK4_APPLYBQSR as APPLYBQSR } from '../../modules/nf-core/modules/gatk4/applybqsr/main' //addParams(options: params.applybqsr_options)
-include { SAMTOOLS_INDEX }               from '../../modules/nf-core/modules/samtools/index/main'  //addParams(options: params.samtools_index_options)
-include { SAMTOOLS_STATS }               from '../../modules/nf-core/modules/samtools/stats/main'  //addParams(options: params.samtools_stats_options)
+include { GATK4_APPLYBQSR as APPLYBQSR } from '../../modules/nf-core/modules/gatk4/applybqsr/main'
+include { SAMTOOLS_INDEX }               from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_STATS }               from '../../modules/nf-core/modules/samtools/stats/main'
 
 workflow RECALIBRATE {
     take:

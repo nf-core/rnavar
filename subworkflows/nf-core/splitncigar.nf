@@ -3,8 +3,8 @@
 //
 
 include { GATK4_SPLITNCIGARREADS } from '../../modules/nf-core/modules/gatk4/splitncigarreads/main'
-include { SAMTOOLS_MERGE         } from '../../modules/nf-core/modules/samtools/merge/main' //addParams(options: params.samtools_merge_options)
-include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main' //addParams(options: params.samtools_index_options)
+include { SAMTOOLS_MERGE         } from '../../modules/nf-core/modules/samtools/merge/main'
+include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main'
 
 workflow SPLITNCIGAR {
     take:
@@ -32,8 +32,9 @@ workflow SPLITNCIGAR {
 
     bam_splitncigar
         .map{ meta, bam ->
-            meta.id = meta.sample
-            [meta, bam]
+            new_meta = meta.clone()
+            new_meta.id = meta.sample
+            [new_meta, bam]
     }.groupTuple().set{bam_splitncigar_interval}
 
     SAMTOOLS_MERGE(bam_splitncigar_interval, fasta)

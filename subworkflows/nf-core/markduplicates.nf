@@ -2,13 +2,9 @@
 // GATK4 MarkDuplicates, index BAM file and run samtools stats, flagstat and idxstats
 //
 
-//params.markduplicates_options = [:]
-//params.samtools_index_options = [:]
-//params.samtools_stats_options = [:]
-
-include { BAM_STATS_SAMTOOLS    } from './bam_stats_samtools'                                     //addParams(options: params.samtools_stats_options)
-include { GATK4_MARKDUPLICATES  } from '../../modules/nf-core/modules/gatk4/markduplicates/main'  //addParams(options: params.markduplicates_options)
-include { SAMTOOLS_INDEX        } from '../../modules/nf-core/modules/samtools/index/main'        //addParams(options: params.samtools_index_options)
+include { BAM_STATS_SAMTOOLS    } from './bam_stats_samtools'
+include { GATK4_MARKDUPLICATES  } from '../../modules/nf-core/modules/gatk4/markduplicates/main'
+include { SAMTOOLS_INDEX        } from '../../modules/nf-core/modules/samtools/index/main'
 
 workflow MARKDUPLICATES {
     take:
