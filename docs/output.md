@@ -24,10 +24,10 @@ GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz,
 The pipeline has been executed with the following command.
 
 ```console
-nextflow run nf-core/rnavar -profile munin,docker --input samplesheet.csv --genome GRCh38 --read_length 151 --annotate_tools merge
+nextflow run nf-core/rnavar -profile test,docker --input samplesheet.csv --genome GRCh38 --read_length 151 --annotate_tools merge
 ```
 
-It used an institutional profile `munin` from [nf-core/configs](https://github.com/nf-core/configs/blob/master/conf/pipeline/rnavar/munin.config)
+It used the test profile provided with this pipeline which can be viewed [here](https://raw.githubusercontent.com/nf-core/rnavar/master/conf/test.config)
 
 ## Pipeline overview
 
