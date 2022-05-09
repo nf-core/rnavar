@@ -28,7 +28,7 @@ nextflow run nf-core/rnavar -profile test,docker --input samplesheet.csv --genom
 ```
 
 It used the test profile provided with this pipeline which can be viewed [here](https://raw.githubusercontent.com/nf-core/rnavar/master/conf/test.config)
-
+However, you can create your own institutional profile and place it on [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf/pipeline/rnavar) and then use the profile name directly here in the command instead of `test` to best use your data and parameters.
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
