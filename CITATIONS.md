@@ -36,6 +36,10 @@
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
+- [Tabix]()
+
+  > Heng Li, Tabix: fast retrieval of sequence features from generic TAB-delimited files, Bioinformatics, Volume 27, Issue 5, 1 March 2011, Pages 718–719. doi: 10.1093/bioinformatics/btq671. PubMed PMID: 21208982; PubMed Central PMCID: PMC3042176.
+
 - [R](https://www.R-project.org/)
 
   > R Core Team (2017). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
