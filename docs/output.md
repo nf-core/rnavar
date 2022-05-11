@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline based on public data.
+This document describes the output produced by the pipeline based on a public dataset.
 
 The directories listed below are created in the `results/` directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
@@ -24,18 +24,16 @@ GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz,
 The pipeline has been executed with the following command.
 
 ```console
-nextflow run nf-core/rnavar -profile test,docker --input samplesheet.csv --genome GRCh38 --annotate_tools merge
+nextflow run nf-core/rnavar -profile <institutional_config>,docker --input samplesheet.csv --genome GRCh38 --annotate_tools merge
 ```
 
-It used the test profile provided with this pipeline which can be viewed [here](https://raw.githubusercontent.com/nf-core/rnavar/master/conf/test.config)
-However, you can create your own institutional profile and place it on [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf/pipeline/rnavar) and then use the profile name directly here in the command instead of `test` to best use your data and parameters.
+The `<institutional_config>` used in this experiment can be found [here](https://github.com/nf-core/configs/blob/master/conf/pipeline/rnavar/munin.config). However, you can create your own institutional profile and place it on [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf/pipeline/rnavar) and then use the profile name directly in the command instead of `<institutional_config>` to use your own data and parameters.
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
 - [Preprocessing](#preprocessing)
   - [cat](#cat) - Merge re-sequenced FastQ files
-  - [FastQC](#fastqc) - Raw read QC
 - [Alignment](#alignment)
   - [STAR](#star) - Fast spliced aware genome alignment
 - [Alignment post-processing](#alignment-post-processing)
@@ -47,7 +45,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Variant filtering](#other-steps)
   - [GATK4 VariantFiltration](#gatk4-variantfiltration) - Hard-filtering variant calls based on certain criteria
 - [Quality control](#quality-control)
-  - [MultiQC](#multiqc) - Present QC for raw reads, alignment, read counting and sample similiarity
+  - [FastQC](#fastqc) - Raw read QC
+  - [MultiQC](#multiqc) - Present QC for raw reads from FASTQC
 - [Workflow reporting and genomes](#workflow-reporting-and-genomes)
   - [Reference genome files](#reference-genome-files) - Saving reference genome indices/files
   - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
