@@ -10,7 +10,6 @@ include { SAMTOOLS_STATS }               from '../../modules/nf-core/modules/sam
 
 workflow RECALIBRATE {
     take:
-        skip_bamqc     // boolean: true/false
         skip_samtools  // boolean: true/false
         bam            // channel: [mandatory] bam
         dict           // channel: [mandatory] dict
