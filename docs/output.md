@@ -283,7 +283,7 @@ Plots will show:
 
 More information in the [GATK MarkDuplicates section](#gatk-markduplicates)
 
-Duplicates can arise during sample preparation *e.g.* library construction using PCR.
+Duplicates can arise during sample preparation _e.g._ library construction using PCR.
 Duplicate reads can also result from a single amplification cluster, incorrectly detected as multiple clusters by the optical sensor of the sequencing instrument. These duplication artifacts are referred to as optical duplicates.
 
 <details markdown="1">
