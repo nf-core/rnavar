@@ -37,8 +37,9 @@ if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+ch_multiqc_config        = Channel.fromPath(file("$projectDir/assets/multiqc_config.yml", checkIfExists: true))
 ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
+ch_rnavar_logo           = Channel.fromPath(file("$projectDir/assets/nf-core-rnavar_logo_light.png", checkIfExists: true))
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,6 +118,9 @@ def multiqc_report = []
 
 workflow RNAVAR {
 
+    // To gather all QC reports for MultiQC
+    ch_reports  = Channel.empty()
+    // To gather used softwares versions for MultiQC
     ch_versions = Channel.empty()
 
     //
@@ -166,6 +170,7 @@ workflow RNAVAR {
     FASTQC (
         ch_cat_fastq
     )
+    ch_reports  = ch_reports.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
@@ -213,19 +218,19 @@ workflow RNAVAR {
         ch_genome_bam        = ALIGN_STAR.out.bam
         ch_genome_bam_index  = ALIGN_STAR.out.bai
         ch_transcriptome_bam = ALIGN_STAR.out.bam_transcript
-        ch_samtools_stats    = ALIGN_STAR.out.stats
-        ch_samtools_flagstat = ALIGN_STAR.out.flagstat
-        ch_samtools_idxstats = ALIGN_STAR.out.idxstats
-        ch_star_multiqc      = ALIGN_STAR.out.log_final
+
+        // Gather QC reports
+        ch_reports           = ch_reports.mix(ALIGN_STAR.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_reports           = ch_reports.mix(ALIGN_STAR.out.log_final.collect{it[1]}.ifEmpty([]))
         ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
         // SUBWORKFLOW: Mark duplicates with GATK4
         MARKDUPLICATES(ch_genome_bam)
         ch_genome_bam             = MARKDUPLICATES.out.bam_bai
-        ch_samtools_stats         = MARKDUPLICATES.out.stats
-        ch_samtools_flagstat      = MARKDUPLICATES.out.flagstat
-        ch_samtools_idxstats      = MARKDUPLICATES.out.idxstats
-        ch_markduplicates_multiqc = MARKDUPLICATES.out.metrics
+
+        //Gather QC reports
+        ch_reports                = ch_reports.mix(MARKDUPLICATES.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_reports                = ch_reports.mix(MARKDUPLICATES.out.metrics.collect{it[1]}.ifEmpty([]))
         ch_versions               = ch_versions.mix(MARKDUPLICATES.out.versions.first().ifEmpty(null))
 
         // Subworkflow - SplitNCigarReads from GATK4 over the intervals
@@ -260,6 +265,9 @@ workflow RNAVAR {
                 known_sites_tbi
             )
             ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
+
+            // Gather QC reports
+            ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
             ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
             // MODULE: ApplyBaseRecalibrator from GATK4
@@ -272,8 +280,7 @@ workflow RNAVAR {
             }.set{applybqsr_bam_bai_interval}
 
             RECALIBRATE(
-                ('bamqc' in params.skip_qc),
-                ('samtools' in params.skip_qc),
+                params.skip_qc,
                 applybqsr_bam_bai_interval,
                 PREPARE_GENOME.out.dict,
                 PREPARE_GENOME.out.fai,
@@ -282,6 +289,9 @@ workflow RNAVAR {
 
             bam_variant_calling = RECALIBRATE.out.bam
             bam_recalibrated_qc = RECALIBRATE.out.qc
+
+            // Gather QC reports
+            ch_reports          = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
             ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
         } else {
             bam_variant_calling = splitncigar_bam_bai
@@ -369,33 +379,36 @@ workflow RNAVAR {
                 vep_species,
                 vep_cache_version,
                 vep_cache)
+
+            // Gather QC reports
+            ch_reports  = ch_reports.mix(ANNOTATE.out.reports)
             ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
         }
 
     }
 
-    CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
-    )
+    ch_version_yaml = Channel.empty()
+    CUSTOM_DUMPSOFTWAREVERSIONS (ch_versions.unique().collectFile(name: 'collated_versions.yml'))
+    ch_version_yaml = CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect()
 
     //
     // MODULE: MultiQC
     //
-    workflow_summary    = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
-    ch_workflow_summary = Channel.value(workflow_summary)
 
-    ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    if (!params.skip_qc){
+        workflow_summary    = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
+        ch_workflow_summary = Channel.value(workflow_summary)
+        ch_multiqc_files    =  Channel.empty().mix(ch_version_yaml,
+                                                ch_multiqc_custom_config.collect().ifEmpty([]),
+                                                ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
+                                                ch_reports.collect(),
+                                                ch_multiqc_config,
+                                                ch_rnavar_logo)
 
-    MULTIQC (
-        ch_multiqc_files.collect()
-    )
-    multiqc_report = MULTIQC.out.report.toList()
-    ch_versions    = ch_versions.mix(MULTIQC.out.versions)
+        MULTIQC (ch_multiqc_files.collect())
+        multiqc_report = MULTIQC.out.report.toList()
+    }
+
 }
 
 /*
