@@ -179,15 +179,15 @@ def check_samplesheet(file_in, file_out):
 
     Example:
         This function checks that the samplesheet follows the following structure,
-        see also the `viral recon samplesheet`_::
+        see also the `rnavar test samplesheet`_::
 
             sample,fastq_1,fastq_2
             SAMPLE_PE,SAMPLE_PE_RUN1_1.fastq.gz,SAMPLE_PE_RUN1_2.fastq.gz
             SAMPLE_PE,SAMPLE_PE_RUN2_1.fastq.gz,SAMPLE_PE_RUN2_2.fastq.gz
             SAMPLE_SE,SAMPLE_SE_RUN1_1.fastq.gz,
 
-    .. _viral recon samplesheet:
-        https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
+    .. _rnavar test samplesheet:
+        https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/samplesheet/v1.0/samplesheet.csv
 
     """
     required_columns = {"sample", "fastq_1", "fastq_2"}

@@ -3,14 +3,98 @@
     "homePage": "https://github.com/nf-core/rnavar",
     "repos": {
         "nf-core/modules": {
+            "cat/fastq": {
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
+            },
             "custom/dumpsoftwareversions": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
-            "fastqc": {
+            "ensemblvep": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
-            "multiqc": {
+            "fastqc": {
+                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+            },
+            "gatk4/applybqsr": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/baserecalibrator": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/bedtointervallist": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/createsequencedictionary": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/haplotypecaller": {
+                "git_sha": "68f1c27169946f931ea4318911de5681f88b2961"
+            },
+            "gatk4/indexfeaturefile": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/intervallisttools": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/markduplicates": {
+                "git_sha": "0511e7fbbfa4ba41940d33b687b1cc90227b4eb8"
+            },
+            "gatk4/mergevcfs": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/splitncigarreads": {
+                "git_sha": "10ca39a86f1b227a5535238d02398fec686eba72"
+            },
+            "gatk4/variantfiltration": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gffread": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
+            "gunzip": {
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
+            },
+            "multiqc": {
+                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+            },
+            "samtools/faidx": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/flagstat": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/idxstats": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/index": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/merge": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/sort": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/stats": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "snpeff": {
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
+            "star/align": {
+                "git_sha": "1dddf1ce9443e3d93853d86e7a7aab52e5b4d614"
+            },
+            "star/genomegenerate": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "tabix/bgziptabix": {
+                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+            },
+            "tabix/tabix": {
+                "git_sha": "b3e9b88e80880f450ad79a95b2b7aa05e1de5484"
+            },
+            "untar": {
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
             }
         }
     }
