@@ -48,7 +48,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 | FastQC      | 0.11.9  |
 | STAR        | 2.7.9a  |
 | Samtools    | 1.15.1  |
-| GATK        | 4.2.5.0 |
+| GATK        | 4.2.6.1 |
 | SnpEff      | 5.0     |
 | Ensembl VEP | 104.3   |
 | MultiQC     | 1.12    |
