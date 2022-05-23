@@ -36,7 +36,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 9. Scatter one interval-list into many interval-files ([`GATK4 IntervalListTools`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917392155-IntervalListTools-Picard-))
 10. Call SNPs and indels ([`GATK4 HaplotypeCaller`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897180827-HaplotypeCaller))
 11. Merge multiple VCF files into one VCF ([`GATK4 MergeVCFs`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924817691-MergeVcfs-Picard-))
-12. Index the VCF ([`GATK4 IndexFeatureFile`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917499931-IndexFeatureFile))
+12. Index the VCF ([`Tabix`](http://www.htslib.org/doc/tabix.html))
 13. Filter variant calls based on certain criteria ([`GATK4 VariantFiltration`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897204763-VariantFiltration))
 14. Annotate variants ([`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))
 15. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC`](http://multiqc.info/), [`R`](https://www.r-project.org/))
@@ -49,6 +49,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 | STAR        | 2.7.9a  |
 | Samtools    | 1.15.1  |
 | GATK        | 4.2.6.1 |
+| Tabix       | 1.11    |
 | SnpEff      | 5.0     |
 | Ensembl VEP | 104.3   |
 | MultiQC     | 1.12    |
