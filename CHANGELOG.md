@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] nfcore/rnafusion - 2022/05/24
+## [1.0.0] nfcore/rnavar - 2022/05/24
 
 First production release of the pipeline with latest software versions.
 It is written in Nextflow DSL2 and is based on the GATK4 best-practice pipeline for RNAseq [Ref](https://github.com/gatk-workflows/gatk4-rnaseq-germline-snps-indels).
