@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] nfcore/rnavar - 2022/05/24
 
 First production release of the pipeline with latest software versions.
-It is written in Nextflow DSL2 and is based on the GATK4 best-practice pipeline for RNAseq [Ref](https://github.com/gatk-workflows/gatk4-rnaseq-germline-snps-indels).
+
+This version is based on GATK4 best-practices for RNAseq [Ref](https://github.com/gatk-workflows/gatk4-rnaseq-germline-snps-indels) and it includes:
 
 ### `Added`
 
@@ -20,8 +21,5 @@ It is written in Nextflow DSL2 and is based on the GATK4 best-practice pipeline 
 - Added `MultiQC v1.12` from nf-core modules for QC summary report.
 - Added Scatter i.e., one interval-list into many interval-files to run multiple processes in parallel.
 
-### `Fixed`
-
-### `Dependencies`
-
-### `Deprecated`
+Thanks to everyone that contributed to this release.
+Special thanks to @maxulysse and @FriederikeHanssen for your review and valuable suggestions.
