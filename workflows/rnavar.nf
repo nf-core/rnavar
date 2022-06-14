@@ -94,18 +94,18 @@ def seq_platform        = params.seq_platform ? params.seq_platform : []
 def seq_center          = params.seq_center ? params.seq_center : []
 
 // Initialize file channels based on params
-dbsnp                   = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
-dbsnp_tbi               = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
-known_indels            = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
-known_indels_tbi        = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
+ch_dbsnp                = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
+ch_dbsnp_tbi            = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
+ch_known_indels         = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
+ch_known_indels_tbi     = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
 // Initialize varaint annotation associated channels
-def snpeff_db           = params.snpeff_db         ?:   Channel.empty()
-def vep_cache_version   = params.vep_cache_version ?:   Channel.empty()
-def vep_genome          = params.vep_genome        ?:   Channel.empty()
-def vep_species         = params.vep_species       ?:   Channel.empty()
-def snpeff_cache        = params.snpeff_cache      ?    Channel.fromPath(params.snpeff_cache).collect()  : []
-def vep_cache           = params.vep_cache         ?    Channel.fromPath(params.vep_cache).collect()     : []
+ch_snpeff_db            = params.snpeff_db         ?:   Channel.empty()
+ch_vep_cache_version    = params.vep_cache_version ?:   Channel.empty()
+ch_vep_genome           = params.vep_genome        ?:   Channel.empty()
+ch_vep_species          = params.vep_species       ?:   Channel.empty()
+ch_snpeff_cache         = params.snpeff_cache      ?    Channel.fromPath(params.snpeff_cache).collect()  : []
+ch_vep_cache            = params.vep_cache         ?    Channel.fromPath(params.vep_cache).collect()     : []
 
 // MultiQC reporting
 def multiqc_report = []
@@ -246,7 +246,7 @@ workflow RNAVAR {
 
         // Subworkflow - SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
-        splitncigar_bam_bai = Channel.empty()
+        ch_splitncigar_bam_bai = Channel.empty()
         SPLITNCIGAR (
             ch_genome_bam,
             PREPARE_GENOME.out.fasta,
@@ -254,10 +254,10 @@ workflow RNAVAR {
             PREPARE_GENOME.out.dict,
             ch_interval_list_split
         )
-        splitncigar_bam_bai = SPLITNCIGAR.out.bam_bai
-        ch_versions         = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
+        ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
+        ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
-        bam_variant_calling = Channel.empty()
+        ch_bam_variant_calling = Channel.empty()
 
         if(!params.skip_baserecalibration) {
             // MODULE: BaseRecalibrator from GATK4
@@ -265,21 +265,21 @@ workflow RNAVAR {
 
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
-            known_sites     = dbsnp.concat(known_indels).collect()
-            known_sites_tbi = dbsnp_tbi.concat(known_indels_tbi).collect()
+            ch_known_sites     = ch_dbsnp.concat(ch_known_indels).collect()
+            ch_known_sites_tbi = ch_dbsnp_tbi.concat(ch_known_indels_tbi).collect()
 
             ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-            splitncigar_bam_bai.combine(ch_interval_list_recalib)
+            ch_splitncigar_bam_bai.combine(ch_interval_list_recalib)
                 .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval]
-            }.set{splitncigar_bam_bai_interval}
+            }.set{ch_splitncigar_bam_bai_interval}
 
             GATK4_BASERECALIBRATOR(
-                splitncigar_bam_bai_interval,
+                ch_splitncigar_bam_bai_interval,
                 PREPARE_GENOME.out.fasta,
                 PREPARE_GENOME.out.fai,
                 PREPARE_GENOME.out.dict,
-                known_sites,
-                known_sites_tbi
+                ch_known_sites,
+                ch_known_sites_tbi
             )
             ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
 
@@ -288,43 +288,43 @@ workflow RNAVAR {
             ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
             // MODULE: ApplyBaseRecalibrator from GATK4
-            bam_applybqsr       = splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
-            bam_recalibrated_qc = Channel.empty()
+            ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
+            ch_bam_recalibrated_qc = Channel.empty()
 
             ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-            bam_applybqsr.combine(ch_interval_list_applybqsr)
+            ch_bam_applybqsr.combine(ch_interval_list_applybqsr)
                 .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]
-            }.set{applybqsr_bam_bai_interval}
+            }.set{ch_applybqsr_bam_bai_interval}
 
             RECALIBRATE(
                 params.skip_multiqc,
-                applybqsr_bam_bai_interval,
+                ch_applybqsr_bam_bai_interval,
                 PREPARE_GENOME.out.dict,
                 PREPARE_GENOME.out.fai,
                 PREPARE_GENOME.out.fasta
             )
 
-            bam_variant_calling = RECALIBRATE.out.bam
-            bam_recalibrated_qc = RECALIBRATE.out.qc
+            ch_bam_variant_calling = RECALIBRATE.out.bam
+            ch_bam_recalibrated_qc = RECALIBRATE.out.qc
 
             // Gather QC reports
-            ch_reports          = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
-            ch_versions         = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
+            ch_reports  = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
+            ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
         } else {
-            bam_variant_calling = splitncigar_bam_bai
+            ch_bam_variant_calling = ch_splitncigar_bam_bai
         }
 
         // MODULE: HaplotypeCaller from GATK4
         interval_flag = params.no_intervals
         // Run haplotyper even in the absence of dbSNP files
         if (!params.dbsnp){
-            dbsnp = []
-            dbsnp_tbi = []
+            ch_dbsnp = []
+            ch_dbsnp_tbi = []
         }
 
-        haplotypecaller_vcf = Channel.empty()
+        ch_haplotypecaller_vcf = Channel.empty()
 
-        haplotypecaller_interval_bam = bam_variant_calling.combine(ch_interval_list_split)
+        ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
                 new_meta = meta.clone()
                 new_meta.id = meta.id + "_" + interval_list.baseName
@@ -333,15 +333,15 @@ workflow RNAVAR {
             }
 
         GATK4_HAPLOTYPECALLER(
-            haplotypecaller_interval_bam,
+            ch_haplotypecaller_interval_bam,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,
             PREPARE_GENOME.out.dict,
-            dbsnp,
-            dbsnp_tbi
+            ch_dbsnp,
+            ch_dbsnp_tbi
         )
 
-        haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
+        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
             .map{ meta, vcf ->
                 meta.id = meta.sample
                 [meta, vcf]}
@@ -350,17 +350,17 @@ workflow RNAVAR {
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
 
         GATK4_MERGEVCFS(
-            haplotypecaller_raw,
+            ch_haplotypecaller_raw,
             PREPARE_GENOME.out.dict
         )
-        haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
+        ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
         TABIX(
-            haplotypecaller_vcf
+            ch_haplotypecaller_vcf
         )
 
-        haplotypecaller_vcf_tbi = haplotypecaller_vcf
+        ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
             .join(TABIX.out.tbi, by: [0], remainder: true)
             .join(TABIX.out.csi, by: [0], remainder: true)
             .map{meta, vcf, tbi, csi ->
@@ -368,34 +368,34 @@ workflow RNAVAR {
                 else [meta, vcf, csi]
             }
 
-        ch_versions             = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
-        final_vcf               = haplotypecaller_vcf
+        ch_versions     = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
+        ch_final_vcf    = ch_haplotypecaller_vcf
 
         // MODULE: VariantFiltration from GATK4
         if (!params.skip_variantfiltration && !params.bam_csi_index ) {
 
             GATK4_VARIANTFILTRATION(
-                haplotypecaller_vcf_tbi,
+                ch_haplotypecaller_vcf_tbi,
                 PREPARE_GENOME.out.fasta,
                 PREPARE_GENOME.out.fai,
                 PREPARE_GENOME.out.dict
             )
 
-            filtered_vcf    = GATK4_VARIANTFILTRATION.out.vcf
-            final_vcf       = filtered_vcf
+            ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
+            ch_final_vcf    = ch_filtered_vcf
             ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
         }
 
         if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
             ANNOTATE(
-                final_vcf,
+                ch_final_vcf,
                 params.annotate_tools,
-                snpeff_db,
-                snpeff_cache,
-                vep_genome,
-                vep_species,
-                vep_cache_version,
-                vep_cache)
+                ch_snpeff_db,
+                ch_snpeff_cache,
+                ch_vep_genome,
+                ch_vep_species,
+                ch_vep_cache_version,
+                ch_vep_cache)
 
             // Gather QC reports
             ch_reports  = ch_reports.mix(ANNOTATE.out.reports)
