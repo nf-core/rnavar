@@ -253,7 +253,7 @@
             "default": "",
             "fa_icon": "fas fa-toolbox",
             "properties": {
-                "stand_call_conf": {
+                "gatk_hc_call_conf": {
                     "type": "number",
                     "default": 20,
                     "fa_icon": "fas fa-hammer",
@@ -363,10 +363,10 @@
                     "description": "Skip variant annotation",
                     "help_text": "Set this parameter if you don't want to run variant annotation."
                 },
-                "skip_qc": {
+                "skip_multiqc": {
                     "type": "boolean",
-                    "description": "Skip QC reports",
-                    "help_text": "This parameter disable all QC reports from recalibrated BAM file."
+                    "description": "Skip MultiQC reports",
+                    "help_text": "This parameter disable all QC reports"
                 }
             }
         },
@@ -376,7 +376,7 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define parameters of the tools used in the pipeline",
             "properties": {
-                "scatter_count": {
+                "gatk_interval_scatter_count": {
                     "type": "integer",
                     "default": 25,
                     "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
@@ -387,25 +387,25 @@
                     "description": "Do not use gene interval file during variant calling",
                     "help_text": "This parameter, if set to True, does not use the gene intervals during the variant calling step, which then results in variants from all regions including non-genic. Default is False"
                 },
-                "window": {
+                "gatk_vf_window_size": {
                     "type": "integer",
                     "default": 35,
                     "description": "The window size (in bases) in which to evaluate clustered SNPs.",
                     "help_text": "This parameter is used by GATK variant filteration step. It defines the window size (in bases) in which to evaluate clustered SNPs. It has to be used together with the other option 'cluster'."
                 },
-                "cluster": {
+                "gatk_vf_cluster_size": {
                     "type": "integer",
                     "default": 3,
                     "description": "The number of SNPs which make up a cluster. Must be at least 2.",
                     "help_text": "This parameter is used by GATK variant filteration step. It defines the number of SNPs which make up a cluster within a window. Must be at least 2."
                 },
-                "fs_filter": {
+                "gatk_vf_fs_filter": {
                     "type": "number",
                     "default": 30,
                     "description": "Value to be used for the FisherStrand (FS) filter",
                     "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 30.0"
                 },
-                "qd_filter": {
+                "gatk_vf_qd_filter": {
                     "type": "number",
                     "default": 2,
                     "description": "Value to be used for the QualByDepth (QD) filter",

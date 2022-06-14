@@ -14,10 +14,14 @@ workflow BAM_SORT_SAMTOOLS {
 
     ch_versions = Channel.empty()
 
-    SAMTOOLS_SORT      ( ch_bam )
+    SAMTOOLS_SORT (
+        ch_bam
+    )
     ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
 
-    SAMTOOLS_INDEX     ( SAMTOOLS_SORT.out.bam )
+    SAMTOOLS_INDEX (
+        SAMTOOLS_SORT.out.bam
+    )
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     SAMTOOLS_SORT.out.bam
@@ -33,7 +37,9 @@ workflow BAM_SORT_SAMTOOLS {
         }
         .set { ch_bam_bai }
 
-    BAM_STATS_SAMTOOLS ( ch_bam_bai )
+    BAM_STATS_SAMTOOLS (
+        ch_bam_bai
+    )
     ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions.first())
 
     emit:

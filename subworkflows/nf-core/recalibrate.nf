@@ -24,11 +24,18 @@ workflow RECALIBRATE {
     bam_recalibrated       = Channel.empty()
     bam_reports            = Channel.empty()
 
-    APPLYBQSR(bam, fasta, fai, dict)
+    APPLYBQSR (
+        bam,
+        fasta,
+        fai,
+        dict
+    )
     bam_recalibrated = APPLYBQSR.out.bam
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
 
-    SAMTOOLS_INDEX(bam_recalibrated)
+    SAMTOOLS_INDEX (
+        bam_recalibrated
+    )
     bam_recalibrated_index = bam_recalibrated
         .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
         .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)

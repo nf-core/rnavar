@@ -126,7 +126,9 @@ workflow RNAVAR {
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
-    PREPARE_GENOME (prepareToolIndices)
+    PREPARE_GENOME (
+        prepareToolIndices
+    )
     ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
@@ -180,7 +182,10 @@ workflow RNAVAR {
     //
 
     ch_interval_list = Channel.empty()
-    GATK4_BEDTOINTERVALLIST(ch_genome_bed, PREPARE_GENOME.out.dict)
+    GATK4_BEDTOINTERVALLIST(
+        ch_genome_bed,
+        PREPARE_GENOME.out.dict
+    )
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
 
@@ -190,7 +195,9 @@ workflow RNAVAR {
 
     ch_interval_list_split = Channel.empty()
     if (!params.skip_intervallisttools) {
-        GATK4_INTERVALLISTTOOLS(ch_interval_list)
+        GATK4_INTERVALLISTTOOLS(
+            ch_interval_list
+        )
         ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
     }
     else ch_interval_list_split = ch_interval_list
@@ -227,7 +234,9 @@ workflow RNAVAR {
         ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
         // SUBWORKFLOW: Mark duplicates with GATK4
-        MARKDUPLICATES(ch_genome_bam)
+        MARKDUPLICATES (
+            ch_genome_bam
+        )
         ch_genome_bam             = MARKDUPLICATES.out.bam_bai
 
         //Gather QC reports
@@ -238,7 +247,13 @@ workflow RNAVAR {
         // Subworkflow - SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
         splitncigar_bam_bai = Channel.empty()
-        SPLITNCIGAR(ch_genome_bam, PREPARE_GENOME.out.fasta, PREPARE_GENOME.out.fai, PREPARE_GENOME.out.dict, ch_interval_list_split)
+        SPLITNCIGAR (
+            ch_genome_bam,
+            PREPARE_GENOME.out.fasta,
+            PREPARE_GENOME.out.fai,
+            PREPARE_GENOME.out.dict,
+            ch_interval_list_split
+        )
         splitncigar_bam_bai = SPLITNCIGAR.out.bam_bai
         ch_versions         = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
@@ -282,7 +297,7 @@ workflow RNAVAR {
             }.set{applybqsr_bam_bai_interval}
 
             RECALIBRATE(
-                params.skip_qc,
+                params.skip_multiqc,
                 applybqsr_bam_bai_interval,
                 PREPARE_GENOME.out.dict,
                 PREPARE_GENOME.out.fai,
@@ -397,7 +412,7 @@ workflow RNAVAR {
     // MODULE: MultiQC
     //
 
-    if (!params.skip_qc){
+    if (!params.skip_multiqc){
         workflow_summary    = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
         ch_workflow_summary = Channel.value(workflow_summary)
         ch_multiqc_files    =  Channel.empty().mix(ch_version_yaml,

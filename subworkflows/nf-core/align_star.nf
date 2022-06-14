@@ -21,13 +21,22 @@ workflow ALIGN_STAR {
     //
     // Map reads with STAR
     //
-    STAR_ALIGN ( reads, index, gtf, star_ignore_sjdbgtf, seq_platform, seq_center )
+    STAR_ALIGN (
+        reads,
+        index,
+        gtf,
+        star_ignore_sjdbgtf,
+        seq_platform,
+        seq_center
+    )
     ch_versions = ch_versions.mix(STAR_ALIGN.out.versions.first())
 
     //
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
-    BAM_SORT_SAMTOOLS ( STAR_ALIGN.out.bam )
+    BAM_SORT_SAMTOOLS (
+        STAR_ALIGN.out.bam
+    )
     ch_versions = ch_versions.mix(BAM_SORT_SAMTOOLS.out.versions.first())
 
     emit:

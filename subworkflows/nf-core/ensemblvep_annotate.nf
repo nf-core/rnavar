@@ -17,9 +17,18 @@ workflow ENSEMBLVEP_ANNOTATE {
 
     ch_versions = Channel.empty()
 
-    ENSEMBLVEP(vcf, vep_genome, vep_species, vep_cache_version, vep_cache)
+    ENSEMBLVEP (
+        vcf,
+        vep_genome,
+        vep_species,
+        vep_cache_version,
+        vep_cache
+    )
     ch_versions = ch_versions.mix(ENSEMBLVEP.out.versions.first())
-    TABIX_BGZIPTABIX(ENSEMBLVEP.out.vcf)
+
+    TABIX_BGZIPTABIX (
+        ENSEMBLVEP.out.vcf
+    )
     ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions.first())
 
     emit:
