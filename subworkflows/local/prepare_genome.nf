@@ -38,7 +38,6 @@ workflow PREPARE_GENOME {
     //
     // Uncompress GTF annotation file or create from GFF3 if required
     //
-
     ch_gffread_version = Channel.empty()
     if (params.gtf) {
         if (params.gtf.endsWith('.gz')) {
@@ -107,9 +106,7 @@ workflow PREPARE_GENOME {
     //
     // Uncompress STAR index or generate from scratch if required
     //
-
     ch_star_index = Channel.empty()
-
     if ('star' in prepare_tool_indices) {
         if (params.star_index) {
             if (params.star_index.endsWith('.tar.gz')) {

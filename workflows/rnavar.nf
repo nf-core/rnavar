@@ -170,7 +170,6 @@ workflow RNAVAR {
     //
     // MODULE: Run FastQC
     //
-
     FASTQC (
         ch_cat_fastq
     )
@@ -180,7 +179,6 @@ workflow RNAVAR {
     //
     // PREPARE THE INTERVAL LIST FROM GTF FILE
     //
-
     ch_interval_list = Channel.empty()
     GATK4_BEDTOINTERVALLIST(
         ch_genome_bed,
@@ -192,7 +190,6 @@ workflow RNAVAR {
     //
     // MODULE: IntervalListTools from GATK4
     //
-
     ch_interval_list_split = Channel.empty()
     if (!params.skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(
@@ -205,7 +202,6 @@ workflow RNAVAR {
     //
     // SUBWORKFLOW: Alignment with STAR
     //
-
     ch_genome_bam                 = Channel.empty()
     ch_genome_bam_index           = Channel.empty()
     ch_samtools_stats             = Channel.empty()
@@ -411,7 +407,6 @@ workflow RNAVAR {
     //
     // MODULE: MultiQC
     //
-
     if (!params.skip_multiqc){
         workflow_summary    = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
         ch_workflow_summary = Channel.value(workflow_summary)
