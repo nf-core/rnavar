@@ -186,19 +186,19 @@
                     "description": "Do not use GTF file during STAR index buidling step",
                     "help_text": "Do not use parameter --sjdbGTFfile <GTF file> during the STAR genomeGenerate process."
                 },
-                "star_limitBAMsortRAM": {
+                "star_max_memory_bamsort": {
                     "type": "integer",
                     "default": 0,
                     "description": "Option to limit RAM when sorting BAM file. Value to be specified in bytes. If 0, will be set to the genome index size.",
                     "help_text": "This parameter specifies the maximum available RAM (bytes) for sorting BAM during STAR alignment."
                 },
-                "star_outBAMsortingBinsN": {
+                "star_bins_bamsort": {
                     "type": "integer",
                     "default": 50,
                     "description": "Specifies the number of genome bins for coordinate-sorting",
                     "help_text": "This parameter specifies the number of bins to be used for coordinate sorting during STAR alignment step."
                 },
-                "star_limitOutSJcollapsed": {
+                "star_max_collapsed_junc": {
                     "type": "integer",
                     "default": 1000000,
                     "description": "Specifies the maximum number of collapsed junctions"
