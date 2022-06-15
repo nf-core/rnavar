@@ -9,3 +9,56 @@ report_section_order:
     order: -1001
 
 export_plots: true
+
+# Run only these modules
+run_modules:
+  - custom_content
+  - fastqc
+  - star
+  - samtools
+  - picard
+  - gatk
+  - snpeff
+  - vep
+
+# Order of modules
+module_order:
+  - fastqc:
+      name: "FastQC (raw)"
+      path_filters:
+        - "*_val_*.zip"
+  - star:
+      name: "Read Alignment (STAR)"
+  - samtools:
+      name: "Samtools Flagstat"
+  - picard:
+      name: "GATK4 MarkDuplicates"
+      info: "Metrics generated either by GATK4 MarkDuplicates"
+  - qualimap:
+      name: "Qualimap"
+  - gatk:
+      name: "GATK4 BQSR"
+  - snpeff:
+      name: "SNPeff"
+  - vep:
+      name: "VEP"
+
+extra_fn_clean_exts:
+  - "_val"
+
+# Don't show % Dups in the General Stats table (we have this from Picard)
+table_columns_visible:
+  fastqc:
+    percent_duplicates: False
+
+sp:
+  samtools/stats:
+    fn: "*.aligned.bam.stats"
+  samtools/flagstat:
+    fn: "*.aligned.bam.flagstat"
+  picard/markdups:
+    fn: "*.markdup.sorted.metrics"
+  snpeff:
+    contents: "SnpEff_version"
+    max_filesize: 5000000
+
