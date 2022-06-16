@@ -130,18 +130,18 @@ GATK best practices has been followed in this pipeline for RNA analysis, hence i
 
 > **NB:** Base recalibration can be turned off using `--skip_baserecalibration true` option. This is useful when you are analyzing data from non-model organisms where there is no known variant datasets exist.
 
-`GATK SplitNCigarReads` is very time consuming step, therefore we made an attempt to break the GTF file into multiple chunks (scatters) using `GATK IntervalListTools` to run the process independently on each chunk in a parallel way to speed up the analysis. The default number of splits is set to 25, that means the GTF file is split into 25 smaller files and run `GATK SplitNCigarReads` on each of them in parallel. You can modify the number of splits using parameter `--scatter_count`.
+`GATK SplitNCigarReads` is very time consuming step, therefore we made an attempt to break the GTF file into multiple chunks (scatters) using `GATK IntervalListTools` to run the process independently on each chunk in a parallel way to speed up the analysis. The default number of splits is set to 25, that means the GTF file is split into 25 smaller files and run `GATK SplitNCigarReads` on each of them in parallel. You can modify the number of splits using parameter `--gatk_interval_scatter_count`.
 
 ## Variant calling and filtering
 
-`GATK HaplotypeCaller` is used for variant calling with default minimum phred-scaled confidence threshold as 20. This value can be changed using paramerter `--stand_call_conf`.
+`GATK HaplotypeCaller` is used for variant calling with default minimum phred-scaled confidence threshold as 20. This value can be changed using paramerter `--gatk_hc_call_conf`.
 
 The pipeline runs a hard-filtering step on the variants by default. It does not filter out any variants, rather it flags i.e. PASS or other flags such as FS, QD, SnpCluster, etc. in FILTER column of the VCF. The following are the default filter criteria, however it can be changed using the respective parameters.
 
-- `--cluster` is set to 3. It is the number of SNPs which make up a cluster.
-- `--window` is set to 35. The window size (in bases) in which to evaluate clustered SNPs.
-- `--fs_filter` is set to 30.0. Filter based on FisherStrand > 30.0. It is the Phred-scaled probability that there is strand bias at the site.
-- `--qd_filter` is set to 2.0 meaning filter variants if Quality By Depth filter is < 2.0.
+- `--gatk_vf_cluster_size` is set to 3. It is the number of SNPs which make up a cluster.
+- `--gatk_vf_window_size` is set to 35. The window size (in bases) in which to evaluate clustered SNPs.
+- `--gatk_vf_fs_filter` is set to 30.0. Filter based on FisherStrand > 30.0. It is the Phred-scaled probability that there is strand bias at the site.
+- `--gatk_vf_qd_filter` is set to 2.0 meaning filter variants if Quality By Depth filter is < 2.0.
 
 Variant filtering is an optional step. You can skip it using `--skip_variantfiltration` parameter.
 

@@ -15,9 +15,16 @@ workflow SNPEFF_ANNOTATE {
 
     ch_versions = Channel.empty()
 
-    SNPEFF(vcf, snpeff_db, snpeff_cache)
+    SNPEFF (
+        vcf,
+        snpeff_db,
+        snpeff_cache
+    )
     ch_versions = ch_versions.mix(SNPEFF.out.versions.first())
-    TABIX_BGZIPTABIX(SNPEFF.out.vcf)
+
+    TABIX_BGZIPTABIX (
+        SNPEFF.out.vcf
+    )
     ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions.first())
 
     emit:

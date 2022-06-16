@@ -14,13 +14,17 @@ workflow MARKDUPLICATES {
 
     ch_versions = Channel.empty()
 
-    GATK4_MARKDUPLICATES(bam)
+    GATK4_MARKDUPLICATES (
+        bam
+    )
     ch_versions = ch_versions.mix(GATK4_MARKDUPLICATES.out.versions.first())
 
     //
     // Index BAM file and run samtools stats, flagstat and idxstats
     //
-    SAMTOOLS_INDEX(GATK4_MARKDUPLICATES.out.bam)
+    SAMTOOLS_INDEX (
+        GATK4_MARKDUPLICATES.out.bam
+    )
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     GATK4_MARKDUPLICATES.out.bam
@@ -31,7 +35,9 @@ workflow MARKDUPLICATES {
             else [meta, bam, csi]}
         .set{ch_bam_bai}
 
-    BAM_STATS_SAMTOOLS(ch_bam_bai)
+    BAM_STATS_SAMTOOLS (
+        ch_bam_bai
+    )
     ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions.first())
 
     emit:
