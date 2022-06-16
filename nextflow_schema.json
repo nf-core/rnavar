@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/rnavar/master/nextflow_schema.json",
     "title": "nf-core/rnavar pipeline parameters",
-    "description": "gatk4 rna variant calling",
+    "description": "GATK4 RNA variant calling pipeline",
     "type": "object",
     "definitions": {
         "input_output_options": {
@@ -10,26 +10,22 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "input"
-            ],
+            "required": ["input", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
-                    "fa_icon": "fas fa-dna",
-                    "description": "Input FastQ files.",
-                    "help_text": "Use this to specify the location of your input FastQ files. For example:\n\n```bash\n--input 'path/to/data/sample_*_{1,2}.fastq'\n```\n\nPlease note the following requirements:\n\n1. The path must be enclosed in quotes\n2. The path must have at least one `*` wildcard character\n3. When using the pipeline with paired end data, the path must use `{1,2}` notation to specify read pairs.\n\nIf left unspecified, a default pattern is used: `data/*{1,2}.fastq.gz`"
-                },
-                "single_end": {
-                    "type": "boolean",
-                    "description": "Specifies that the input is single-end reads.",
-                    "fa_icon": "fas fa-align-center",
-                    "help_text": "By default, the pipeline expects paired-end data. If you have single-end data, you need to specify `--single_end` on the command line when you launch the pipeline. A normal glob pattern, enclosed in quotation marks, can then be used for `--input`. For example:\n\n```bash\n--single_end --input '*.fastq'\n```\n\nIt is not possible to run a mixture of single-end and paired-end files in one run."
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.csv$",
+                    "schema": "assets/schema_input.json",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/rnavar/usage#samplesheet-input).",
+                    "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
                     "type": "string",
-                    "description": "The output directory where the results will be saved.",
-                    "default": "./results",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
                 "email": {
@@ -38,6 +34,15 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                },
+                "multiqc_title": {
+                    "type": "string",
+                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
+                    "fa_icon": "fas fa-file-signature"
+                },
+                "save_merged_fastq": {
+                    "type": "boolean",
+                    "description": "Save FastQ files after merging re-sequenced libraries in the results directory."
                 }
             }
         },
@@ -45,22 +50,38 @@
             "title": "Reference genome options",
             "type": "object",
             "fa_icon": "fas fa-dna",
-            "description": "Options for the reference genome indices used to align reads.",
+            "description": "Reference genome related files and options required for the workflow.",
             "properties": {
                 "genome": {
                     "type": "string",
                     "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`.\n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
                 },
                 "fasta": {
                     "type": "string",
-                    "fa_icon": "fas fa-font",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
-                    "help_text": "If you have no genome reference available, the pipeline can build one using a FASTA file. This requires additional time and resources, so it's better to use a pre-build index if possible."
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "dict": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to FASTA dictionary file.",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
+                },
+                "fasta_fai": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference",
+                    "description": "Path to FASTA reference index."
                 },
                 "igenomes_base": {
                     "type": "string",
+                    "format": "directory-path",
                     "description": "Directory / URL base for iGenomes references.",
                     "default": "s3://ngi-igenomes/igenomes",
                     "fa_icon": "fas fa-cloud-download-alt",
@@ -72,129 +93,323 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "gtf": {
+                    "type": "string",
+                    "description": "Path to GTF annotation file.",
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified."
+                },
+                "gff": {
+                    "type": "string",
+                    "description": "Path to GFF3 annotation file.",
+                    "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
+                },
+                "exon_bed": {
+                    "type": "string",
+                    "description": "Path to BED file containing exon intervals. This will be created from the GTF file if not specified."
+                },
+                "read_length": {
+                    "type": "number",
+                    "default": 151,
+                    "description": "Read length",
+                    "help_text": "Specify the read length for the STAR aligner."
+                },
+                "save_reference": {
+                    "type": "boolean",
+                    "help_text": "If the STAR index is generated by the pipeline, then please use this parameter to save it to your results folder. These index can then be used for future pipeline runs, reducing processing times.",
+                    "description": "If generated by the pipeline, save the STAR index in the results directory."
+                },
+                "known_indels": {
+                    "type": "string",
+                    "description": "Path to known indels VCF file"
+                },
+                "known_indels_tbi": {
+                    "type": "string",
+                    "description": "Path to known indels index file"
+                },
+                "dbsnp": {
+                    "type": "string",
+                    "description": "Path to dbSNP VCF file"
+                },
+                "dbsnp_tbi": {
+                    "type": "string",
+                    "description": "Path to dbSNP VCF index file"
+                },
+                "snpeff_db": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "snpEff DB version"
+                },
+                "vep_genome": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP genome",
+                    "help_text": "If you use AWS iGenomes or a local resource with genomes.conf, this has already been set for you appropriately."
+                },
+                "vep_species": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP species",
+                    "help_text": "If you use AWS iGenomes or a local resource with genomes.conf, this has already been set for you appropriately."
+                },
+                "vep_cache_version": {
+                    "type": "string",
+                    "fa_icon": "fas fa-tag",
+                    "description": "VEP cache version"
                 }
             }
         },
-        "generic_options": {
-            "title": "Generic options",
+        "alignment_options": {
+            "title": "Alignment options",
             "type": "object",
-            "fa_icon": "fas fa-file-import",
-            "description": "Less common options for the pipeline, typically set in a config file.",
-            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define parameters related to read alignment",
             "properties": {
-                "help": {
-                    "type": "boolean",
-                    "description": "Display help text.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-question-circle"
-                },
-                "publish_dir_mode": {
+                "aligner": {
                     "type": "string",
-                    "default": "copy",
-                    "hidden": true,
-                    "description": "Method used to save pipeline results to output directory.",
-                    "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
-                    "fa_icon": "fas fa-copy",
-                    "enum": [
-                        "symlink",
-                        "rellink",
-                        "link",
-                        "copy",
-                        "copyNoFollow",
-                        "move"
-                    ]
+                    "default": "star",
+                    "description": "Specifies the alignment algorithm to use. Currently available option is 'star'",
+                    "help_text": "This parameter define which aligner is to be used for aligning the RNA reads to the reference genome. Currently only STAR aligner is supported. So use 'star' as the value for this option."
                 },
-                "validate_params": {
-                    "type": "boolean",
-                    "description": "Boolean whether to validate parameters against the schema at runtime",
-                    "default": true,
-                    "fa_icon": "fas fa-check-square",
-                    "hidden": true
-                },
-                "email_on_fail": {
+                "star_index": {
                     "type": "string",
-                    "description": "Email address for completion summary, only when pipeline fails.",
-                    "fa_icon": "fas fa-exclamation-triangle",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                    "hidden": true,
-                    "help_text": "This works exactly as with `--email`, except emails are only sent if the workflow is not successful."
+                    "description": "Path to STAR index folder or compressed file (tar.gz)",
+                    "help_text": "This parameter can be used if there is an pre-defined STAR index available. You can either give the full path to the index directory or a compressed file in tar.gz format."
                 },
-                "plaintext_email": {
+                "star_twopass": {
                     "type": "boolean",
-                    "description": "Send plain-text email instead of HTML.",
-                    "fa_icon": "fas fa-remove-format",
-                    "hidden": true,
-                    "help_text": "Set to receive plain-text e-mails instead of HTML formatted."
+                    "description": "Enable STAR 2-pass mapping mode.",
+                    "help_text": "This parameter enables STAR to perform 2-pass mapping. Default true."
                 },
-                "max_multiqc_email_size": {
-                    "type": "string",
-                    "description": "File size limit when attaching MultiQC reports to summary emails.",
-                    "default": "25.MB",
-                    "fa_icon": "fas fa-file-upload",
-                    "hidden": true,
-                    "help_text": "If file generated by pipeline exceeds the threshold, it will not be attached."
-                },
-                "monochrome_logs": {
+                "star_ignore_sjdbgtf": {
                     "type": "boolean",
-                    "description": "Do not use coloured log outputs.",
-                    "fa_icon": "fas fa-palette",
-                    "hidden": true,
-                    "help_text": "Set to disable colourful command line output and live life in monochrome."
+                    "description": "Do not use GTF file during STAR index buidling step",
+                    "help_text": "Do not use parameter --sjdbGTFfile <GTF file> during the STAR genomeGenerate process."
                 },
-                "multiqc_config": {
-                    "type": "string",
-                    "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog",
-                    "hidden": true
-                },
-                "tracedir": {
-                    "type": "string",
-                    "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
-                    "fa_icon": "fas fa-cogs",
-                    "hidden": true
-                },
-                "show_hidden_params": {
-                    "type": "boolean",
-                    "fa_icon": "far fa-eye-slash",
-                    "description": "Show all params when using `--help`",
-                    "hidden": true,
-                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
-                }
-            }
-        },
-        "max_job_request_options": {
-            "title": "Max job request options",
-            "type": "object",
-            "fa_icon": "fab fa-acquisitions-incorporated",
-            "description": "Set the top limit for requested resources for any single job.",
-            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
-            "properties": {
-                "max_cpus": {
+                "star_max_memory_bamsort": {
                     "type": "integer",
-                    "description": "Maximum number of CPUs that can be requested    for any single job.",
-                    "default": 16,
-                    "fa_icon": "fas fa-microchip",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                    "default": 0,
+                    "description": "Option to limit RAM when sorting BAM file. Value to be specified in bytes. If 0, will be set to the genome index size.",
+                    "help_text": "This parameter specifies the maximum available RAM (bytes) for sorting BAM during STAR alignment."
                 },
-                "max_memory": {
-                    "type": "string",
-                    "description": "Maximum amount of memory that can be requested for any single job.",
-                    "default": "128.GB",
-                    "fa_icon": "fas fa-memory",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                "star_bins_bamsort": {
+                    "type": "integer",
+                    "default": 50,
+                    "description": "Specifies the number of genome bins for coordinate-sorting",
+                    "help_text": "This parameter specifies the number of bins to be used for coordinate sorting during STAR alignment step."
                 },
-                "max_time": {
+                "star_max_collapsed_junc": {
+                    "type": "integer",
+                    "default": 1000000,
+                    "description": "Specifies the maximum number of collapsed junctions"
+                },
+                "seq_center": {
                     "type": "string",
-                    "description": "Maximum amount of time that can be requested for any single job.",
-                    "default": "240.h",
-                    "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
-                    "hidden": true,
-                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                    "description": "Sequencing center information to be added to read group of BAM files.",
+                    "help_text": "This parameter is required for creating a proper BAM header to use in the downstream analysis of GATK. "
+                },
+                "seq_platform": {
+                    "type": "string",
+                    "default": "illumina",
+                    "description": "Specify the sequencing platform used",
+                    "help_text": "This parameter is required for creating a proper BAM header to use in the downstream analysis of GATK. "
+                },
+                "save_unaligned": {
+                    "type": "boolean",
+                    "description": "Where possible, save unaligned reads from aligner to the results directory.",
+                    "help_text": "This may either be in the form of FastQ or BAM files depending on the options available for that particular tool."
+                },
+                "save_align_intermeds": {
+                    "type": "boolean",
+                    "description": "Save the intermediate BAM files from the alignment step.",
+                    "help_text": "By default, intermediate BAM files will not be saved. The final BAM files created after the appropriate filtering step are always saved to limit storage usage. Set this parameter to also save other intermediate BAM files."
+                },
+                "bam_csi_index": {
+                    "type": "boolean",
+                    "description": "Create a CSI index for BAM files instead of the traditional BAI index. This will be required for genomes with larger chromosome sizes."
+                }
+            }
+        },
+        "preprocessing": {
+            "title": "Preprocessing of alignment",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
+                "remove_duplicates": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
+                    "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
+                    "hidden": false
+                }
+            }
+        },
+        "variant_calling": {
+            "title": "Variant calling",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
+                "gatk_hc_call_conf": {
+                    "type": "number",
+                    "default": 20,
+                    "fa_icon": "fas fa-hammer",
+                    "description": "The minimum phred-scaled confidence threshold at which variants should be called.",
+                    "help_text": "Specify the minimum phred-scaled confidence threshold at which variants should be called.",
+                    "hidden": false
+                }
+            }
+        },
+        "variant_annotation": {
+            "title": "Variant Annotation",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
+                "annotate_tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify which tools RNAvar should use for annotating variants. Values can be 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "help_text": "List of tools to be used for variant annotation.",
+                    "pattern": "^((snpeff|vep|merge)*(,)*)*$",
+                    "hidden": true
+                },
+                "annotation_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-database",
+                    "description": "Enable the use of cache for annotation",
+                    "help_text": "And disable usage of snpeff and vep specific containers for annotation\n\nTo be used with `--snpeff_cache` and/or `--vep_cache`",
+                    "hidden": true
+                },
+                "cadd_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-database",
+                    "description": "Enable CADD cache.",
+                    "hidden": true
+                },
+                "cadd_indels": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD InDels file.",
+                    "hidden": true
+                },
+                "cadd_indels_tbi": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD InDels index.",
+                    "hidden": true
+                },
+                "cadd_wg_snvs": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD SNVs file.",
+                    "hidden": true
+                },
+                "cadd_wg_snvs_tbi": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to CADD SNVs index.",
+                    "hidden": true
+                },
+                "genesplicer": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-gavel",
+                    "description": "Enable the use of the VEP GeneSplicer plugin.",
+                    "hidden": true
+                },
+                "snpeff_cache": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "Path to snpEff cache",
+                    "help_text": "To be used with `--annotation_cache`",
+                    "hidden": true
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "Path to VEP cache",
+                    "help_text": "To be used with `--annotation_cache`",
+                    "hidden": true
+                }
+            }
+        },
+        "pipeline_stage_options": {
+            "title": "Pipeline stage options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define parameters that control the stages in the pipeline",
+            "properties": {
+                "skip_baserecalibration": {
+                    "type": "boolean",
+                    "description": "Skip the process of base recalibration steps i.e., GATK BaseRecalibrator and GATK ApplyBQSR.",
+                    "help_text": "This parameter disable the base recalibration step, thus using a un-calibrated BAM file for variant calling."
+                },
+                "skip_intervallisttools": {
+                    "type": "boolean",
+                    "description": "Skip the process of preparing interval lists for the GATK variant calling step",
+                    "help_text": "This parameter disable preparing multiple interval lists to use with HaplotypeCaller module of GATK. It is recommended not to disable the step as it is required to run the variant calling correctly."
+                },
+                "skip_variantfiltration": {
+                    "type": "boolean",
+                    "description": "Skip variant filtering of GATK",
+                    "help_text": "Set this parameter if you don't want to filter any variants."
+                },
+                "skip_variantannotation": {
+                    "type": "boolean",
+                    "description": "Skip variant annotation",
+                    "help_text": "Set this parameter if you don't want to run variant annotation."
+                },
+                "skip_multiqc": {
+                    "type": "boolean",
+                    "description": "Skip MultiQC reports",
+                    "help_text": "This parameter disable all QC reports"
+                }
+            }
+        },
+        "tool_parameters": {
+            "title": "Tool parameters",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define parameters of the tools used in the pipeline",
+            "properties": {
+                "gatk_interval_scatter_count": {
+                    "type": "integer",
+                    "default": 25,
+                    "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
+                    "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
+                },
+                "no_intervals": {
+                    "type": "boolean",
+                    "description": "Do not use gene interval file during variant calling",
+                    "help_text": "This parameter, if set to True, does not use the gene intervals during the variant calling step, which then results in variants from all regions including non-genic. Default is False"
+                },
+                "gatk_vf_window_size": {
+                    "type": "integer",
+                    "default": 35,
+                    "description": "The window size (in bases) in which to evaluate clustered SNPs.",
+                    "help_text": "This parameter is used by GATK variant filteration step. It defines the window size (in bases) in which to evaluate clustered SNPs. It has to be used together with the other option 'cluster'."
+                },
+                "gatk_vf_cluster_size": {
+                    "type": "integer",
+                    "default": 3,
+                    "description": "The number of SNPs which make up a cluster. Must be at least 2.",
+                    "help_text": "This parameter is used by GATK variant filteration step. It defines the number of SNPs which make up a cluster within a window. Must be at least 2."
+                },
+                "gatk_vf_fs_filter": {
+                    "type": "number",
+                    "default": 30,
+                    "description": "Value to be used for the FisherStrand (FS) filter",
+                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 30.0"
+                },
+                "gatk_vf_qd_filter": {
+                    "type": "number",
+                    "default": 2,
+                    "description": "Value to be used for the QualByDepth (QD) filter",
+                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 2.0"
                 }
             }
         },
@@ -210,21 +425,14 @@
                     "description": "Git commit id for Institutional configs.",
                     "default": "master",
                     "hidden": true,
-                    "fa_icon": "fas fa-users-cog",
-                    "help_text": "Provide git commit id for custom Institutional configs hosted at `nf-core/configs`. This was implemented for reproducibility purposes. Default: `master`.\n\n```bash\n## Download and use config file with following git commit id\n--custom_config_version d52db660777c4bf36546ddb188ec530c3ada1b96\n```"
+                    "fa_icon": "fas fa-users-cog"
                 },
                 "custom_config_base": {
                     "type": "string",
                     "description": "Base directory for Institutional configs.",
                     "default": "https://raw.githubusercontent.com/nf-core/configs/master",
                     "hidden": true,
-                    "help_text": "If you're running offline, nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell nextflow where to find them with the `custom_config_base` option. For example:\n\n```bash\n## Download and unzip the config files\ncd /path/to/my/configs\nwget https://github.com/nf-core/configs/archive/master.zip\nunzip master.zip\n\n## Run the pipeline\ncd /path/to/my/data\nnextflow run /path/to/pipeline/ --custom_config_base /path/to/my/configs/configs-master/\n```\n\n> Note that the nf-core/tools helper package has a `download` command to download all required pipeline files + singularity containers + institutional configs in one go for you, to make this process easier.",
-                    "fa_icon": "fas fa-users-cog"
-                },
-                "hostnames": {
-                    "type": "string",
-                    "description": "Institutional configs hostname.",
-                    "hidden": true,
+                    "help_text": "If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.",
                     "fa_icon": "fas fa-users-cog"
                 },
                 "config_profile_name": {
@@ -252,6 +460,126 @@
                     "fa_icon": "fas fa-users-cog"
                 }
             }
+        },
+        "max_job_request_options": {
+            "title": "Max job request options",
+            "type": "object",
+            "fa_icon": "fab fa-acquisitions-incorporated",
+            "description": "Set the top limit for requested resources for any single job.",
+            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
+            "properties": {
+                "max_cpus": {
+                    "type": "integer",
+                    "description": "Maximum number of CPUs that can be requested for any single job.",
+                    "default": 16,
+                    "fa_icon": "fas fa-microchip",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                },
+                "max_memory": {
+                    "type": "string",
+                    "description": "Maximum amount of memory that can be requested for any single job.",
+                    "default": "128.GB",
+                    "fa_icon": "fas fa-memory",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                },
+                "max_time": {
+                    "type": "string",
+                    "description": "Maximum amount of time that can be requested for any single job.",
+                    "default": "240.h",
+                    "fa_icon": "far fa-clock",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                }
+            }
+        },
+        "generic_options": {
+            "title": "Generic options",
+            "type": "object",
+            "fa_icon": "fas fa-file-import",
+            "description": "Less common options for the pipeline, typically set in a config file.",
+            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+            "properties": {
+                "help": {
+                    "type": "boolean",
+                    "description": "Display help text.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
+                "publish_dir_mode": {
+                    "type": "string",
+                    "default": "copy",
+                    "description": "Method used to save pipeline results to output directory.",
+                    "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
+                    "fa_icon": "fas fa-copy",
+                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "hidden": true
+                },
+                "email_on_fail": {
+                    "type": "string",
+                    "description": "Email address for completion summary, only when pipeline fails.",
+                    "fa_icon": "fas fa-exclamation-triangle",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.",
+                    "hidden": true
+                },
+                "plaintext_email": {
+                    "type": "boolean",
+                    "description": "Send plain-text email instead of HTML.",
+                    "fa_icon": "fas fa-remove-format",
+                    "hidden": true
+                },
+                "max_multiqc_email_size": {
+                    "type": "string",
+                    "description": "File size limit when attaching MultiQC reports to summary emails.",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "default": "25.MB",
+                    "fa_icon": "fas fa-file-upload",
+                    "hidden": true
+                },
+                "monochrome_logs": {
+                    "type": "boolean",
+                    "description": "Do not use coloured log outputs.",
+                    "fa_icon": "fas fa-palette",
+                    "hidden": true
+                },
+                "multiqc_config": {
+                    "type": "string",
+                    "description": "Custom config file to supply to MultiQC.",
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
+                },
+                "tracedir": {
+                    "type": "string",
+                    "description": "Directory to keep pipeline Nextflow logs and reports.",
+                    "default": "${params.outdir}/pipeline_info",
+                    "fa_icon": "fas fa-cogs",
+                    "hidden": true
+                },
+                "validate_params": {
+                    "type": "boolean",
+                    "description": "Boolean whether to validate parameters against the schema at runtime",
+                    "default": true,
+                    "fa_icon": "fas fa-check-square",
+                    "hidden": true
+                },
+                "show_hidden_params": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-eye-slash",
+                    "description": "Show all params when using `--help`",
+                    "hidden": true,
+                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
+                },
+                "enable_conda": {
+                    "type": "boolean",
+                    "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-bacon"
+                }
+            }
         }
     },
     "allOf": [
@@ -262,13 +590,32 @@
             "$ref": "#/definitions/reference_genome_options"
         },
         {
-            "$ref": "#/definitions/generic_options"
+            "$ref": "#/definitions/institutional_config_options"
         },
         {
             "$ref": "#/definitions/max_job_request_options"
         },
         {
-            "$ref": "#/definitions/institutional_config_options"
+            "$ref": "#/definitions/generic_options"
+        },
+        {
+            "$ref": "#/definitions/tool_parameters"
+        },
+        {
+            "$ref": "#/definitions/pipeline_stage_options"
+        },
+        {
+            "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/variant_calling"
+        },
+        {
+            "$ref": "#/definitions/variant_annotation"
+        },
+        {
+            "$ref": "#/definitions/preprocessing"
         }
-    ]
+    ],
+    "required": ["aligner", "seq_platform"]
 }
