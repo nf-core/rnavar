@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0dev] nfcore/rnavar
 
 New version with additional features and bug fixes.
-## [1.0.0] nfcore/rnavar - 2022/05/24
+
+## [1.0.0] nfcore/rnavar - 2022/06/20
 
 First production release of the pipeline with latest software versions.
 
