@@ -3,7 +3,7 @@
 [![GitHub Actions CI Status](https://github.com/nf-core/rnavar/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/nf-core/rnavar/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+linting%22)
 [![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?logo=Amazon%20AWS)](https://nf-co.re/rnavar/results)
-[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![Cite with Zenodo]((https://zenodo.org/badge/DOI/10.5281/zenodo.6669637.svg)](https://doi.org/10.5281/zenodo.6669637)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A521.10.3-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?logo=anaconda)](https://docs.conda.io/en/latest/)
@@ -100,6 +100,8 @@ If you would like to contribute to this pipeline, please see the [contributing g
 For further information or help, don't hesitate to get in touch on the [Slack `#rnavar` channel](https://nfcore.slack.com/channels/rnavar) (you can join with [this invite](https://nf-co.re/join/slack)).
 
 ## Citations
+
+If you use nf-core/rnavar for your analysis, please cite it using the following doi: [10.5281/zenodo.6669637](https://doi.org/10.5281/zenodo.6669637)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
