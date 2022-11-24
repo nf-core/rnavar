@@ -4,7 +4,9 @@
 
 include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main' //addParams(options: params.genome_options)
 include { GFFREAD }                           from '../../modules/nf-core/modules/gffread/main'                        //addParams(options: params.gffread_options)
-include { GTF2BED }                           from '../../modules/local/gtf2bed'                                       //addParams(options: params.genome_options)
+include { GTF2BED }                           from '../../modules/local/gtf2bed'                                       
+include { BEDTOOLS_SORT }                     from '../../modules/nf-core/modules/bedtools/sort/main'                                  
+include { BEDTOOLS_MERGE }                    from '../../modules/nf-core/modules/bedtools/merge/main'                                 
 include { GUNZIP as GUNZIP_FASTA }            from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
 include { GUNZIP as GUNZIP_GENE_BED }         from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
 include { GUNZIP as GUNZIP_GFF }              from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
@@ -17,6 +19,7 @@ include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/module
 workflow PREPARE_GENOME {
     take:
     prepare_tool_indices
+    feature_type
 
     main:
 
@@ -83,9 +86,24 @@ workflow PREPARE_GENOME {
             ch_gene_bed = Channel.fromPath(params.exon_bed).collect()
         }
     } else {
-        ch_exon_bed = GTF2BED ( ch_gtf ).bed.collect()
+        ch_exon_bed = GTF2BED ( ch_gtf , feature_type).bed.collect()
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
+    
+    ch_exon_bed.map{ it -> [[id:'exome'], it] }
+    
+    // Bedtools sort
+    ch_bedtools_sort = BEDTOOLS_SORT(ch_exon_bed, 'sorted').sorted.collect()
+    ch_versions = ch_versions.mix(BEDTOOLS_SORT.out.versions)
+    
+    
+    // Bedtools merge
+    //ch_test_meta=BEDTOOLS_SORT.out[0]
+    //ch_test_path=BEDTOOLS_SORT.out[1]
+    //ch_bedtools_merge = BEDTOOLS_MERGE(BEDTOOLS_SORT.out.sorted.collect())
+    ch_bedtools_merge = BEDTOOLS_MERGE(ch_bedtools_sort)
+    ch_versions = ch_versions.mix(BEDTOOLS_MERGE.out.versions)
+        
 
     // Index the genome fasta
     ch_fasta_fai = Channel.empty()
@@ -141,6 +159,8 @@ workflow PREPARE_GENOME {
     dict             = ch_fasta_dict       // path: genome.fasta.dict
     gtf              = ch_gtf              // path: genome.gtf
     exon_bed         = ch_exon_bed         // path: exon.bed
+    bedtools_sort    = ch_bedtools_sort    // path: sort.bed
+    bedtools_merge   = ch_bedtools_merge   // path: merge.bed
     star_index       = ch_star_index       // path: star/index/
     versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

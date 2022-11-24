@@ -57,19 +57,30 @@ include { ANNOTATE                      } from '../subworkflows/local/annotate' 
 ========================================================================================
 */
 
-include { FASTQC                        } from '../modules/nf-core/modules/fastqc/main'
-include { MULTIQC                       } from '../modules/nf-core/modules/multiqc/main'
-include { CAT_FASTQ                     } from '../modules/nf-core/modules/cat/fastq/main'
-include { GATK4_BASERECALIBRATOR        } from '../modules/nf-core/modules/gatk4/baserecalibrator/main'
-include { GATK4_BEDTOINTERVALLIST       } from '../modules/nf-core/modules/gatk4/bedtointervallist/main'
-include { GATK4_INTERVALLISTTOOLS       } from '../modules/nf-core/modules/gatk4/intervallisttools/main'
-include { GATK4_HAPLOTYPECALLER         } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
-include { GATK4_MERGEVCFS               } from '../modules/nf-core/modules/gatk4/mergevcfs/main'
-include { GATK4_INDEXFEATUREFILE        } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
-include { GATK4_VARIANTFILTRATION       } from '../modules/nf-core/modules/gatk4/variantfiltration/main'
-include { SAMTOOLS_INDEX                } from '../modules/nf-core/modules/samtools/index/main'
-include { TABIX_TABIX as TABIX          } from '../modules/nf-core/modules/tabix/tabix/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS   } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
+include { FASTQC                                             } from '../modules/nf-core/modules/fastqc/main'
+include { MULTIQC                                            } from '../modules/nf-core/modules/multiqc/main'
+include { CAT_FASTQ                                          } from '../modules/nf-core/modules/cat/fastq/main'
+include { GATK4_BASERECALIBRATOR                             } from '../modules/nf-core/modules/gatk4/baserecalibrator/main'
+include { GATK4_BEDTOINTERVALLIST                            } from '../modules/nf-core/modules/gatk4/bedtointervallist/main'
+include { GATK4_INTERVALLISTTOOLS                            } from '../modules/nf-core/modules/gatk4/intervallisttools/main'
+include { GATK4_HAPLOTYPECALLER                              } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
+include { GATK4_HAPLOTYPECALLER as GATK4_HAPLOTYPECALLERGVCF } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
+include { GATK4_MERGEVCFS                                    } from '../modules/nf-core/modules/gatk4/mergevcfs/main'
+include { GATK4_COMBINEGVCFS                                 } from '../modules/nf-core/modules/gatk4/combinegvcfs/main'
+include { GATK4_INDEXFEATUREFILE                             } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
+include { GATK4_VARIANTFILTRATION                            } from '../modules/nf-core/modules/gatk4/variantfiltration/main'
+include { SAMTOOLS_INDEX                                     } from '../modules/nf-core/modules/samtools/index/main'
+include { TABIX_TABIX as TABIX                               } from '../modules/nf-core/modules/tabix/tabix/main'
+include { TABIX_TABIX as TABIXGVCF                           } from '../modules/nf-core/modules/tabix/tabix/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
+
+/*
+========================================================================================
+    IMPORT LOCAL MODULES
+========================================================================================
+*/
+
+include { GTF2BED               } from '../modules/local/gtf2bed'
 
 /*
 ========================================================================================
@@ -99,7 +110,7 @@ ch_dbsnp_tbi            = params.dbsnp_tbi         ? Channel.fromPath(params.dbs
 ch_known_indels         = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
 ch_known_indels_tbi     = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
-// Initialize varaint annotation associated channels
+// Initialize variant annotation associated channels
 ch_snpeff_db            = params.snpeff_db         ?:   Channel.empty()
 ch_vep_cache_version    = params.vep_cache_version ?:   Channel.empty()
 ch_vep_genome           = params.vep_genome        ?:   Channel.empty()
@@ -109,6 +120,13 @@ ch_vep_cache            = params.vep_cache         ?    Channel.fromPath(params.
 
 // MultiQC reporting
 def multiqc_report = []
+
+// GTF2bed parameters
+def feature_type = params.feature_type ? params.feature_type : "exon"
+
+
+// generate_gvcf parameters
+def generate_gvcf = params.generate_gvcf ? params.generate_gvcf : false
 
 /*
 ========================================================================================
@@ -127,7 +145,8 @@ workflow RNAVAR {
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
     PREPARE_GENOME (
-        prepareToolIndices
+        prepareToolIndices,
+        feature_type
     )
     ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
@@ -338,6 +357,7 @@ workflow RNAVAR {
         // MODULE: HaplotypeCaller from GATK4
         // Calls germline SNPs and indels via local re-assembly of haplotypes.
         //
+        
         GATK4_HAPLOTYPECALLER(
             ch_haplotypecaller_interval_bam,
             PREPARE_GENOME.out.fasta,
@@ -346,15 +366,16 @@ workflow RNAVAR {
             ch_dbsnp,
             ch_dbsnp_tbi
         )
-
+        
+        
         ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
-            .map{ meta, vcf ->
-                meta.id = meta.sample
-                [meta, vcf]}
-            .groupTuple()
+        .map{ meta, vcf ->
+            meta.id = meta.sample
+            [meta, vcf]}
+        .groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
-
+        
         //
         // MODULE: MergeVCFS from GATK4
         // Merge multiple VCF files into one VCF
@@ -366,6 +387,81 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
+        if (generate_gvcf){        
+            GATK4_HAPLOTYPECALLERGVCF(
+                ch_haplotypecaller_interval_bam,
+                PREPARE_GENOME.out.fasta,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.dict,
+                ch_dbsnp,
+                ch_dbsnp_tbi
+            )
+        
+            ch_haplotypecallergvcf_raw = GATK4_HAPLOTYPECALLERGVCF.out.vcf
+                .map{ meta, vcf ->
+                    meta.id = meta.sample
+                    [meta, vcf]}
+                .groupTuple()
+
+            ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLERGVCF.out.versions.first().ifEmpty(null))
+            //
+            // MODULE: IndexFeatureFile from GATK4
+            // Index the gVCF files
+            //
+            GATK4_INDEXFEATUREFILE(
+                GATK4_HAPLOTYPECALLERGVCF.out.vcf
+            )
+            
+            ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
+            .map{ meta, idx ->
+                meta.id = meta.sample
+                [meta, idx]}
+            .groupTuple()
+
+            ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+            
+            //
+            // MODULE: CombineGVCFS from GATK4
+            // Merge multiple GVCF files into one GVCF
+            //
+        
+            //ch_haplotypecallergvcf_raw_tbi = ch_haplotypecallergvcf_raw
+            //    .join(ch_haplotypecallergvcf_raw_index, by: [0], remainder: true)
+            //    .map{meta, vcf, tbi ->
+            //        [meta, vcf, tbi]
+            //    }
+            
+        
+            
+            GATK4_COMBINEGVCFS(
+                ch_haplotypecallergvcf_raw, 
+                ch_haplotypecallergvcf_raw_index,
+                PREPARE_GENOME.out.fasta,
+                PREPARE_GENOME.out.fai,
+                PREPARE_GENOME.out.dict
+            )
+            ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
+            ch_versions  = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions.first().ifEmpty(null))
+            
+            //
+            // MODULE: Index the VCF using TABIX
+            //
+            TABIXGVCF(
+                ch_haplotypecaller_gvcf
+            )
+
+            ch_haplotypecaller_gvcf_tbi = ch_haplotypecaller_gvcf
+                .join(TABIXGVCF.out.tbi, by: [0], remainder: true)
+                .join(TABIXGVCF.out.csi, by: [0], remainder: true)
+                .map{meta, vcf, tbi, csi ->
+                    if (tbi) [meta, vcf, tbi]
+                    else [meta, vcf, csi]
+                }
+
+            ch_versions  = ch_versions.mix(TABIXGVCF.out.versions.first().ifEmpty(null))
+                
+        }
+        
         //
         // MODULE: Index the VCF using TABIX
         //
