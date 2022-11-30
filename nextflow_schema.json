@@ -156,6 +156,11 @@
                     "type": "string",
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version"
+                },
+                "feature_type": {
+                    "type": "string",
+                    "description": "Type of feature to parse from annotation file",
+                    "help_text": "This parameter value can be exon, transcript or gene. Default exon"
                 }
             }
         },
@@ -260,7 +265,12 @@
                     "description": "The minimum phred-scaled confidence threshold at which variants should be called.",
                     "help_text": "Specify the minimum phred-scaled confidence threshold at which variants should be called.",
                     "hidden": false
-                }
+                },
+                "generate_gvcf": {
+                    "type": "boolean",
+                    "description": "Enable generation of GVCFs by sample additionnaly to the VCFs.",
+                    "help_text": "This parameter enables GATK HAPLOTYPECALLER to generate GVCFs. Default false."
+                },
             }
         },
         "variant_annotation": {

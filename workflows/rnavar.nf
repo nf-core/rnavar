@@ -23,7 +23,8 @@ def checkPathParamList = [
     params.known_indels_tbi,
     params.snpeff_cache,
     params.vep_cache,
-    params.star_index]
+    params.star_index,
+]
 
 for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 
@@ -121,12 +122,6 @@ ch_vep_cache            = params.vep_cache         ?    Channel.fromPath(params.
 // MultiQC reporting
 def multiqc_report = []
 
-// GTF2bed parameters
-def feature_type = params.feature_type ? params.feature_type : "exon"
-
-
-// generate_gvcf parameters
-def generate_gvcf = params.generate_gvcf ? params.generate_gvcf : false
 
 /*
 ========================================================================================
@@ -144,9 +139,10 @@ workflow RNAVAR {
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
+    
     PREPARE_GENOME (
         prepareToolIndices,
-        feature_type
+        params.feature_type
     )
     ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
@@ -387,7 +383,7 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
-        if (generate_gvcf){        
+        if (params.generate_gvcf){        
             GATK4_HAPLOTYPECALLERGVCF(
                 ch_haplotypecaller_interval_bam,
                 PREPARE_GENOME.out.fasta,

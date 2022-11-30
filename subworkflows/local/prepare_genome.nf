@@ -90,18 +90,16 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
     
-    ch_exon_bed.map{ it -> [[id:'exome'], it] }
-    
+    //ch_exon_bed.view()
+    //ch_exon_bed.map{ it -> [[id:'exome'], it] }
+    //ch_exon_bed.view()
     // Bedtools sort
-    ch_bedtools_sort = BEDTOOLS_SORT(ch_exon_bed, 'sorted').sorted.collect()
+    ch_bedtools_sort = BEDTOOLS_SORT(ch_exon_bed.map{ it -> [[id:'exome'], it] }, 'sorted').sorted.collect()
     ch_versions = ch_versions.mix(BEDTOOLS_SORT.out.versions)
     
     
     // Bedtools merge
-    //ch_test_meta=BEDTOOLS_SORT.out[0]
-    //ch_test_path=BEDTOOLS_SORT.out[1]
-    //ch_bedtools_merge = BEDTOOLS_MERGE(BEDTOOLS_SORT.out.sorted.collect())
-    ch_bedtools_merge = BEDTOOLS_MERGE(ch_bedtools_sort)
+    ch_bedtools_merge = BEDTOOLS_MERGE(ch_bedtools_sort).bed
     ch_versions = ch_versions.mix(BEDTOOLS_MERGE.out.versions)
         
 
