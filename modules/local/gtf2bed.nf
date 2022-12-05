@@ -10,7 +10,6 @@ process GTF2BED {
     input:
     path gtf
     val feature_type
-    
     output:
     path '*.bed'       , emit: bed
     path "versions.yml", emit: versions
@@ -23,11 +22,10 @@ process GTF2BED {
     if (feature_type){
         feature_type = allowed_type.contains(feature_type) ? feature_type : "exon"
     }
-    
     """
     Rscript --no-save -<<'RCODE'
         gtf = read.table("${gtf}", sep="\t")
-        gtf = subset(gtf, V3 == "${feature_type}") 
+        gtf = subset(gtf, V3 == "${feature_type}")
         write.table(data.frame(chrom=gtf[,'V1'], start=gtf[,'V4'], end=gtf[,'V5']), "tmp.exome.bed", quote = F, sep="\t", col.names = F, row.names = F)
     RCODE
 
