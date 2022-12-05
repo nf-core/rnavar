@@ -270,7 +270,7 @@
                     "type": "boolean",
                     "description": "Enable generation of GVCFs by sample additionnaly to the VCFs.",
                     "help_text": "This parameter enables GATK HAPLOTYPECALLER to generate GVCFs. Default false."
-                },
+                }
             }
         },
         "variant_annotation": {
