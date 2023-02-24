@@ -2,19 +2,18 @@
 // Uncompress and prepare reference genome files
 //
 
-include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main' //addParams(options: params.genome_options)
-include { GFFREAD }                           from '../../modules/nf-core/modules/gffread/main'                        //addParams(options: params.gffread_options)
-include { GTF2BED }                           from '../../modules/local/gtf2bed'                                       
-include { BEDTOOLS_SORT }                     from '../../modules/nf-core/modules/bedtools/sort/main'                                  
-include { BEDTOOLS_MERGE }                    from '../../modules/nf-core/modules/bedtools/merge/main'                                 
-include { GUNZIP as GUNZIP_FASTA }            from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_GENE_BED }         from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_GFF }              from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
-include { GUNZIP as GUNZIP_GTF }              from '../../modules/nf-core/modules/gunzip/main'                         //addParams(options: params.genome_options)
-include { SAMTOOLS_FAIDX }                    from '../../modules/nf-core/modules/samtools/faidx/main'                 //addParams(options: params.genome_options)
-include { STAR_GENOMEGENERATE }               from '../../modules/nf-core/modules/star/genomegenerate/main'            //addParams(options: params.star_index_options)
-include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/modules/untar/main'                          //addParams(options: params.star_untar_options)
-
+include { GATK4_CREATESEQUENCEDICTIONARY }    from '../../modules/nf-core/gatk4/createsequencedictionary/main'
+include { GFFREAD }                           from '../../modules/nf-core/gffread/main'
+include { GTF2BED }                           from '../../modules/local/gtf2bed'
+include { BEDTOOLS_SORT }                     from '../../modules/nf-core/bedtools/sort/main'
+include { BEDTOOLS_MERGE }                    from '../../modules/nf-core/bedtools/merge/main'
+include { GUNZIP as GUNZIP_FASTA }            from '../../modules/nf-core/gunzip/main'
+include { GUNZIP as GUNZIP_GENE_BED }         from '../../modules/nf-core/gunzip/main'
+include { GUNZIP as GUNZIP_GFF }              from '../../modules/nf-core/gunzip/main'
+include { GUNZIP as GUNZIP_GTF }              from '../../modules/nf-core/gunzip/main'
+include { SAMTOOLS_FAIDX }                    from '../../modules/nf-core/samtools/faidx/main'
+include { STAR_GENOMEGENERATE }               from '../../modules/nf-core/star/genomegenerate/main'
+include { UNTAR as UNTAR_STAR_INDEX }         from '../../modules/nf-core/untar/main'
 
 workflow PREPARE_GENOME {
     take:
@@ -89,19 +88,17 @@ workflow PREPARE_GENOME {
         ch_exon_bed = GTF2BED ( ch_gtf , feature_type).bed.collect()
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
-    
+
     //ch_exon_bed.view()
     //ch_exon_bed.map{ it -> [[id:'exome'], it] }
     //ch_exon_bed.view()
     // Bedtools sort
-    ch_bedtools_sort = BEDTOOLS_SORT(ch_exon_bed.map{ it -> [[id:'exome'], it] }, 'sorted').sorted.collect()
+    ch_bedtools_sort = BEDTOOLS_SORT(ch_exon_bed.map{ it -> [[id:'exome'], it] }, []).sorted.collect()
     ch_versions = ch_versions.mix(BEDTOOLS_SORT.out.versions)
-    
-    
+
     // Bedtools merge
     ch_bedtools_merge = BEDTOOLS_MERGE(ch_bedtools_sort).bed
     ch_versions = ch_versions.mix(BEDTOOLS_MERGE.out.versions)
-        
 
     // Index the genome fasta
     ch_fasta_fai = Channel.empty()

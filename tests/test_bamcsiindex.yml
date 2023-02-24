@@ -1,5 +1,5 @@
 - name: Run pipeline with bam_csi_index for large genomes
-  command: nextflow run main.nf -profile test,docker --bam_csi_index
+  command: nextflow run main.nf -profile test,docker --bam_csi_index --outdir results
   tags:
     - bamcsiindex
   files:

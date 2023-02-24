@@ -23,7 +23,7 @@ def checkPathParamList = [
     params.known_indels_tbi,
     params.snpeff_cache,
     params.vep_cache,
-    params.star_index,
+    params.star_index
 ]
 
 for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
@@ -59,22 +59,22 @@ include { ANNOTATE                      } from '../subworkflows/local/annotate' 
 ========================================================================================
 */
 
-include { FASTQC                                             } from '../modules/nf-core/modules/fastqc/main'
-include { MULTIQC                                            } from '../modules/nf-core/modules/multiqc/main'
-include { CAT_FASTQ                                          } from '../modules/nf-core/modules/cat/fastq/main'
-include { GATK4_BASERECALIBRATOR                             } from '../modules/nf-core/modules/gatk4/baserecalibrator/main'
-include { GATK4_BEDTOINTERVALLIST                            } from '../modules/nf-core/modules/gatk4/bedtointervallist/main'
-include { GATK4_INTERVALLISTTOOLS                            } from '../modules/nf-core/modules/gatk4/intervallisttools/main'
-include { GATK4_HAPLOTYPECALLER                              } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
-include { GATK4_HAPLOTYPECALLER as GATK4_HAPLOTYPECALLERGVCF } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
-include { GATK4_MERGEVCFS                                    } from '../modules/nf-core/modules/gatk4/mergevcfs/main'
-include { GATK4_COMBINEGVCFS                                 } from '../modules/nf-core/modules/gatk4/combinegvcfs/main'
-include { GATK4_INDEXFEATUREFILE                             } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
-include { GATK4_VARIANTFILTRATION                            } from '../modules/nf-core/modules/gatk4/variantfiltration/main'
-include { SAMTOOLS_INDEX                                     } from '../modules/nf-core/modules/samtools/index/main'
-include { TABIX_TABIX as TABIX                               } from '../modules/nf-core/modules/tabix/tabix/main'
-include { TABIX_TABIX as TABIXGVCF                           } from '../modules/nf-core/modules/tabix/tabix/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
+include { FASTQC                                             } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                                            } from '../modules/nf-core/multiqc/main'
+include { CAT_FASTQ                                          } from '../modules/nf-core/cat/fastq/main'
+include { GATK4_BASERECALIBRATOR                             } from '../modules/nf-core/gatk4/baserecalibrator/main'
+include { GATK4_BEDTOINTERVALLIST                            } from '../modules/nf-core/gatk4/bedtointervallist/main'
+include { GATK4_INTERVALLISTTOOLS                            } from '../modules/nf-core/gatk4/intervallisttools/main'
+include { GATK4_HAPLOTYPECALLER                              } from '../modules/nf-core/gatk4/haplotypecaller/main'
+include { GATK4_HAPLOTYPECALLER as GATK4_HAPLOTYPECALLERGVCF } from '../modules/nf-core/gatk4/haplotypecaller/main'
+include { GATK4_MERGEVCFS                                    } from '../modules/nf-core/gatk4/mergevcfs/main'
+include { GATK4_COMBINEGVCFS                                 } from '../modules/nf-core/gatk4/combinegvcfs/main'
+include { GATK4_INDEXFEATUREFILE                             } from '../modules/nf-core/gatk4/indexfeaturefile/main'
+include { GATK4_VARIANTFILTRATION                            } from '../modules/nf-core/gatk4/variantfiltration/main'
+include { SAMTOOLS_INDEX                                     } from '../modules/nf-core/samtools/index/main'
+include { TABIX_TABIX as TABIX                               } from '../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIXGVCF                           } from '../modules/nf-core/tabix/tabix/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
 ========================================================================================
@@ -122,7 +122,6 @@ ch_vep_cache            = params.vep_cache         ?    Channel.fromPath(params.
 
 // MultiQC reporting
 def multiqc_report = []
-
 
 /*
 ========================================================================================
@@ -428,8 +427,6 @@ workflow RNAVAR {
             //        [meta, vcf, tbi]
             //    }
 
-
-
             GATK4_COMBINEGVCFS(
                 ch_haplotypecallergvcf_raw,
                 ch_haplotypecallergvcf_raw_index,
@@ -533,13 +530,8 @@ workflow RNAVAR {
         ch_multiqc_files = Channel.empty()
         ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
-        ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(ch_version_yaml)
-        ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(ch_reports.collect())
-        ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_config)
-        ch_multiqc_files = ch_multiqc_files.mix(ch_rnavar_logo))
 
         MULTIQC (
             ch_multiqc_files.collect(),

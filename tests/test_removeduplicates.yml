@@ -1,5 +1,5 @@
 - name: Run pipeline with duplicate reads removed
-  command: nextflow run main.nf -profile test,docker --remove_duplicates true
+  command: nextflow run main.nf -profile test,docker --remove_duplicates --outdir results
   tags:
     - removeduplicates
     - preprocessing

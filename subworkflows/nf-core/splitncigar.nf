@@ -2,9 +2,9 @@
 // Subworkflow: Run GATK4 SplitNCigarReads with intervals, merge and index BAM file.
 //
 
-include { GATK4_SPLITNCIGARREADS } from '../../modules/nf-core/modules/gatk4/splitncigarreads/main'
-include { SAMTOOLS_MERGE         } from '../../modules/nf-core/modules/samtools/merge/main'
-include { SAMTOOLS_INDEX         } from '../../modules/nf-core/modules/samtools/index/main'
+include { GATK4_SPLITNCIGARREADS } from '../../modules/nf-core/gatk4/splitncigarreads/main'
+include { SAMTOOLS_MERGE         } from '../../modules/nf-core/samtools/merge/main'
+include { SAMTOOLS_INDEX         } from '../../modules/nf-core/samtools/index/main'
 
 workflow SPLITNCIGAR {
     take:
@@ -44,7 +44,8 @@ workflow SPLITNCIGAR {
 
     SAMTOOLS_MERGE (
         bam_splitncigar_interval,
-        fasta
+        fasta,
+        fasta_fai
     )
     splitncigar_bam = SAMTOOLS_MERGE.out.bam
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
