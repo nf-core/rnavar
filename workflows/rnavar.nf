@@ -65,7 +65,7 @@ include { CAT_FASTQ                                          } from '../modules/
 include { GATK4_BASERECALIBRATOR                             } from '../modules/nf-core/gatk4/baserecalibrator/main'
 include { GATK4_BEDTOINTERVALLIST                            } from '../modules/nf-core/gatk4/bedtointervallist/main'
 include { GATK4_INTERVALLISTTOOLS                            } from '../modules/nf-core/gatk4/intervallisttools/main'
-include { GATK4_HAPLOTYPECALLER                              } from '../modules/nf-core/gatk4/haplotypecaller/main'
+include { GATK4_HAPLOTYPECALLER as GATK4_HAPLOTYPECALLERVCF  } from '../modules/nf-core/gatk4/haplotypecaller/main'
 include { GATK4_HAPLOTYPECALLER as GATK4_HAPLOTYPECALLERGVCF } from '../modules/nf-core/gatk4/haplotypecaller/main'
 include { GATK4_MERGEVCFS                                    } from '../modules/nf-core/gatk4/mergevcfs/main'
 include { GATK4_COMBINEGVCFS                                 } from '../modules/nf-core/gatk4/combinegvcfs/main'
@@ -354,7 +354,7 @@ workflow RNAVAR {
         // Calls germline SNPs and indels via local re-assembly of haplotypes.
         //
 
-        GATK4_HAPLOTYPECALLER(
+        GATK4_HAPLOTYPECALLERVCF(
             ch_haplotypecaller_interval_bam,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,
@@ -364,13 +364,13 @@ workflow RNAVAR {
         )
 
 
-        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
+        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLERVCF.out.vcf
         .map{ meta, vcf ->
             meta.id = meta.sample
             [meta, vcf]}
         .groupTuple()
 
-        ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
+        ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLERVCF.out.versions.first().ifEmpty(null))
 
         //
         // MODULE: MergeVCFS from GATK4
