@@ -38,9 +38,10 @@ if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = Channel.fromPath(file("$projectDir/assets/multiqc_config.yml", checkIfExists: true))
-ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
-ch_rnavar_logo           = Channel.fromPath(file("$projectDir/assets/nf-core-rnavar_logo_light.png", checkIfExists: true))
+ch_multiqc_config          = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
+ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
+ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +140,7 @@ workflow RNAVAR {
     //
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
-    
+
     PREPARE_GENOME (
         prepareToolIndices,
         params.feature_type
@@ -353,7 +354,7 @@ workflow RNAVAR {
         // MODULE: HaplotypeCaller from GATK4
         // Calls germline SNPs and indels via local re-assembly of haplotypes.
         //
-        
+
         GATK4_HAPLOTYPECALLER(
             ch_haplotypecaller_interval_bam,
             PREPARE_GENOME.out.fasta,
@@ -362,8 +363,8 @@ workflow RNAVAR {
             ch_dbsnp,
             ch_dbsnp_tbi
         )
-        
-        
+
+
         ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
         .map{ meta, vcf ->
             meta.id = meta.sample
@@ -371,7 +372,7 @@ workflow RNAVAR {
         .groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
-        
+
         //
         // MODULE: MergeVCFS from GATK4
         // Merge multiple VCF files into one VCF
@@ -383,7 +384,7 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
-        if (params.generate_gvcf){        
+        if (params.generate_gvcf){
             GATK4_HAPLOTYPECALLERGVCF(
                 ch_haplotypecaller_interval_bam,
                 PREPARE_GENOME.out.fasta,
@@ -392,7 +393,7 @@ workflow RNAVAR {
                 ch_dbsnp,
                 ch_dbsnp_tbi
             )
-        
+
             ch_haplotypecallergvcf_raw = GATK4_HAPLOTYPECALLERGVCF.out.vcf
                 .map{ meta, vcf ->
                     meta.id = meta.sample
@@ -407,7 +408,7 @@ workflow RNAVAR {
             GATK4_INDEXFEATUREFILE(
                 GATK4_HAPLOTYPECALLERGVCF.out.vcf
             )
-            
+
             ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
             .map{ meta, idx ->
                 meta.id = meta.sample
@@ -415,22 +416,22 @@ workflow RNAVAR {
             .groupTuple()
 
             ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
-            
+
             //
             // MODULE: CombineGVCFS from GATK4
             // Merge multiple GVCF files into one GVCF
             //
-        
+
             //ch_haplotypecallergvcf_raw_tbi = ch_haplotypecallergvcf_raw
             //    .join(ch_haplotypecallergvcf_raw_index, by: [0], remainder: true)
             //    .map{meta, vcf, tbi ->
             //        [meta, vcf, tbi]
             //    }
-            
-        
-            
+
+
+
             GATK4_COMBINEGVCFS(
-                ch_haplotypecallergvcf_raw, 
+                ch_haplotypecallergvcf_raw,
                 ch_haplotypecallergvcf_raw_index,
                 PREPARE_GENOME.out.fasta,
                 PREPARE_GENOME.out.fai,
@@ -438,7 +439,7 @@ workflow RNAVAR {
             )
             ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
             ch_versions  = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions.first().ifEmpty(null))
-            
+
             //
             // MODULE: Index the VCF using TABIX
             //
@@ -455,9 +456,9 @@ workflow RNAVAR {
                 }
 
             ch_versions  = ch_versions.mix(TABIXGVCF.out.versions.first().ifEmpty(null))
-                
+
         }
-        
+
         //
         // MODULE: Index the VCF using TABIX
         //
@@ -524,19 +525,30 @@ workflow RNAVAR {
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
     //
     if (!params.skip_multiqc){
-        workflow_summary    = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
-        ch_workflow_summary = Channel.value(workflow_summary)
-        ch_multiqc_files    =  Channel.empty().mix(ch_version_yaml,
-                                                ch_multiqc_custom_config.collect().ifEmpty([]),
-                                                ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
-                                                ch_reports.collect(),
-                                                ch_multiqc_config,
-                                                ch_rnavar_logo)
+        workflow_summary       = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
+        ch_workflow_summary    = Channel.value(workflow_summary)
+        methods_description    = WorkflowRnavar.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
+        ch_methods_description = Channel.value(methods_description)
 
-        MULTIQC (ch_multiqc_files.collect())
+        ch_multiqc_files = Channel.empty()
+        ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
+        ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_version_yaml)
+        ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_reports.collect())
+        ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_config)
+        ch_multiqc_files = ch_multiqc_files.mix(ch_rnavar_logo))
+
+        MULTIQC (
+            ch_multiqc_files.collect(),
+            ch_multiqc_config.toList(),
+            ch_multiqc_custom_config.toList(),
+            ch_multiqc_logo.toList()
+        )
         multiqc_report = MULTIQC.out.report.toList()
     }
-
 }
 
 /*
@@ -550,6 +562,9 @@ workflow.onComplete {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
     }
     NfcoreTemplate.summary(workflow, params, log)
+    if (params.hook_url) {
+        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
+    }
 }
 
 /*
