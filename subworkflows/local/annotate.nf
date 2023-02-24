@@ -2,9 +2,9 @@
 // ANNOTATION
 //
 
-include { SNPEFF_ANNOTATE } from '../nf-core/snpeff_annotate'
-include { ENSEMBLVEP_ANNOTATE as MERGE_ANNOTATE } from '../nf-core/ensemblvep_annotate'
-include { ENSEMBLVEP_ANNOTATE } from '../nf-core/ensemblvep_annotate'
+include { SNPEFF_ANNOTATE } from './snpeff_annotate'
+include { ENSEMBLVEP_ANNOTATE as MERGE_ANNOTATE } from './ensemblvep_annotate'
+include { ENSEMBLVEP_ANNOTATE } from './ensemblvep_annotate'
 
 workflow ANNOTATE {
     take:

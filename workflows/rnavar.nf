@@ -90,10 +90,10 @@ include { GTF2BED               } from '../modules/local/gtf2bed'
 ========================================================================================
 */
 
-include { ALIGN_STAR                    } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
-include { MARKDUPLICATES                } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
-include { SPLITNCIGAR                   } from '../subworkflows/nf-core/splitncigar'        // Splits reads that contain Ns in their cigar string
-include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
+include { ALIGN_STAR                    } from '../subworkflows/local/align_star'         // Align reads to genome and sort and index the alignment file
+include { MARKDUPLICATES                } from '../subworkflows/local/markduplicates'     // Mark duplicates in the BAM file
+include { SPLITNCIGAR                   } from '../subworkflows/local/splitncigar'        // Splits reads that contain Ns in their cigar string
+include { RECALIBRATE                   } from '../subworkflows/local/recalibrate'        // Estimate and correct systematic bias
 
 /*
 ========================================================================================
