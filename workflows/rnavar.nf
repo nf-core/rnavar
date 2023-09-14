@@ -32,11 +32,11 @@ def checkPathParamList = [
     params.star_index,
 ]
 
-for (param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
+for(param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if(!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option --gtf|--gff to provide a GTF|GFF file." }
+if (!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option --gtf|--gff to provide a GTF|GFF file." }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,9 +55,9 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { INPUT_CHECK                   } from '../subworkflows/local/input_check'              // Validate the input samplesheet.csv and prepare input channels
-include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome'           // Build the genome index and other reference files
-include { ANNOTATE                      } from '../subworkflows/local/annotate'                 // Annotate variants using snpEff or VEP or both
+include { INPUT_CHECK    } from '../subworkflows/local/input_check'              // Validate the input samplesheet.csv and prepare input channels
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'           // Build the genome index and other reference files
+include { ANNOTATE       } from '../subworkflows/local/annotate'                 // Annotate variants using snpEff or VEP or both
 
 /*
 ========================================================================================
@@ -88,7 +88,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/
 ========================================================================================
 */
 
-include { GTF2BED               } from '../modules/local/gtf2bed'
+include { GTF2BED } from '../modules/local/gtf2bed'
 
 /*
 ========================================================================================
@@ -96,10 +96,10 @@ include { GTF2BED               } from '../modules/local/gtf2bed'
 ========================================================================================
 */
 
-include { ALIGN_STAR                    } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
-include { MARKDUPLICATES                } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
-include { SPLITNCIGAR                   } from '../subworkflows/nf-core/splitncigar'        // Splits reads that contain Ns in their cigar string
-include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
+include { ALIGN_STAR     } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
+include { MARKDUPLICATES } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
+include { SPLITNCIGAR    } from '../subworkflows/nf-core/splitncigar'        // Splits reads that contain Ns in their cigar string
+include { RECALIBRATE    } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
 
 /*
 ========================================================================================
@@ -109,8 +109,8 @@ include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibr
 
 // Check STAR alignment parameters
 def prepareToolIndices  = params.aligner
-def seq_platform        = params.seq_platform ? params.seq_platform : []
-def seq_center          = params.seq_center ? params.seq_center : []
+def seq_platform        = params.seq_platform ?: []
+def seq_center          = params.seq_center   ?: []
 
 // Initialize file channels based on params
 ch_dbsnp                = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
@@ -147,7 +147,7 @@ workflow RNAVAR {
     // SUBWORKFLOW: Uncompress and prepare reference genome files
     //
 
-    PREPARE_GENOME (
+    PREPARE_GENOME(
         prepareToolIndices,
         params.feature_type
     )
@@ -157,25 +157,24 @@ workflow RNAVAR {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
-    INPUT_CHECK (
-        file(params.input)
-    )
-    .reads
-    .map {
-        meta, fastq ->
-            def meta_clone = meta.clone()
-            meta_clone.id = meta_clone.id.split('_')[0..-2].join('_')
-            [ meta_clone, fastq ]
-    }
-    .groupTuple(by: [0])
-    .branch {
-        meta, fastq ->
-            single  : fastq.size() == 1
-                return [ meta, fastq.flatten() ]
-            multiple: fastq.size() > 1
-                return [ meta, fastq.flatten() ]
-    }
-    .set { ch_fastq }
+    INPUT_CHECK(file(params.input))
+        .reads
+        .map {
+            meta, fastq ->
+                def meta_clone = meta.clone()
+                meta_clone.id = meta_clone.id.split('_')[0..-2].join('_')
+                [ meta_clone, fastq ]
+        }
+        .groupTuple(by: [0])
+        .branch {
+            meta, fastq ->
+                single  : fastq.size() == 1
+                    return [ meta, fastq.flatten() ]
+                multiple: fastq.size() > 1
+                    return [ meta, fastq.flatten() ]
+        }
+        .set { ch_fastq }
+
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
     // TODO: OPTIONAL, you can use nf-validation plugin to create an input channel from the samplesheet with Channel.fromSamplesheet("input")
     // See the documentation https://nextflow-io.github.io/nf-validation/samplesheets/fromSamplesheet/
@@ -184,20 +183,17 @@ workflow RNAVAR {
     //
     // MODULE: Concatenate FastQ files from same sample if required
     //
-    CAT_FASTQ (
-        ch_fastq.multiple
-    )
-    .reads
-    .mix(ch_fastq.single)
-    .set { ch_cat_fastq }
+    CAT_FASTQ(ch_fastq.multiple)
+        .reads
+        .mix(ch_fastq.single)
+        .set { ch_cat_fastq }
+
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
 
     //
     // MODULE: Generate QC summary using FastQC
     //
-    FASTQC (
-        ch_cat_fastq
-    )
+    FASTQC(ch_cat_fastq)
     ch_reports  = ch_reports.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
@@ -205,10 +201,7 @@ workflow RNAVAR {
     // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
     //
     ch_interval_list = Channel.empty()
-    GATK4_BEDTOINTERVALLIST(
-        ch_genome_bed,
-        PREPARE_GENOME.out.dict
-    )
+    GATK4_BEDTOINTERVALLIST(ch_genome_bed, PREPARE_GENOME.out.dict)
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
 
@@ -217,9 +210,7 @@ workflow RNAVAR {
     //
     ch_interval_list_split = Channel.empty()
     if (!params.skip_intervallisttools) {
-        GATK4_INTERVALLISTTOOLS(
-            ch_interval_list
-        )
+        GATK4_INTERVALLISTTOOLS(ch_interval_list)
         ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
     }
     else ch_interval_list_split = ch_interval_list
@@ -237,7 +228,7 @@ workflow RNAVAR {
     ch_aligner_clustering_multiqc = Channel.empty()
 
     if (params.aligner == 'star') {
-        ALIGN_STAR (
+        ALIGN_STAR(
             ch_cat_fastq,
             PREPARE_GENOME.out.star_index,
             PREPARE_GENOME.out.gtf,
@@ -257,9 +248,7 @@ workflow RNAVAR {
         //
         // SUBWORKFLOW: Mark duplicates with GATK4
         //
-        MARKDUPLICATES (
-            ch_genome_bam
-        )
+        MARKDUPLICATES(ch_genome_bam)
         ch_genome_bam             = MARKDUPLICATES.out.bam_bai
 
         //Gather QC reports
@@ -269,10 +258,10 @@ workflow RNAVAR {
 
         //
         // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
-        // Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data).
+        // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
         //
         ch_splitncigar_bam_bai = Channel.empty()
-        SPLITNCIGAR (
+        SPLITNCIGAR(
             ch_genome_bam,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.fai,
@@ -287,7 +276,7 @@ workflow RNAVAR {
         // Generates a recalibration table based on various co-variates
         //
         ch_bam_variant_calling = Channel.empty()
-        if(!params.skip_baserecalibration) {
+        if (!params.skip_baserecalibration) {
             ch_bqsr_table   = Channel.empty()
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
@@ -318,8 +307,8 @@ workflow RNAVAR {
 
             ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
             ch_bam_applybqsr.combine(ch_interval_list_applybqsr)
-                .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]
-            }.set{ch_applybqsr_bam_bai_interval}
+                .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]}
+                .set{ch_applybqsr_bam_bai_interval}
 
             //
             // MODULE: ApplyBaseRecalibrator from GATK4
@@ -375,10 +364,10 @@ workflow RNAVAR {
 
 
         ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
-        .map{ meta, vcf ->
-            meta.id = meta.sample
-            [meta, vcf]}
-        .groupTuple()
+            .map{ meta, vcf ->
+                meta.id = meta.sample
+                [meta, vcf]}
+            .groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
 
@@ -386,10 +375,7 @@ workflow RNAVAR {
         // MODULE: MergeVCFS from GATK4
         // Merge multiple VCF files into one VCF
         //
-        GATK4_MERGEVCFS(
-            ch_haplotypecaller_raw,
-            PREPARE_GENOME.out.dict
-        )
+        GATK4_MERGEVCFS(ch_haplotypecaller_raw, PREPARE_GENOME.out.dict)
         ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
@@ -414,15 +400,13 @@ workflow RNAVAR {
             // MODULE: IndexFeatureFile from GATK4
             // Index the gVCF files
             //
-            GATK4_INDEXFEATUREFILE(
-                GATK4_HAPLOTYPECALLERGVCF.out.vcf
-            )
+            GATK4_INDEXFEATUREFILE(GATK4_HAPLOTYPECALLERGVCF.out.vcf)
 
             ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
-            .map{ meta, idx ->
-                meta.id = meta.sample
-                [meta, idx]}
-            .groupTuple()
+                .map{ meta, idx ->
+                    meta.id = meta.sample
+                    [meta, idx]}
+                .groupTuple()
 
             ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
 
@@ -452,9 +436,7 @@ workflow RNAVAR {
             //
             // MODULE: Index the VCF using TABIX
             //
-            TABIXGVCF(
-                ch_haplotypecaller_gvcf
-            )
+            TABIXGVCF(ch_haplotypecaller_gvcf)
 
             ch_haplotypecaller_gvcf_tbi = ch_haplotypecaller_gvcf
                 .join(TABIXGVCF.out.tbi, by: [0], remainder: true)
@@ -471,9 +453,7 @@ workflow RNAVAR {
         //
         // MODULE: Index the VCF using TABIX
         //
-        TABIX(
-            ch_haplotypecaller_vcf
-        )
+        TABIX(ch_haplotypecaller_vcf)
 
         ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
             .join(TABIX.out.tbi, by: [0], remainder: true)
@@ -507,7 +487,7 @@ workflow RNAVAR {
         //
         // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
         //
-        if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
+        if ((!params.skip_variantannotation) &&(params.annotate_tools) &&(params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
             ANNOTATE(
                 ch_final_vcf,
                 params.annotate_tools,
@@ -526,7 +506,7 @@ workflow RNAVAR {
     }
 
     ch_version_yaml = Channel.empty()
-    CUSTOM_DUMPSOFTWAREVERSIONS (ch_versions.unique().collectFile(name: 'collated_versions.yml'))
+    CUSTOM_DUMPSOFTWAREVERSIONS(ch_versions.unique().collectFile(name: 'collated_versions.yml'))
     ch_version_yaml = CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect()
 
     //
@@ -549,9 +529,9 @@ workflow RNAVAR {
         ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(ch_reports.collect())
         ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_config)
-        ch_multiqc_files = ch_multiqc_files.mix(ch_rnavar_logo))
+        ch_multiqc_files = ch_multiqc_files.mix(ch_rnavar_logo)
 
-        MULTIQC (
+        MULTIQC(
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),
             ch_multiqc_custom_config.toList(),
