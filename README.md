@@ -73,9 +73,9 @@ Each row represents a fastq file (single-end) or a pair of fastq files (paired e
 
 Now, you can run the pipeline using:
 
-   ```console
-   nextflow run nf-core/rnavar -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv  --outdir <OUTDIR> --genome GRCh38
-   ```
+```console
+nextflow run nf-core/rnavar -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv  --outdir <OUTDIR> --genome GRCh38
+```
 
 > **Warning:**
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
