@@ -5,7 +5,7 @@ process GTF2BED {
     conda "conda-forge::r-base=3.5.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/r-base:3.5.0' :
-        'quay.io/biocontainers/r-base:3.5.0'}"
+        'biocontainers/r-base:3.5.0'}"
 
     input:
     path gtf
