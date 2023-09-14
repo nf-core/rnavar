@@ -1,0 +1,10 @@
+- name: Run pipeline with bam_csi_index for large genomes
+  command: nextflow run main.nf -profile test,docker --bam_csi_index
+  tags:
+    - bamcsiindex
+  files:
+    - path: results/reports/multiqc_report.html
+    - path: results/preprocessing/GM12878/GM12878.markdup.sorted.bam
+    - path: results/preprocessing/GM12878/GM12878.markdup.sorted.bam.csi
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz
+    - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.csi
