@@ -2,7 +2,7 @@
 // Alignment with STAR
 //
 
-include { STAR_ALIGN        } from '../../modules/nf-core/modules/star/align/main'
+include { STAR_ALIGN        } from '../../modules/nf-core/star/align/main'
 include { BAM_SORT_SAMTOOLS } from './bam_sort_samtools'
 
 workflow ALIGN_STAR {

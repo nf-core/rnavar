@@ -3,8 +3,8 @@
 //
 
 include { BAM_STATS_SAMTOOLS    } from './bam_stats_samtools'
-include { GATK4_MARKDUPLICATES  } from '../../modules/nf-core/modules/gatk4/markduplicates/main'
-include { SAMTOOLS_INDEX        } from '../../modules/nf-core/modules/samtools/index/main'
+include { GATK4_MARKDUPLICATES  } from '../../modules/nf-core/gatk4/markduplicates/main'
+include { SAMTOOLS_INDEX        } from '../../modules/nf-core/samtools/index/main'
 
 workflow MARKDUPLICATES {
     take:
