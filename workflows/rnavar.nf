@@ -117,7 +117,10 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/
 
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_fasta = params.fasta ? Channel.fromPath(params.fasta).first() : Channel.empty()
+ch_exon_bed = params.exon_bed ? Channel.fromPath(params.exon_bed)                                                       : Channel.empty()
+ch_fasta    = params.fasta    ? Channel.fromPath(params.fasta).map{ fasta -> [ [ id:fasta.baseName ], fasta ] }.first() : Channel.empty()
+ch_gff      = params.gff      ? Channel.fromPath(params.gff).first()                                                    : Channel.empty()
+ch_gtf      = params.gtf      ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.first()         : Channel.empty()
 
 /*
 ========================================================================================
@@ -129,20 +132,21 @@ workflow RNAVAR {
 
     // To gather all QC reports for MultiQC
     ch_reports  = Channel.empty()
+
     // To gather used softwares versions for MultiQC
     ch_versions = Channel.empty()
 
     //
-    // SUBWORKFLOW: Uncompress and prepare reference genome files
+    // Prepare reference genome files
     //
 
     PREPARE_GENOME(
-        ch_fasta
-        // params.gtf,
-        // params.gff,
-        // params.gene_bed,
+        ch_exon_bed,
+        ch_fasta,
+        ch_gff,
+        ch_gtf,
         // params.aligner,
-        // params.feature_type
+        params.feature_type
     )
 
     // ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
