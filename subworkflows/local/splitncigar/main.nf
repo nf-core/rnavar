@@ -9,52 +9,49 @@ include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index
 workflow SPLITNCIGAR {
     take:
     bam             // channel: [ val(meta), [ bam ], [bai] ]
-    fasta           // channel: [ fasta ]
-    fasta_fai       // channel: [ fai ]
-    fasta_dict      // channel: [ dict ]
+    ch_fasta        // channel: [ fasta ]
+    ch_fai       // channel: [ fai ]
+    ch_dict         // channel: [ dict ]
     intervals       // channel: [ interval_list]
 
     main:
-
     ch_versions       = Channel.empty()
 
-    bam.combine(intervals)
-        .map{ meta, bam, bai, intervals ->
+    bam_interval = bam.combine(intervals).map{ meta, bam, bai, intervals ->
         new_meta = meta.clone()
         new_meta.id = meta.id + "_" + intervals.baseName
         new_meta.sample = meta.id
         [new_meta, bam, bai, intervals]
-    }.set{bam_interval}
+    }
 
-    GATK4_SPLITNCIGARREADS (
+    GATK4_SPLITNCIGARREADS(
         bam_interval,
-        fasta,
-        fasta_fai,
-        fasta_dict
+        ch_fasta.map{ meta, fasta -> [fasta] },
+        ch_fai,
+        ch_dict.map{ meta, dict -> [dict] },
     )
     bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
     ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
 
-    bam_splitncigar
+    bam_splitncigar_interval = bam_splitncigar
         .map{ meta, bam ->
             new_meta = meta.clone()
             new_meta.id = meta.sample
             [new_meta, bam]
-    }.groupTuple().set{bam_splitncigar_interval}
+    }.groupTuple()
 
-    SAMTOOLS_MERGE (
-        bam_splitncigar_interval,
-        fasta
-    )
+    SAMTOOLS_MERGE(bam_splitncigar_interval,
+        ch_fasta,
+        ch_fai.map{ fai -> [[id:fai.baseName], fai] })
+
     splitncigar_bam = SAMTOOLS_MERGE.out.bam
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
 
-    SAMTOOLS_INDEX (
-        splitncigar_bam
-    )
+    SAMTOOLS_INDEX(splitncigar_bam)
+
     splitncigar_bam_bai = splitncigar_bam
-        .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
-        .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
+        .join(SAMTOOLS_INDEX.out.bai, remainder: true)
+        .join(SAMTOOLS_INDEX.out.csi, remainder: true)
         .map{meta, bam, bai, csi ->
             if (bai) [meta, bam, bai]
             else [meta, bam, csi]

@@ -225,7 +225,7 @@ workflow RNAVAR {
         ch_transcriptome_bam = ALIGN_STAR.out.bam_transcript
 
         // Gather QC reports
-        ch_reports           = ch_reports.mix(ALIGN_STAR.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_reports           = ch_reports.mix(ALIGN_STAR.out.reports)
         ch_reports           = ch_reports.mix(ALIGN_STAR.out.log_final.collect{it[1]}.ifEmpty([]))
         ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
@@ -238,26 +238,26 @@ workflow RNAVAR {
             ch_fasta_fai,
             [])
 
-        ch_genome_bam             = BAM_MARKDUPLICATES.out.cram
+        ch_genome_bam             = BAM_MARKDUPLICATES.out.bam
 
         //Gather QC reports
         ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES.out.reports.collect{it[1]}.ifEmpty([]))
         ch_versions               = ch_versions.mix(BAM_MARKDUPLICATES.out.versions.first().ifEmpty(null))
 
-    //     //
-    //     // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
-    //     // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
-    //     //
-    //     ch_splitncigar_bam_bai = Channel.empty()
-    //     SPLITNCIGAR(
-    //         ch_genome_bam,
-    //         ch_fasta,
-    //         ch_fasta_fai,
-    //         ch_dict,
-    //         ch_interval_list_split
-    //     )
-    //     ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
-    //     ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
+        //
+        // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
+        // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
+        //
+        ch_splitncigar_bam_bai = Channel.empty()
+        SPLITNCIGAR(
+            ch_genome_bam,
+            ch_fasta,
+            ch_fasta_fai,
+            ch_dict,
+            ch_interval_list_split
+        )
+        ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
+        ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
     //     //
     //     // MODULE: BaseRecalibrator from GATK4

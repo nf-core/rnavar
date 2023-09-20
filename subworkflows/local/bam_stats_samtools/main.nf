@@ -22,9 +22,6 @@ workflow BAM_STATS_SAMTOOLS {
     ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions.first())
 
     emit:
-    stats    = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
-    flagstat = SAMTOOLS_FLAGSTAT.out.flagstat // channel: [ val(meta), [ flagstat ] ]
-    idxstats = SAMTOOLS_IDXSTATS.out.idxstats // channel: [ val(meta), [ idxstats ] ]
-
+    reports = SAMTOOLS_STATS.out.stats.mix(SAMTOOLS_FLAGSTAT.out.flagstat, SAMTOOLS_IDXSTATS.out.idxstats)
     versions = ch_versions                    // channel: [ versions.yml ]
 }
