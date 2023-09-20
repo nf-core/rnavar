@@ -309,62 +309,59 @@ workflow RNAVAR {
                 ch_fasta.map{ meta, fasta -> [fasta] }
             )
 
-    //         ch_bam_variant_calling = RECALIBRATE.out.bam
-    //         ch_bam_recalibrated_qc = RECALIBRATE.out.qc
+            ch_bam_variant_calling = RECALIBRATE.out.bam
+            ch_bam_recalibrated_qc = RECALIBRATE.out.qc
 
-    //         // Gather QC reports
-    //         ch_reports  = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
-    //         ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
-    //     } else {
-    //         ch_bam_variant_calling = ch_splitncigar_bam_bai
+            // Gather QC reports
+            ch_reports  = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
+            ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
+        } else {
+            ch_bam_variant_calling = ch_splitncigar_bam_bai
         }
 
-    //     interval_flag = params.no_intervals
-    //     // Run haplotyper even in the absence of dbSNP files
-    //     if (!params.dbsnp){
-    //         ch_dbsnp = []
-    //         ch_dbsnp_tbi = []
-    //     }
+        interval_flag = params.no_intervals
+        // Run haplotyper even in the absence of dbSNP files
+        if (!params.dbsnp){
+            ch_dbsnp = []
+            ch_dbsnp_tbi = []
+        }
 
-    //     ch_haplotypecaller_vcf = Channel.empty()
-    //     ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
-    //         .map{ meta, bam, bai, interval_list ->
-    //             new_meta = meta.clone()
-    //             new_meta.id = meta.id + "_" + interval_list.baseName
-    //             new_meta.sample = meta.id
-    //             [new_meta, bam, bai, interval_list]
-    //         }
+        ch_haplotypecaller_vcf = Channel.empty()
+        ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
+            .map{ meta, bam, bai, interval_list ->
+                [meta + [id:meta.id + "_" + interval_list.baseName], bam, bai, interval_list, []]
+            }
 
-    //     //
-    //     // MODULE: HaplotypeCaller from GATK4
-    //     // Calls germline SNPs and indels via local re-assembly of haplotypes.
-    //     //
+        //
+        // MODULE: HaplotypeCaller from GATK4
+        // Calls germline SNPs and indels via local re-assembly of haplotypes.
+        //
 
-    //     GATK4_HAPLOTYPECALLER(
-    //         ch_haplotypecaller_interval_bam,
-    //         ch_fasta,
-    //         ch_fasta_fai,
-    //         ch_dict,
-    //         ch_dbsnp,
-    //         ch_dbsnp_tbi
-    //     )
+        GATK4_HAPLOTYPECALLER(
+            ch_haplotypecaller_interval_bam,
+            ch_fasta.map{ meta, fasta -> [fasta] },
+            ch_fasta_fai,
+            ch_dict.map{ meta, dict -> [dict] },
+            ch_dbsnp,
+            ch_dbsnp_tbi
+        )
 
 
-    //     ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
-    //         .map{ meta, vcf ->
-    //             meta.id = meta.sample
-    //             [meta, vcf]}
-    //         .groupTuple()
+        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
+            .map{ meta, vcf ->
+                meta.id = meta.sample
+                [meta, vcf]}
+            .groupTuple()
 
-    //     ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
+        ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
 
-    //     //
-    //     // MODULE: MergeVCFS from GATK4
-    //     // Merge multiple VCF files into one VCF
-    //     //
-    //     GATK4_MERGEVCFS(ch_haplotypecaller_raw, ch_dict)
-    //     ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
-    //     ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
+        //
+        // MODULE: MergeVCFS from GATK4
+        // Merge multiple VCF files into one VCF
+        //
+        GATK4_MERGEVCFS(ch_haplotypecaller_raw, ch_dict)
+        ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
+        ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
     //     if (params.generate_gvcf){
     //         GATK4_HAPLOTYPECALLERGVCF(
