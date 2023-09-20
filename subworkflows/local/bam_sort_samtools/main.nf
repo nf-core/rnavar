@@ -37,9 +37,10 @@ workflow BAM_SORT_SAMTOOLS {
         }
         .set { ch_bam_bai }
 
-    BAM_STATS_SAMTOOLS (
-        ch_bam_bai
-    )
+    BAM_STATS_SAMTOOLS(ch_bam_bai)
+
+    reports = BAM_STATS_SAMTOOLS.out.reports.map{meta, logs -> [logs] }
+
     ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions.first())
 
     emit:
@@ -47,6 +48,6 @@ workflow BAM_SORT_SAMTOOLS {
     bai      = SAMTOOLS_INDEX.out.bai          // channel: [ val(meta), [ bai ] ]
     csi      = SAMTOOLS_INDEX.out.csi          // channel: [ val(meta), [ csi ] ]
 
-    reports  = BAM_STATS_SAMTOOLS.out.reports
+    reports
     versions = ch_versions                     // channel: [ versions.yml ]
 }

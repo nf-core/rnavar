@@ -178,7 +178,7 @@ workflow RNAVAR {
 
     // MODULE: Generate QC summary using FastQC
     FASTQC(ch_cat_fastq)
-    ch_reports  = ch_reports.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_reports = ch_reports.mix(FASTQC.out.zip.collect{ meta, logs -> logs })
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
@@ -426,39 +426,39 @@ workflow RNAVAR {
 
         }
 
-    //     //
-    //     // MODULE: Index the VCF using TABIX
-    //     //
-    //     TABIX(ch_haplotypecaller_vcf)
+        //
+        // MODULE: Index the VCF using TABIX
+        //
+        TABIX(ch_haplotypecaller_vcf)
 
-    //     ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
-    //         .join(TABIX.out.tbi, remainder: true)
-    //         .join(TABIX.out.csi, remainder: true)
-    //         .map{meta, vcf, tbi, csi ->
-    //             if (tbi) [meta, vcf, tbi]
-    //             else [meta, vcf, csi]
-    //         }
+        ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
+            .join(TABIX.out.tbi, remainder: true)
+            .join(TABIX.out.csi, remainder: true)
+            .map{meta, vcf, tbi, csi ->
+                if (tbi) [meta, vcf, tbi]
+                else [meta, vcf, csi]
+            }
 
-    //     ch_versions     = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
-    //     ch_final_vcf    = ch_haplotypecaller_vcf
+        ch_versions     = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
+        ch_final_vcf    = ch_haplotypecaller_vcf
 
-    //     //
-    //     // MODULE: VariantFiltration from GATK4
-    //     // Filter variant calls based on certain criteria
-    //     //
-    //     if (!params.skip_variantfiltration && !params.bam_csi_index ) {
+        //
+        // MODULE: VariantFiltration from GATK4
+        // Filter variant calls based on certain criteria
+        //
+        if (!params.skip_variantfiltration && !params.bam_csi_index ) {
 
-    //         GATK4_VARIANTFILTRATION(
-    //             ch_haplotypecaller_vcf_tbi,
-    //             ch_fasta,
-    //             ch_fasta_fai,
-    //             ch_dict
-    //         )
+            GATK4_VARIANTFILTRATION(
+                ch_haplotypecaller_vcf_tbi,
+                ch_fasta,
+                ch_fasta_fai.map{ it -> [ [id:'fai'], it ] },
+                ch_dict
+            )
 
-    //         ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
-    //         ch_final_vcf    = ch_filtered_vcf
-    //         ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
-    //     }
+            ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
+            ch_final_vcf    = ch_filtered_vcf
+            ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
+        }
 
     //     //
     //     // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
@@ -481,40 +481,34 @@ workflow RNAVAR {
 
     }
 
-    // ch_version_yaml = Channel.empty()
-    // CUSTOM_DUMPSOFTWAREVERSIONS(ch_versions.unique().collectFile(name: 'collated_versions.yml'))
-    // ch_version_yaml = CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect()
+    ch_version_yaml = Channel.empty()
+    CUSTOM_DUMPSOFTWAREVERSIONS(ch_versions.unique().collectFile(name: 'collated_versions.yml'))
+    ch_version_yaml = CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect()
 
-    // //
-    // // MODULE: MultiQC
-    // // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
-    // //
-    // if (!params.skip_multiqc){
-    //     workflow_summary       = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
-    //     ch_workflow_summary    = Channel.value(workflow_summary)
+    //
+    // MODULE: MultiQC
+    // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
+    //
+    if (!params.skip_multiqc){
+        workflow_summary    = WorkflowRnavar.paramsSummaryMultiqc(workflow, summary_params)
+        ch_workflow_summary = Channel.value(workflow_summary)
 
-    //     methods_description    = WorkflowRnavar.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
-    //     ch_methods_description = Channel.value(methods_description)
+        methods_description    = WorkflowRnavar.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
+        ch_methods_description = Channel.value(methods_description)
 
-    //     ch_multiqc_files = Channel.empty()
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
-    //     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    //     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_version_yaml)
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_reports.collect())
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_config)
-    //     ch_multiqc_files = ch_multiqc_files.mix(ch_rnavar_logo)
+        ch_reports.view()
 
-    //     MULTIQC(
-    //         ch_multiqc_files.collect(),
-    //         ch_multiqc_config.toList(),
-    //         ch_multiqc_custom_config.toList(),
-    //         ch_multiqc_logo.toList()
-    //     )
-    //     multiqc_report = MULTIQC.out.report.toList()
-    // }
+        multiqc_files = Channel.empty()
+        multiqc_files = multiqc_files.mix(ch_version_yaml)
+        multiqc_files = multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+        multiqc_files = multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
+        multiqc_files = multiqc_files.mix(ch_reports.collect().ifEmpty([]))
+
+        MULTIQC(multiqc_files.collect(), ch_multiqc_config.collect().ifEmpty([]), ch_multiqc_custom_config.collect().ifEmpty([]), ch_multiqc_logo.collect().ifEmpty([]))
+
+        multiqc_report = MULTIQC.out.report.toList()
+        ch_versions = ch_versions.mix(MULTIQC.out.versions)
+    }
 }
 
 /*

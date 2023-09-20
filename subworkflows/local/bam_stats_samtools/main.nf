@@ -12,6 +12,7 @@ workflow BAM_STATS_SAMTOOLS {
 
     main:
     ch_versions = Channel.empty()
+    ch_reports = Channel.empty()
 
     SAMTOOLS_FLAGSTAT(ch_bam_bai)
     SAMTOOLS_IDXSTATS(ch_bam_bai)
@@ -21,7 +22,11 @@ workflow BAM_STATS_SAMTOOLS {
     ch_versions = ch_versions.mix(SAMTOOLS_IDXSTATS.out.versions.first())
     ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions.first())
 
+    ch_reports = ch_reports.mix(SAMTOOLS_STATS.out.stats)
+    ch_reports = ch_reports.mix(SAMTOOLS_FLAGSTAT.out.flagstat)
+    ch_reports = ch_reports.mix(SAMTOOLS_IDXSTATS.out.idxstats)
+
     emit:
-    reports = SAMTOOLS_STATS.out.stats.mix(SAMTOOLS_FLAGSTAT.out.flagstat, SAMTOOLS_IDXSTATS.out.idxstats)
+    reports = ch_reports
     versions = ch_versions                    // channel: [ versions.yml ]
 }
