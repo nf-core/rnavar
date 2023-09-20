@@ -12,7 +12,6 @@ include { STAR_GENOMEGENERATE            } from '../../../modules/nf-core/star/g
 
 workflow PREPARE_GENOME {
     take:
-    ch_exon_bed   // file: /path/to/gene.bed
     ch_fasta      // file: /path/to/genome.fasta
     ch_gff        // file: /path/to/genome.gff
     ch_gtf        // file: /path/to/genome.gtf
@@ -37,12 +36,12 @@ workflow PREPARE_GENOME {
     ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
 
     emit:
-    dict       = GATK4_CREATESEQUENCEDICTIONARY.out.dict          //    path: genome.fasta.dict
-    exon_bed   = GTF2BED.out.bed.collect()                        //    path: exon.bed
-    fasta_fai  = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] } //    path: genome.fasta.fai
-    gtf        = ch_gtf                                           //    path: genome.gtf
-    star_index = STAR_GENOMEGENERATE.out.index                    //    path: star/index/
-    versions   = ch_versions                                      // channel: [ versions.yml ]
+    dict       = GATK4_CREATESEQUENCEDICTIONARY.out.dict                              //    path: genome.fasta.dict
+    exon_bed   = GTF2BED.out.bed.map{ bed -> [ [ id:bed.baseName ], bed ] }.collect() //    path: exon.bed
+    fasta_fai  = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }                     //    path: genome.fasta.fai
+    gtf        = ch_gtf                                                               //    path: genome.gtf
+    star_index = STAR_GENOMEGENERATE.out.index                                        //    path: star/index/
+    versions   = ch_versions                                                          // channel: [ versions.yml ]
     // bedtools_sort    = ch_bedtools_sort    // path: sort.bed
     // bedtools_merge   = ch_bedtools_merge   // path: merge.bed
 }

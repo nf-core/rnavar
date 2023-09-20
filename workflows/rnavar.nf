@@ -154,15 +154,19 @@ workflow RNAVAR {
     // Prepare reference genome files
 
     PREPARE_GENOME(
-        ch_exon_bed,
         ch_fasta,
         ch_gff,
         ch_gtf,
         params.feature_type
     )
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    // ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
-    // ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
+    ch_genome_bed = params.exon_bed  ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
+                                    : PREPARE_GENOME.out.exon_bed
+    ch_dict       = params.dict      ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
+                                    : PREPARE_GENOME.out.dict
+    ch_fasta_fai  = params.fasta_fai ? Channel.fromPath(params.fasta_fai).collect()
+                                    : PREPARE_GENOME.out.fasta_fai
 
     // // MODULE: Concatenate FastQ files from same sample if required
 
@@ -180,10 +184,10 @@ workflow RNAVAR {
     // //
     // // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
     // //
-    // ch_interval_list = Channel.empty()
-    // GATK4_BEDTOINTERVALLIST(ch_genome_bed, PREPARE_GENOME.out.dict)
-    // ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
-    // ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
+
+    GATK4_BEDTOINTERVALLIST(ch_genome_bed, ch_dict)
+    ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
+    ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
 
     // //
     // // MODULE: Scatter one interval-list into many interval-files using GATK4 IntervalListTools
