@@ -285,29 +285,29 @@ workflow RNAVAR {
             )
             ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
 
-    //         // Gather QC reports
-    //         ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
-    //         ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
+            // Gather QC reports
+            ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
+            ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
-    //         ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
-    //         ch_bam_recalibrated_qc = Channel.empty()
+            ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
+            ch_bam_recalibrated_qc = Channel.empty()
 
-    //         ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-    //         ch_bam_applybqsr.combine(ch_interval_list_applybqsr)
-    //             .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]}
-    //             .set{ch_applybqsr_bam_bai_interval}
+            ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
+            ch_bam_applybqsr.combine(ch_interval_list_applybqsr)
+                .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]}
+                .set{ch_applybqsr_bam_bai_interval}
 
-    //         //
-    //         // MODULE: ApplyBaseRecalibrator from GATK4
-    //         // Recalibrates the base qualities of the input reads based on the recalibration table produced by the GATK BaseRecalibrator tool.
-    //         //
-    //         RECALIBRATE(
-    //             params.skip_multiqc,
-    //             ch_applybqsr_bam_bai_interval,
-    //             ch_dict,
-    //             ch_fasta_fai,
-    //             PREPARE_GENOME.out.fasta
-    //         )
+            //
+            // MODULE: ApplyBaseRecalibrator from GATK4
+            // Recalibrates the base qualities of the input reads based on the recalibration table produced by the GATK BaseRecalibrator tool.
+            //
+            RECALIBRATE(
+                params.skip_multiqc,
+                ch_applybqsr_bam_bai_interval,
+                ch_dict.map{ meta, dict -> [dict] },
+                ch_fasta_fai,
+                ch_fasta.map{ meta, fasta -> [fasta] }
+            )
 
     //         ch_bam_variant_calling = RECALIBRATE.out.bam
     //         ch_bam_recalibrated_qc = RECALIBRATE.out.qc

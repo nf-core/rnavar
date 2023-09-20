@@ -33,9 +33,8 @@ workflow RECALIBRATE {
     bam_recalibrated = APPLYBQSR.out.bam
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
 
-    SAMTOOLS_INDEX (
-        bam_recalibrated
-    )
+    SAMTOOLS_INDEX(bam_recalibrated)
+
     bam_recalibrated_index = bam_recalibrated
         .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
         .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
@@ -49,7 +48,7 @@ workflow RECALIBRATE {
     samtools_stats = Channel.empty()
 
     if (!skip_samtools) {
-        SAMTOOLS_STATS(bam_recalibrated_index, [])
+        SAMTOOLS_STATS(bam_recalibrated_index, [[], []])
         samtools_stats = SAMTOOLS_STATS.out.stats
         ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions.first())
     }
