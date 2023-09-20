@@ -95,8 +95,8 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/
 
 // // Check STAR alignment parameters
 // def prepareToolIndices  = params.aligner
-// def seq_platform        = params.seq_platform ?: []
-// def seq_center          = params.seq_center   ?: []
+def seq_platform = params.seq_platform ?: []
+def seq_center   = params.seq_center   ?: []
 
 // // Initialize file channels based on params
 // ch_dbsnp                = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
@@ -164,11 +164,11 @@ workflow RNAVAR {
     ch_genome_bed = params.exon_bed  ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
                                     : PREPARE_GENOME.out.exon_bed
     ch_dict       = params.dict      ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
-                                    : PREPARE_GENOME.out.dict
+                                    : ch_dict
     ch_fasta_fai  = params.fasta_fai ? Channel.fromPath(params.fasta_fai).collect()
                                     : PREPARE_GENOME.out.fasta_fai
 
-    // // MODULE: Concatenate FastQ files from same sample if required
+    // MODULE: Concatenate FastQ files from same sample if required
 
     CAT_FASTQ(ch_fastq.multiple)
 
@@ -176,74 +176,73 @@ workflow RNAVAR {
 
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
 
-    // // MODULE: Generate QC summary using FastQC
+    // MODULE: Generate QC summary using FastQC
     FASTQC(ch_cat_fastq)
     ch_reports  = ch_reports.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
-    // //
-    // // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
-    // //
+    //
+    // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
+    //
 
     GATK4_BEDTOINTERVALLIST(ch_genome_bed, ch_dict)
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions.first().ifEmpty(null))
 
-    // //
-    // // MODULE: Scatter one interval-list into many interval-files using GATK4 IntervalListTools
-    // //
-    // ch_interval_list_split = Channel.empty()
-    // if (!params.skip_intervallisttools) {
-    //     GATK4_INTERVALLISTTOOLS(ch_interval_list)
-    //     ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
-    // }
-    // else ch_interval_list_split = ch_interval_list
+    //
+    // MODULE: Scatter one interval-list into many interval-files using GATK4 IntervalListTools
+    //
+    ch_interval_list_split = Channel.empty()
+    if (!params.skip_intervallisttools) {
+        GATK4_INTERVALLISTTOOLS(ch_interval_list)
+        ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
+    }
+    else ch_interval_list_split = ch_interval_list
 
-    // //
-    // // SUBWORKFLOW: Perform read alignment using STAR aligner
-    // //
-    // ch_genome_bam                 = Channel.empty()
-    // ch_genome_bam_index           = Channel.empty()
-    // ch_samtools_stats             = Channel.empty()
-    // ch_samtools_flagstat          = Channel.empty()
-    // ch_samtools_idxstats          = Channel.empty()
-    // ch_star_multiqc               = Channel.empty()
-    // ch_aligner_pca_multiqc        = Channel.empty()
-    // ch_aligner_clustering_multiqc = Channel.empty()
+    //
+    // SUBWORKFLOW: Perform read alignment using STAR aligner
+    //
+    ch_genome_bam                 = Channel.empty()
+    ch_genome_bam_index           = Channel.empty()
+    ch_samtools_stats             = Channel.empty()
+    ch_samtools_flagstat          = Channel.empty()
+    ch_samtools_idxstats          = Channel.empty()
+    ch_star_multiqc               = Channel.empty()
+    ch_aligner_pca_multiqc        = Channel.empty()
+    ch_aligner_clustering_multiqc = Channel.empty()
 
-    // if (params.aligner == 'star') {
-    //     ALIGN_STAR(
-    //         ch_cat_fastq,
-    //         PREPARE_GENOME.out.star_index,
-    //         PREPARE_GENOME.out.gtf,
-    //         params.star_ignore_sjdbgtf,
-    //         seq_platform,
-    //         seq_center
-    //     )
-    //     ch_genome_bam        = ALIGN_STAR.out.bam
-    //     ch_genome_bam_index  = ALIGN_STAR.out.bai
-    //     ch_transcriptome_bam = ALIGN_STAR.out.bam_transcript
+    if (params.aligner == 'star') {
+        ALIGN_STAR(
+            ch_cat_fastq,
+            PREPARE_GENOME.out.star_index,
+            PREPARE_GENOME.out.gtf,
+            params.star_ignore_sjdbgtf,
+            seq_platform,
+            seq_center
+        )
+        ch_genome_bam        = ALIGN_STAR.out.bam
+        ch_genome_bam_index  = ALIGN_STAR.out.bai
+        ch_transcriptome_bam = ALIGN_STAR.out.bam_transcript
 
-    //     // Gather QC reports
-    //     ch_reports           = ch_reports.mix(ALIGN_STAR.out.stats.collect{it[1]}.ifEmpty([]))
-    //     ch_reports           = ch_reports.mix(ALIGN_STAR.out.log_final.collect{it[1]}.ifEmpty([]))
-    //     ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
+        // Gather QC reports
+        ch_reports           = ch_reports.mix(ALIGN_STAR.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_reports           = ch_reports.mix(ALIGN_STAR.out.log_final.collect{it[1]}.ifEmpty([]))
+        ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions.first().ifEmpty(null))
 
-    //     //
-    //     // SUBWORKFLOW: Mark duplicates with GATK4
-    //     //
-    //     BAM_MARKDUPLICATES(
-    //         ch_genome_bam,
-    //         PREPARE_GENOME.out.fasta,
-    //         PREPARE_GENOME.out.fai,
-    //         [])
+        //
+        // SUBWORKFLOW: Mark duplicates with GATK4
+        //
+        BAM_MARKDUPLICATES(
+            ch_genome_bam,
+            ch_fasta.map{ meta, fasta -> [fasta] },
+            ch_fasta_fai,
+            [])
 
-    //     ch_genome_bam             = BAM_MARKDUPLICATES.out.bam_bai
+        ch_genome_bam             = BAM_MARKDUPLICATES.out.cram
 
-    //     //Gather QC reports
-    //     ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES.out.stats.collect{it[1]}.ifEmpty([]))
-    //     ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES.out.metrics.collect{it[1]}.ifEmpty([]))
-    //     ch_versions               = ch_versions.mix(BAM_MARKDUPLICATES.out.versions.first().ifEmpty(null))
+        //Gather QC reports
+        ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES.out.reports.collect{it[1]}.ifEmpty([]))
+        ch_versions               = ch_versions.mix(BAM_MARKDUPLICATES.out.versions.first().ifEmpty(null))
 
     //     //
     //     // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
@@ -252,9 +251,9 @@ workflow RNAVAR {
     //     ch_splitncigar_bam_bai = Channel.empty()
     //     SPLITNCIGAR(
     //         ch_genome_bam,
-    //         PREPARE_GENOME.out.fasta,
-    //         PREPARE_GENOME.out.fai,
-    //         PREPARE_GENOME.out.dict,
+    //         ch_fasta,
+    //         ch_fasta_fai,
+    //         ch_dict,
     //         ch_interval_list_split
     //     )
     //     ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
@@ -279,9 +278,9 @@ workflow RNAVAR {
 
     //         GATK4_BASERECALIBRATOR(
     //             ch_splitncigar_bam_bai_interval,
-    //             PREPARE_GENOME.out.fasta,
-    //             PREPARE_GENOME.out.fai,
-    //             PREPARE_GENOME.out.dict,
+    //             ch_fasta,
+    //             ch_fasta_fai,
+    //             ch_dict,
     //             ch_known_sites,
     //             ch_known_sites_tbi
     //         )
@@ -306,8 +305,8 @@ workflow RNAVAR {
     //         RECALIBRATE(
     //             params.skip_multiqc,
     //             ch_applybqsr_bam_bai_interval,
-    //             PREPARE_GENOME.out.dict,
-    //             PREPARE_GENOME.out.fai,
+    //             ch_dict,
+    //             ch_fasta_fai,
     //             PREPARE_GENOME.out.fasta
     //         )
 
@@ -319,7 +318,7 @@ workflow RNAVAR {
     //         ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
     //     } else {
     //         ch_bam_variant_calling = ch_splitncigar_bam_bai
-    //     }
+        }
 
     //     interval_flag = params.no_intervals
     //     // Run haplotyper even in the absence of dbSNP files
@@ -344,9 +343,9 @@ workflow RNAVAR {
 
     //     GATK4_HAPLOTYPECALLER(
     //         ch_haplotypecaller_interval_bam,
-    //         PREPARE_GENOME.out.fasta,
-    //         PREPARE_GENOME.out.fai,
-    //         PREPARE_GENOME.out.dict,
+    //         ch_fasta,
+    //         ch_fasta_fai,
+    //         ch_dict,
     //         ch_dbsnp,
     //         ch_dbsnp_tbi
     //     )
@@ -364,16 +363,16 @@ workflow RNAVAR {
     //     // MODULE: MergeVCFS from GATK4
     //     // Merge multiple VCF files into one VCF
     //     //
-    //     GATK4_MERGEVCFS(ch_haplotypecaller_raw, PREPARE_GENOME.out.dict)
+    //     GATK4_MERGEVCFS(ch_haplotypecaller_raw, ch_dict)
     //     ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
     //     ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
     //     if (params.generate_gvcf){
     //         GATK4_HAPLOTYPECALLERGVCF(
     //             ch_haplotypecaller_interval_bam,
-    //             PREPARE_GENOME.out.fasta,
-    //             PREPARE_GENOME.out.fai,
-    //             PREPARE_GENOME.out.dict,
+    //             ch_fasta,
+    //             ch_fasta_fai,
+    //             ch_dict,
     //             ch_dbsnp,
     //             ch_dbsnp_tbi
     //         )
@@ -415,9 +414,9 @@ workflow RNAVAR {
     //         GATK4_COMBINEGVCFS(
     //             ch_haplotypecallergvcf_raw,
     //             ch_haplotypecallergvcf_raw_index,
-    //             PREPARE_GENOME.out.fasta,
-    //             PREPARE_GENOME.out.fai,
-    //             PREPARE_GENOME.out.dict
+    //             ch_fasta,
+    //             ch_fasta_fai,
+    //             ch_dict
     //         )
     //         ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
     //         ch_versions  = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions.first().ifEmpty(null))
@@ -463,9 +462,9 @@ workflow RNAVAR {
 
     //         GATK4_VARIANTFILTRATION(
     //             ch_haplotypecaller_vcf_tbi,
-    //             PREPARE_GENOME.out.fasta,
-    //             PREPARE_GENOME.out.fai,
-    //             PREPARE_GENOME.out.dict
+    //             ch_fasta,
+    //             ch_fasta_fai,
+    //             ch_dict
     //         )
 
     //         ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
