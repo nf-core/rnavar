@@ -4,7 +4,7 @@
     - bamcsiindex
   files:
     - path: results/reports/multiqc_report.html
-    - path: results/preprocessing/GM12878/GM12878.markdup.sorted.bam
-    - path: results/preprocessing/GM12878/GM12878.markdup.sorted.bam.csi
+    - path: results/preprocessing/GM12878/GM12878.md.bam
+    - path: results/preprocessing/GM12878/GM12878.md.bam.csi
     - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz
     - path: results/variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.csi
