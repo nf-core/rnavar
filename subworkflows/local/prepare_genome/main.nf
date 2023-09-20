@@ -17,7 +17,6 @@ workflow PREPARE_GENOME {
     ch_gff        // file: /path/to/genome.gff
     ch_gtf        // file: /path/to/genome.gtf
     feature_type
-    // prepare_tool_indices
 
     main:
     ch_versions = Channel.empty()

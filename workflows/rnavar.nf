@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
+include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -116,6 +116,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS                        } from '../modules/
 // def multiqc_report = []
 
 
+
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
 ch_exon_bed = params.exon_bed ? Channel.fromPath(params.exon_bed)                                                       : Channel.empty()
 ch_fasta    = params.fasta    ? Channel.fromPath(params.fasta).map{ fasta -> [ [ id:fasta.baseName ], fasta ] }.first() : Channel.empty()
@@ -129,71 +130,52 @@ ch_gtf      = params.gtf      ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:
 */
 
 workflow RNAVAR {
-
     // To gather all QC reports for MultiQC
     ch_reports  = Channel.empty()
 
     // To gather used softwares versions for MultiQC
     ch_versions = Channel.empty()
 
-    //
+    ch_from_samplesheet = Channel.empty()
+
+    if (params.input) ch_from_samplesheet = Channel.fromSamplesheet("input")
+
+    ch_fastq = ch_from_samplesheet.map{ meta, fastq_1, fastq_2 ->
+        if (fastq_2) return [ meta + [id: meta.sample], [ fastq_1, fastq_2 ] ]
+        else return [ meta + [id: meta.sample], [ fastq_1 ] ]
+    }.groupTuple()
+    .branch { meta, fastq ->
+        single  : fastq.size() == 1
+            return [ meta, fastq.flatten() ]
+        multiple: fastq.size() > 1
+            return [ meta, fastq.flatten() ]
+    }
+
     // Prepare reference genome files
-    //
 
     PREPARE_GENOME(
         ch_exon_bed,
         ch_fasta,
         ch_gff,
         ch_gtf,
-        // params.aligner,
         params.feature_type
     )
 
     // ch_genome_bed = Channel.from([id:'genome.bed']).combine(PREPARE_GENOME.out.exon_bed)
     // ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    // //
-    // // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    // //
-    // INPUT_CHECK(file(params.input))
-    //     .reads
-    //     .map {
-    //         meta, fastq ->
-    //             def meta_clone = meta.clone()
-    //             meta_clone.id = meta_clone.id.split('_')[0..-2].join('_')
-    //             [ meta_clone, fastq ]
-    //     }
-    //     .groupTuple(by: [0])
-    //     .branch {
-    //         meta, fastq ->
-    //             single  : fastq.size() == 1
-    //                 return [ meta, fastq.flatten() ]
-    //             multiple: fastq.size() > 1
-    //                 return [ meta, fastq.flatten() ]
-    //     }
-    //     .set { ch_fastq }
-
-    // ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
-    // // TODO: OPTIONAL, you can use nf-validation plugin to create an input channel from the samplesheet with Channel.fromSamplesheet("input")
-    // // See the documentation https://nextflow-io.github.io/nf-validation/samplesheets/fromSamplesheet/
-    // // ! There is currently no tooling to help you write a sample sheet schema
-
-    // //
     // // MODULE: Concatenate FastQ files from same sample if required
-    // //
-    // CAT_FASTQ(ch_fastq.multiple)
-    //     .reads
-    //     .mix(ch_fastq.single)
-    //     .set { ch_cat_fastq }
 
-    // ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
+    CAT_FASTQ(ch_fastq.multiple)
 
-    // //
+    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single)
+
+    ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
+
     // // MODULE: Generate QC summary using FastQC
-    // //
-    // FASTQC(ch_cat_fastq)
-    // ch_reports  = ch_reports.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    FASTQC(ch_cat_fastq)
+    ch_reports  = ch_reports.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // //
     // // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
