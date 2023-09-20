@@ -99,10 +99,10 @@ def seq_platform = params.seq_platform ?: []
 def seq_center   = params.seq_center   ?: []
 
 // // Initialize file channels based on params
-// ch_dbsnp                = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
-// ch_dbsnp_tbi            = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
-// ch_known_indels         = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
-// ch_known_indels_tbi     = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
+ch_dbsnp                = params.dbsnp             ? Channel.fromPath(params.dbsnp).collect()               : Channel.empty()
+ch_dbsnp_tbi            = params.dbsnp_tbi         ? Channel.fromPath(params.dbsnp_tbi).collect()           : Channel.empty()
+ch_known_indels         = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
+ch_known_indels_tbi     = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
 // // Initialize variant annotation associated channels
 // ch_snpeff_db            = params.snpeff_db         ?:   Channel.empty()
@@ -259,32 +259,31 @@ workflow RNAVAR {
         ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
         ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions.first().ifEmpty(null))
 
-    //     //
-    //     // MODULE: BaseRecalibrator from GATK4
-    //     // Generates a recalibration table based on various co-variates
-    //     //
-    //     ch_bam_variant_calling = Channel.empty()
-    //     if (!params.skip_baserecalibration) {
-    //         ch_bqsr_table   = Channel.empty()
-    //         // known_sites is made by grouping both the dbsnp and the known indels ressources
-    //         // they can either or both be optional
-    //         ch_known_sites     = ch_dbsnp.concat(ch_known_indels).collect()
-    //         ch_known_sites_tbi = ch_dbsnp_tbi.concat(ch_known_indels_tbi).collect()
+        //
+        // MODULE: BaseRecalibrator from GATK4
+        // Generates a recalibration table based on various co-variates
+        //
+        ch_bam_variant_calling = Channel.empty()
+        if (!params.skip_baserecalibration) {
+            ch_bqsr_table   = Channel.empty()
+            // known_sites is made by grouping both the dbsnp and the known indels ressources
+            // they can either or both be optional
+            ch_known_sites     = ch_dbsnp.concat(ch_known_indels).collect()
+            ch_known_sites_tbi = ch_dbsnp_tbi.concat(ch_known_indels_tbi).collect()
 
-    //         ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-    //         ch_splitncigar_bam_bai.combine(ch_interval_list_recalib)
-    //             .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval]
-    //         }.set{ch_splitncigar_bam_bai_interval}
+            ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
+            ch_splitncigar_bam_bai_interval = ch_splitncigar_bam_bai.combine(ch_interval_list_recalib)
+                .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval] }
 
-    //         GATK4_BASERECALIBRATOR(
-    //             ch_splitncigar_bam_bai_interval,
-    //             ch_fasta,
-    //             ch_fasta_fai,
-    //             ch_dict,
-    //             ch_known_sites,
-    //             ch_known_sites_tbi
-    //         )
-    //         ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
+            GATK4_BASERECALIBRATOR(
+                ch_splitncigar_bam_bai_interval,
+                ch_fasta.map{ meta, fasta -> [fasta] },
+                ch_fasta_fai,
+                ch_dict.map{ meta, dict -> [dict] },
+                ch_known_sites,
+                ch_known_sites_tbi
+            )
+            ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
 
     //         // Gather QC reports
     //         ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
@@ -491,7 +490,7 @@ workflow RNAVAR {
     //         ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
     //     }
 
-    // }
+    }
 
     // ch_version_yaml = Channel.empty()
     // CUSTOM_DUMPSOFTWAREVERSIONS(ch_versions.unique().collectFile(name: 'collated_versions.yml'))
