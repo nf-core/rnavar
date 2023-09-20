@@ -496,8 +496,6 @@ workflow RNAVAR {
         methods_description    = WorkflowRnavar.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
         ch_methods_description = Channel.value(methods_description)
 
-        ch_reports.view()
-
         multiqc_files = Channel.empty()
         multiqc_files = multiqc_files.mix(ch_version_yaml)
         multiqc_files = multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
