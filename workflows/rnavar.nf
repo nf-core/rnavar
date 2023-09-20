@@ -289,7 +289,7 @@ workflow RNAVAR {
             ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
             ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions.first().ifEmpty(null))
 
-            ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table, by: [0])
+            ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table)
             ch_bam_recalibrated_qc = Channel.empty()
 
             ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
@@ -363,76 +363,68 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
         ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
-    //     if (params.generate_gvcf){
-    //         GATK4_HAPLOTYPECALLERGVCF(
-    //             ch_haplotypecaller_interval_bam,
-    //             ch_fasta,
-    //             ch_fasta_fai,
-    //             ch_dict,
-    //             ch_dbsnp,
-    //             ch_dbsnp_tbi
-    //         )
+        if (params.generate_gvcf){
+            GATK4_HAPLOTYPECALLERGVCF(
+                ch_haplotypecaller_interval_bam,
+                ch_fasta.map{ meta, fasta -> [fasta] },
+                ch_fasta_fai,
+                ch_dict.map{ meta, dict -> [dict] },
+                ch_dbsnp,
+                ch_dbsnp_tbi
+            )
 
-    //         ch_haplotypecallergvcf_raw = GATK4_HAPLOTYPECALLERGVCF.out.vcf
-    //             .map{ meta, vcf ->
-    //                 meta.id = meta.sample
-    //                 [meta, vcf]}
-    //             .groupTuple()
+            ch_haplotypecallergvcf_raw = GATK4_HAPLOTYPECALLERGVCF.out.vcf
+                .map{ meta, vcf ->
+                    meta.id = meta.sample
+                    [meta, vcf]
+                }.groupTuple()
 
-    //         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLERGVCF.out.versions.first().ifEmpty(null))
-    //         //
-    //         // MODULE: IndexFeatureFile from GATK4
-    //         // Index the gVCF files
-    //         //
-    //         GATK4_INDEXFEATUREFILE(GATK4_HAPLOTYPECALLERGVCF.out.vcf)
+            ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLERGVCF.out.versions.first().ifEmpty(null))
+            //
+            // MODULE: IndexFeatureFile from GATK4
+            // Index the gVCF files
+            //
+            GATK4_INDEXFEATUREFILE(GATK4_HAPLOTYPECALLERGVCF.out.vcf)
 
-    //         ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
-    //             .map{ meta, idx ->
-    //                 meta.id = meta.sample
-    //                 [meta, idx]}
-    //             .groupTuple()
+            ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
+                .map{ meta, idx ->
+                    meta.id = meta.sample
+                    [meta, idx]
+                }.groupTuple()
 
-    //         ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+            ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
 
-    //         //
-    //         // MODULE: CombineGVCFS from GATK4
-    //         // Merge multiple GVCF files into one GVCF
-    //         //
+            // MODULE: CombineGVCFS from GATK4
+            // Merge multiple GVCF files into one GVCF
 
-    //         //ch_haplotypecallergvcf_raw_tbi = ch_haplotypecallergvcf_raw
-    //         //    .join(ch_haplotypecallergvcf_raw_index, by: [0], remainder: true)
-    //         //    .map{meta, vcf, tbi ->
-    //         //        [meta, vcf, tbi]
-    //         //    }
+            ch_haplotypecallergvcf_raw_tbi = ch_haplotypecallergvcf_raw
+                .join(ch_haplotypecallergvcf_raw_index, remainder: true)
 
+            GATK4_COMBINEGVCFS(
+                ch_haplotypecallergvcf_raw_tbi,
+                ch_fasta.map{ meta, fasta -> [fasta] },
+                ch_fasta_fai,
+                ch_dict.map{ meta, dict -> [dict] }
+            )
+            ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
+            ch_versions  = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions.first().ifEmpty(null))
 
+            //
+            // MODULE: Index the VCF using TABIX
+            //
+            TABIXGVCF(ch_haplotypecaller_gvcf)
 
-    //         GATK4_COMBINEGVCFS(
-    //             ch_haplotypecallergvcf_raw,
-    //             ch_haplotypecallergvcf_raw_index,
-    //             ch_fasta,
-    //             ch_fasta_fai,
-    //             ch_dict
-    //         )
-    //         ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
-    //         ch_versions  = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions.first().ifEmpty(null))
+            ch_haplotypecaller_gvcf_tbi = ch_haplotypecaller_gvcf
+                .join(TABIXGVCF.out.tbi, remainder: true)
+                .join(TABIXGVCF.out.csi, remainder: true)
+                .map{meta, vcf, tbi, csi ->
+                    if (tbi) [meta, vcf, tbi]
+                    else [meta, vcf, csi]
+                }
 
-    //         //
-    //         // MODULE: Index the VCF using TABIX
-    //         //
-    //         TABIXGVCF(ch_haplotypecaller_gvcf)
+            ch_versions  = ch_versions.mix(TABIXGVCF.out.versions.first().ifEmpty(null))
 
-    //         ch_haplotypecaller_gvcf_tbi = ch_haplotypecaller_gvcf
-    //             .join(TABIXGVCF.out.tbi, by: [0], remainder: true)
-    //             .join(TABIXGVCF.out.csi, by: [0], remainder: true)
-    //             .map{meta, vcf, tbi, csi ->
-    //                 if (tbi) [meta, vcf, tbi]
-    //                 else [meta, vcf, csi]
-    //             }
-
-    //         ch_versions  = ch_versions.mix(TABIXGVCF.out.versions.first().ifEmpty(null))
-
-    //     }
+        }
 
     //     //
     //     // MODULE: Index the VCF using TABIX
@@ -440,8 +432,8 @@ workflow RNAVAR {
     //     TABIX(ch_haplotypecaller_vcf)
 
     //     ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
-    //         .join(TABIX.out.tbi, by: [0], remainder: true)
-    //         .join(TABIX.out.csi, by: [0], remainder: true)
+    //         .join(TABIX.out.tbi, remainder: true)
+    //         .join(TABIX.out.csi, remainder: true)
     //         .map{meta, vcf, tbi, csi ->
     //             if (tbi) [meta, vcf, tbi]
     //             else [meta, vcf, csi]
