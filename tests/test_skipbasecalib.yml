@@ -1,5 +1,5 @@
 - name: Run pipeline without base calibration step
-  command: nextflow run main.nf -profile test,docker --skip_baserecalibration true
+  command: nextflow run main.nf -profile test,docker --skip_baserecalibration true --outdir results
   tags:
     - skipbasecalib
     - preprocessing

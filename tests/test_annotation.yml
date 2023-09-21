@@ -1,5 +1,5 @@
 - name: Run snpEff
-  command: nextflow run main.nf -profile test,docker --annotate_tools snpeff
+  command: nextflow run main.nf -profile test,docker --annotate_tools snpeff --outdir results
   tags:
     - annotation
     - snpeff
@@ -8,7 +8,7 @@
     - path: results/variant_annotation/GM12878/GM12878_snpEff.ann.vcf.gz.tbi
     - path: results/reports/multiqc_report.html
 - name: Run VEP
-  command: nextflow run main.nf -profile test,docker --annotate_tools vep --skip_multiqc
+  command: nextflow run main.nf -profile test,docker --annotate_tools vep --skip_multiqc --outdir results
   tags:
     - annotation
     - vep
@@ -16,7 +16,7 @@
     - path: results/variant_annotation/GM12878/GM12878_VEP.ann.vcf.gz
     - path: results/variant_annotation/GM12878/GM12878_VEP.ann.vcf.gz.tbi
 - name: Run snpEff followed by VEP
-  command: nextflow run main.nf -profile test,docker --annotate_tools merge --skip_multiqc
+  command: nextflow run main.nf -profile test,docker --annotate_tools merge --skip_multiqc --outdir results
   tags:
     - annotation
     - merge

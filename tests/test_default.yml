@@ -1,5 +1,5 @@
 - name: Run default pipeline
-  command: nextflow run main.nf -profile test,docker
+  command: nextflow run main.nf -profile test,docker --outdir results
   tags:
     - default
     - preprocessing
