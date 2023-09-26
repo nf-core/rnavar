@@ -5,7 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0dev] nfcore/rnavar
 
-New version with additional features and bug fixes.
+### Added
+
+### Changed
+
+- [#95](https://github.com/nf-core/rnavar/pull/95) - Template update from nf-core/tools 2.5 -> 2.9
+- [#97](https://github.com/nf-core/rnavar/pull/97) - Template update from nf-core/tools 2.10
+
+### Fixed
+
+- [#97](https://github.com/nf-core/rnavar/pull/97) - Udpate all gatk4 modules to disable JVM hotspot
 
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 
