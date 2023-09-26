@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- [#97](https://github.com/nf-core/rnavar/pull/97) - Udpate all gatk4 modules to disable JVM hotspot
+- [#97](https://github.com/nf-core/rnavar/pull/97) - Update all gatk4 modules to disable JVM hotspot
 
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 
