@@ -94,7 +94,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/rnavar was originally written by Praveen Raj, Maxime U Garcia.
+nf-core/rnavar was originally written in Nextflow DSL2 for use at the [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken), by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)).
 
 The pipeline is primarily maintained by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) from [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)) from [Seqera Labs](https://seqera/io)
 
