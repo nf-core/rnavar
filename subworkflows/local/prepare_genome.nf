@@ -80,10 +80,10 @@ workflow PREPARE_GENOME {
             GUNZIP_GENE_BED (
                 Channel.fromPath(params.exon_bed).map{ it -> [[id:it[0].baseName], it] }
             )
-            ch_gene_bed = GUNZIP_GENE_BED.out.gunzip.map{ meta, bed -> [bed] }.collect()
+            ch_exon_bed = GUNZIP_GENE_BED.out.gunzip.map{ meta, bed -> [bed] }.collect()
             ch_versions = ch_versions.mix(GUNZIP_GENE_BED.out.versions)
         } else {
-            ch_gene_bed = Channel.fromPath(params.exon_bed).collect()
+            ch_exon_bed = Channel.fromPath(params.exon_bed).collect()
         }
     } else {
         ch_exon_bed = GTF2BED ( ch_gtf , feature_type).bed.collect()
@@ -94,6 +94,8 @@ workflow PREPARE_GENOME {
     //ch_exon_bed.map{ it -> [[id:'exome'], it] }
     //ch_exon_bed.view()
     // Bedtools sort
+    
+    
     ch_bedtools_sort = BEDTOOLS_SORT(ch_exon_bed.map{ it -> [[id:'exome'], it] }, 'sorted').sorted.collect()
     ch_versions = ch_versions.mix(BEDTOOLS_SORT.out.versions)
     

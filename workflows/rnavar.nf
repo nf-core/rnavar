@@ -277,7 +277,7 @@ workflow RNAVAR {
         // Generates a recalibration table based on various co-variates
         //
         ch_bam_variant_calling = Channel.empty()
-        if(!params.skip_baserecalibration) {
+        //if(!params.skip_baserecalibration) {
             ch_bqsr_table   = Channel.empty()
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
@@ -329,9 +329,9 @@ workflow RNAVAR {
             // Gather QC reports
             ch_reports  = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
             ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
-        } else {
-            ch_bam_variant_calling = ch_splitncigar_bam_bai
-        }
+        //} else {
+        //    ch_bam_variant_calling = ch_splitncigar_bam_bai
+        //}
 
         interval_flag = params.no_intervals
         // Run haplotyper even in the absence of dbSNP files
