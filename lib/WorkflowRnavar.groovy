@@ -20,23 +20,23 @@ class WorkflowRnavar {
         }
 
         if (!params.gtf && !params.gff) {
-            log.error "No GTF or GFF3 annotation specified! The pipeline requires at least one of these files."
-            System.exit(1)
+            Nextflow.error "No GTF or GFF3 annotation specified! The pipeline requires at least one of these files."
+
         }
 
         if ((!params.skip_baserecalibration) && (!params.dbsnp && !params.known_indels)) {
-            log.error "Known variants VCF file or its index is missing!. At least --dbsnp (and its index) or --known_indels (and its index) is required."
-            System.exit(1)
+            Nextflow.error "Known variants VCF file or its index is missing!. At least --dbsnp (and its index) or --known_indels (and its index) is required."
+
         }
 
         if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('vep')) && (!params.genome || !params.vep_genome || !params.vep_species || !params.vep_cache_version)) {
-            log.error "Species name (using --vep_species), genome assembly (either --genome or --vep_genome) and cache version (--vep_cache_version) are required to run VEP variant annotation."
-            System.exit(1)
+            Nextflow.error "Species name (using --vep_species), genome assembly (either --genome or --vep_genome) and cache version (--vep_cache_version) are required to run VEP variant annotation."
+
         }
 
         if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff')) && (!params.genome || !params.snpeff_db)) {
-            log.error "Either --genome or --snpeff_db is required to run snpEff variant annotation."
-            System.exit(1)
+            Nextflow.error "Either --genome or --snpeff_db is required to run snpEff variant annotation."
+
         }
 
     }
