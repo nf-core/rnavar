@@ -13,7 +13,11 @@ def summary_params = paramsSummaryMap(workflow)
 // Print parameter summary log to screen
 log.info logo + paramsSummaryLog(workflow) + citation
 
-WorkflowRnavar.initialise(params, log)
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    VALIDATE INPUTS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [
@@ -27,16 +31,30 @@ def checkPathParamList = [
     params.dbsnp_tbi,
     params.known_indels,
     params.known_indels_tbi,
-    params.snpeff_cache,
-    params.vep_cache,
     params.star_index,
 ]
 
-for(param in checkPathParamList) {if (param) file(param, checkIfExists: true)}
+// only check if we are using the tools
+if (params.annotate_tools && params.annotate_tools.contains("snpeff")) checkPathParamList.add(params.snpeff_cache)
+if (params.annotate_tools && params.annotate_tools.contains("vep"))    checkPathParamList.add(params.vep_cache)
 
-// Check mandatory parameters
+// Validate input parameters
+WorkflowRnavar.initialise(params, log)
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Check mandatory parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
+
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 if (!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option --gtf|--gff to provide a GTF|GFF file." }
+
+if ((params.download_cache) && (params.snpeff_cache || params.vep_cache)) {
+    error("Please specify either `--download_cache` or `--snpeff_cache`, `--vep_cache`.\nhttps://nf-co.re/sarek/usage#how-to-customise-snpeff-and-vep-annotation")
+}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,11 +76,12 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 include { GTF2BED            } from '../modules/local/gtf2bed/main'
 
 include { ALIGN_STAR         } from '../subworkflows/local/align_star/main'          // Align reads to genome and sort and index the alignment file
-include { ANNOTATE           } from '../subworkflows/local/annotate/main'            // Annotate variants using snpEff or VEP or both
 include { BAM_MARKDUPLICATES } from '../subworkflows/local/bam_markduplicates/main'  // Mark duplicates in the BAM file
+include { PREPARE_CACHE      } from '../subworkflows/local/prepare_cache/main'       // Download annotation cache if needed
 include { PREPARE_GENOME     } from '../subworkflows/local/prepare_genome/main'      // Build the genome index and other reference files
 include { RECALIBRATE        } from '../subworkflows/local/recalibrate/main'         // Estimate and correct systematic bias
 include { SPLITNCIGAR        } from '../subworkflows/local/splitncigar/main'         // Splits reads that contain Ns in their cigar string
+include { VCF_ANNOTATE_ALL   } from '../subworkflows/local/vcf_annotate_all/main'    // Annotate variants using snpEff or VEP or both
 
 /*
 ========================================================================================
@@ -104,18 +123,70 @@ ch_dbsnp_tbi            = params.dbsnp_tbi         ? Channel.fromPath(params.dbs
 ch_known_indels         = params.known_indels      ? Channel.fromPath(params.known_indels).collect()        : Channel.empty()
 ch_known_indels_tbi     = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi).collect()    : Channel.empty()
 
-// // Initialize variant annotation associated channels
-// ch_snpeff_db            = params.snpeff_db         ?:   Channel.empty()
-// ch_vep_cache_version    = params.vep_cache_version ?:   Channel.empty()
-// ch_vep_genome           = params.vep_genome        ?:   Channel.empty()
-// ch_vep_species          = params.vep_species       ?:   Channel.empty()
-// ch_snpeff_cache         = params.snpeff_cache      ?    Channel.fromPath(params.snpeff_cache).collect()  : []
-// ch_vep_cache            = params.vep_cache         ?    Channel.fromPath(params.vep_cache).collect()     : []
+// Initialize variant annotation associated channels
+snpeff_db          = params.snpeff_db          ?: Channel.empty()
+vep_cache_version  = params.vep_cache_version  ?: Channel.empty()
+vep_genome         = params.vep_genome         ?: Channel.empty()
+vep_species        = params.vep_species        ?: Channel.empty()
+
+// Initialize files channels based on params, not defined within the params.genomes[params.genome] scope
+if (params.snpeff_cache && params.annotate_tools && params.annotate_tools.contains("snpeff")) {
+    if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache") {
+        def snpeff_annotation_cache_key = "${params.snpeff_genome}.${params.snpeff_db}/"
+    } else {
+        def snpeff_annotation_cache_key = params.use_annotation_cache_keys ? "${params.snpeff_genome}.${params.snpeff_db}/" : ""
+    }
+    def snpeff_cache_dir =  "${snpeff_annotation_cache_key}${params.snpeff_genome}.${params.snpeff_db}"
+    def snpeff_cache_path_full = file("$params.snpeff_cache/$snpeff_cache_dir", type: 'dir')
+    if ( !snpeff_cache_path_full.exists() || !snpeff_cache_path_full.isDirectory() ) {
+        if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache") {
+            error("This path is not available within annotation-cache. Please check https://annotation-cache.github.io/ to create a request for it.")
+        } else {
+            error("Files within --snpeff_cache invalid. Make sure there is a directory named ${snpeff_cache_dir} in ${params.snpeff_cache}.\nhttps://nf-co.re/sarek/usage#how-to-customise-snpeff-and-vep-annotation")
+        }
+    }
+    snpeff_cache = Channel.fromPath(file("${params.snpeff_cache}/${snpeff_annotation_cache_key}"), checkIfExists: true).collect()
+        .map{ cache -> [ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], cache ] }
+    } else if (params.annotate_tools && params.annotate_tools.contains("snpeff") && !params.download_cache) {
+        error("No cache for SnpEff or automatic download of said cache has been detected.\nPlease refer to https://nf-co.re/sarek/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
+    } else snpeff_cache = []
+
+if (params.vep_cache && params.annotate_tools && params.annotate_tools.contains("vep")) {
+    if (params.vep_cache == "s3://annotation-cache/vep_cache") {
+        def vep_annotation_cache_key = "${params.vep_cache_version}_${params.vep_genome}/"
+    } else {
+        def vep_annotation_cache_key = params.use_annotation_cache_keys ? "${params.vep_cache_version}_${params.vep_genome}/" : ""
+    }
+    def vep_cache_dir = "${vep_annotation_cache_key}${params.vep_species}/${params.vep_cache_version}_${params.vep_genome}"
+    def vep_cache_path_full = file("$params.vep_cache/$vep_cache_dir", type: 'dir')
+    if ( !vep_cache_path_full.exists() || !vep_cache_path_full.isDirectory() ) {
+        if (params.vep_cache == "s3://annotation-cache/vep_cache") {
+            error("This path is not available within annotation-cache. Please check https://annotation-cache.github.io/ to create a request for it.")
+        } else {
+            error("Files within --vep_cache invalid. Make sure there is a directory named ${vep_cache_dir} in ${params.vep_cache}.\nhttps://nf-co.re/sarek/usage#how-to-customise-snpeff-and-vep-annotation")
+        }
+    }
+    vep_cache = Channel.fromPath(file("${params.vep_cache}/${vep_annotation_cache_key}"), checkIfExists: true).collect()
+    } else if (params.annotate_tools && params.annotate_tools.contains("vep") && !params.download_cache) {
+        error("No cache for VEP or automatic download of said cache has been detected.\nPlease refer to https://nf-co.re/sarek/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
+    } else vep_cache = []
+
+vep_extra_files = []
+
+if (params.dbnsfp && params.dbnsfp_tbi) {
+    vep_extra_files.add(file(params.dbnsfp, checkIfExists: true))
+    vep_extra_files.add(file(params.dbnsfp_tbi, checkIfExists: true))
+}
+
+if (params.spliceai_snv && params.spliceai_snv_tbi && params.spliceai_indel && params.spliceai_indel_tbi) {
+    vep_extra_files.add(file(params.spliceai_indel, checkIfExists: true))
+    vep_extra_files.add(file(params.spliceai_indel_tbi, checkIfExists: true))
+    vep_extra_files.add(file(params.spliceai_snv, checkIfExists: true))
+    vep_extra_files.add(file(params.spliceai_snv_tbi, checkIfExists: true))
+}
 
 // MultiQC reporting
 // def multiqc_report = []
-
-
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
 ch_exon_bed = params.exon_bed ? Channel.fromPath(params.exon_bed)                                                       : Channel.empty()
@@ -149,6 +220,19 @@ workflow RNAVAR {
             return [ meta, fastq.flatten() ]
         multiple: fastq.size() > 1
             return [ meta, fastq.flatten() ]
+    }
+
+    // Download cache if needed
+    // Assuming that if the cache is provided, the user has already downloaded it
+    ensemblvep_info = params.vep_cache    ? [] : Channel.of([ [ id:"${params.vep_cache_version}_${params.vep_genome}" ], params.vep_genome, params.vep_species, params.vep_cache_version ])
+    snpeff_info     = params.snpeff_cache ? [] : Channel.of([ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], params.snpeff_genome, params.snpeff_db ])
+
+    if (params.download_cache) {
+        PREPARE_CACHE(ensemblvep_info, snpeff_info)
+        snpeff_cache = PREPARE_CACHE.out.snpeff_cache
+        vep_cache    = PREPARE_CACHE.out.ensemblvep_cache.map{ meta, cache -> [ cache ] }
+
+        ch_versions = ch_versions.mix(PREPARE_CACHE.out.versions)
     }
 
     // Prepare reference genome files
@@ -460,24 +544,29 @@ workflow RNAVAR {
             ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
         }
 
-    //     //
-    //     // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
-    //     //
-    //     if ((!params.skip_variantannotation) &&(params.annotate_tools) &&(params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
-    //         ANNOTATE(
-    //             ch_final_vcf,
-    //             params.annotate_tools,
-    //             ch_snpeff_db,
-    //             ch_snpeff_cache,
-    //             ch_vep_genome,
-    //             ch_vep_species,
-    //             ch_vep_cache_version,
-    //             ch_vep_cache)
+        //
+        // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
+        //
+        if ((!params.skip_variantannotation) &&(params.annotate_tools) &&(params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
 
-    //         // Gather QC reports
-    //         ch_reports  = ch_reports.mix(ANNOTATE.out.reports)
-    //         ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
-    //     }
+            vep_fasta = (params.vep_include_fasta) ? fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] } : [[id: 'null'], []]
+
+            VCF_ANNOTATE_ALL(
+                ch_final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
+                vep_fasta,
+                params.annotate_tools,
+                params.snpeff_genome ? "${params.snpeff_genome}.${params.snpeff_db}" : "${params.genome}.${params.snpeff_db}",
+                snpeff_cache,
+                vep_genome,
+                vep_species,
+                vep_cache_version,
+                vep_cache,
+                vep_extra_files)
+
+            // Gather QC reports
+            ch_reports  = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
+            ch_versions = ch_versions.mix(VCF_ANNOTATE_ALL.out.versions.first().ifEmpty(null))
+        }
 
     }
 
