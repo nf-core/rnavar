@@ -35,8 +35,8 @@ def checkPathParamList = [
 ]
 
 // only check if we are using the tools
-if (params.annotate_tools && (params.annotate_tools.contains("snpeff") || params.annotate_tools.contains("merge"))) checkPathParamList.add(params.snpeff_cache)
-if (params.annotate_tools && (params.annotate_tools.contains("vep")    || params.annotate_tools.contains("merge"))) checkPathParamList.add(params.vep_cache)
+if (params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains("merge"))) checkPathParamList.add(params.snpeff_cache)
+if (params.annotate_tools && (params.annotate_tools.split(',').contains("vep")    || params.annotate_tools.split(',').contains("merge"))) checkPathParamList.add(params.vep_cache)
 
 // Validate input parameters
 WorkflowRnavar.initialise(params, log)
@@ -130,7 +130,7 @@ vep_genome         = params.vep_genome         ?: Channel.empty()
 vep_species        = params.vep_species        ?: Channel.empty()
 
 // Initialize files channels based on params, not defined within the params.genomes[params.genome] scope
-if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.contains("snpeff") || params.annotate_tools.contains("merge"))) {
+if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains("merge"))) {
     if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache") {
         def snpeff_annotation_cache_key = "${params.snpeff_genome}.${params.snpeff_db}/"
     } else {
@@ -147,11 +147,11 @@ if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.conta
     }
     snpeff_cache = Channel.fromPath(file("${params.snpeff_cache}/${snpeff_annotation_cache_key}"), checkIfExists: true).collect()
         .map{ cache -> [ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], cache ] }
-    } else if (params.annotate_tools && (params.annotate_tools.contains("snpeff") || params.annotate_tools.contains("merge")) && !params.download_cache) {
+    } else if (params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains("merge")) && !params.download_cache) {
         error("No cache for SnpEff or automatic download of said cache has been detected.\nPlease refer to https://nf-co.re/sarek/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
     } else snpeff_cache = []
 
-if (params.vep_cache && params.annotate_tools && (params.annotate_tools.contains("vep") || params.annotate_tools.contains("merge"))) {
+if (params.vep_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains("merge"))) {
     if (params.vep_cache == "s3://annotation-cache/vep_cache") {
         def vep_annotation_cache_key = "${params.vep_cache_version}_${params.vep_genome}/"
     } else {
@@ -167,7 +167,7 @@ if (params.vep_cache && params.annotate_tools && (params.annotate_tools.contains
         }
     }
     vep_cache = Channel.fromPath(file("${params.vep_cache}/${vep_annotation_cache_key}"), checkIfExists: true).collect()
-    } else if (params.annotate_tools && (params.annotate_tools.contains("vep") || params.annotate_tools.contains("merge")) && !params.download_cache) {
+    } else if (params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains("merge")) && !params.download_cache) {
         error("No cache for VEP or automatic download of said cache has been detected.\nPlease refer to https://nf-co.re/sarek/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
     } else vep_cache = []
 
@@ -547,7 +547,7 @@ workflow RNAVAR {
         //
         // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
         //
-        if ((!params.skip_variantannotation) &&(params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
+        if ((!params.skip_variantannotation) &&(params.annotate_tools) && (params.annotate_tools.split(',').contains('merge') || params.annotate_tools.split(',').contains('snpeff') || params.annotate_tools.split(',').contains('vep'))) {
 
             vep_fasta = (params.vep_include_fasta) ? fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] } : [[id: 'null'], []]
 
