@@ -15,20 +15,20 @@ workflow SNPEFF_ANNOTATE {
 
     ch_versions = Channel.empty()
 
-    SNPEFF (
+    SNPEFF_SNPEFF (
         vcf,
         snpeff_db,
         snpeff_cache
     )
-    ch_versions = ch_versions.mix(SNPEFF.out.versions.first())
+    ch_versions = ch_versions.mix(SNPEFF_SNPEFF.out.versions.first())
 
     TABIX_BGZIPTABIX (
-        SNPEFF.out.vcf
+        SNPEFF_SNPEFF.out.vcf
     )
     ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions.first())
 
     emit:
     vcf_tbi     = TABIX_BGZIPTABIX.out.gz_tbi    // channel: [ val(meta), vcf, tbi ]
-    reports     = SNPEFF.out.report              // path: *.html
+    reports     = SNPEFF_SNPEFF.out.report       // path: *.html
     versions    = ch_versions                    // channel: [versions.yml]
 }
