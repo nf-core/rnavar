@@ -15,7 +15,7 @@ workflow SNPEFF_ANNOTATE {
 
     ch_versions = Channel.empty()
 
-    SNPEFF (
+    SNPEFF_SNPEFF (
         vcf,
         snpeff_db,
         snpeff_cache
