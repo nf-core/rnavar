@@ -250,7 +250,7 @@ workflow RNAVAR {
     ch_genome_bed = params.exon_bed  ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
                                     : PREPARE_GENOME.out.exon_bed
     ch_dict       = params.dict      ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
-                                    : ch_dict
+                                    : PREPARE_GENOME.out.dict
     ch_fasta_fai  = params.fasta_fai ? Channel.fromPath(params.fasta_fai).collect()
                                     : PREPARE_GENOME.out.fasta_fai
 
