@@ -49,9 +49,6 @@ WorkflowRnavar.initialise(params, log)
 
 for (param in checkPathParamList) if (param) file(param, checkIfExists: true)
 
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if (!params.star_index && !params.gtf && !params.gff){ exit 1, "GTF|GFF3 file is required to build a STAR reference index! Use option --gtf|--gff to provide a GTF|GFF file." }
-
 if ((params.download_cache) && (params.snpeff_cache || params.vep_cache)) {
     error("Please specify either `--download_cache` or `--snpeff_cache`, `--vep_cache`.\nhttps://nf-co.re/sarek/usage#how-to-customise-snpeff-and-vep-annotation")
 }
@@ -209,17 +206,17 @@ workflow RNAVAR {
     // To gather used softwares versions for MultiQC
     ch_versions = Channel.empty()
 
-    ch_from_samplesheet = Channel.empty()
+    ch_input = Channel.empty()
 
-    if (params.input) ch_from_samplesheet = Channel.fromSamplesheet("input")
+    if (params.input) ch_input = Channel.fromSamplesheet("input")
 
-    ch_fastq = ch_from_samplesheet.map{ meta, fastq_1, fastq_2 ->
+    ch_input = ch_input.map{ meta, fastq_1, fastq_2 ->
         if (fastq_2) return [ meta + [id: meta.sample], [ fastq_1, fastq_2 ] ]
         else return [ meta + [id: meta.sample], [ fastq_1 ] ]
     }.groupTuple()
     .branch { meta, fastq ->
         single  : fastq.size() == 1
-            return [ meta, fastq.flatten() ]
+            return [ meta + [single_end:true], fastq.flatten() ]
         multiple: fastq.size() > 1
             return [ meta, fastq.flatten() ]
     }
@@ -256,14 +253,14 @@ workflow RNAVAR {
 
     // MODULE: Concatenate FastQ files from same sample if required
 
-    CAT_FASTQ(ch_fastq.multiple)
+    CAT_FASTQ(ch_input.multiple)
 
-    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single)
+    ch_fastq = CAT_FASTQ.out.reads.mix(ch_input.single)
 
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
 
     // MODULE: Generate QC summary using FastQC
-    FASTQC(ch_cat_fastq)
+    FASTQC(ch_fastq)
     ch_reports = ch_reports.mix(FASTQC.out.zip.collect{ meta, logs -> logs })
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
@@ -299,9 +296,9 @@ workflow RNAVAR {
 
     if (params.aligner == 'star') {
         ALIGN_STAR(
-            ch_cat_fastq,
-            PREPARE_GENOME.out.star_index,
-            PREPARE_GENOME.out.gtf,
+            ch_fastq,
+            PREPARE_GENOME.out.star_index.first(),
+            PREPARE_GENOME.out.gtf.first(),
             params.star_ignore_sjdbgtf,
             seq_platform,
             seq_center
