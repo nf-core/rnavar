@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#97](https://github.com/nf-core/rnavar/pull/97) - Update all gatk4 modules to disable JVM hotspot
 
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| fastqc     | 0.11.9      | 0.12.1      |
+| multiqc    | 1.15        | 1.17        |
+
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 
 First production release of the pipeline with latest software versions.
