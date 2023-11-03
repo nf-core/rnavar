@@ -37,7 +37,7 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "8fc1d24c710ebe1d5de0f2447ec9439fd3d9d66a",
+                        "git_sha": "fc6caedab1c71113aa440900e5989dd1c03ec58f",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/download": {
