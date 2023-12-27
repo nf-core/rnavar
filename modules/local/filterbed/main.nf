@@ -21,6 +21,7 @@ process FILTERBEDFILE {
     """
     python - <<PYCODE
     import argparse
+    import os
 
     def load_sequences_from_dict(dict_file):
         sequences = set()
@@ -43,6 +44,7 @@ process FILTERBEDFILE {
     def main(bed_file, dict_file, output_file):
         sequences = load_sequences_from_dict(dict_file)
         filter_bed_file(bed_file, sequences, output_file)
+        print(f"Output file {output_file} created in {os.getcwd()}")
 
     if __name__ == "__main__":
         main("${bed}", "${dict_file}", "filtered_${bed.simpleName}")
