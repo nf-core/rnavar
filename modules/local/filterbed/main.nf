@@ -12,7 +12,7 @@ process FILTERBEDFILE {
     path  dict_file
 
     output:
-    tuple val(meta), path('filtered_${bed.simpleName}')
+    tuple val(meta), path('filtered_${bed.simpleName}'), emit: filtered_bed
 
     when:
     task.ext.when == null || task.ext.when
