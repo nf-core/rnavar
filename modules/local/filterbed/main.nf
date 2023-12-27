@@ -1,5 +1,5 @@
 process FILTERBEDFILE {
-    tag "${genome_bed} -> ${filtered_bed}"
+    tag "$meta.id"
     label 'process_medium'
 
     conda (params.enable_conda ? "conda-forge::python=3.8.3" : null)
@@ -7,13 +7,12 @@ process FILTERBEDFILE {
         'https://depot.galaxyproject.org/singularity/python:3.8.3' :
         'quay.io/biocontainers/python:3.8.3' }"
 
-    input:
-    path genome_bed
-    path genome_dict
+     input:
+    tuple val(meta), path(bed)
+    path  dict_file
 
     output:
-    path 'filtered_exome.bed', emit: filtered_bed
-    path "versions.yml", emit: versions
+    tuple val(meta), path('filtered_${bed.simpleName}')
 
     when:
     task.ext.when == null || task.ext.when
@@ -41,12 +40,13 @@ process FILTERBEDFILE {
                 if sequence in sequences:
                     out.write(line)
 
-    def main():
-        sequences = load_sequences_from_dict("${genome_dict}")
-        filter_bed_file("${genome_bed}", sequences, "filtered_exome.bed")
+    def main(bed_file, dict_file, output_file):
+        sequences = load_sequences_from_dict(dict_file)
+        filter_bed_file(bed_file, sequences, output_file)
 
     if __name__ == "__main__":
-        main()
+        main("${bed}", "${dict_file}", "filtered_${bed.simpleName}")
+
     PYCODE
 
     cat <<-END_VERSIONS > versions.yml
