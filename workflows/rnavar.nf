@@ -47,9 +47,11 @@ ch_rnavar_logo           = Channel.fromPath(file("$projectDir/assets/nf-core-rna
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { INPUT_CHECK                   } from '../subworkflows/local/input_check'              // Validate the input samplesheet.csv and prepare input channels
-include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome'           // Build the genome index and other reference files
-include { ANNOTATE                      } from '../subworkflows/local/annotate'                 // Annotate variants using snpEff or VEP or both
+include { INPUT_CHECK                   } from '../subworkflows/local/input_check'          // Validate the input samplesheet.csv and prepare input channels
+include { PREPARE_GENOME                } from '../subworkflows/local/prepare_genome'       // Build the genome index and other reference files
+include { ANNOTATE                      } from '../subworkflows/local/annotate'             // Annotate variants using snpEff or VEP or both
+include { FILTERBEDFILE                 } from '../modules/local/filterbed/main'            // Filter a BED file based on the available genome.dict file to prevent errors for extra chromosomes
+
 
 /*
 ========================================================================================
@@ -177,11 +179,21 @@ workflow RNAVAR {
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
+    // PROCESS: Filter BED file before BedToIntervalList
+    //
+    ch_filtered_genome_bed = Channel.empty()
+    FILTERBEDFILE (
+        ch_genome_bed,       // This should be the channel containing your exome.bed file
+        PREPARE_GENOME.out.dict      // This should be the channel containing your genome.dict file
+    )
+    ch_filtered_genome_bed = FILTERBEDFILE.out.filtered_bed
+
+    //
     // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
     //
     ch_interval_list = Channel.empty()
     GATK4_BEDTOINTERVALLIST(
-        ch_genome_bed,
+        ch_filtered_genome_bed,
         PREPARE_GENOME.out.dict
     )
     ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
