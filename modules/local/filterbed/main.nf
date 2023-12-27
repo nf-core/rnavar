@@ -12,7 +12,7 @@ process FILTERBEDFILE {
     path  dict_file
 
     output:
-    tuple val(meta), path('filtered_${bed.simpleName}'), emit: filtered_bed
+    tuple val(meta), path('filtered.bed'), emit: filtered_bed
 
     when:
     task.ext.when == null || task.ext.when
@@ -47,7 +47,7 @@ process FILTERBEDFILE {
         print(f"Output file {output_file} created in {os.getcwd()}")
 
     if __name__ == "__main__":
-        main("${bed}", "${dict_file}", "filtered_${bed.simpleName}")
+        main("${bed}", "${dict_file}", "filtered.bed")
 
     PYCODE
 
