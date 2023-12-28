@@ -188,10 +188,10 @@ if (params.spliceai_snv && params.spliceai_snv_tbi && params.spliceai_indel && p
 // def multiqc_report = []
 
 // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-ch_exon_bed = params.exon_bed ? Channel.fromPath(params.exon_bed)                                                       : Channel.empty()
-ch_fasta    = params.fasta    ? Channel.fromPath(params.fasta).map{ fasta -> [ [ id:fasta.baseName ], fasta ] }.first() : Channel.empty()
-ch_gff      = params.gff      ? Channel.fromPath(params.gff).first()                                                    : Channel.empty()
-ch_gtf      = params.gtf      ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.first()         : Channel.empty()
+ch_exon_bed  = params.exon_bed ? Channel.fromPath(params.exon_bed)                                                       : Channel.empty()
+ch_fasta_raw = params.fasta    ? Channel.fromPath(params.fasta).map{ fasta -> [ [ id:fasta.baseName ], fasta ] }.first() : Channel.empty()
+ch_gff       = params.gff      ? Channel.fromPath(params.gff).first()                                                    : Channel.empty()
+ch_gtf_raw   = params.gtf      ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.first()         : Channel.empty()
 
 /*
 ========================================================================================
@@ -237,19 +237,26 @@ workflow RNAVAR {
     // Prepare reference genome files
 
     PREPARE_GENOME(
-        ch_fasta,
+        ch_fasta_raw,
         ch_gff,
-        ch_gtf,
+        ch_gtf_raw,
         params.feature_type
     )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    ch_genome_bed = params.exon_bed  ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
+    ch_genome_bed = params.exon_bed              ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
                                     : PREPARE_GENOME.out.exon_bed
-    ch_dict       = params.dict      ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
+    ch_dict       = params.dict                  ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
                                     : PREPARE_GENOME.out.dict
-    ch_fasta_fai  = params.fasta_fai ? Channel.fromPath(params.fasta_fai).collect()
+
+    ch_fasta      = params.fasta.endsWith('.gz') ? PREPARE_GENOME.out.fasta
+                                    : ch_fasta_raw
+
+    ch_fasta_fai  = params.fasta_fai             ? Channel.fromPath(params.fasta_fai).collect()
                                     : PREPARE_GENOME.out.fasta_fai
+
+    ch_gtf        = params.gtf.endsWith('.gz')   ? PREPARE_GENOME.out.gtf
+                                    : ch_gtf_raw
 
     // MODULE: Concatenate FastQ files from same sample if required
 
