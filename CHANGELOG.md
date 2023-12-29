@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#97](https://github.com/nf-core/rnavar/pull/97) - Template update from nf-core/tools 2.10
 - [#109](https://github.com/nf-core/rnavar/pull/109) - Update all modules
 - [#111](https://github.com/nf-core/rnavar/pull/111) - Template update from nf-core/tools 2.11
+- [#117](https://github.com/nf-core/rnavar/pull/117) - Template update from nf-core/tools 2.11.1
 
 ### Fixed
 
