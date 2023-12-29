@@ -26,6 +26,12 @@ jobs:
         NXF_VER:
           - "23.04.0"
           - "latest-everything"
+        test:
+          - "default"
+          - "annotation"
+          - "removeduplicates"
+          - "skipbasecalib"
+          - "bamcsiindex"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v4
@@ -35,9 +41,13 @@ jobs:
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Run pipeline with test data
-        # TODO nf-core: You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
-        run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pytest-workflow
+
+      - name: Run pipeline with tests settings
+        run: TMPDIR=~ PROFILE=docker pytest --tag ${{ matrix.test }} --symlink --kwdof --git-aware --color=yes
