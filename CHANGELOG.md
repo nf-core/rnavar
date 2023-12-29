@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#95](https://github.com/nf-core/rnavar/pull/95) - Template update from nf-core/tools 2.5 -> 2.9
 - [#97](https://github.com/nf-core/rnavar/pull/97) - Template update from nf-core/tools 2.10
 - [#109](https://github.com/nf-core/rnavar/pull/109) - Update all modules
+- [#111](https://github.com/nf-core/rnavar/pull/111) - Template update from nf-core/tools 2.11
 
 ### Fixed
 
@@ -21,8 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
+| bcftools   | 1.17        | 1.18        |
+| bedtools   | 2.31.0      | 2.31.1      |
 | fastqc     | 0.11.9      | 0.12.1      |
-| multiqc    | 1.15        | 1.17        |
+| mosdepth   | 0.3.3       | 0.3.6       |
+| multiqc    | 1.15        | 1.18        |
+| samtools   | 1.17        | 1.18        |
 
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 

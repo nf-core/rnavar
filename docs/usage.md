@@ -4,7 +4,7 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
-## RUNNING THE PIPELINE
+## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
