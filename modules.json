@@ -37,11 +37,7 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-<<<<<<< HEAD
                         "git_sha": "bba7e362e4afead70653f84d8700588ea28d0f9e",
-=======
-                        "git_sha": "fc6caedab1c71113aa440900e5989dd1c03ec58f",
->>>>>>> dev
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/download": {
@@ -56,10 +52,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-<<<<<<< HEAD
                         "git_sha": "65ad3e0b9a4099592e1102e92e10455dc661cf53",
-=======
-                        "git_sha": "8fc1d24c710ebe1d5de0f2447ec9439fd3d9d66a",
                         "installed_by": ["modules"]
                     },
                     "gatk4/applybqsr": {
@@ -135,16 +128,11 @@
                     "mosdepth": {
                         "branch": "master",
                         "git_sha": "8fc1d24c710ebe1d5de0f2447ec9439fd3d9d66a",
->>>>>>> dev
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
-<<<<<<< HEAD
                         "git_sha": "4ab13872435962dadc239979554d13709e20bf29",
-=======
-                        "git_sha": "8fc1d24c710ebe1d5de0f2447ec9439fd3d9d66a",
->>>>>>> dev
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
