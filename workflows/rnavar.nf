@@ -429,11 +429,11 @@ workflow RNAVAR {
 
         GATK4_HAPLOTYPECALLER(
             ch_haplotypecaller_interval_bam,
-            ch_fasta.map{ meta, fasta -> [fasta] },
-            ch_fasta_fai,
-            ch_dict.map{ meta, dict -> [dict] },
-            ch_dbsnp,
-            ch_dbsnp_tbi
+            ch_fasta,
+            ch_fasta_fai.map{ it -> [[id:it.baseName], it] },
+            ch_dict,
+            ch_dbsnp.map{ it -> [[id:it.baseName], it] },
+            ch_dbsnp_tbi.map{ it -> [[id:it.baseName], it] }
         )
 
 
