@@ -80,6 +80,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS   } from '../modules/nf-core/modules/custo
 */
 
 include { ALIGN_STAR                    } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
+include { STAR_GENOMEGENERATE } from '../subworkflows/nf-core/genomegenerate' // Generate genome index for STAR
 include { MARKDUPLICATES                } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
 include { SPLITNCIGAR                   } from '../subworkflows/nf-core/splitncigar'        // Splits reads that contain Ns in their cigar string
 include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
@@ -222,11 +223,21 @@ workflow RNAVAR {
     ch_star_multiqc               = Channel.empty()
     ch_aligner_pca_multiqc        = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
+    ch_star_index                 = Channel.empty()
 
     if (params.aligner == 'star') {
+
+        // Generate the STAR index
+        STAR_GENOMEGENERATE (
+            PREPARE_GENOME.out.fasta,
+            PREPARE_GENOME.out.gtf,
+
+        )
+        ch_star_index = STAR_GENOMEGENERATE.out.index
+
         ALIGN_STAR (
             ch_cat_fastq,
-            PREPARE_GENOME.out.star_index,
+            ch_star_index,
             PREPARE_GENOME.out.gtf,
             params.star_ignore_sjdbgtf,
             seq_platform,
