@@ -128,10 +128,10 @@ workflow PREPARE_GENOME {
             ch_versions     = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
         }
 
-        //if((!ch_star_index) || getIndexVersion(ch_star_index) != '2.7.4a'){
-        //    ch_star_index   = STAR_GENOMEGENERATE(ch_fasta,ch_gtf).index
-        //    ch_versions     = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
-        //}
+        if((!ch_star_index) || getIndexVersion(ch_star_index) != '2.7.4a'){
+           ch_star_index   = STAR_GENOMEGENERATE(ch_fasta,ch_gtf).index
+           ch_versions     = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
+        }
     }
 
 

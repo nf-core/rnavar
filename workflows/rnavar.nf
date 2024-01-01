@@ -223,21 +223,20 @@ workflow RNAVAR {
     ch_star_multiqc               = Channel.empty()
     ch_aligner_pca_multiqc        = Channel.empty()
     ch_aligner_clustering_multiqc = Channel.empty()
-    ch_star_index                 = Channel.empty()
 
     if (params.aligner == 'star') {
 
         // Generate the STAR index
-        STAR_GENOMEGENERATE (
-            PREPARE_GENOME.out.fasta,
-            PREPARE_GENOME.out.gtf,
+        // STAR_GENOMEGENERATE (
+        //     PREPARE_GENOME.out.fasta,
+        //     PREPARE_GENOME.out.gtf,
 
-        )
-        ch_star_index = STAR_GENOMEGENERATE.out.index
+        // )
+        // ch_star_index = STAR_GENOMEGENERATE.out.index
 
         ALIGN_STAR (
             ch_cat_fastq,
-            ch_star_index,
+            PREPARE_GENOME.out.star_index,
             PREPARE_GENOME.out.gtf,
             params.star_ignore_sjdbgtf,
             seq_platform,
