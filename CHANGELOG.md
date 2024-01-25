@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added`unzip` from nf-core modules for working with unzipped fasta and gtf files
+
 ### Changed
 
 - [#95](https://github.com/nf-core/rnavar/pull/95) - Template update from nf-core/tools 2.5 -> 2.9
