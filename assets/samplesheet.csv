@@ -1,3 +1,4 @@
-sample,fastq_1,fastq_2
-SAMPLE_PAIRED_END,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz
-SAMPLE_SINGLE_END,/path/to/fastq/files/AEG588A4_S4_L003_R1_001.fastq.gz,
+sample,fastq_1,fastq_2,strandedness
+RAP1_UNINDUCED_REP1,s3://nf-core-awsmegatests/rnaseq/input_data/minimal/GSE110004/SRR6357073_1.fastq.gz,,reverse
+RAP1_UNINDUCED_REP2,s3://nf-core-awsmegatests/rnaseq/input_data/minimal/GSE110004/SRR6357074_1.fastq.gz,,reverse
+RAP1_UNINDUCED_REP2,s3://nf-core-awsmegatests/rnaseq/input_data/minimal/GSE110004/SRR6357075_1.fastq.gz,,reverse

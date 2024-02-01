@@ -4,8 +4,11 @@
     <img alt="nf-core/rnavar" src="docs/images/nf-core-rnavar_logo_light.png">
   </picture>
 </h1>
+
 [![GitHub Actions CI Status](https://github.com/nf-core/rnavar/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+CI%22)
-[![GitHub Actions Linting Status](https://github.com/nf-core/rnavar/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+linting%22)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/rnavar/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![GitHub Actions Linting Status](https://github.com/nf-core/rnavar/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+linting%22)
+[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/rnavar/results)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.6669637-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.6669637)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
@@ -17,20 +20,38 @@
 
 ## Introduction
 
-**nf-core/rnavar** is a bioinformatics pipeline that ...
+**nf-core/rnavar** is a bioinformatics pipeline for RNA variant calling analysis following GATK4 best practices.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+## Pipeline summary
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+1. Merge re-sequenced FastQ files ([`cat`](http://www.linfo.org/cat.html))
+2. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+3. Align reads to reference genome ([`STAR`](https://github.com/alexdobin/STAR))
+4. Sort and index alignments ([`SAMtools`](https://sourceforge.net/projects/samtools/files/samtools/))
+5. Duplicate read marking ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard))
+6. Splits reads that contain Ns in their cigar string ([`GATK4 SplitNCigarReads`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917482651-SplitNCigarReads))
+7. Estimate and correct systematic bias using base quality score recalibration ([`GATK4 BaseRecalibrator`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897206043-BaseRecalibrator), [`GATK4 ApplyBQSR`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897168667-ApplyBQSR))
+8. Convert a BED file to a Picard Interval List ([`GATK4 BedToIntervalList`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924780827-BedToIntervalList-Picard-))
+9. Scatter one interval-list into many interval-files ([`GATK4 IntervalListTools`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917392155-IntervalListTools-Picard-))
+10. Call SNPs and indels ([`GATK4 HaplotypeCaller`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897180827-HaplotypeCaller))
+11. Merge multiple VCF files into one VCF ([`GATK4 MergeVCFs`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924817691-MergeVcfs-Picard-))
+12. Index the VCF ([`Tabix`](http://www.htslib.org/doc/tabix.html))
+13. Filter variant calls based on certain criteria ([`GATK4 VariantFiltration`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897204763-VariantFiltration))
+14. Annotate variants ([`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))
+15. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC`](http://multiqc.info/), [`R`](https://www.r-project.org/))
 
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+### Summary of tools and version used in the pipeline
+
+| Tool        | Version |
+| ----------- | ------- |
+| FastQC      | 0.11.9  |
+| STAR        | 2.7.9a  |
+| Samtools    | 1.15.1  |
+| GATK        | 4.2.6.1 |
+| Tabix       | 1.11    |
+| SnpEff      | 5.0     |
+| Ensembl VEP | 104.3   |
+| MultiQC     | 1.12    |
 
 ## Usage
 
@@ -55,13 +76,8 @@ Each row represents a fastq file (single-end) or a pair of fastq files (paired e
 
 Now, you can run the pipeline using:
 
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
-
-```bash
-nextflow run nf-core/rnavar \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR>
+```console
+nextflow run nf-core/rnavar -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv  --outdir <OUTDIR> --genome GRCh38
 ```
 
 > [!WARNING]
@@ -78,11 +94,13 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/rnavar was originally written by Praveen Raj, Maxime U Garcia.
+nf-core/rnavar was originally written in Nextflow DSL2 for use at the [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken), by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)).
 
-We thank the following people for their extensive assistance in the development of this pipeline:
+The pipeline is primarily maintained by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) from [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)) from [Seqera Labs](https://seqera/io)
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+Many thanks to other who have helped out along the way too, including (but not limited to):
+[@ewels](https://github.com/ewels),
+[@drpatelh](https://github.com/drpatelh).
 
 ## Contributions and Support
 
@@ -92,10 +110,7 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use nf-core/rnavar for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+If you use nf-core/rnavar for your analysis, please cite it using the following doi: [10.5281/zenodo.6669637](https://doi.org/10.5281/zenodo.6669637)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
