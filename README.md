@@ -1,4 +1,9 @@
-# ![nf-core/rnavar](docs/images/nf-core-rnavar_logo_light.png#gh-light-mode-only) ![nf-core-rnavar](docs/images/nf-core/rnavar_logo_dark.png#gh-dark-mode-only)
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-rnavar_logo_dark.png">
+    <img alt="nf-core/rnavar" src="docs/images/nf-core-rnavar_logo_light.png">
+  </picture>
+</h1>
 
 [![GitHub Actions CI Status](https://github.com/nf-core/rnavar/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/nf-core/rnavar/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/rnavar/actions?query=workflow%3A%22nf-core+linting%22)
