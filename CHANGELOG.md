@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added`unzip` from nf-core modules for working with unzipped fasta and gtf files
 
 ### Changed
-
 - [#95](https://github.com/nf-core/rnavar/pull/95) - Template update from nf-core/tools 2.5 -> 2.9
 - [#97](https://github.com/nf-core/rnavar/pull/97) - Template update from nf-core/tools 2.10
 - [#109](https://github.com/nf-core/rnavar/pull/109) - Update all modules
@@ -20,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - [#97](https://github.com/nf-core/rnavar/pull/97) - Update all gatk4 modules to disable JVM hotspot
+- [#124](https://github.com/nf-core/rnavar/pull/124) - Fixed s3 bucket path in conditional statement for SnpEff cache
 
 ### Dependencies
 
