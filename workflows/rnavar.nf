@@ -129,7 +129,7 @@ vep_species        = params.vep_species        ?: Channel.empty()
 // Initialize files channels based on params, not defined within the params.genomes[params.genome] scope
 if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains("merge"))) {
     def snpeff_annotation_cache_key = ''
-    if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache") {
+    if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache/") {
         snpeff_annotation_cache_key = "${params.snpeff_genome}.${params.snpeff_db}/"
     } else {
         snpeff_annotation_cache_key = params.use_annotation_cache_keys ? "${params.snpeff_genome}.${params.snpeff_db}/" : ""
@@ -137,7 +137,7 @@ if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split
     def snpeff_cache_dir =  "${snpeff_annotation_cache_key}${params.snpeff_genome}.${params.snpeff_db}"
     def snpeff_cache_path_full = file("$params.snpeff_cache/$snpeff_cache_dir", type: 'dir')
     if ( !snpeff_cache_path_full.exists() || !snpeff_cache_path_full.isDirectory() ) {
-        if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache") {
+        if (params.snpeff_cache == "s3://annotation-cache/snpeff_cache/") {
             error("This path is not available within annotation-cache. Please check https://annotation-cache.github.io/ to create a request for it.")
         } else {
             error("Files within --snpeff_cache invalid. Make sure there is a directory named ${snpeff_cache_dir} in ${params.snpeff_cache}.\nhttps://nf-co.re/sarek/usage#how-to-customise-snpeff-and-vep-annotation")
@@ -145,9 +145,9 @@ if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split
     }
     snpeff_cache = Channel.fromPath(file("${params.snpeff_cache}/${snpeff_annotation_cache_key}"), checkIfExists: true).collect()
         .map{ cache -> [ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], cache ] }
-    } else if (params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains("merge")) && !params.download_cache) {
+} else if (params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains("merge")) && !params.download_cache) {
         error("No cache for SnpEff or automatic download of said cache has been detected.\nPlease refer to https://nf-co.re/sarek/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
-    } else snpeff_cache = []
+} else snpeff_cache = []
 
 if (params.vep_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains("merge"))) {
     def vep_annotation_cache_key = ''
