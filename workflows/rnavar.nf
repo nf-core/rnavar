@@ -156,7 +156,7 @@ if (params.vep_cache && params.annotate_tools && (params.annotate_tools.split(',
     } else {
         vep_annotation_cache_key = params.use_annotation_cache_keys ? "${params.vep_cache_version}_${params.vep_genome}/" : ""
     }
-    def vep_cache_dir = "${vep_annotation_cache_key}${params.vep_species}/${params.vep_cache_version}_${params.vep_genome}"
+    def vep_cache_dir = "${vep_annotation_cache_key}${params.vep_cache_version}_${params.vep_genome}/${params.vep_species}"
     def vep_cache_path_full = file("$params.vep_cache/$vep_cache_dir", type: 'dir')
     if ( !vep_cache_path_full.exists() || !vep_cache_path_full.isDirectory() ) {
         if (params.vep_cache == "s3://annotation-cache/vep_cache") {
