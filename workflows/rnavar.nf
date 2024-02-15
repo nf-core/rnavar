@@ -151,24 +151,24 @@ if (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split
 
 if (params.vep_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains("merge"))) {
     def vep_annotation_cache_key = ''
-    if (params.vep_cache == "s3://annotation-cache/vep_cache") {
+    if (params.vep_cache == "s3://annotation-cache/vep_cache/") {
         vep_annotation_cache_key = "${params.vep_cache_version}_${params.vep_genome}/"
     } else {
         vep_annotation_cache_key = params.use_annotation_cache_keys ? "${params.vep_cache_version}_${params.vep_genome}/" : ""
     }
-    def vep_cache_dir = "${vep_annotation_cache_key}${params.vep_cache_version}_${params.vep_genome}/${params.vep_species}"
+    def vep_cache_dir = "${vep_annotation_cache_key}/${params.vep_species}"
     def vep_cache_path_full = file("$params.vep_cache/$vep_cache_dir", type: 'dir')
     if ( !vep_cache_path_full.exists() || !vep_cache_path_full.isDirectory() ) {
-        if (params.vep_cache == "s3://annotation-cache/vep_cache") {
+        if (params.vep_cache == "s3://annotation-cache/vep_cache/") {
             error("This path is not available within annotation-cache. Please check https://annotation-cache.github.io/ to create a request for it.")
         } else {
             error("Files within --vep_cache invalid. Make sure there is a directory named ${vep_cache_dir} in ${params.vep_cache}.\nhttps://nf-co.re/sarek/usage#how-to-customise-snpeff-and-vep-annotation")
         }
     }
     vep_cache = Channel.fromPath(file("${params.vep_cache}/${vep_annotation_cache_key}"), checkIfExists: true).collect()
-    } else if (params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains("merge")) && !params.download_cache) {
+} else if (params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains("merge")) && !params.download_cache) {
         error("No cache for VEP or automatic download of said cache has been detected.\nPlease refer to https://nf-co.re/sarek/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
-    } else vep_cache = []
+} else vep_cache = []
 
 vep_extra_files = []
 
