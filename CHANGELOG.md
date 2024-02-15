@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#97](https://github.com/nf-core/rnavar/pull/97) - Update all gatk4 modules to disable JVM hotspot
 - [#124](https://github.com/nf-core/rnavar/pull/124) - Fixed s3 bucket path in conditional statement for SnpEff cache
-- []() - Fixed s3 bucket path in conditional statement for VEP cache
+- [#127](https://github.com/nf-core/rnavar/pull/127) - Fixed s3 bucket path in conditional statement for VEP cache
 
 ### Dependencies
 
