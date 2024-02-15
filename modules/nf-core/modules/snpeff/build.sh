@@ -18,8 +18,9 @@ build_push() {
     docker push nfcore/snpeff:${SNPEFF_TAG}.${GENOME}
 }
 
-build_push "GRCh37"    "75" "5.0"
-build_push "GRCh38"    "99" "5.0"
-build_push "GRCm38"    "99" "5.0"
-build_push "CanFam3.1" "99" "5.0"
-build_push "WBcel235"  "99" "5.0"
+build_push "GRCh37"    "75" "5.1"
+build_push "GRCh38"    "99" "5.1"
+build_push "GRCm38"    "99" "5.1"
+build_push "CanFam3.1" "99" "5.1"
+build_push "WBcel235"  "99" "5.1"
+build_push "UMD3.1"    "99" "5.1"
