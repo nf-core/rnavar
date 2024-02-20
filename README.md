@@ -100,7 +100,8 @@ The pipeline is primarily maintained by Praveen Raj ([@praveenraj2018](https://g
 
 Many thanks to other who have helped out along the way too, including (but not limited to):
 [@ewels](https://github.com/ewels),
-[@drpatelh](https://github.com/drpatelh).
+[@drpatelh](https://github.com/drpatelh),
+[@nschcolnicov](https://github.com/nschcolnicov).
 
 ## Contributions and Support
 

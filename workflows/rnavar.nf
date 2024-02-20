@@ -465,8 +465,9 @@ workflow RNAVAR {
 
             ch_haplotypecallergvcf_raw = GATK4_HAPLOTYPECALLERGVCF.out.vcf
                 .map{ meta, vcf ->
-                    meta.id = meta.sample
-                    [meta, vcf]
+                    def new_meta = meta.clone()
+                    new_meta.id = meta.sample
+                    [new_meta, vcf]
                 }.groupTuple()
 
             ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLERGVCF.out.versions.first().ifEmpty(null))
@@ -478,8 +479,9 @@ workflow RNAVAR {
 
             ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
                 .map{ meta, idx ->
-                    meta.id = meta.sample
-                    [meta, idx]
+                    def new_meta = meta.clone()
+                    new_meta.id = meta.sample
+                    [new_meta, idx]
                 }.groupTuple()
 
             ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
