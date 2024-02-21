@@ -419,7 +419,7 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = Channel.empty()
         ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
-                [meta + [id:meta.id + "_" + interval_list.baseName], bam, bai, interval_list, []]
+                [meta + [id:meta.id + "_" + interval_list.baseName, variantcaller:'haplotypecaller'], bam, bai, interval_list, []]
             }
 
         //
