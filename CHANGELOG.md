@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#124](https://github.com/nf-core/rnavar/pull/124) - Fixed s3 bucket path in conditional statement for SnpEff cache
 - [#127](https://github.com/nf-core/rnavar/pull/127) - Fixed s3 bucket path in conditional statement for VEP cache
 - [#130](https://github.com/nf-core/rnavar/pull/130) - Added missing "def" in local variables
+- [#132](https://github.com/nf-core/rnavar/pull/132) - Added missing variantcaller key to meta map, to fix null value in publishDir
 
 ### Dependencies
 
