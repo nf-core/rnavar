@@ -11,7 +11,6 @@ include { SAMTOOLS_FAIDX                 } from '../../../modules/nf-core/samtoo
 include { STAR_GENOMEGENERATE            } from '../../../modules/nf-core/star/genomegenerate/main'
 include { GUNZIP as GUNZIP_FASTA         } from '../../../modules/nf-core/gunzip/main'
 include { GUNZIP as GUNZIP_GTF           } from '../../../modules/nf-core/gunzip/main'
-include { GUNZIP as GUNZIP_GFF           } from '../../../modules/nf-core/gunzip/main'
 
 workflow PREPARE_GENOME {
     take:
