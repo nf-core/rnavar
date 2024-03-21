@@ -65,7 +65,7 @@ include { GATK4_BASERECALIBRATOR                             } from '../modules/
 include { GATK4_BEDTOINTERVALLIST                            } from '../modules/nf-core/modules/gatk4/bedtointervallist/main'
 include { GATK4_INTERVALLISTTOOLS                            } from '../modules/nf-core/modules/gatk4/intervallisttools/main'
 include { GATK4_HAPLOTYPECALLER                              } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
-include { GATK4_HAPLOTYPECALLER as GATK4_HAPLOTYPECALLERGVCF } from '../modules/nf-core/modules/gatk4/haplotypecaller/main'
+include { GATK4_HAPLOTYPECALLERGVCF                          } from '../modules/nf-core/modules/gatk4/haplotypecallergvcf/main'
 include { GATK4_MERGEVCFS                                    } from '../modules/nf-core/modules/gatk4/mergevcfs/main'
 include { GATK4_COMBINEGVCFS                                 } from '../modules/nf-core/modules/gatk4/combinegvcfs/main'
 include { GATK4_INDEXFEATUREFILE                             } from '../modules/nf-core/modules/gatk4/indexfeaturefile/main'
@@ -404,17 +404,17 @@ workflow RNAVAR {
             // MODULE: IndexFeatureFile from GATK4
             // Index the gVCF files
             //
-            GATK4_INDEXFEATUREFILE(
-                GATK4_HAPLOTYPECALLERGVCF.out.vcf
-            )
+            ////GATK4_INDEXFEATUREFILE(
+            ////    GATK4_HAPLOTYPECALLERGVCF.out.vcf
+            ////)
             
-            ch_haplotypecallergvcf_raw_index = GATK4_INDEXFEATUREFILE.out.index
+            ch_haplotypecallergvcf_raw_index = GATK4_HAPLOTYPECALLERGVCF.out.tbi
             .map{ meta, idx ->
                 meta.id = meta.sample
                 [meta, idx]}
             .groupTuple()
 
-            ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
+            ////ch_versions  = ch_versions.mix(GATK4_INDEXFEATUREFILE.out.versions.first().ifEmpty(null))
             
             //
             // MODULE: CombineGVCFS from GATK4

@@ -28,6 +28,7 @@ process SAMTOOLS_MERGE {
     samtools \\
         merge \\
         --threads ${task.cpus-1} \\
+        -f \\
         $args \\
         ${reference} \\
         ${prefix}.${file_type} \\
