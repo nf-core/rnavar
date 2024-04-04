@@ -4,53 +4,42 @@ name: nf-core linting
 # that the code meets the nf-core guidelines.
 on:
   push:
+    branches:
+      - dev
   pull_request:
   release:
     types: [published]
 
 jobs:
-  EditorConfig:
+  pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: "pip"
 
-      - name: Install editorconfig-checker
-        run: npm install -g editorconfig-checker
+      - name: Install pre-commit
+        run: pip install pre-commit
 
-      - name: Run ECLint check
-        run: editorconfig-checker -exclude README.md $(find .* -type f | grep -v '.git\|.py\|.md\|json\|yml\|yaml\|html\|css\|work\|.nextflow\|build\|nf_core.egg-info\|log.txt\|Makefile')
-
-  Prettier:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-
-      - name: Install Prettier
-        run: npm install -g prettier
-
-      - name: Run Prettier --check
-        run: prettier --check ${GITHUB_WORKSPACE}
+      - name: Run pre-commit
+        run: pre-commit run --all-files
 
   nf-core:
     runs-on: ubuntu-latest
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Nextflow
-        env:
-          CAPSULE_LOG: none
-        run: |
-          wget -qO- get.nextflow.io | bash
-          sudo mv nextflow /usr/local/bin/
+        uses: nf-core/setup-nextflow@v1
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.6"
+          python-version: "3.11"
           architecture: "x64"
 
       - name: Install dependencies
@@ -71,7 +60,7 @@ jobs:
 
       - name: Upload linting log file artifact
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: linting-logs
           path: |

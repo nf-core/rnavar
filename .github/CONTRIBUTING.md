@@ -9,7 +9,9 @@ Please use the pre-filled template to save time.
 However, don't be put off by this template - other more general issues and suggestions are welcome!
 Contributions to the code are even more welcome ;)
 
-> If you need help using or modifying nf-core/rnavar then the best place to ask is on the nf-core Slack [#rnavar](https://nfcore.slack.com/channels/rnavar) channel ([join our Slack here](https://nf-co.re/join/slack)).
+:::info
+If you need help using or modifying nf-core/rnavar then the best place to ask is on the nf-core Slack [#rnavar](https://nfcore.slack.com/channels/rnavar) channel ([join our Slack here](https://nf-co.re/join/slack)).
+:::
 
 ## Contribution workflow
 
@@ -24,6 +26,9 @@ If you'd like to write some code for nf-core/rnavar, the standard workflow is as
 If you're not used to this workflow with git, you can start with some [docs from GitHub](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests) or even their [excellent `git` resources](https://try.github.io/).
 
 ## Tests
+
+You can optionally test your changes by running the pipeline locally. Then it is recommended to use the `debug` profile to
+receive warnings about process selectors and other debug info. Example: `nextflow run . -profile debug,test,docker --outdir <OUTDIR>`.
 
 When you create a pull request with changes, [GitHub Actions](https://github.com/features/actions) will run automatic tests.
 Typically, pull-requests are only fully reviewed when these tests are passing, though of course we can help out before then.
@@ -101,3 +106,18 @@ If you are using a new feature from core Nextflow, you may bump the minimum requ
 ### Images and figures
 
 For overview images and other documents we follow the nf-core [style guidelines and examples](https://nf-co.re/developers/design_guidelines).
+
+## GitHub Codespaces
+
+This repo includes a devcontainer configuration which will create a GitHub Codespaces for Nextflow development! This is an online developer environment that runs in your browser, complete with VSCode and a terminal.
+
+To get started:
+
+- Open the repo in [Codespaces](https://github.com/nf-core/rnavar/codespaces)
+- Tools installed
+  - nf-core
+  - Nextflow
+
+Devcontainer specs:
+
+- [DevContainer config](.devcontainer/devcontainer.json)

@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download lint results
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v3
         with:
           workflow: linting.yml
           workflow_conclusion: completed
 
       - name: Get PR number
         id: pr_number
-        run: echo "::set-output name=pr_number::$(cat linting-logs/PR_number.txt)"
+        run: echo "pr_number=$(cat linting-logs/PR_number.txt)" >> $GITHUB_OUTPUT
 
       - name: Post PR comment
         uses: marocchino/sticky-pull-request-comment@v2
