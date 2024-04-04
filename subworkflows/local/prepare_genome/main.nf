@@ -9,8 +9,9 @@ include { GFFREAD                        } from '../../../modules/nf-core/gffrea
 include { GTF2BED                        } from '../../../modules/local/gtf2bed'
 include { SAMTOOLS_FAIDX                 } from '../../../modules/nf-core/samtools/faidx/main'
 include { STAR_GENOMEGENERATE            } from '../../../modules/nf-core/star/genomegenerate/main'
-include { GUNZIP as GUNZIP_FASTA         } from '../../../modules/nf-core/gunzip/main'
-include { GUNZIP as GUNZIP_GTF           } from '../../../modules/nf-core/gunzip/main'
+include { UNZIP as UNZIP_FASTA           } from '../../../modules/nf-core/unzip/main'
+include { UNZIP as UNZIP_GTF             } from '../../../modules/nf-core/unzip/main'
+include { UNZIP as UNZIP_GFF             } from '../../../modules/nf-core/unzip/main'
 
 workflow PREPARE_GENOME {
     take:
@@ -25,20 +26,28 @@ workflow PREPARE_GENOME {
     //Unzip reference genome files if needed
 
     if (params.fasta.endsWith('.gz')) {
-        GUNZIP_FASTA(ch_fasta_raw)
+        UNZIP_FASTA(ch_fasta_raw)
 
-        ch_fasta    = GUNZIP_FASTA.out.gunzip
-        ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
-    } else {
+        //file gets saved into a folder with the same name as the file, need to add the missing depth to the folder
+        ch_fasta = UNZIP_FASTA.out.unzipped_archive.map{ meta, file ->
+            def file_name      = file.baseName
+            def full_file_path = file.toString()  + '/' + file_name + '.fa'
+
+            [meta, full_file_path] }
+        } else {
         ch_fasta = ch_fasta_raw
     }
 
     if (params.gtf.endsWith('.gz')) {
-        GUNZIP_GTF(ch_gtf_raw)
+        UNZIP_GTF(ch_gtf_raw)
 
-        ch_gtf      = GUNZIP_GTF.out.gunzip
-        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-    } else {
+        //file gets saved into a folder with the same name as the file, need to add the missing depth to the folder
+        ch_gtf = UNZIP_GTF.out.unzipped_archive.map{ meta, file ->
+            def file_name      = file.baseName
+            def full_file_path = file.toString()  + '/' + file_name + '.gtf'
+
+            [meta,full_file_path] }
+        } else {
         ch_gtf = ch_gtf_raw
     }
 
