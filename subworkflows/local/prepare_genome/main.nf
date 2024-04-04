@@ -33,8 +33,9 @@ workflow PREPARE_GENOME {
             def file_name      = file.baseName
             def full_file_path = file.toString()  + '/' + file_name + '.fa'
 
-            [meta, full_file_path] }
-        } else {
+            [meta, full_file_path]
+        }
+    } else {
         ch_fasta = ch_fasta_raw
     }
 
@@ -46,8 +47,9 @@ workflow PREPARE_GENOME {
             def file_name      = file.baseName
             def full_file_path = file.toString()  + '/' + file_name + '.gtf'
 
-            [meta,full_file_path] }
-        } else {
+            [meta,full_file_path]
+        }
+    } else {
         ch_gtf = ch_gtf_raw
     }
 
