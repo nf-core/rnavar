@@ -47,7 +47,7 @@ workflow PREPARE_GENOME {
             def file_name      = file.baseName
             def full_file_path = file.toString()  + '/' + file_name + '.gtf'
 
-            [meta,full_file_path]
+            [meta, full_file_path]
         }
     } else {
         ch_gtf = ch_gtf_raw
