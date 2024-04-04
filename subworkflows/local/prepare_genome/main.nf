@@ -28,7 +28,7 @@ workflow PREPARE_GENOME {
     if (params.fasta.endsWith('.gz')) {
         UNZIP_FASTA(ch_fasta_raw)
 
-        //file gets saved into a folder with the same name as the file, need to add the missing depth to the folder
+        // File gets saved into a folder with the same name as the file, need to add the missing depth to the folder
         ch_fasta = UNZIP_FASTA.out.unzipped_archive.map{ meta, file ->
             def file_name      = file.baseName
             def full_file_path = file.toString()  + '/' + file_name + '.fa'
@@ -42,7 +42,7 @@ workflow PREPARE_GENOME {
     if (params.gtf.endsWith('.gz')) {
         UNZIP_GTF(ch_gtf_raw)
 
-        //file gets saved into a folder with the same name as the file, need to add the missing depth to the folder
+        // File gets saved into a folder with the same name as the file, need to add the missing depth to the folder
         ch_gtf = UNZIP_GTF.out.unzipped_archive.map{ meta, file ->
             def file_name      = file.baseName
             def full_file_path = file.toString()  + '/' + file_name + '.gtf'
