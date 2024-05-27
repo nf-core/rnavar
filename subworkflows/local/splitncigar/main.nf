@@ -18,7 +18,7 @@ workflow SPLITNCIGAR {
     ch_versions       = Channel.empty()
 
     bam_interval = bam.combine(intervals).map{ meta, bam, bai, intervals ->
-        new_meta = meta.clone()
+        def new_meta = meta.clone()
         new_meta.id = meta.id + "_" + intervals.baseName
         new_meta.sample = meta.id
         [new_meta, bam, bai, intervals]
@@ -35,7 +35,7 @@ workflow SPLITNCIGAR {
 
     bam_splitncigar_interval = bam_splitncigar
         .map{ meta, bam ->
-            new_meta = meta.clone()
+            def new_meta = meta.clone()
             new_meta.id = meta.sample
             [new_meta, bam]
     }.groupTuple()

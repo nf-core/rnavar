@@ -418,7 +418,7 @@ workflow RNAVAR {
             ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
         //} else {
         //    ch_bam_variant_calling = ch_splitncigar_bam_bai
-        //}
+        }
 
         interval_flag = params.no_intervals
         // Run haplotyper even in the absence of dbSNP files
@@ -430,7 +430,7 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = Channel.empty()
         ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
-                [meta + [id:meta.id + "_" + interval_list.baseName], bam, bai, interval_list, []]
+                [meta + [id:meta.id + "_" + interval_list.baseName, variantcaller:'haplotypecaller'], bam, bai, interval_list, []]
             }
 
         //
@@ -476,8 +476,9 @@ workflow RNAVAR {
 
             ch_haplotypecallergvcf_raw = GATK4_HAPLOTYPECALLERGVCF.out.vcf
                 .map{ meta, vcf ->
-                    meta.id = meta.sample
-                    [meta, vcf]
+                    def new_meta = meta.clone()
+                    new_meta.id = meta.sample
+                    [new_meta, vcf]
                 }.groupTuple()
 
             ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLERGVCF.out.versions.first().ifEmpty(null))
