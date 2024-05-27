@@ -58,9 +58,6 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
@@ -71,8 +68,6 @@ CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
 ```
 
 Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
 
 Now, you can run the pipeline using:
 
@@ -96,12 +91,23 @@ For more details about the output files and reports, please refer to the
 
 nf-core/rnavar was originally written in Nextflow DSL2 for use at the [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken), by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)).
 
-The pipeline is primarily maintained by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) from [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)) from [Seqera Labs](https://seqera/io)
+nf-core/rnavar was originally written by Praveen Raj at [The Swedish Childhood Tumor Biobank (Barntumörbanken)](https://ki.se/forskning/barntumorbanken).
+Maxime U Garcia at [The Swedish Childhood Tumor Biobank (Barntumörbanken)](https://ki.se/forskning/barntumorbanken) helped with development.
 
-Many thanks to other who have helped out along the way too, including (but not limited to):
-[@ewels](https://github.com/ewels),
-[@drpatelh](https://github.com/drpatelh),
-[@nschcolnicov](https://github.com/nschcolnicov).
+Maintenance is now lead by Maxime U Garcia (now at [Seqera Labs](https://seqera/io))
+
+Main developers:
+
+- [Maxime U Garcia](https://github.com/maxulysse)
+
+We thank the following people for their extensive assistance in the development of this pipeline:
+
+- [Harshil Patel](https://github.com/drpatelh)
+- [Nicolás Schcolnicov](https://github.com/nschcolnicov)
+- [Ömer An](https://github.com/bounlu)
+- [Phil Ewels](https://github.com/ewels)
+- [Praveen Raj](https://github.com/praveenraj2018)
+- [Sarah Maman](https://github.com/SarahMaman)
 
 ## Contributions and Support
 

@@ -44,7 +44,7 @@ workflow PREPARE_GENOME {
 
     GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
     GFFREAD(ch_gff)
-    SAMTOOLS_FAIDX(ch_fasta, [['id':null], []])
+    SAMTOOLS_FAIDX(ch_fasta, [['id':'genome'], []])
 
     ch_gtf = ch_gtf.mix(GFFREAD.out.gtf)
 
