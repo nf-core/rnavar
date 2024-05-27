@@ -104,6 +104,7 @@ We thank the following people for their extensive assistance in the development 
 
 - [Harshil Patel](https://github.com/drpatelh)
 - [Nicolás Schcolnicov](https://github.com/nschcolnicov)
+- [Ömer An](https://github.com/bounlu)
 - [Phil Ewels](https://github.com/ewels)
 - [Praveen Raj](https://github.com/praveenraj2018)
 - [Sarah Maman](https://github.com/SarahMaman)
