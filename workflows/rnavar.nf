@@ -455,75 +455,75 @@ workflow RNAVAR {
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions.first().ifEmpty(null))
 
         if (!params.generate_gvcf){
-			//
-			// MODULE: MergeVCFS from GATK4
-			// Merge multiple VCF files into one VCF
-			//
-			GATK4_MERGEVCFS(
-				ch_haplotypecaller_raw,
-				PREPARE_GENOME.out.dict
-			)
-			ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
-			ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
+            //
+            // MODULE: MergeVCFS from GATK4
+            // Merge multiple VCF files into one VCF
+            //
+            GATK4_MERGEVCFS(
+                ch_haplotypecaller_raw,
+                PREPARE_GENOME.out.dict
+            )
+            ch_haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
+            ch_versions  = ch_versions.mix(GATK4_MERGEVCFS.out.versions.first().ifEmpty(null))
 
-			//
-			// MODULE: Index the VCF using TABIX
-			//
-			TABIX(
-				ch_haplotypecaller_vcf
-			)
+            //
+            // MODULE: Index the VCF using TABIX
+            //
+            TABIX(
+                ch_haplotypecaller_vcf
+            )
 
-			ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
-				.join(TABIX.out.tbi, by: [0], remainder: true)
-				.join(TABIX.out.csi, by: [0], remainder: true)
-				.map{meta, vcf, tbi, csi ->
-					if (tbi) [meta, vcf, tbi]
-					else [meta, vcf, csi]
-				}
+            ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
+                .join(TABIX.out.tbi, by: [0], remainder: true)
+                .join(TABIX.out.csi, by: [0], remainder: true)
+                .map{meta, vcf, tbi, csi ->
+                    if (tbi) [meta, vcf, tbi]
+                    else [meta, vcf, csi]
+                }
 
-			ch_versions     = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
-			ch_final_vcf    = ch_haplotypecaller_vcf
+            ch_versions     = ch_versions.mix(TABIX.out.versions.first().ifEmpty(null))
+            ch_final_vcf    = ch_haplotypecaller_vcf
 
-			//
-			// MODULE: VariantFiltration from GATK4
-			// Filter variant calls based on certain criteria
-			//
-			if (!params.skip_variantfiltration && !params.bam_csi_index ) {
+            //
+            // MODULE: VariantFiltration from GATK4
+            // Filter variant calls based on certain criteria
+            //
+            if (!params.skip_variantfiltration && !params.bam_csi_index ) {
 
-				GATK4_VARIANTFILTRATION(
-					ch_haplotypecaller_vcf_tbi,
-					PREPARE_GENOME.out.fasta,
-					PREPARE_GENOME.out.fai,
-					PREPARE_GENOME.out.dict
-				)
+                GATK4_VARIANTFILTRATION(
+                    ch_haplotypecaller_vcf_tbi,
+                    PREPARE_GENOME.out.fasta,
+                    PREPARE_GENOME.out.fai,
+                    PREPARE_GENOME.out.dict
+                )
 
-				ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
-				ch_final_vcf    = ch_filtered_vcf
-				ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
-			}
+                ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
+                ch_final_vcf    = ch_filtered_vcf
+                ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions.first().ifEmpty(null))
+            }
 
-			//
-			// SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
-			//
-			if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
-				ANNOTATE(
-					ch_final_vcf,
-					params.annotate_tools,
-					ch_snpeff_db,
-					ch_snpeff_cache,
-					ch_vep_genome,
-					ch_vep_species,
-					ch_vep_cache_version,
-					ch_vep_cache)
+            //
+            // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
+            //
+            if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
+                ANNOTATE(
+                    ch_final_vcf,
+                    params.annotate_tools,
+                    ch_snpeff_db,
+                    ch_snpeff_cache,
+                    ch_vep_genome,
+                    ch_vep_species,
+                    ch_vep_cache_version,
+                    ch_vep_cache)
 
-				// Gather QC reports
-				ch_reports  = ch_reports.mix(ANNOTATE.out.reports)
-				ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
-			}
+                // Gather QC reports
+                ch_reports  = ch_reports.mix(ANNOTATE.out.reports)
+                ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
+            }
 
         }
         else{
-			ch_haplotypecaller_raw_index = GATK4_HAPLOTYPECALLER.out.tbi
+            ch_haplotypecaller_raw_index = GATK4_HAPLOTYPECALLER.out.tbi
             .map{ meta, idx ->
                 meta.id = meta.sample
                 [meta, idx]}
