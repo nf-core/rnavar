@@ -103,17 +103,6 @@ include { TABIX_TABIX as TABIXGVCF    } from '../modules/nf-core/tabix/tabix/mai
 
 /*
 ========================================================================================
-    IMPORT NF-CORE SUBWORKFLOWS
-========================================================================================
-*/
-
-include { ALIGN_STAR                    } from '../subworkflows/nf-core/align_star'         // Align reads to genome and sort and index the alignment file
-include { MARKDUPLICATES                } from '../subworkflows/nf-core/markduplicates'     // Mark duplicates in the BAM file
-include { RECALIBRATE                   } from '../subworkflows/nf-core/recalibrate'        // Estimate and correct systematic bias
-include { SPLITNCIGAR                   } from '../subworkflows/nf-core/splitncigar'        // Splits reads that contain Ns in their cigar string
-
-/*
-========================================================================================
     VARIABLES
 ========================================================================================
 */
@@ -493,7 +482,7 @@ workflow RNAVAR {
                 GATK4_VARIANTFILTRATION(
                     ch_haplotypecaller_vcf_tbi,
                     PREPARE_GENOME.out.fasta,
-                    PREPARE_GENOME.out.fai,
+                    PREPARE_GENOME.out.fasta_fai,
                     PREPARE_GENOME.out.dict
                 )
 
