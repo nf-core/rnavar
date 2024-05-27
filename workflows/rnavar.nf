@@ -482,7 +482,7 @@ workflow RNAVAR {
                 GATK4_VARIANTFILTRATION(
                     ch_haplotypecaller_vcf_tbi,
                     PREPARE_GENOME.out.fasta,
-                    PREPARE_GENOME.out.fasta_fai,
+                    PREPARE_GENOME.out.fasta_fai.map{ fasta_fai -> [[id:'genome'], fasta_fai]},
                     PREPARE_GENOME.out.dict
                 )
 
@@ -495,19 +495,24 @@ workflow RNAVAR {
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
             //
             if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
-                ANNOTATE(
+
+                vep_fasta = (params.vep_include_fasta) ? fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] } : [[id: 'null'], []]
+
+                VCF_ANNOTATE_ALL(
                     ch_final_vcf,
+                    vep_fasta,
                     params.annotate_tools,
-                    ch_snpeff_db,
-                    ch_snpeff_cache,
-                    ch_vep_genome,
-                    ch_vep_species,
-                    ch_vep_cache_version,
-                    ch_vep_cache)
+                    params.snpeff_genome ? "${params.snpeff_genome}.${params.snpeff_db}" : "${params.genome}.${params.snpeff_db}",
+                    snpeff_cache,
+                    vep_genome,
+                    vep_species,
+                    vep_cache_version,
+                    vep_cache,
+                    vep_extra_files)
 
                 // Gather QC reports
-                ch_reports  = ch_reports.mix(ANNOTATE.out.reports)
-                ch_versions = ch_versions.mix(ANNOTATE.out.versions.first().ifEmpty(null))
+                ch_reports  = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
+                ch_versions = ch_versions.mix(VCF_ANNOTATE_ALL.out.versions.first().ifEmpty(null))
             }
 
         }
