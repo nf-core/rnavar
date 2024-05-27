@@ -4,8 +4,8 @@ process SAMTOOLS_MERGE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/samtools:1.18--h50ea8bc_1' :
-        'biocontainers/samtools:1.18--h50ea8bc_1' }"
+        'https://depot.galaxyproject.org/singularity/samtools:1.19.2--h50ea8bc_0' :
+        'biocontainers/samtools:1.19.2--h50ea8bc_0' }"
 
     input:
     tuple val(meta), path(input_files, stageAs: "?/*")
@@ -32,7 +32,6 @@ process SAMTOOLS_MERGE {
     samtools \\
         merge \\
         --threads ${task.cpus-1} \\
-        -f \\
         $args \\
         ${reference} \\
         ${prefix}.${file_type} \\
