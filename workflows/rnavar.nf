@@ -415,8 +415,8 @@ workflow RNAVAR {
             // Gather QC reports
             ch_reports  = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
             ch_versions = ch_versions.mix(RECALIBRATE.out.versions.first().ifEmpty(null))
-        //} else {
-        //    ch_bam_variant_calling = ch_splitncigar_bam_bai
+        } else {
+            ch_bam_variant_calling = ch_splitncigar_bam_bai
         }
 
         interval_flag = params.no_intervals
