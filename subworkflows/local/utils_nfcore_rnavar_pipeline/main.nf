@@ -72,10 +72,30 @@ workflow PIPELINE_INITIALISATION {
     UTILS_NFCORE_PIPELINE (
         nextflow_cli_args
     )
+
     //
     // Custom validation for pipeline parameters
     //
     validateInputParameters()
+
+    // Check input path parameters to see if they exist
+    def checkPathParamList = [
+        params.dbsnp,
+        params.dbsnp_tbi,
+        params.dict,
+        params.fasta,
+        params.fasta_fai,
+        params.gff,
+        params.gtf,
+        params.input,
+        params.known_indels,
+        params.known_indels_tbi,
+        params.star_index
+    ]
+
+    // only check if we are using the tools
+    if (params.tools && (params.tools.split(',').contains('snpeff') || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
+    if (params.tools && (params.tools.split(',').contains('vep')    || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
 
     //
     // Create channel from input file provided through params.input
