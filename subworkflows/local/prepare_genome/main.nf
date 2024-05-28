@@ -19,6 +19,8 @@ workflow PREPARE_GENOME {
     ch_fasta_raw      // file: /path/to/genome.fasta
     ch_gff            // file: /path/to/genome.gff
     ch_gtf_raw        // file: /path/to/genome.gtf
+    ch_dbsnp
+    ch_known_indels
     feature_type
 
     main:
@@ -47,6 +49,8 @@ workflow PREPARE_GENOME {
     GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
     GFFREAD(ch_gff)
     SAMTOOLS_FAIDX(ch_fasta, [['id':'genome'], []])
+    TABIX_DBSNP(ch_dbsnp.flatten().map{ it -> [ [ id:it.baseName ], it ] })
+    TABIX_KNOWN_INDELS(ch_known_indels.flatten().map{ it -> [ [ id:it.baseName ], it ] } )
 
     ch_gtf = ch_gtf.mix(GFFREAD.out.gtf)
 

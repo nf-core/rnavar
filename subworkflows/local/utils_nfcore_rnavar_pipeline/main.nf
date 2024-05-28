@@ -93,32 +93,20 @@ workflow PIPELINE_INITIALISATION {
         params.star_index
     ]
 
-    // only check if we are using the tools
-    if (params.tools && (params.tools.split(',').contains('snpeff') || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
-    if (params.tools && (params.tools.split(',').contains('vep')    || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
+    // only check if we are using the annotate_tools
+    if (params.annotate_tools && (params.annotate_tools.split(',').contains('snpeff') || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
+    if (params.annotate_tools && (params.annotate_tools.split(',').contains('vep')    || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
 
     //
     // Create channel from input file provided through params.input
     //
-    Channel
-        .fromSamplesheet("input")
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
-        }
-        .groupTuple()
-        .map {
-            validateInputSamplesheet(it)
-        }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
-        }
-        .set { ch_samplesheet }
+
+    if (params.input) ch_samplesheet = Channel.fromSamplesheet("input")
+        .map{ meta, fastq_1, fastq_2 ->
+            if (!fastq_2) [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+            else  [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+        }.groupTuple().map{validateInputSamplesheet(it)}
+        .map { meta, fastqs -> [ meta, fastqs.flatten() ] }
 
     emit:
     samplesheet = ch_samplesheet
@@ -192,16 +180,26 @@ def validateInputSamplesheet(input) {
 
     return [ metas[0], fastqs ]
 }
+
 //
-// Get attribute from genome config file e.g. fasta
+// Function to check samples are internally consistent after being grouped
 //
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[ params.genome ].containsKey(attribute)) {
-            return params.genomes[ params.genome ][ attribute ]
-        }
+def checkSamplesAfterGrouping(input) {
+    def (metas, fastqs) = input[1..2]
+
+    // Check that multiple runs of the same sample are of the same strandedness
+    def strandedness_ok = metas.collect{ it.strandedness }.unique().size == 1
+    if (!strandedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same strandedness!: ${metas[0].id}")
     }
-    return null
+
+    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
+    def endedness_ok = metas.collect{ it.single_end }.unique().size == 1
+    if (!endedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    }
+
+    return [ metas[0], fastqs ]
 }
 
 //

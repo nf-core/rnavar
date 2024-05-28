@@ -80,11 +80,6 @@ workflow NFCORE_RNAVAR {
     seq_center        = params.seq_center   ?: []
 
     // Initialize value channels based on params, defined in the params.genomes[params.genome] scope
-    ascat_genome                = params.ascat_genome       ?:  Channel.empty()
-    dbsnp_vqsr                  = params.dbsnp_vqsr         ?   Channel.value(params.dbsnp_vqsr)        : Channel.empty()
-    known_indels_vqsr           = params.known_indels_vqsr  ?   Channel.value(params.known_indels_vqsr) : Channel.empty()
-    known_snps_vqsr             = params.known_snps_vqsr    ?   Channel.value(params.known_snps_vqsr)   : Channel.empty()
-    ngscheckmate_bed            = params.ngscheckmate_bed   ?   Channel.value(params.ngscheckmate_bed)  : Channel.empty()
     snpeff_db                   = params.snpeff_db          ?:  Channel.empty()
     vep_cache_version           = params.vep_cache_version  ?:  Channel.empty()
     vep_genome                  = params.vep_genome         ?:  Channel.empty()
@@ -108,8 +103,12 @@ workflow NFCORE_RNAVAR {
         ch_fasta_raw,
         ch_gff,
         ch_gtf_raw,
-        feature_type)
+        ch_dbsnp,
+        ch_known_indels,
+        params.feature_type)
 
+    ch_fasta            = PREPARE_GENOME.out.fasta
+    ch_star_index       = PREPARE_GENOME.out.star_index
     ch_dict             = params.dict           ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
                                                 : PREPARE_GENOME.out.dict
     ch_fasta_fai        = params.fasta_fai      ? Channel.fromPath(params.fasta_fai).map{ it -> [ [id:'fai'], it ] }.collect()
@@ -118,8 +117,6 @@ workflow NFCORE_RNAVAR {
                                                 : PREPARE_GENOME.out.exon_bed
     ch_gtf              = params.gtf            ? Channel.fromPath(params.gtf).map{ it -> [ [id:'gtf'], it ] }.collect()
                                                 : PREPARE_GENOME.out.gtf
-    ch_star_index       = params.star_index     ? Channel.fromPath(params.star_index).map{ it -> [ [id:'star_index'], it ] }.collect()
-                                                : PREPARE_GENOME.out.star_index
     ch_dbsnp_tbi        = params.dbsnp          ? params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi).collect()
                                                 : PREPARE_GENOME.out.dbsnp_tbi : Channel.value([])
     ch_known_indels_tbi = params.known_indels   ? params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi).collect()
@@ -138,11 +135,11 @@ workflow NFCORE_RNAVAR {
     } else {
         // Looks for cache information either locally or on the cloud
         ANNOTATION_CACHE_INITIALISATION(
-            (params.snpeff_cache && params.tools && (params.tools.split(',').contains("snpeff") || params.tools.split(',').contains('merge'))),
+            (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains('merge'))),
             params.snpeff_cache,
             params.snpeff_genome,
             params.snpeff_db,
-            (params.vep_cache && params.tools && (params.tools.split(',').contains("vep") || params.tools.split(',').contains('merge'))),
+            (params.vep_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains('merge'))),
             params.vep_cache,
             params.vep_species,
             params.vep_cache_version,
@@ -156,9 +153,19 @@ workflow NFCORE_RNAVAR {
     //
     // WORKFLOW: Run pipeline
     //
-    RNAVAR (
-        samplesheet
-    )
+    RNAVAR(samplesheet,
+        ch_dbsnp,
+        ch_dbsnp_tbi,
+        ch_dict,
+        ch_exon_bed,
+        ch_fasta,
+        ch_fasta_fai,
+        ch_gtf,
+        ch_known_indels,
+        ch_known_indels_tbi,
+        ch_star_index,
+        seq_center,
+        seq_platform)
 
     emit:
     multiqc_report = RNAVAR.out.multiqc_report // channel: /path/to/multiqc_report.html
