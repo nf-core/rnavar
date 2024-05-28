@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0dev] nfcore/rnavar
+## [2.0.0dev] nfcore/rnavar
 
 ### Added
 
@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#109](https://github.com/nf-core/rnavar/pull/109) - Update all modules
 - [#111](https://github.com/nf-core/rnavar/pull/111) - Template update from nf-core/tools 2.11
 - [#117](https://github.com/nf-core/rnavar/pull/117) - Template update from nf-core/tools 2.11.1
+- [#120](https://github.com/nf-core/rnavar/pull/120) - Template update from nf-core/tools 2.12
+- [#140](https://github.com/nf-core/rnavar/pull/140) - Template update from nf-core/tools 2.14.1
 
 ### Fixed
 
@@ -25,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#130](https://github.com/nf-core/rnavar/pull/130) - Added missing "def" in local variables
 - [#132](https://github.com/nf-core/rnavar/pull/132) - Added missing variantcaller key to meta map, to fix null value in publishDir
 - [#136](https://github.com/nf-core/rnavar/pull/136) - Replaced unzip module with gunzip, removed unzip module
+- [#138](https://github.com/nf-core/rnavar/pull/138) - Proper usage of GVCF
 
 ### Dependencies
 
