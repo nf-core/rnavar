@@ -10,13 +10,13 @@ include { methodsDescriptionText    } from '../../subworkflows/local/utils_nfcor
 include { paramsSummaryMultiqc      } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML    } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
 
-include { ALIGN_STAR                } from '../../subworkflows/local/align_star'
 include { BAM_MARKDUPLICATES        } from '../../subworkflows/local/bam_markduplicates'
-include { GTF2BED                   } from '../../modules/local/gtf2bed'
 include { RECALIBRATE               } from '../../subworkflows/local/recalibrate'
 include { SPLITNCIGAR               } from '../../subworkflows/local/splitncigar'
 include { VCF_ANNOTATE_ALL          } from '../../subworkflows/local/vcf_annotate_all'
+include { FASTQ_ALIGN_STAR          } from '../../subworkflows/nf-core/fastq_align_star'
 
+include { GTF2BED                   } from '../../modules/local/gtf2bed'
 include { CAT_FASTQ                 } from '../../modules/nf-core/cat/fastq'
 include { FASTQC                    } from '../../modules/nf-core/fastqc'
 include { GATK4_BASERECALIBRATOR    } from '../../modules/nf-core/gatk4/baserecalibrator'
@@ -123,21 +123,23 @@ workflow RNAVAR {
     ch_aligner_clustering_multiqc = Channel.empty()
 
     if (params.aligner == 'star') {
-        ALIGN_STAR(ch_cat_fastq,
+        FASTQ_ALIGN_STAR(ch_cat_fastq,
             ch_star_index,
             ch_gtf,
             params.star_ignore_sjdbgtf,
             seq_platform,
-            seq_center)
+            seq_center,
+            ch_fasta,
+            [[:],[]]) //ch_transcripts_fasta)
 
-        ch_genome_bam        = ALIGN_STAR.out.bam
-        ch_genome_bam_index  = ALIGN_STAR.out.bai
-        ch_transcriptome_bam = ALIGN_STAR.out.bam_transcript
+        ch_genome_bam        = FASTQ_ALIGN_STAR.out.bam
+        ch_genome_bam_index  = FASTQ_ALIGN_STAR.out.bai
+        ch_transcriptome_bam = FASTQ_ALIGN_STAR.out.bam_transcript
 
         // Gather QC reports
-        ch_reports           = ch_reports.mix(ALIGN_STAR.out.reports)
-        ch_reports           = ch_reports.mix(ALIGN_STAR.out.log_final.collect{it[1]}.ifEmpty([]))
-        ch_versions          = ch_versions.mix(ALIGN_STAR.out.versions)
+        ch_reports           = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_out)
+        ch_reports           = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect{it[1]}.ifEmpty([]))
+        ch_versions          = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
 
         //
         // SUBWORKFLOW: Mark duplicates with GATK4

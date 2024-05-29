@@ -4,7 +4,7 @@
 // For all modules here:
 // A when clause condition is defined in the conf/modules.config to determine if the module should be run
 
-include { BAM_STATS_SAMTOOLS   } from '../bam_stats_samtools/main'
+include { BAM_STATS_SAMTOOLS } from '../../nf-core/bam_stats_samtools'
 include { GATK4_MARKDUPLICATES } from '../../../modules/nf-core/gatk4/markduplicates/main'
 include { SAMTOOLS_INDEX       } from '../../../modules/nf-core/samtools/index/main'
 
@@ -32,11 +32,13 @@ workflow BAM_MARKDUPLICATES {
             else [meta, bam, csi]
         }
 
-    BAM_STATS_SAMTOOLS(ch_bam_index)
+    BAM_STATS_SAMTOOLS(ch_bam_index, fasta)
 
     // Gather all reports generated
     ch_reports = ch_reports.mix(GATK4_MARKDUPLICATES.out.metrics)
-    ch_reports = ch_reports.mix(BAM_STATS_SAMTOOLS.out.reports)
+    ch_reports = ch_reports.mix(BAM_STATS_SAMTOOLS.out.stats)
+    ch_reports = ch_reports.mix(BAM_STATS_SAMTOOLS.out.flagstat)
+    ch_reports = ch_reports.mix(BAM_STATS_SAMTOOLS.out.idxstats)
 
     // Gather versions of all tools used
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())

@@ -47,7 +47,7 @@ workflow PREPARE_GENOME {
     }
 
     GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
-    GFFREAD(ch_gff)
+    GFFREAD(ch_gff, ch_fasta)
     SAMTOOLS_FAIDX(ch_fasta, [['id':'genome'], []])
     TABIX_DBSNP(ch_dbsnp.flatten().map{ it -> [ [ id:it.baseName ], it ] })
     TABIX_KNOWN_INDELS(ch_known_indels.flatten().map{ it -> [ [ id:it.baseName ], it ] } )

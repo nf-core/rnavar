@@ -10,7 +10,7 @@ workflow SPLITNCIGAR {
     take:
     bam             // channel: [ val(meta), [ bam ], [bai] ]
     ch_fasta        // channel: [ fasta ]
-    ch_fai       // channel: [ fai ]
+    ch_fai          // channel: [ fai ]
     ch_dict         // channel: [ dict ]
     intervals       // channel: [ interval_list]
 
@@ -26,9 +26,9 @@ workflow SPLITNCIGAR {
 
     GATK4_SPLITNCIGARREADS(
         bam_interval,
-        ch_fasta.map{ meta, fasta -> [fasta] },
+        ch_fasta.map{ fasta -> [[id:'genome'], fasta] },
         ch_fai,
-        ch_dict.map{ meta, dict -> [dict] },
+        ch_dict
     )
     bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
     ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
