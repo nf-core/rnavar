@@ -166,6 +166,12 @@ workflow NFCORE_RNAVAR {
         ch_known_indels,
         ch_known_indels_tbi,
         ch_star_index,
+        snpeff_cache,
+        params.vep_genome,
+        params.vep_species,
+        params.vep_cache_version,
+        vep_cache,
+        vep_extra_files,
         seq_center,
         seq_platform)
 

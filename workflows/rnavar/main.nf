@@ -51,6 +51,12 @@ workflow RNAVAR {
     ch_known_indels
     ch_known_indels_tbi
     ch_star_index
+    snpeff_cache
+    vep_genome
+    vep_species
+    vep_cache_version
+    vep_cache
+    vep_extra_files
     seq_center
     seq_platform
 
@@ -315,7 +321,7 @@ workflow RNAVAR {
                 vep_fasta = (params.vep_include_fasta) ? fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] } : [[id: 'null'], []]
 
                 VCF_ANNOTATE_ALL(
-                    ch_final_vcf,
+                    ch_final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
                     vep_fasta,
                     params.annotate_tools,
                     params.snpeff_genome ? "${params.snpeff_genome}.${params.snpeff_db}" : "${params.genome}.${params.snpeff_db}",
@@ -324,7 +330,10 @@ workflow RNAVAR {
                     vep_species,
                     vep_cache_version,
                     vep_cache,
-                    vep_extra_files)
+                    vep_extra_files,
+                    [], // bcftools_annotations,
+                    [], //bcftools_annotations_tbi,
+                    []) //bcftools_header_lines)
 
                 // Gather QC reports
                 ch_reports  = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
@@ -380,6 +389,8 @@ workflow RNAVAR {
     // MODULE: MultiQC
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
     //
+    multiqc_report = Channel.empty()
+
     if (!params.skip_multiqc){
         ch_multiqc_files =  Channel.empty()
 
@@ -406,8 +417,8 @@ workflow RNAVAR {
     }
 
     emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    multiqc_report         // channel: /path/to/multiqc_report.html
+    versions = ch_versions // channel: [ path(versions.yml) ]
 }
 
 /*
