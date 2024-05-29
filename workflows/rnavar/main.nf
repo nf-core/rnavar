@@ -4,19 +4,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryMap          } from 'plugin/nf-validation'
-include { checkSamplesAfterGrouping } from '../../subworkflows/local/utils_nfcore_rnavar_pipeline'
-include { methodsDescriptionText    } from '../../subworkflows/local/utils_nfcore_rnavar_pipeline'
-include { paramsSummaryMultiqc      } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML    } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
-
-include { BAM_MARKDUPLICATES        } from '../../subworkflows/local/bam_markduplicates'
-include { RECALIBRATE               } from '../../subworkflows/local/recalibrate'
-include { SPLITNCIGAR               } from '../../subworkflows/local/splitncigar'
-include { VCF_ANNOTATE_ALL          } from '../../subworkflows/local/vcf_annotate_all'
-include { FASTQ_ALIGN_STAR          } from '../../subworkflows/nf-core/fastq_align_star'
-
+// local
 include { GTF2BED                   } from '../../modules/local/gtf2bed'
+
+// nf-core
 include { CAT_FASTQ                 } from '../../modules/nf-core/cat/fastq'
 include { FASTQC                    } from '../../modules/nf-core/fastqc'
 include { GATK4_BASERECALIBRATOR    } from '../../modules/nf-core/gatk4/baserecalibrator'
@@ -31,6 +22,26 @@ include { MULTIQC                   } from '../../modules/nf-core/multiqc'
 include { SAMTOOLS_INDEX            } from '../../modules/nf-core/samtools/index'
 include { TABIX_TABIX as TABIX      } from '../../modules/nf-core/tabix/tabix'
 include { TABIX_TABIX as TABIXGVCF  } from '../../modules/nf-core/tabix/tabix'
+
+// local
+include { RECALIBRATE               } from '../../subworkflows/local/recalibrate'
+include { SPLITNCIGAR               } from '../../subworkflows/local/splitncigar'
+include { VCF_ANNOTATE_ALL          } from '../../subworkflows/local/vcf_annotate_all'
+
+// nf-core
+include { BAM_MARKDUPLICATES_PICARD } from '../../subworkflows/nf-core/bam_markduplicates_picard'
+include { FASTQ_ALIGN_STAR          } from '../../subworkflows/nf-core/fastq_align_star'
+
+// local
+include { checkSamplesAfterGrouping } from '../../subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { methodsDescriptionText    } from '../../subworkflows/local/utils_nfcore_rnavar_pipeline'
+
+// nf-core
+include { paramsSummaryMultiqc      } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML    } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
+
+// plugin
+include { paramsSummaryMap          } from 'plugin/nf-validation'
 
 /*
 ========================================================================================
@@ -144,30 +155,37 @@ workflow RNAVAR {
         //
         // SUBWORKFLOW: Mark duplicates with GATK4
         //
-        BAM_MARKDUPLICATES(
-            ch_genome_bam,
-            ch_fasta.map{ meta, fasta -> [fasta] },
-            ch_fasta_fai,
-            [])
+        BAM_MARKDUPLICATES_PICARD(ch_genome_bam,
+            ch_fasta,
+            ch_fasta_fai.map{ it -> [[id:'genome'], it] })
 
-        ch_genome_bam             = BAM_MARKDUPLICATES.out.bam
+        ch_genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
+            .join(BAM_MARKDUPLICATES_PICARD.out.bai, remainder: true)
+            .join(BAM_MARKDUPLICATES_PICARD.out.csi, remainder: true)
+            .map{meta, bam, bai, csi ->
+                if (bai) [meta, bam, bai]
+                else [meta, bam, csi]
+            }
 
         //Gather QC reports
-        ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES.out.reports.collect{it[1]}.ifEmpty([]))
-        ch_versions               = ch_versions.mix(BAM_MARKDUPLICATES.out.versions)
+        ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES_PICARD.out.metrics.collect{it[1]}.ifEmpty([]))
+        ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES_PICARD.out.stats.collect{it[1]}.ifEmpty([]))
+        ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES_PICARD.out.flagstat.collect{it[1]}.ifEmpty([]))
+        ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES_PICARD.out.idxstats.collect{it[1]}.ifEmpty([]))
+        ch_versions               = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions)
 
         //
         // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
         //
-        ch_splitncigar_bam_bai = Channel.empty()
-        SPLITNCIGAR(
-            ch_genome_bam,
+
+        SPLITNCIGAR(ch_genome_bam_bai,
             ch_fasta,
             ch_fasta_fai,
             ch_dict,
             ch_interval_list_split
         )
+
         ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
         ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions)
 
@@ -242,7 +260,7 @@ workflow RNAVAR {
         ch_haplotypecaller_vcf = Channel.empty()
         ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
-                [meta + [id:meta.id + "_" + interval_list.baseName, variantcaller:'haplotypecaller'], bam, bai, interval_list, []]
+                [ meta + [ id:meta.id + "_" + interval_list.baseName, sample:meta.id, variantcaller:'haplotypecaller' ], bam, bai, interval_list, [] ]
             }
 
         //
@@ -259,11 +277,7 @@ workflow RNAVAR {
             ch_dbsnp_tbi.map{ it -> [[id:it.baseName], it] }
         )
 
-        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf
-            .map{ meta, vcf ->
-                meta.id = meta.sample
-                [meta, vcf]}
-            .groupTuple()
+        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta, vcf -> [ meta + [id:meta.sample] - meta.subMap('sample'), vcf ] }.groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions)
 

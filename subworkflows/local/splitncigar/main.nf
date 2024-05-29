@@ -17,35 +17,24 @@ workflow SPLITNCIGAR {
     main:
     ch_versions       = Channel.empty()
 
-    bam_interval = bam.combine(intervals).map{ meta, bam, bai, intervals ->
-        def new_meta = meta.clone()
-        new_meta.id = meta.id + "_" + intervals.baseName
-        new_meta.sample = meta.id
-        [new_meta, bam, bai, intervals]
-    }
+    bam_interval = bam.combine(intervals).map{ meta, bam, bai, intervals -> [ meta + [sample:meta.id], bam, bai, intervals ] }
 
-    GATK4_SPLITNCIGARREADS(
-        bam_interval,
-        ch_fasta.map{ fasta -> [[id:'genome'], fasta] },
-        ch_fai,
-        ch_dict
-    )
+    GATK4_SPLITNCIGARREADS(bam_interval,
+        ch_fasta,
+        ch_fai.map{ fai -> [[id:'genome'], fai] },
+        ch_dict)
+
     bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
-    ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions.first())
+    ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions)
 
-    bam_splitncigar_interval = bam_splitncigar
-        .map{ meta, bam ->
-            def new_meta = meta.clone()
-            new_meta.id = meta.sample
-            [new_meta, bam]
-    }.groupTuple()
+    bam_splitncigar_interval = bam_splitncigar.map{ meta, bam -> [ meta + [id:meta.sample] - meta.subMap('sample'), bam ] }.groupTuple()
 
     SAMTOOLS_MERGE(bam_splitncigar_interval,
         ch_fasta,
         ch_fai.map{ fai -> [[id:fai.baseName], fai] })
 
     splitncigar_bam = SAMTOOLS_MERGE.out.bam
-    ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
+    ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
 
     SAMTOOLS_INDEX(splitncigar_bam)
 
@@ -56,7 +45,8 @@ workflow SPLITNCIGAR {
             if (bai) [meta, bam, bai]
             else [meta, bam, csi]
         }
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+
+    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
     emit:
         bam_bai     = splitncigar_bam_bai
