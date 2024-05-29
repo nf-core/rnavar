@@ -1,13 +1,2 @@
 repository_type: pipeline
-lint:
-  files_exist:
-    - lib/NfcoreTemplate.groovy
-    - lib/Utils.groovy
-    - lib/WorkflowMain.groovy
-    - lib/WorkflowRnavar.groovy
-  files_unchanged:
-    - .github/CONTRIBUTING.md
-    - .github/workflows/branch.yml
-    - .github/workflows/linting.yml
-    - .github/workflows/linting_comment.yml
-    - docs/images/nf-core-rnavar_logo_light.png
+nf_core_version: "2.14.1"

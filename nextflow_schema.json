@@ -16,10 +16,10 @@
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "A design file with information about the samples in your experiment. Use this parameter to specify the location of the input files. It has to be a comma-separated file with a header row. See [usage docs](https://nf-co.re/rnavar/usage#input).",
                     "fa_icon": "fas fa-file-csv",
-                    "schema": "assets/schema_input.json",
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
+                    "schema": "assets/schema_input.json",
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$"
                 },
@@ -708,6 +708,20 @@
                     "description": "Validation of parameters in lenient more.",
                     "hidden": true,
                     "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
+                },
+                "modules_testdata_base_path": {
+                    "type": "string",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Base URL or local path to location of pipeline test dataset files",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data",
+                    "hidden": true
+                },
+                "pipelines_testdata_base_path": {
+                    "type": "string",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Base URL or local path to location of pipeline test dataset files",
+                    "default": "https://raw.githubusercontent.com/nf-core/test-datasets/modules/data",
+                    "hidden": true
                 }
             }
         }
