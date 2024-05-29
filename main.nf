@@ -16,19 +16,13 @@ nextflow.enable.dsl = 2
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
 params.fasta             = getGenomeAttribute('fasta')
-params.fasta_fai         = getGenomeAttribute('fasta_fai')
-params.dict              = getGenomeAttribute('dict')
+params.gene_bed          = getGenomeAttribute('bed12')
 params.gtf               = getGenomeAttribute('gtf')
-params.gff               = getGenomeAttribute('gff')
-params.exon_bed          = getGenomeAttribute('exon_bed')
-params.star_index        = getGenomeAttribute('star')
-params.dbsnp             = getGenomeAttribute('dbsnp')
-params.dbsnp_tbi         = getGenomeAttribute('dbsnp_tbi')
-params.known_indels      = getGenomeAttribute('known_indels')
-params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
 params.snpeff_db         = getGenomeAttribute('snpeff_db')
 params.snpeff_genome     = getGenomeAttribute('snpeff_genome')
+params.star_index        = getGenomeAttribute('star')
 params.vep_cache_version = getGenomeAttribute('vep_cache_version')
 params.vep_genome        = getGenomeAttribute('vep_genome')
 params.vep_species       = getGenomeAttribute('vep_species')
