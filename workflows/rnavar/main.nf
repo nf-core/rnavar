@@ -253,8 +253,11 @@ workflow RNAVAR {
         interval_flag = params.no_intervals
         // Run haplotyper even in the absence of dbSNP files
         if (!params.dbsnp){
-            ch_dbsnp = []
-            ch_dbsnp_tbi = []
+            ch_dbsnp_for_haplotypecaller = [[id:'null'], []]
+            ch_dbsnp_for_haplotypecaller_tbi = [[id:'null'], []]
+        } else {
+            ch_dbsnp_for_haplotypecaller     = ch_dbsnp.map{ vcf -> [[id:'dbsnp'], vcf] }
+            ch_dbsnp_for_haplotypecaller_tbi = ch_dbsnp_tbi.map{ tbi -> [[id:'dbsnp'], tbi] }
         }
 
         ch_haplotypecaller_vcf = Channel.empty()
@@ -273,8 +276,8 @@ workflow RNAVAR {
             ch_fasta,
             ch_fasta_fai.map{ it -> [[id:it.baseName], it] },
             ch_dict,
-            ch_dbsnp.map{ it -> [[id:it.baseName], it] },
-            ch_dbsnp_tbi.map{ it -> [[id:it.baseName], it] }
+            ch_dbsnp_for_haplotypecaller,
+            ch_dbsnp_for_haplotypecaller_tbi
         )
 
         ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta, vcf -> [ meta + [id:meta.sample] - meta.subMap('sample'), vcf ] }.groupTuple()
