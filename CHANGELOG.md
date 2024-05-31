@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#132](https://github.com/nf-core/rnavar/pull/132) - Added missing variantcaller key to meta map, to fix null value in publishDir
 - [#136](https://github.com/nf-core/rnavar/pull/136) - Replaced unzip module with gunzip, removed unzip module
 - [#138](https://github.com/nf-core/rnavar/pull/138) - Proper usage of GVCF
+- [#142](https://github.com/nf-core/rnavar/pull/142) - Fix dbsnp channels
 
 ### Dependencies
 
