@@ -256,8 +256,8 @@ workflow RNAVAR {
             ch_dbsnp_for_haplotypecaller = [[id:'null'], []]
             ch_dbsnp_for_haplotypecaller_tbi = [[id:'null'], []]
         } else {
-            ch_dbsnp_for_haplotypecaller     = ch_dbsnp
-            ch_dbsnp_for_haplotypecaller_tbi = ch_dbsnp_tbi
+            ch_dbsnp_for_haplotypecaller     = ch_dbsnp.map{ vcf -> [[id:'dbsnp'], vcf] }
+            ch_dbsnp_for_haplotypecaller_tbi = ch_dbsnp_tbi.map{ tbi -> [[id:'dbsnp'], tbi] }
         }
 
         ch_haplotypecaller_vcf = Channel.empty()
