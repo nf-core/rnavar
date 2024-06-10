@@ -218,7 +218,7 @@ workflow RNAVAR {
 
             // Gather QC reports
             ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
-            ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions)
+            ch_versions = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions)
 
             ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table)
             ch_bam_recalibrated_qc = Channel.empty()
@@ -256,8 +256,8 @@ workflow RNAVAR {
             ch_dbsnp_for_haplotypecaller = [[id:'null'], []]
             ch_dbsnp_for_haplotypecaller_tbi = [[id:'null'], []]
         } else {
-            ch_dbsnp_for_haplotypecaller     = ch_dbsnp.map{ vcf -> [[id:'dbsnp'], vcf] }
-            ch_dbsnp_for_haplotypecaller_tbi = ch_dbsnp_tbi.map{ tbi -> [[id:'dbsnp'], tbi] }
+            ch_dbsnp_for_haplotypecaller     = ch_dbsnp.map{ it -> [[id:it.baseName], it] },
+            ch_dbsnp_for_haplotypecaller_tbi = ch_dbsnp_tbi.map{ it -> [[id:it.baseName], it] }
         }
 
         ch_haplotypecaller_vcf = Channel.empty()
