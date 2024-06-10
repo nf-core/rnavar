@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#136](https://github.com/nf-core/rnavar/pull/136) - Replaced unzip module with gunzip, removed unzip module
 - [#138](https://github.com/nf-core/rnavar/pull/138) - Proper usage of GVCF
 - [#142](https://github.com/nf-core/rnavar/pull/142) - Fix dbsnp channels
+- [#143](https://github.com/nf-core/rnavar/pull/143) - Use `DROP_MISSING_CONTIGS` by default in `GATK4_BEDTOINTERVALLIST`
 
 ### Dependencies
 
