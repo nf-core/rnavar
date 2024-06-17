@@ -505,13 +505,13 @@
                 },
                 "gatk_vf_fs_filter": {
                     "type": "number",
-                    "default": 30,
+                    "default": 30.0,
                     "description": "Value to be used for the FisherStrand (FS) filter",
                     "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 30.0"
                 },
                 "gatk_vf_qd_filter": {
                     "type": "number",
-                    "default": 2,
+                    "default": 2.0,
                     "description": "Value to be used for the QualByDepth (QD) filter",
                     "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 2.0"
                 }
