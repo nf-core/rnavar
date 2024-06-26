@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#138](https://github.com/nf-core/rnavar/pull/138) - Proper usage of GVCF
 - [#142](https://github.com/nf-core/rnavar/pull/142) - Fix dbsnp channels
 - [#143](https://github.com/nf-core/rnavar/pull/143) - Use `DROP_MISSING_CONTIGS` by default in `GATK4_BEDTOINTERVALLIST`
-- [#145](https://github.com/nf-core/rnavar/pull/145) - Updated ch_gtf channel emitted by main.nf
+- [#145](https://github.com/nf-core/rnavar/pull/145) - Updated ch_gtf and ch_fasta_fai channels emitted by main.nf
 
 ### Dependencies
 
