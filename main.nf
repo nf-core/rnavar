@@ -111,14 +111,13 @@ workflow NFCORE_RNAVAR {
 
     ch_fasta            = PREPARE_GENOME.out.fasta
     ch_star_index       = PREPARE_GENOME.out.star_index
+    ch_gtf              = PREPARE_GENOME.out.gtf
     ch_dict             = params.dict           ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
                                                 : PREPARE_GENOME.out.dict
-    ch_fasta_fai        = params.fasta_fai      ? Channel.fromPath(params.fasta_fai).map{ it -> [ [id:'fai'], it ] }.collect()
+    ch_fasta_fai        = params.fasta_fai      ? Channel.fromPath(params.fasta_fai)
                                                 : PREPARE_GENOME.out.fasta_fai
     ch_exon_bed         = params.exon_bed       ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
                                                 : PREPARE_GENOME.out.exon_bed
-    ch_gtf              = params.gtf            ? Channel.fromPath(params.gtf).map{ it -> [ [id:'gtf'], it ] }.collect()
-                                                : PREPARE_GENOME.out.gtf
     ch_dbsnp_tbi        = params.dbsnp          ? params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi).collect()
                                                 : PREPARE_GENOME.out.dbsnp_tbi : Channel.value([])
     ch_known_indels_tbi = params.known_indels   ? params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi).collect()
