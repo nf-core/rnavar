@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#117](https://github.com/nf-core/rnavar/pull/117) - Template update for nf-core/tools v2.11.1
 - [#120](https://github.com/nf-core/rnavar/pull/120) - Template update for nf-core/tools v2.12
 - [#140](https://github.com/nf-core/rnavar/pull/140) - Template update for nf-core/tools v2.14.1
-- [#152](https://github.com/nf-core/rnavar/pull/152) - Template update for nf-core/tools v3.0.1
+- [#153](https://github.com/nf-core/rnavar/pull/153) - Template update for nf-core/tools v3.0.2
+- [#153](https://github.com/nf-core/rnavar/pull/153) - Converted pytest tests to nf-test tests
 
 ### Fixed
 
