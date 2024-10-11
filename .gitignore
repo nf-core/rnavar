@@ -1,5 +1,4 @@
 .nextflow*
-.nf-test*
 work/
 data/
 results/
@@ -7,3 +6,4 @@ results/
 testing/
 testing*
 *.pyc
+.nf-test*
