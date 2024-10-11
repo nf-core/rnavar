@@ -88,7 +88,6 @@ workflow RNAVAR {
                 return [ meta, fastqs.flatten() ]
         }
 
-
     CAT_FASTQ(ch_fastq.multiple)
 
     ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single)

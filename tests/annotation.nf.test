@@ -9,7 +9,7 @@ nextflow_pipeline {
 
         when {
             params {
-                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 outdir = "$outputDir"
                 annotate_tools = 'snpeff'
                 download_cache = true
@@ -39,7 +39,7 @@ nextflow_pipeline {
 
         when {
             params {
-                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 outdir = "$outputDir"
                 annotate_tools = 'vep'
                 download_cache = true
@@ -69,7 +69,7 @@ nextflow_pipeline {
 
         when {
             params {
-                modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 outdir = "$outputDir"
                 annotate_tools = 'merge'
                 download_cache = true
