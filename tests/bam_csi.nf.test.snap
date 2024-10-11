@@ -1,0 +1,51 @@
+{
+    "Run with profile test | bam_csi_index": {
+        "content": [
+            39,
+            null,
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/GM12878",
+                "preprocessing/GM12878/GM12878.md.bam",
+                "preprocessing/GM12878/GM12878.md.bam.csi",
+                "preprocessing/GM12878/GM12878.recal.bam",
+                "preprocessing/GM12878/GM12878.recal.bam.csi",
+                "reports",
+                "reports/multiqc_data",
+                "reports/multiqc_data/multiqc.log",
+                "reports/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc_data/multiqc_data.json",
+                "reports/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc_report.html",
+                "reports/stats",
+                "reports/stats/GM12878",
+                "reports/stats/GM12878/GM12878.flagstat",
+                "reports/stats/GM12878/GM12878.stats",
+                "reports/stats/GM12878/STAR_log",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
+                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
+                "samtools",
+                "samtools/GM12878.bam",
+                "samtools/GM12878.bam.bai",
+                "variant_calling",
+                "variant_calling/GM12878",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.csi",
+                "variant_calling/dbsnp_146.hg38.vcf",
+                "variant_calling/dbsnp_146.hg38.vcf/dbsnp_146.hg38.vcf.gz.csi",
+                "variant_calling/mills_and_1000G.indels.vcf",
+                "variant_calling/mills_and_1000G.indels.vcf/mills_and_1000G.indels.vcf.gz.csi"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.0",
+            "nextflow": "24.09.0"
+        },
+        "timestamp": "2024-10-11T14:57:45.737274"
+    }
+}
