@@ -147,7 +147,7 @@
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively species listed in Ensembl Genomes caches can be used."
                 },
                 "vep_cache_version": {
-                    "type": "number",
+                    "type": "string",
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version.",
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively cache version can be use to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers"
@@ -162,14 +162,6 @@
                     "fa_icon": "fas fa-download",
                     "description": "Download annotation cache.",
                     "help_text": "Set this parameter, if you wish to download annotation cache."
-                },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory / URL base for iGenomes references.",
-                    "default": "s3://ngi-igenomes/igenomes/",
-                    "fa_icon": "fas fa-cloud-download-alt",
-                    "hidden": true
                 },
                 "igenomes_ignore": {
                     "type": "boolean",

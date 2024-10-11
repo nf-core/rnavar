@@ -80,10 +80,18 @@ workflow RNAVAR {
     ch_versions = Channel.empty()
 
     // MODULE: Concatenate FastQ files from same sample if required
+    ch_fastq = ch_input.groupTuple().map{ samplesheet -> checkSamplesAfterGrouping(samplesheet) }
+        .branch{ meta, fastqs ->
+            single  : fastqs.size() == 1
+                return [ meta, fastqs.flatten() ]
+            multiple: fastqs.size() > 1
+                return [ meta, fastqs.flatten() ]
+        }
 
-    CAT_FASTQ(ch_input.multiple)
 
-    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_input.single)
+    CAT_FASTQ(ch_fastq.multiple)
+
+    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single)
 
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions)
 
@@ -418,7 +426,9 @@ workflow RNAVAR {
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),
             ch_multiqc_custom_config.toList(),
-            ch_multiqc_logo.toList()
+            ch_multiqc_logo.toList(),
+            [],
+            []
         )
         multiqc_report = MULTIQC.out.report.toList()
         ch_versions = ch_versions.mix(MULTIQC.out.versions)
