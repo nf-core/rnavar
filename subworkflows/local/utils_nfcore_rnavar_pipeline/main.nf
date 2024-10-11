@@ -47,7 +47,7 @@ workflow PIPELINE_INITIALISATION {
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
-    
+
     //
     // Validate parameters and generate parameter summary to stdout
     //
@@ -56,7 +56,7 @@ workflow PIPELINE_INITIALISATION {
         validate_params,
         null
     )
-    
+
 
     //
     // Check config provided to the pipeline
@@ -64,34 +64,44 @@ workflow PIPELINE_INITIALISATION {
     UTILS_NFCORE_PIPELINE (
         nextflow_cli_args
     )
+
     //
     // Custom validation for pipeline parameters
     //
     validateInputParameters()
 
+    // Check input path parameters to see if they exist
+    def checkPathParamList = [
+        params.dbsnp,
+        params.dbsnp_tbi,
+        params.dict,
+        params.fasta,
+        params.fasta_fai,
+        params.gff,
+        params.gtf,
+        params.input,
+        params.known_indels,
+        params.known_indels_tbi,
+        params.star_index
+    ]
+
+    // only check if we are using the annotate_tools
+    if (params.annotate_tools && (params.annotate_tools.split(',').contains('snpeff') || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
+    if (params.annotate_tools && (params.annotate_tools.split(',').contains('vep')    || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
+
     //
     // Create channel from input file provided through params.input
     //
 
-    Channel
+    ch_samplesheet = Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
+        .map{ meta, fastq_1, fastq_2 ->
+            if (!fastq_2) return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+            else { return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
         }
         .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
-        }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
-        }
-        .set { ch_samplesheet }
+        .map{ samplesheet -> validateInputSamplesheet(samplesheet) }
+        .map{ meta, fastqs -> return [ meta, fastqs.flatten() ] }
 
     emit:
     samplesheet = ch_samplesheet
@@ -110,7 +120,7 @@ workflow PIPELINE_COMPLETION {
     email           //  string: email address
     email_on_fail   //  string: email address sent on pipeline failure
     plaintext_email // boolean: Send plain-text email instead of HTML
-    
+
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     hook_url        //  string: hook URL for notifications
@@ -172,16 +182,26 @@ def validateInputSamplesheet(input) {
 
     return [ metas[0], fastqs ]
 }
+
 //
-// Get attribute from genome config file e.g. fasta
+// Function to check samples are internally consistent after being grouped
 //
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[ params.genome ].containsKey(attribute)) {
-            return params.genomes[ params.genome ][ attribute ]
-        }
+def checkSamplesAfterGrouping(input) {
+    def (metas, fastqs) = input[1..2]
+
+    // Check that multiple runs of the same sample are of the same strandedness
+    def strandedness_ok = metas.collect{ it.strandedness }.unique().size == 1
+    if (!strandedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same strandedness!: ${metas[0].id}")
     }
-    return null
+
+    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
+    def endedness_ok = metas.collect{ it.single_end }.unique().size == 1
+    if (!endedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    }
+
+    return [ metas[0], fastqs ]
 }
 
 //
