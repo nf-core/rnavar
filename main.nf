@@ -14,19 +14,13 @@
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
 params.fasta             = getGenomeAttribute('fasta')
-params.fasta_fai         = getGenomeAttribute('fasta_fai')
-params.dict              = getGenomeAttribute('dict')
+params.gene_bed          = getGenomeAttribute('bed12')
 params.gtf               = getGenomeAttribute('gtf')
-params.gff               = getGenomeAttribute('gff')
-params.exon_bed          = getGenomeAttribute('exon_bed')
-params.star_index        = getGenomeAttribute('star')
-params.dbsnp             = getGenomeAttribute('dbsnp')
-params.dbsnp_tbi         = getGenomeAttribute('dbsnp_tbi')
-params.known_indels      = getGenomeAttribute('known_indels')
-params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
 params.snpeff_db         = getGenomeAttribute('snpeff_db')
 params.snpeff_genome     = getGenomeAttribute('snpeff_genome')
+params.star_index        = getGenomeAttribute('star')
 params.vep_cache_version = getGenomeAttribute('vep_cache_version')
 params.vep_genome        = getGenomeAttribute('vep_genome')
 params.vep_species       = getGenomeAttribute('vep_species')
@@ -61,29 +55,18 @@ workflow NFCORE_RNAVAR {
 
     ch_versions = Channel.empty()
 
-    // Initialize fasta file with meta map:
-    ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()    : Channel.empty()
-
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-    ch_dbsnp          = params.dbsnp                   ? Channel.fromPath(params.dbsnp).collect()                                          : Channel.value([])
-    ch_known_indels   = params.known_indels            ? Channel.fromPath(params.known_indels).collect()                                   : Channel.value([])
-    ch_gff            = params.gff                     ? Channel.fromPath(params.gff).collect()                                            : Channel.empty()
-    ch_gtf_raw        = params.gtf                     ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.collect() : Channel.empty()
+    ch_dbsnp          = params.dbsnp              ? Channel.fromPath(params.dbsnp).collect()        : Channel.value([])
+    ch_known_indels   = params.known_indels       ? Channel.fromPath(params.known_indels).collect() : Channel.value([])
 
-    // Initialize variant annotation associated channels
+    // Initialize value channels based on params, defined in the params.genomes[params.genome] scope
     snpeff_db         = params.snpeff_db          ?: Channel.empty()
     vep_cache_version = params.vep_cache_version  ?: Channel.empty()
     vep_genome        = params.vep_genome         ?: Channel.empty()
     vep_species       = params.vep_species        ?: Channel.empty()
 
-    seq_platform      = params.seq_platform ?: []
-    seq_center        = params.seq_center   ?: []
-
-    // Initialize value channels based on params, defined in the params.genomes[params.genome] scope
-    snpeff_db                   = params.snpeff_db          ?:  Channel.empty()
-    vep_cache_version           = params.vep_cache_version  ?:  Channel.empty()
-    vep_genome                  = params.vep_genome         ?:  Channel.empty()
-    vep_species                 = params.vep_species        ?:  Channel.empty()
+    seq_platform      = params.seq_platform       ?: []
+    seq_center        = params.seq_center         ?: []
 
     vep_extra_files = []
 
@@ -99,16 +82,22 @@ workflow NFCORE_RNAVAR {
         vep_extra_files.add(file(params.spliceai_snv_tbi, checkIfExists: true))
     }
 
-    PREPARE_GENOME(
-        ch_fasta_raw,
-        ch_gff,
-        ch_gtf_raw,
-        ch_dbsnp,
-        ch_known_indels,
-        params.feature_type)
+    PREPARE_GENOME (
+        params.fasta,
+        params.gtf,
+        params.gff,
+        params.additional_fasta,
+        params.transcript_fasta,
+        params.gene_bed,
+        params.star_index,
+        params.gencode,
+        params.featurecounts_group_type,
+        params.skip_gtf_filter
+    )
 
     ch_fasta            = PREPARE_GENOME.out.fasta
     ch_star_index       = PREPARE_GENOME.out.star_index
+    ch_gff              = PREPARE_GENOME.out.gff
     ch_gtf              = PREPARE_GENOME.out.gtf
     ch_dict             = params.dict           ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
                                                 : PREPARE_GENOME.out.dict
