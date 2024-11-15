@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#142](https://github.com/nf-core/rnavar/pull/142) - Fix dbsnp channels
 - [#143](https://github.com/nf-core/rnavar/pull/143) - Use `DROP_MISSING_CONTIGS` by default in `GATK4_BEDTOINTERVALLIST`
 - [#144](https://github.com/nf-core/rnavar/pull/144) - Change gatk_vf params from integer to floats
+- [#145](https://github.com/nf-core/rnavar/issues/145) - Converted `star_index` and `gtf` emit channels from queue to value channels in `PREPARE_GENOME` subworkflow
 - [#149](https://github.com/nf-core/rnavar/pull/149) - Updated ch_gtf and ch_fasta_fai channels emitted by main.nf
 
 ### Dependencies
