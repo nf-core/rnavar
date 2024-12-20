@@ -9,7 +9,6 @@ body:
 
         - [nf-core website: troubleshooting](https://nf-co.re/usage/troubleshooting)
         - [nf-core/rnavar pipeline documentation](https://nf-co.re/rnavar/usage)
-
   - type: textarea
     id: description
     attributes:
