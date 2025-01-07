@@ -111,7 +111,16 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,,reverse
 | `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
 | `fastq_1`      | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 | `fastq_2`      | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `bam`          | Full path to BAM file created with STAR and duplicate marked. File has to have the extension ".bam".                                                                                   |
+| `bai`          | Full path to index file of the BAM file. File has to have the extension ".bai".                                                                                                        |
+| `cram`         | Full path to CRAM file created with STAR and duplicate marked. File has to have the extension ".cram".                                                                                 |
+| `crai`         | Full path to index file of the CRAM file. File has to have the extension ".crai".                                                                                                      |
 | `strandedness` | Sample strand-specificity. Must be one of `unstranded`, `forward` or `reverse`.                                                                                                        |
+
+:::note
+Only one file type per sample is allowed. Supplying FASTQ files and a BAM/CRAM file for the same sample will cause an error in the pipeline.
+The pipeline also has no support for multiple BAM/CRAM file per sample.
+:::
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
