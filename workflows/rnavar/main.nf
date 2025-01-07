@@ -168,7 +168,7 @@ workflow RNAVAR {
         //
         BAM_MARKDUPLICATES_PICARD(ch_genome_bam,
             ch_fasta,
-            ch_fasta_fai.map{ it -> [[id:'genome'], it] })
+            ch_fasta_fai)
 
         ch_genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
             .join(BAM_MARKDUPLICATES_PICARD.out.bai, remainder: true)
