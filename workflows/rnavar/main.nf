@@ -27,6 +27,7 @@ include { TABIX_TABIX as TABIXGVCF  } from '../../modules/nf-core/tabix/tabix'
 include { RECALIBRATE               } from '../../subworkflows/local/recalibrate'
 include { SPLITNCIGAR               } from '../../subworkflows/local/splitncigar'
 include { VCF_ANNOTATE_ALL          } from '../../subworkflows/local/vcf_annotate_all'
+include { PREPARE_ALIGNMENT         } from '../../subworkflows/local/prepare_alignment'
 
 // nf-core
 include { BAM_MARKDUPLICATES_PICARD } from '../../subworkflows/nf-core/bam_markduplicates_picard'
@@ -79,18 +80,32 @@ workflow RNAVAR {
     // To gather used softwares versions for MultiQC
     ch_versions = Channel.empty()
 
-    // MODULE: Concatenate FastQ files from same sample if required
-    ch_fastq = ch_input.groupTuple().map{ samplesheet -> checkSamplesAfterGrouping(samplesheet) }
-        .branch{ meta, fastqs ->
+    // Parse the input data
+    ch_parsed_input = ch_input.groupTuple().map{ samplesheet -> checkSamplesAfterGrouping(samplesheet) }
+        .branch{ meta, fastqs, bam, bai, cram, crai ->
             single  : fastqs.size() == 1
                 return [ meta, fastqs.flatten() ]
             multiple: fastqs.size() > 1
                 return [ meta, fastqs.flatten() ]
+            bam     : bam
+                return [ meta, bam, bai ]
+            cram    : cram
+                return [ meta, cram, crai ]
         }
 
-    CAT_FASTQ(ch_fastq.multiple)
+    // MODULE: Prepare the alignment files (convert CRAM -> BAM and index)
+    PREPARE_ALIGNMENT(
+        ch_parsed_input.cram,
+        ch_parsed_input.bam,
+        ch_fasta,
+        ch_fasta_fai
+    )
+    ch_versions = ch_versions.mix(PREPARE_ALIGNMENT.out.versions)
 
-    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_fastq.single)
+    // MODULE: Concatenate FastQ files from same sample if required
+    CAT_FASTQ(ch_parsed_input.multiple)
+
+    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_parsed_input.single)
 
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions)
 
@@ -162,6 +177,7 @@ workflow RNAVAR {
                 if (bai) [meta, bam, bai]
                 else [meta, bam, csi]
             }
+            .mix(PREPARE_ALIGNMENT.out.bam)
 
         //Gather QC reports
         ch_reports                = ch_reports.mix(BAM_MARKDUPLICATES_PICARD.out.metrics.collect{it[1]}.ifEmpty([]))
@@ -177,7 +193,7 @@ workflow RNAVAR {
 
         SPLITNCIGAR(ch_genome_bam_bai,
             ch_fasta,
-            ch_fasta_fai,
+            ch_fasta_fai.map { _meta, fai -> fai },
             ch_dict,
             ch_interval_list_split
         )
@@ -205,7 +221,7 @@ workflow RNAVAR {
             GATK4_BASERECALIBRATOR(
                 ch_splitncigar_bam_bai_interval,
                 ch_fasta.map{ meta, fasta -> [fasta] },
-                ch_fasta_fai,
+                ch_fasta_fai.map { _meta, fai -> fai },
                 ch_dict.map{ meta, dict -> [dict] },
                 ch_known_sites,
                 ch_known_sites_tbi
@@ -232,7 +248,7 @@ workflow RNAVAR {
                 params.skip_multiqc,
                 ch_applybqsr_bam_bai_interval,
                 ch_dict.map{ meta, dict -> [dict] },
-                ch_fasta_fai,
+                ch_fasta_fai.map { _meta, fai -> fai },
                 ch_fasta.map{ meta, fasta -> [fasta] }
             )
 
@@ -270,7 +286,7 @@ workflow RNAVAR {
         GATK4_HAPLOTYPECALLER(
             ch_haplotypecaller_interval_bam,
             ch_fasta,
-            ch_fasta_fai.map{ it -> [[id:it.baseName], it] },
+            ch_fasta_fai,
             ch_dict,
             ch_dbsnp_for_haplotypecaller,
             ch_dbsnp_for_haplotypecaller_tbi
@@ -319,7 +335,7 @@ workflow RNAVAR {
                 GATK4_VARIANTFILTRATION(
                     ch_haplotypecaller_vcf_tbi,
                     ch_fasta,
-                    ch_fasta_fai.map{ fasta_fai -> [[id:'genome'], fasta_fai]},
+                    ch_fasta_fai,
                     ch_dict
                 )
 

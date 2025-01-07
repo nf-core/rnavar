@@ -69,7 +69,7 @@ workflow PREPARE_GENOME {
     dict             = GATK4_CREATESEQUENCEDICTIONARY.out.dict                              //    path: genome.fasta.dict
     exon_bed         = GTF2BED.out.bed.map{ bed -> [ [ id:bed.baseName ], bed ] }.collect() //    path: exon.bed
     fasta            = ch_fasta
-    fasta_fai        = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }                     //    path: genome.fasta.fai
+    fasta_fai        = SAMTOOLS_FAIDX.out.fai                                               //    path: genome.fasta.fai
     gtf              = ch_gtf.first()                                                       //    path: genome.gtf
     star_index       = STAR_GENOMEGENERATE.out.index.first()                                //    path: star/index/
     dbsnp_tbi        = TABIX_DBSNP.out.tbi.map{ meta, tbi -> [tbi] }.collect()              // path: dbsnb.vcf.gz.tbi
