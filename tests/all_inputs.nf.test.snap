@@ -1,0 +1,133 @@
+{
+    "Run with profile test": {
+        "content": [
+            79,
+            {
+                "APPLYBQSR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "CAT_FASTQ": {
+                    "cat": 8.3
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.5.0.0"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.1.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.19.2"
+                },
+                "STAR_ALIGN": {
+                    "star": "2.7.10a",
+                    "samtools": 1.18,
+                    "gawk": "5.1.0"
+                },
+                "TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "Workflow": {
+                    "nf-core/rnavar": "v2.0.0dev"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/GM12878_bam",
+                "preprocessing/GM12878_bam/GM12878_bam.recal.bam",
+                "preprocessing/GM12878_bam/GM12878_bam.recal.bam.bai",
+                "preprocessing/GM12878_cram",
+                "preprocessing/GM12878_cram/GM12878_cram.recal.bam",
+                "preprocessing/GM12878_cram/GM12878_cram.recal.bam.bai",
+                "preprocessing/GM12878_fastq",
+                "preprocessing/GM12878_fastq/GM12878_fastq.md.bam",
+                "preprocessing/GM12878_fastq/GM12878_fastq.md.bam.bai",
+                "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam",
+                "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam.bai",
+                "reports",
+                "reports/multiqc_data",
+                "reports/multiqc_data/multiqc.log",
+                "reports/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc_data/multiqc_data.json",
+                "reports/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc_report.html",
+                "reports/stats",
+                "reports/stats/GM12878_bam",
+                "reports/stats/GM12878_bam/GM12878_bam.stats",
+                "reports/stats/GM12878_cram",
+                "reports/stats/GM12878_cram/GM12878_cram.stats",
+                "reports/stats/GM12878_fastq",
+                "reports/stats/GM12878_fastq/GM12878_fastq.flagstat",
+                "reports/stats/GM12878_fastq/GM12878_fastq.stats",
+                "reports/stats/GM12878_fastq/STAR_log",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.Log.final.out",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.Log.out",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.Log.progress.out",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.SJ.out.tab",
+                "samtools",
+                "samtools/GM12878_fastq.bam",
+                "samtools/GM12878_fastq.bam.bai",
+                "variant_calling",
+                "variant_calling/GM12878_bam",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.vcf.gz.tbi",
+                "variant_calling/GM12878_cram",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.vcf.gz.tbi",
+                "variant_calling/GM12878_fastq",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz.tbi",
+                "variant_calling/dbsnp_146.hg38.vcf",
+                "variant_calling/dbsnp_146.hg38.vcf/dbsnp_146.hg38.vcf.gz.tbi",
+                "variant_calling/mills_and_1000G.indels.vcf",
+                "variant_calling/mills_and_1000G.indels.vcf/mills_and_1000G.indels.vcf.gz.tbi"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.1",
+            "nextflow": "24.10.1"
+        },
+        "timestamp": "2025-01-07T17:13:49.548731154"
+    }
+}

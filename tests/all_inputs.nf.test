@@ -1,17 +1,17 @@
 nextflow_pipeline {
 
-    name "Test pipeline | skip_baserecalibration"
+    name "Test pipeline | all inputs"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("Run with profile test | skip_baserecalibration") {
+    test("Run with profile test") {
 
         when {
             params {
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 outdir = "$outputDir"
-                skip_baserecalibration = true
+                input = "${projectDir}/tests/csv/1.0/all.csv"
             }
         }
 
