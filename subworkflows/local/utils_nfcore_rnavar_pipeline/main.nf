@@ -92,9 +92,9 @@ workflow PIPELINE_INITIALISATION {
     //
 
     ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map{ meta, fastq_1, fastq_2 ->
-            if (!fastq_2) return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-            else          return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+        .map{ meta, fastq_1, fastq_2, bam, bai, cram, crai ->
+            def new_meta = meta + [ single_end: !fastq_2 ]
+            [ meta.id, new_meta, fastq_1, fastq_2, bam, bai, cram, crai ]
         }
 
     emit:
@@ -180,7 +180,24 @@ def validateInputSamplesheet(input) {
 // Function to check samples are internally consistent after being grouped
 //
 def checkSamplesAfterGrouping(input) {
-    def (metas, fastqs) = input[1..2]
+    def (_ids, metas, fastqs_1, fastqs_2, bams, bais, crams, crais) = input
+
+    def fastqs_1_list = fastqs_1.findAll { it -> it != [] }
+    def fastqs_2_list = fastqs_2.findAll { it -> it != [] }
+    def bam_list = bams.findAll { it -> it != [] }
+    def bai_list = bais.findAll { it -> it != [] }
+    def cram_list = crams.findAll { it -> it != [] }
+    def crai_list = crais.findAll { it -> it != [] }
+
+    def alignment_file_list = bam_list + cram_list
+    if(alignment_file_list.size() > 1) {
+        error("Please check input samplesheet -> Multiple BAM/CRAM files per sample are not supported: ${metas[0].id}")
+    }
+
+    def fastqs = fastqs_1_list + fastqs_2_list
+    if(alignment_file_list.size() == 1 && fastqs.size() > 0) {
+        error("Please check input samplesheet -> Detected FASTQ and BAM/CRAM files for the same sample. Please provide only one file type per sample: ${metas[0].id}")
+    }
 
     // Check that multiple runs of the same sample are of the same strandedness
     def strandedness_ok = metas.collect{ it.strandedness }.unique().size == 1
@@ -194,7 +211,7 @@ def checkSamplesAfterGrouping(input) {
         error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
     }
 
-    return [ metas[0], fastqs ]
+    return [ metas[0], fastqs, bam_list[0] ?: [], bai_list[0] ?: [], cram_list[0] ?: [], crai_list[0] ?: [] ]
 }
 
 //
