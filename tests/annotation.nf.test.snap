@@ -1,8 +1,80 @@
 {
     "Run with profile test | annotation with merge": {
         "content": [
-            46,
-            null,
+            47,
+            {
+                "APPLYBQSR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "CAT_FASTQ": {
+                    "cat": 8.3
+                },
+                "ENSEMBLVEP_VEP": {
+                    "ensemblvep": 111.0
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.5.0.0"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.1.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.19.2"
+                },
+                "SNPEFF_SNPEFF": {
+                    "snpeff": "5.1d"
+                },
+                "STAR_ALIGN": {
+                    "star": "2.7.10a",
+                    "samtools": 1.18,
+                    "gawk": "5.1.0"
+                },
+                "TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "TABIX_BGZIPTABIX": {
+                    "tabix": "1.19.1"
+                },
+                "TABIX_TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "Workflow": {
+                    "nf-core/rnavar": "v2.0.0dev"
+                }
+            },
             [
                 "annotation",
                 "annotation/haplotypecaller",
@@ -185,15 +257,81 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.09.0"
+            "nf-test": "0.9.1",
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2024-10-11T14:54:33.842224"
+        "timestamp": "2025-01-08T13:44:12.561904068"
     },
     "Run with profile test | annotation with vep": {
         "content": [
-            43,
-            null,
+            44,
+            {
+                "APPLYBQSR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "CAT_FASTQ": {
+                    "cat": 8.3
+                },
+                "ENSEMBLVEP_VEP": {
+                    "ensemblvep": 111.0
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.5.0.0"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.1.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.19.2"
+                },
+                "STAR_ALIGN": {
+                    "star": "2.7.10a",
+                    "samtools": 1.18,
+                    "gawk": "5.1.0"
+                },
+                "TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "TABIX_TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "Workflow": {
+                    "nf-core/rnavar": "v2.0.0dev"
+                }
+            },
             [
                 "annotation",
                 "annotation/haplotypecaller",
@@ -363,15 +501,81 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.09.0"
+            "nf-test": "0.9.1",
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2024-10-11T14:49:38.621181"
+        "timestamp": "2025-01-08T13:37:37.774766173"
     },
     "Run with profile test | annotation with snpeff": {
         "content": [
-            43,
-            null,
+            44,
+            {
+                "APPLYBQSR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "CAT_FASTQ": {
+                    "cat": 8.3
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.5.0.0"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.1.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.19.2"
+                },
+                "SNPEFF_SNPEFF": {
+                    "snpeff": "5.1d"
+                },
+                "STAR_ALIGN": {
+                    "star": "2.7.10a",
+                    "samtools": 1.18,
+                    "gawk": "5.1.0"
+                },
+                "TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "TABIX_BGZIPTABIX": {
+                    "tabix": "1.19.1"
+                },
+                "Workflow": {
+                    "nf-core/rnavar": "v2.0.0dev"
+                }
+            },
             [
                 "annotation",
                 "annotation/haplotypecaller",
@@ -437,9 +641,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.09.0"
+            "nf-test": "0.9.1",
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2024-10-11T14:46:10.437216"
+        "timestamp": "2025-01-08T13:31:39.422563362"
     }
 }

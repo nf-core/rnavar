@@ -135,6 +135,11 @@
                         "git_sha": "1943aa60f7490c3d6740e8872e6e69122ccc8087",
                         "installed_by": ["bam_markduplicates_picard"]
                     },
+                    "samtools/convert": {
+                        "branch": "master",
+                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "installed_by": ["modules"]
+                    },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "f153f1f10e1083c49935565844cccb7453021682",

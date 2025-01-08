@@ -32,8 +32,40 @@
                 "errorMessage": "Strandedness must be provided and be one of 'forward', 'reverse' or 'unstranded'",
                 "enum": ["forward", "reverse", "unstranded"],
                 "meta": ["strandedness"]
+            },
+            "bam": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bam$",
+                "errorMessage": "BAM file should end with `.bam`, should not contains spaces and should exist."
+            },
+            "bai": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bai$",
+                "errorMessage": "BAI file should end with `.bai`, should not contains spaces and should exist."
+            },
+            "cram": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.cram$",
+                "errorMessage": "CRAM file should end with `.cram`, should not contains spaces and should exist."
+            },
+            "crai": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.crai$",
+                "errorMessage": "CRAI file should end with `.crai`, should not contains spaces and should exist."
             }
         },
-        "required": ["sample", "fastq_1", "strandedness"]
+        "oneOf": [
+            { "required": ["sample", "fastq_1", "strandedness"] },
+            { "required": ["sample", "bam"] },
+            { "required": ["sample", "cram"] }
+        ]
     }
 }
