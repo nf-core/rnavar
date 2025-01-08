@@ -1,8 +1,65 @@
 {
     "Run with profile test | bam_csi_index": {
         "content": [
-            39,
-            null,
+            40,
+            {
+                "APPLYBQSR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "CAT_FASTQ": {
+                    "cat": 8.3
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.5.0.0"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.1.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.19.2"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.19.2"
+                },
+                "STAR_ALIGN": {
+                    "star": "2.7.10a",
+                    "samtools": 1.18,
+                    "gawk": "5.1.0"
+                },
+                "TABIX": {
+                    "tabix": "1.19.1"
+                },
+                "Workflow": {
+                    "nf-core/rnavar": "v2.0.0dev"
+                }
+            },
             [
                 "pipeline_info",
                 "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
@@ -43,9 +100,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.0",
-            "nextflow": "24.09.0"
+            "nf-test": "0.9.1",
+            "nextflow": "24.10.3"
         },
-        "timestamp": "2024-10-11T14:57:45.737274"
+        "timestamp": "2025-01-08T14:02:00.162034514"
     }
 }
