@@ -75,10 +75,10 @@ workflow RNAVAR {
     main:
 
     // To gather all QC reports for MultiQC
-    ch_reports  = Channel.empty()
+    def ch_reports  = Channel.empty()
 
     // To gather used softwares versions for MultiQC
-    ch_versions = Channel.empty()
+    def ch_versions = Channel.empty()
 
     // Parse the input data
     ch_parsed_input = ch_input.groupTuple().map{ samplesheet -> checkSamplesAfterGrouping(samplesheet) }
@@ -105,13 +105,13 @@ workflow RNAVAR {
     // MODULE: Concatenate FastQ files from same sample if required
     CAT_FASTQ(ch_parsed_input.multiple)
 
-    ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_parsed_input.single)
+    def ch_cat_fastq = CAT_FASTQ.out.reads.mix(ch_parsed_input.single)
 
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions)
 
     // MODULE: Generate QC summary using FastQC
     FASTQC(ch_cat_fastq)
-    ch_reports = ch_reports.mix(FASTQC.out.zip.collect{ meta, logs -> logs })
+    ch_reports = ch_reports.mix(FASTQC.out.zip.collect{ _meta, logs -> logs })
     ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     //
@@ -119,30 +119,24 @@ workflow RNAVAR {
     //
 
     GATK4_BEDTOINTERVALLIST(ch_exon_bed, ch_dict)
-    ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
+    def ch_interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions)
 
     //
     // MODULE: Scatter one interval-list into many interval-files using GATK4 IntervalListTools
     //
-    ch_interval_list_split = Channel.empty()
+    def ch_interval_list_split = Channel.empty()
     if (!params.skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(ch_interval_list)
-        ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ meta, bed -> [bed] }.flatten()
+        ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ _meta, bed -> [bed] }.flatten()
     }
-    else ch_interval_list_split = ch_interval_list
+    else {
+        ch_interval_list_split = ch_interval_list
+    }
 
     //
     // SUBWORKFLOW: Perform read alignment using STAR aligner
     //
-    ch_genome_bam                 = Channel.empty()
-    ch_genome_bam_index           = Channel.empty()
-    ch_samtools_stats             = Channel.empty()
-    ch_samtools_flagstat          = Channel.empty()
-    ch_samtools_idxstats          = Channel.empty()
-    ch_star_multiqc               = Channel.empty()
-    ch_aligner_pca_multiqc        = Channel.empty()
-    ch_aligner_clustering_multiqc = Channel.empty()
 
     if (params.aligner == 'star') {
         FASTQ_ALIGN_STAR(ch_cat_fastq,
@@ -154,9 +148,7 @@ workflow RNAVAR {
             ch_fasta,
             [[:],[]]) //ch_transcripts_fasta)
 
-        ch_genome_bam        = FASTQ_ALIGN_STAR.out.bam
-        ch_genome_bam_index  = FASTQ_ALIGN_STAR.out.bai
-        ch_transcriptome_bam = FASTQ_ALIGN_STAR.out.bam_transcript
+        def ch_genome_bam    = FASTQ_ALIGN_STAR.out.bam
 
         // Gather QC reports
         ch_reports           = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_out)
@@ -170,9 +162,9 @@ workflow RNAVAR {
             ch_fasta,
             ch_fasta_fai)
 
-        ch_genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
+        def ch_genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
             .join(BAM_MARKDUPLICATES_PICARD.out.bai, remainder: true)
-            .join(BAM_MARKDUPLICATES_PICARD.out.csi, remainder: true)
+            .join(BAM_MARKDUPLICATES_PICARD.out.csi, remainder: true) // TODO fix this bottleneck
             .map{meta, bam, bai, csi ->
                 if (bai) [meta, bam, bai]
                 else [meta, bam, csi]
@@ -198,47 +190,44 @@ workflow RNAVAR {
             ch_interval_list_split
         )
 
-        ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
-        ch_versions             = ch_versions.mix(SPLITNCIGAR.out.versions)
+        def ch_splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
+        ch_versions                 = ch_versions.mix(SPLITNCIGAR.out.versions)
 
         //
         // MODULE: BaseRecalibrator from GATK4
         // Generates a recalibration table based on various co-variates
         //
-        ch_bam_variant_calling = Channel.empty()
+        def ch_bam_variant_calling = Channel.empty()
 
         if (!params.skip_baserecalibration) {
-            ch_bqsr_table   = Channel.empty()
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
-            ch_known_sites     = ch_dbsnp.concat(ch_known_indels).collect()
-            ch_known_sites_tbi = ch_dbsnp_tbi.concat(ch_known_indels_tbi).collect()
+            def ch_known_sites     = ch_dbsnp.concat(ch_known_indels).collect()
+            def ch_known_sites_tbi = ch_dbsnp_tbi.concat(ch_known_indels_tbi).collect()
 
-            ch_interval_list_recalib = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-            ch_splitncigar_bam_bai_interval = ch_splitncigar_bam_bai.combine(ch_interval_list_recalib)
+            def ch_interval_list_recalib = ch_interval_list.map{ _meta, bed -> [bed] }.flatten()
+            def ch_splitncigar_bam_bai_interval = ch_splitncigar_bam_bai.combine(ch_interval_list_recalib)
                 .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval] }
 
             GATK4_BASERECALIBRATOR(
                 ch_splitncigar_bam_bai_interval,
-                ch_fasta.map{ meta, fasta -> [fasta] },
+                ch_fasta.map{ _meta, fasta -> [fasta] },
                 ch_fasta_fai.map { _meta, fai -> fai },
-                ch_dict.map{ meta, dict -> [dict] },
+                ch_dict.map{ _meta, dict -> [dict] },
                 ch_known_sites,
                 ch_known_sites_tbi
             )
-            ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
+            def ch_bqsr_table   = GATK4_BASERECALIBRATOR.out.table
 
             // Gather QC reports
-            ch_reports  = ch_reports.mix(ch_bqsr_table.map{ meta, table -> table})
+            ch_reports  = ch_reports.mix(ch_bqsr_table.map{ _meta, table -> table})
             ch_versions     = ch_versions.mix(GATK4_BASERECALIBRATOR.out.versions)
 
-            ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table)
-            ch_bam_recalibrated_qc = Channel.empty()
+            def ch_bam_applybqsr       = ch_splitncigar_bam_bai.join(ch_bqsr_table)
 
-            ch_interval_list_applybqsr = ch_interval_list.map{ meta, bed -> [bed] }.flatten()
-            ch_bam_applybqsr.combine(ch_interval_list_applybqsr)
+            def ch_interval_list_applybqsr = ch_interval_list.map{ _meta, bed -> [bed] }.flatten()
+            def ch_applybqsr_bam_bai_interval = ch_bam_applybqsr.combine(ch_interval_list_applybqsr)
                 .map{ meta, bam, bai, table, interval -> [ meta, bam, bai, table, interval]}
-                .set{ch_applybqsr_bam_bai_interval}
 
             //
             // MODULE: ApplyBaseRecalibrator from GATK4
@@ -247,13 +236,12 @@ workflow RNAVAR {
             RECALIBRATE(
                 params.skip_multiqc,
                 ch_applybqsr_bam_bai_interval,
-                ch_dict.map{ meta, dict -> [dict] },
+                ch_dict.map{ _meta, dict -> [dict] },
                 ch_fasta_fai.map { _meta, fai -> fai },
-                ch_fasta.map{ meta, fasta -> [fasta] }
+                ch_fasta.map{ _meta, fasta -> [fasta] }
             )
 
             ch_bam_variant_calling = RECALIBRATE.out.bam
-            ch_bam_recalibrated_qc = RECALIBRATE.out.qc
 
             // Gather QC reports
             ch_reports  = ch_reports.mix(RECALIBRATE.out.qc.collect{it[1]}.ifEmpty([]))
@@ -262,8 +250,9 @@ workflow RNAVAR {
             ch_bam_variant_calling = ch_splitncigar_bam_bai
         }
 
-        interval_flag = params.no_intervals
         // Run haplotyper even in the absence of dbSNP files
+        def ch_dbsnp_for_haplotypecaller = Channel.empty()
+        def ch_dbsnp_for_haplotypecaller_tbi = Channel.empty()
         if (!params.dbsnp){
             ch_dbsnp_for_haplotypecaller = [[id:'null'], []]
             ch_dbsnp_for_haplotypecaller_tbi = [[id:'null'], []]
@@ -272,7 +261,6 @@ workflow RNAVAR {
             ch_dbsnp_for_haplotypecaller_tbi = ch_dbsnp_tbi.map{ tbi -> [[id:'dbsnp'], tbi] }
         }
 
-        ch_haplotypecaller_vcf = Channel.empty()
         ch_haplotypecaller_interval_bam = ch_bam_variant_calling.combine(ch_interval_list_split)
             .map{ meta, bam, bai, interval_list ->
                 [ meta + [ id:meta.id + "_" + interval_list.baseName, sample:meta.id, variantcaller:'haplotypecaller' ], bam, bai, interval_list, [] ]
@@ -292,10 +280,11 @@ workflow RNAVAR {
             ch_dbsnp_for_haplotypecaller_tbi
         )
 
-        ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta, vcf -> [ meta + [id:meta.sample] - meta.subMap('sample'), vcf ] }.groupTuple()
+        def ch_haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta, vcf -> [ meta + [id:meta.sample] - meta.subMap('sample'), vcf ] }.groupTuple() // TODO fix this bottleneck
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions)
 
+        def ch_haplotypecaller_vcf = Channel.empty()
         if (!params.generate_gvcf){
             //
             // MODULE: MergeVCFS from GATK4
@@ -315,16 +304,16 @@ workflow RNAVAR {
                 ch_haplotypecaller_vcf
             )
 
-            ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
+            def ch_haplotypecaller_vcf_tbi = ch_haplotypecaller_vcf
                 .join(TABIX.out.tbi, by: [0], remainder: true)
-                .join(TABIX.out.csi, by: [0], remainder: true)
+                .join(TABIX.out.csi, by: [0], remainder: true) // TODO fix this bottleneck
                 .map{meta, vcf, tbi, csi ->
                     if (tbi) [meta, vcf, tbi]
                     else [meta, vcf, csi]
                 }
 
-            ch_versions     = ch_versions.mix(TABIX.out.versions)
-            ch_final_vcf    = ch_haplotypecaller_vcf
+            ch_versions      = ch_versions.mix(TABIX.out.versions)
+            def ch_final_vcf = Channel.empty()
 
             //
             // MODULE: VariantFiltration from GATK4
@@ -339,9 +328,11 @@ workflow RNAVAR {
                     ch_dict
                 )
 
-                ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
+                def ch_filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
                 ch_final_vcf    = ch_filtered_vcf
                 ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions)
+            } else {
+                ch_final_vcf = ch_haplotypecaller_vcf
             }
 
             //
@@ -349,11 +340,11 @@ workflow RNAVAR {
             //
             if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
 
-                vep_fasta = (params.vep_include_fasta) ? fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] } : [[id: 'null'], []]
+                def ch_vep_fasta = (params.vep_include_fasta) ? ch_fasta: [[id: 'null'], []]
 
                 VCF_ANNOTATE_ALL(
                     ch_final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
-                    vep_fasta,
+                    ch_vep_fasta,
                     params.annotate_tools,
                     params.snpeff_genome ? "${params.snpeff_genome}.${params.snpeff_db}" : "${params.genome}.${params.snpeff_db}",
                     snpeff_cache,
@@ -371,40 +362,32 @@ workflow RNAVAR {
                 ch_versions = ch_versions.mix(VCF_ANNOTATE_ALL.out.versions)
             }
 
-        }
-        else{
-            ch_haplotypecaller_raw_index = GATK4_HAPLOTYPECALLER.out.tbi
-            .map{ meta, idx ->
-                meta.id = meta.sample
-                [meta, idx]}
-            .groupTuple()
+        } else {
+            def ch_combinegvcfs_input = GATK4_HAPLOTYPECALLER.out.vcf
+                .join(GATK4_HAPLOTYPECALLER.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+                .map{ meta, vcf, tbi ->
+                    def new_meta = meta + [id:meta.sample]
+                    [new_meta, vcf, tbi]
+                }
+                .groupTuple() // TODO fix this bottleneck
 
             //
             // MODULE: CombineGVCFS from GATK4
             // Merge multiple GVCF files into one GVCF
             //
             GATK4_COMBINEGVCFS(
-                ch_haplotypecaller_raw,
-                ch_haplotypecaller_raw_index,
-                ch_fasta,
-                ch_fai,
-                ch_dict
+                ch_combinegvcfs_input,
+                ch_fasta.map { _meta, fasta -> fasta },
+                ch_fasta_fai.map { _meta, fai -> fai },
+                ch_dict.map { _meta, dict -> dict }
             )
-            ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
+            def ch_haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
             ch_versions  = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions)
 
             //
             // MODULE: Index the VCF using TABIX
             //
             TABIXGVCF(ch_haplotypecaller_gvcf)
-
-            ch_haplotypecaller_gvcf_tbi = ch_haplotypecaller_gvcf
-                .join(TABIXGVCF.out.tbi, by: [0], remainder: true)
-                .join(TABIXGVCF.out.csi, by: [0], remainder: true)
-                .map{meta, vcf, tbi, csi ->
-                    if (tbi) [meta, vcf, tbi]
-                    else [meta, vcf, csi]
-                }
 
             ch_versions  = ch_versions.mix(TABIXGVCF.out.versions)
 
@@ -414,24 +397,24 @@ workflow RNAVAR {
     //
     // Collate and save software versions
     //
-    ch_collated_versions = softwareVersionsToYAML(ch_versions).collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_software_mqc_versions.yml', sort: true, newLine: true)
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions).collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_software_mqc_versions.yml', sort: true, newLine: true)
 
     //
     // MODULE: MultiQC
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
     //
-    multiqc_report = Channel.empty()
+    def multiqc_report = Channel.empty()
 
     if (!params.skip_multiqc){
-        ch_multiqc_files =  Channel.empty()
+        def ch_multiqc_files =  Channel.empty()
 
-        ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-        ch_multiqc_custom_config              = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
-        ch_multiqc_logo                       = params.multiqc_logo   ? Channel.fromPath(params.multiqc_logo, checkIfExists: true)   : Channel.empty()
-        summary_params                        = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
-        ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
-        ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-        ch_methods_description                = Channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
+        def ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+        def ch_multiqc_custom_config              = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
+        def ch_multiqc_logo                       = params.multiqc_logo   ? Channel.fromPath(params.multiqc_logo, checkIfExists: true)   : Channel.empty()
+        def summary_params                        = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+        def ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
+        def ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+        def ch_methods_description                = Channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
 
         ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
