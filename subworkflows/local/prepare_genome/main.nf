@@ -72,8 +72,8 @@ workflow PREPARE_GENOME {
     fasta_fai        = SAMTOOLS_FAIDX.out.fai                                               //    path: genome.fasta.fai
     gtf              = ch_gtf.first()                                                       //    path: genome.gtf
     star_index       = STAR_GENOMEGENERATE.out.index.first()                                //    path: star/index/
-    dbsnp_tbi        = TABIX_DBSNP.out.tbi.map{ meta, tbi -> [tbi] }.collect()              // path: dbsnb.vcf.gz.tbi
-    known_indels_tbi = TABIX_KNOWN_INDELS.out.tbi.map{ meta, tbi -> [tbi] }.collect()       // path: {known_indels*}.vcf.gz.tbi
+    dbsnp_tbi        = TABIX_DBSNP.out.tbi.map{ _meta, tbi -> [tbi] }.collect()              // path: dbsnb.vcf.gz.tbi
+    known_indels_tbi = TABIX_KNOWN_INDELS.out.tbi.map{ _meta, tbi -> [tbi] }.collect()       // path: {known_indels*}.vcf.gz.tbi
     versions         = ch_versions                                                          // channel: [ versions.yml ]
     // bedtools_sort    = ch_bedtools_sort    // path: sort.bed
     // bedtools_merge   = ch_bedtools_merge   // path: merge.bed

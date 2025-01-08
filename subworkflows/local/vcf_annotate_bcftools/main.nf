@@ -8,15 +8,12 @@ include { TABIX_TABIX       } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow VCF_ANNOTATE_BCFTOOLS {
     take:
-    vcf               // channel: [ val(meta), vcf ]
-    annotations       //
-    annotations_index //
-    header_lines      //
+    ch_vcf               // channel: [ val(meta), vcf ]
 
     main:
     ch_versions = Channel.empty()
 
-    BCFTOOLS_ANNOTATE(vcf, annotations, annotations_index, header_lines)
+    BCFTOOLS_ANNOTATE(ch_vcf.map { meta, vcf -> [ meta, vcf, [], [], [], []]})
     TABIX_TABIX(BCFTOOLS_ANNOTATE.out.vcf)
 
     ch_vcf_tbi = BCFTOOLS_ANNOTATE.out.vcf.join(TABIX_TABIX.out.tbi, failOnDuplicate: true, failOnMismatch: true)

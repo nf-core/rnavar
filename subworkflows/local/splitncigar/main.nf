@@ -8,16 +8,16 @@ include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index
 
 workflow SPLITNCIGAR {
     take:
-    bam             // channel: [ val(meta), [ bam ], [bai] ]
+    ch_bam          // channel: [ val(meta), [ bam ], [bai] ]
     ch_fasta        // channel: [ fasta ]
     ch_fai          // channel: [ fai ]
     ch_dict         // channel: [ dict ]
-    intervals       // channel: [ interval_list]
+    ch_intervals    // channel: [ interval_list]
 
     main:
     ch_versions       = Channel.empty()
 
-    bam_interval = bam.combine(intervals).map{ meta, bam, bai, intervals -> [ meta + [sample:meta.id], bam, bai, intervals ] }
+    def bam_interval = ch_bam.combine(ch_intervals).map{ meta, bam, bai, intervals -> [ meta + [sample:meta.id], bam, bai, intervals ] }
 
     GATK4_SPLITNCIGARREADS(bam_interval,
         ch_fasta,
@@ -40,7 +40,7 @@ workflow SPLITNCIGAR {
 
     splitncigar_bam_bai = splitncigar_bam
         .join(SAMTOOLS_INDEX.out.bai, remainder: true)
-        .join(SAMTOOLS_INDEX.out.csi, remainder: true)
+        .join(SAMTOOLS_INDEX.out.csi, remainder: true) // TODO fix this bottleneck
         .map{meta, bam, bai, csi ->
             if (bai) [meta, bam, bai]
             else [meta, bam, csi]

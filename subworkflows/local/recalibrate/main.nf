@@ -11,33 +11,29 @@ include { SAMTOOLS_STATS               } from '../../../modules/nf-core/samtools
 workflow RECALIBRATE {
     take:
         skip_samtools  // boolean: true/false
-        bam            // channel: [mandatory] bam
-        dict           // channel: [mandatory] dict
-        fai            // channel: [mandatory] fai
-        fasta          // channel: [mandatory] fasta
+        ch_bam         // channel: [mandatory] bam
+        ch_dict        // channel: [mandatory] dict
+        ch_fai         // channel: [mandatory] fai
+        ch_fasta       // channel: [mandatory] fasta
 
     main:
 
-    ch_versions = Channel.empty()
-
-    bam_recalibrated_index = Channel.empty()
-    bam_recalibrated       = Channel.empty()
-    bam_reports            = Channel.empty()
+    def ch_versions = Channel.empty()
 
     APPLYBQSR (
-        bam,
-        fasta,
-        fai,
-        dict
+        ch_bam,
+        ch_fasta,
+        ch_fai,
+        ch_dict
     )
-    bam_recalibrated = APPLYBQSR.out.bam
+    def bam_recalibrated = APPLYBQSR.out.bam
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
 
     SAMTOOLS_INDEX(bam_recalibrated)
 
-    bam_recalibrated_index = bam_recalibrated
+    def bam_recalibrated_index = bam_recalibrated
         .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
-        .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true)
+        .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true) // TODO fix this bottleneck
         .map{meta, bam, bai, csi ->
             if (bai) [meta, bam, bai]
             else [meta, bam, csi]
@@ -45,20 +41,19 @@ workflow RECALIBRATE {
 
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
-    samtools_stats = Channel.empty()
+    def bam_reports = Channel.empty()
 
     if (!skip_samtools) {
         SAMTOOLS_STATS(bam_recalibrated_index, [[], []])
-        samtools_stats = SAMTOOLS_STATS.out.stats
+        bam_reports = SAMTOOLS_STATS.out.stats
         ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions.first())
     }
-    bam_reports = samtools_stats
 
 
     emit:
-        bam         = bam_recalibrated_index
-        qc          = bam_reports
+    bam         = bam_recalibrated_index
+    qc          = bam_reports
 
-        versions    = ch_versions
+    versions    = ch_versions
 
 }

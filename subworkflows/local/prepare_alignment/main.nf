@@ -9,8 +9,6 @@ workflow PREPARE_ALIGNMENT {
     take:
     ch_cram     // [ val(meta), path(cram), path(crai) ]
     ch_bam      // [ val(meta), path(bam), path(bai) ]
-    ch_fasta    // [ val(meta), path(fasta) ]
-    ch_fai      // [ val(meta), path(fai) ]
 
     main:
     ch_versions = Channel.empty()

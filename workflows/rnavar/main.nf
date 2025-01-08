@@ -97,8 +97,6 @@ workflow RNAVAR {
     PREPARE_ALIGNMENT(
         ch_parsed_input.cram,
         ch_parsed_input.bam,
-        ch_fasta,
-        ch_fasta_fai
     )
     ch_versions = ch_versions.mix(PREPARE_ALIGNMENT.out.versions)
 
@@ -353,9 +351,7 @@ workflow RNAVAR {
                     vep_cache_version,
                     vep_cache,
                     vep_extra_files,
-                    [], // bcftools_annotations,
-                    [], //bcftools_annotations_tbi,
-                    []) //bcftools_header_lines)
+                )
 
                 // Gather QC reports
                 ch_reports  = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
