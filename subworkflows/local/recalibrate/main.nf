@@ -11,20 +11,20 @@ include { SAMTOOLS_STATS               } from '../../../modules/nf-core/samtools
 workflow RECALIBRATE {
     take:
         skip_samtools  // boolean: true/false
-        ch_bam         // channel: [mandatory] bam
-        ch_dict        // channel: [mandatory] dict
-        ch_fai         // channel: [mandatory] fai
-        ch_fasta       // channel: [mandatory] fasta
+        bam         // channel: [mandatory] bam
+        dict        // channel: [mandatory] dict
+        fai         // channel: [mandatory] fai
+        fasta       // channel: [mandatory] fasta
 
     main:
 
     def ch_versions = Channel.empty()
 
     APPLYBQSR (
-        ch_bam,
-        ch_fasta,
-        ch_fai,
-        ch_dict
+        bam,
+        fasta,
+        fai,
+        dict
     )
     def bam_recalibrated = APPLYBQSR.out.bam
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
@@ -34,9 +34,9 @@ workflow RECALIBRATE {
     def bam_recalibrated_index = bam_recalibrated
         .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
         .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true) // TODO fix this bottleneck
-        .map{meta, bam, bai, csi ->
-            if (bai) [meta, bam, bai]
-            else [meta, bam, csi]
+        .map{meta, bam_, bai, csi ->
+            if (bai) [meta, bam_, bai]
+            else [meta, bam_, csi]
         }
 
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
