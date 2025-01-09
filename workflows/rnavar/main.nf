@@ -129,7 +129,7 @@ workflow RNAVAR {
         ch_interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ _meta, bed -> [bed] }.flatten()
     }
     else {
-        ch_interval_list_split = ch_interval_list
+        ch_interval_list_split = ch_interval_list.map { _meta, bed -> bed }
     }
 
     //
@@ -338,7 +338,11 @@ workflow RNAVAR {
             //
             if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
 
-                def ch_vep_fasta = (params.vep_include_fasta) ? ch_fasta: [[id: 'null'], []]
+                def ch_vep_fasta = [[id: 'null'], []]
+
+                if (params.vep_include_fasta) {
+                    ch_vep_fasta = ch_fasta
+                } 
 
                 VCF_ANNOTATE_ALL(
                     ch_final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
@@ -399,7 +403,7 @@ workflow RNAVAR {
     // MODULE: MultiQC
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
     //
-    def multiqc_report = Channel.empty()
+    def val_multiqc_report = Channel.empty()
 
     if (!params.skip_multiqc){
         def ch_multiqc_files =  Channel.empty()
@@ -424,13 +428,13 @@ workflow RNAVAR {
             [],
             []
         )
-        multiqc_report = MULTIQC.out.report.toList()
+        val_multiqc_report = MULTIQC.out.report.toList()
         ch_versions = ch_versions.mix(MULTIQC.out.versions)
     }
 
     emit:
-    multiqc_report         // channel: /path/to/multiqc_report.html
-    versions = ch_versions // channel: [ path(versions.yml) ]
+    multiqc_report = val_multiqc_report     // channel: /path/to/multiqc_report.html
+    versions = ch_versions                  // channel: [ path(versions.yml) ]
 }
 
 /*
