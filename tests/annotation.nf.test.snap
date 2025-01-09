@@ -297,29 +297,29 @@
                     "gatk4": "4.5.0.0"
                 },
                 "PICARD_MARKDUPLICATES": {
-                    "picard": "3.1.1"
+                    "picard": "3.3.0"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_MERGE": {
                     "samtools": "1.19.2"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "STAR_ALIGN": {
-                    "star": "2.7.10a",
-                    "samtools": 1.18,
+                    "star": "2.7.11b",
+                    "samtools": 1.21,
                     "gawk": "5.1.0"
                 },
                 "TABIX": {
@@ -504,7 +504,7 @@
             "nf-test": "0.9.1",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-01-08T13:37:37.774766173"
+        "timestamp": "2025-01-09T16:51:32.004274594"
     },
     "Run with profile test | annotation with snpeff": {
         "content": [
@@ -538,32 +538,32 @@
                     "gatk4": "4.5.0.0"
                 },
                 "PICARD_MARKDUPLICATES": {
-                    "picard": "3.1.1"
+                    "picard": "3.3.0"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_MERGE": {
                     "samtools": "1.19.2"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SNPEFF_SNPEFF": {
                     "snpeff": "5.1d"
                 },
                 "STAR_ALIGN": {
-                    "star": "2.7.10a",
-                    "samtools": 1.18,
+                    "star": "2.7.11b",
+                    "samtools": 1.21,
                     "gawk": "5.1.0"
                 },
                 "TABIX": {
@@ -644,6 +644,6 @@
             "nf-test": "0.9.1",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-01-08T13:31:39.422563362"
+        "timestamp": "2025-01-09T16:47:00.48306332"
     }
 }
