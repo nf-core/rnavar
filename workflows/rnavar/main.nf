@@ -342,7 +342,7 @@ workflow RNAVAR {
 
                 if (params.vep_include_fasta) {
                     ch_vep_fasta = ch_fasta
-                } 
+                }
 
                 VCF_ANNOTATE_ALL(
                     ch_final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
