@@ -54,7 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | fastqc     | 0.11.9      | 0.12.1      |
 | mosdepth   | 0.3.3       | 0.3.6       |
 | multiqc    | 1.15        | 1.18        |
-| samtools   | 1.17        | 1.18        |
+| picard     | 3.1.0       | 3.3.0       |
+| samtools   | 1.17        | 1.21        |
+| star       | 2.7.10a     | 2.7.11b     |
 
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 
