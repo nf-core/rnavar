@@ -257,10 +257,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.1",
+            "nf-test": "0.9.2",
             "nextflow": "24.10.3"
         },
-        "timestamp": "2025-01-09T16:57:22.127665971"
+        "timestamp": "2025-01-09T16:19:12.045032239"
     },
     "Run with profile test | annotation with vep": {
         "content": [

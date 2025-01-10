@@ -74,7 +74,7 @@ workflow PREPARE_GENOME {
     star_index       = STAR_GENOMEGENERATE.out.index.first()                                //    path: star/index/
     dbsnp_tbi        = TABIX_DBSNP.out.tbi.map{ _meta, tbi -> [tbi] }.collect()              // path: dbsnb.vcf.gz.tbi
     known_indels_tbi = TABIX_KNOWN_INDELS.out.tbi.map{ _meta, tbi -> [tbi] }.collect()       // path: {known_indels*}.vcf.gz.tbi
-    versions         = ch_versions                                                          // channel: [ ch_versions.yml ]
+    versions         = ch_versions                                                          // channel: [ versions.yml ]
     // bedtools_sort    = bedtools_sort    // path: sort.bed
     // bedtools_merge   = bedtools_merge   // path: merge.bed
 }
