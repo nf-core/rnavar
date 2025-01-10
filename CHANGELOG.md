@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#144](https://github.com/nf-core/rnavar/pull/144) - Change gatk_vf params from integer to floats
 - [#145](https://github.com/nf-core/rnavar/issues/145) - Converted `star_index` and `gtf` emit channels from queue to value channels in `PREPARE_GENOME` subworkflow
 - [#149](https://github.com/nf-core/rnavar/pull/149) - Updated ch_gtf and ch_fasta_fai channels emitted by main.nf
+- [#158](https://github.com/nf-core/rnavar/pull/158) - Fixed language server errors and warnings
 
 ### Dependencies
 
