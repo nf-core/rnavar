@@ -128,7 +128,7 @@ workflow NFCORE_RNAVAR {
         snpeff_info     = Channel.of([ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], params.snpeff_genome, params.snpeff_db ])
         DOWNLOAD_CACHE_SNPEFF_VEP(ensemblvep_info, snpeff_info)
         snpeff_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.snpeff_cache
-        vep_cache    = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map{ meta, cache -> [ cache ] }
+        vep_cache    = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map{ _meta, cache -> [ cache ] }
 
         ch_versions = ch_versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
     } else {
@@ -190,10 +190,8 @@ workflow {
     PIPELINE_INITIALISATION (
         params.version,
         params.validate_params,
-        params.monochrome_logs,
         args,
         params.outdir,
-        params.input
     )
 
     //

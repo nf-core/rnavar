@@ -8,30 +8,30 @@ include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index
 
 workflow SPLITNCIGAR {
     take:
-    bam             // channel: [ val(meta), [ bam ], [bai] ]
-    ch_fasta        // channel: [ fasta ]
-    ch_fai          // channel: [ fai ]
-    ch_dict         // channel: [ dict ]
-    intervals       // channel: [ interval_list]
+    bam          // channel: [ val(meta), [ bam ], [bai] ]
+    fasta        // channel: [ fasta ]
+    fai          // channel: [ fai ]
+    dict         // channel: [ dict ]
+    intervals    // channel: [ interval_list]
 
     main:
-    ch_versions       = Channel.empty()
+    def ch_versions       = Channel.empty()
 
-    bam_interval = bam.combine(intervals).map{ meta, bam, bai, intervals -> [ meta + [sample:meta.id], bam, bai, intervals ] }
+    def bam_interval = bam.combine(intervals).map{ meta, bam_, bai, intervals_ -> [ meta + [sample:meta.id], bam_, bai, intervals_ ] }
 
     GATK4_SPLITNCIGARREADS(bam_interval,
-        ch_fasta,
-        ch_fai.map{ fai -> [[id:'genome'], fai] },
-        ch_dict)
+        fasta,
+        fai.map{ fai_ -> [[id:'genome'], fai_] },
+        dict)
 
     bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
     ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions)
 
-    bam_splitncigar_interval = bam_splitncigar.map{ meta, bam -> [ meta + [id:meta.sample] - meta.subMap('sample'), bam ] }.groupTuple()
+    bam_splitncigar_interval = bam_splitncigar.map{ meta, bam_ -> [ meta + [id:meta.sample] - meta.subMap('sample'), bam_ ] }.groupTuple()
 
     SAMTOOLS_MERGE(bam_splitncigar_interval,
-        ch_fasta,
-        ch_fai.map{ fai -> [[id:fai.baseName], fai] })
+        fasta,
+        fai.map{ fai_ -> [[id:fai_.baseName], fai_] })
 
     splitncigar_bam = SAMTOOLS_MERGE.out.bam
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
@@ -40,15 +40,15 @@ workflow SPLITNCIGAR {
 
     splitncigar_bam_bai = splitncigar_bam
         .join(SAMTOOLS_INDEX.out.bai, remainder: true)
-        .join(SAMTOOLS_INDEX.out.csi, remainder: true)
-        .map{meta, bam, bai, csi ->
-            if (bai) [meta, bam, bai]
-            else [meta, bam, csi]
+        .join(SAMTOOLS_INDEX.out.csi, remainder: true) // TODO fix this bottleneck
+        .map{meta, bam_, bai, csi ->
+            if (bai) [meta, bam_, bai]
+            else [meta, bam_, csi]
         }
 
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
     emit:
-        bam_bai     = splitncigar_bam_bai
-        versions    = ch_versions
+    bam_bai     = splitncigar_bam_bai
+    versions    = ch_versions
 }

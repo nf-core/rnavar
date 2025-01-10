@@ -16,11 +16,11 @@ include { TABIX_TABIX as TABIX_KNOWN_INDELS } from '../../../modules/nf-core/tab
 
 workflow PREPARE_GENOME {
     take:
-    ch_fasta_raw      // file: /path/to/genome.fasta
-    ch_gff            // file: /path/to/genome.gff
-    ch_gtf_raw        // file: /path/to/genome.gtf
-    ch_dbsnp
-    ch_known_indels
+    fasta_raw      // file: /path/to/genome.fasta
+    gff            // file: /path/to/genome.gff
+    gtf_raw        // file: /path/to/genome.gtf
+    dbsnp
+    known_indels
     feature_type
 
     main:
@@ -29,33 +29,33 @@ workflow PREPARE_GENOME {
     //Unzip reference genome files if needed
 
     if (params.fasta.endsWith('.gz')) {
-        GUNZIP_FASTA(ch_fasta_raw)
+        GUNZIP_FASTA(fasta_raw)
 
-        ch_fasta = GUNZIP_FASTA.out.gunzip
+        fasta = GUNZIP_FASTA.out.gunzip
 
     } else {
-        ch_fasta = ch_fasta_raw
+        fasta = fasta_raw
     }
 
     if (params.gtf.endsWith('.gz')) {
-        GUNZIP_GTF(ch_gtf_raw)
+        GUNZIP_GTF(gtf_raw)
 
-        ch_gtf = GUNZIP_GTF.out.gunzip
+        gtf = GUNZIP_GTF.out.gunzip
 
     } else {
-        ch_gtf = ch_gtf_raw
+        gtf = gtf_raw
     }
 
-    GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
-    GFFREAD(ch_gff, ch_fasta)
-    SAMTOOLS_FAIDX(ch_fasta, [['id':'genome'], []])
-    TABIX_DBSNP(ch_dbsnp.flatten().map{ it -> [ [ id:it.baseName ], it ] })
-    TABIX_KNOWN_INDELS(ch_known_indels.flatten().map{ it -> [ [ id:it.baseName ], it ] } )
+    GATK4_CREATESEQUENCEDICTIONARY(fasta)
+    GFFREAD(gff, fasta)
+    SAMTOOLS_FAIDX(fasta, [['id':'genome'], []])
+    TABIX_DBSNP(dbsnp.flatten().map{ it -> [ [ id:it.baseName ], it ] })
+    TABIX_KNOWN_INDELS(known_indels.flatten().map{ it -> [ [ id:it.baseName ], it ] } )
 
-    ch_gtf = ch_gtf.mix(GFFREAD.out.gtf)
+    gtf = gtf.mix(GFFREAD.out.gtf)
 
-    GTF2BED(ch_gtf, feature_type)
-    STAR_GENOMEGENERATE(ch_fasta, ch_gtf)
+    GTF2BED(gtf, feature_type)
+    STAR_GENOMEGENERATE(fasta, gtf)
 
     ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
     ch_versions = ch_versions.mix(GFFREAD.out.versions)
@@ -68,13 +68,13 @@ workflow PREPARE_GENOME {
     emit:
     dict             = GATK4_CREATESEQUENCEDICTIONARY.out.dict                              //    path: genome.fasta.dict
     exon_bed         = GTF2BED.out.bed.map{ bed -> [ [ id:bed.baseName ], bed ] }.collect() //    path: exon.bed
-    fasta            = ch_fasta
+    fasta            = fasta
     fasta_fai        = SAMTOOLS_FAIDX.out.fai                                               //    path: genome.fasta.fai
-    gtf              = ch_gtf.first()                                                       //    path: genome.gtf
+    gtf              = gtf.first()                                                       //    path: genome.gtf
     star_index       = STAR_GENOMEGENERATE.out.index.first()                                //    path: star/index/
-    dbsnp_tbi        = TABIX_DBSNP.out.tbi.map{ meta, tbi -> [tbi] }.collect()              // path: dbsnb.vcf.gz.tbi
-    known_indels_tbi = TABIX_KNOWN_INDELS.out.tbi.map{ meta, tbi -> [tbi] }.collect()       // path: {known_indels*}.vcf.gz.tbi
+    dbsnp_tbi        = TABIX_DBSNP.out.tbi.map{ _meta, tbi -> [tbi] }.collect()              // path: dbsnb.vcf.gz.tbi
+    known_indels_tbi = TABIX_KNOWN_INDELS.out.tbi.map{ _meta, tbi -> [tbi] }.collect()       // path: {known_indels*}.vcf.gz.tbi
     versions         = ch_versions                                                          // channel: [ versions.yml ]
-    // bedtools_sort    = ch_bedtools_sort    // path: sort.bed
-    // bedtools_merge   = ch_bedtools_merge   // path: merge.bed
+    // bedtools_sort    = bedtools_sort    // path: sort.bed
+    // bedtools_merge   = bedtools_merge   // path: merge.bed
 }
