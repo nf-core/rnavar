@@ -284,7 +284,7 @@ workflow RNAVAR {
 
         def haplotypecaller_out = GATK4_HAPLOTYPECALLER.out.vcf
             .join(GATK4_HAPLOTYPECALLER.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .map{ meta, vcf, tbi -> 
+            .map{ meta, vcf, tbi ->
                 def new_meta = meta + [id:meta.sample] - meta.subMap('sample') - meta.subMap("interval_count")
                 [ groupKey(new_meta, meta.interval_count), vcf, tbi ]
             }

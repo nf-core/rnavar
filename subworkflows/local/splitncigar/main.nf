@@ -24,7 +24,7 @@ workflow SPLITNCIGAR {
             [ new_meta, bam_, bai, intervals_ ]
         }
         .transpose(by:3)
-        .map { meta, bam_, bai, interval -> 
+        .map { meta, bam_, bai, interval ->
             def new_meta = meta + [id:"${meta.id}_${interval.baseName}", sample: meta.id]
             [ new_meta, bam_, bai, interval ]
         }
@@ -38,9 +38,9 @@ workflow SPLITNCIGAR {
     ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions)
 
     def bam_splitncigar_interval = bam_splitncigar
-        .map{ meta, bam_ -> 
+        .map{ meta, bam_ ->
             def new_meta = meta + [id:meta.sample] - meta.subMap('sample') - meta.subMap('interval_count')
-            [ groupKey(new_meta, meta.interval_count), bam_ ] 
+            [ groupKey(new_meta, meta.interval_count), bam_ ]
         }
         .groupTuple()
 
