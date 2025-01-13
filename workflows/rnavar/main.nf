@@ -160,13 +160,12 @@ workflow RNAVAR {
             fasta,
             fasta_fai)
 
+        def markduplicate_indices = BAM_MARKDUPLICATES_PICARD.out.bai
+            .mix(BAM_MARKDUPLICATES_PICARD.out.csi)
+            .mix(BAM_MARKDUPLICATES_PICARD.out.crai)
+
         def genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
-            .join(BAM_MARKDUPLICATES_PICARD.out.bai, remainder: true)
-            .join(BAM_MARKDUPLICATES_PICARD.out.csi, remainder: true) // TODO fix this bottleneck
-            .map{meta, bam, bai, csi ->
-                if (bai) [meta, bam, bai]
-                else [meta, bam, csi]
-            }
+            .join(markduplicate_indices, failOnDuplicate:true, failOnMismatch:true)
             .mix(PREPARE_ALIGNMENT.out.bam)
 
         //Gather QC ch_reports
@@ -301,16 +300,14 @@ workflow RNAVAR {
             TABIX(
                 haplotypecaller_vcf
             )
+            ch_versions      = ch_versions.mix(TABIX.out.versions)
+
+            def haplotypecaller_indices = TABIX.out.tbi
+                .mix(TABIX.out.csi)
 
             def haplotypecaller_vcf_tbi = haplotypecaller_vcf
-                .join(TABIX.out.tbi, by: [0], remainder: true)
-                .join(TABIX.out.csi, by: [0], remainder: true) // TODO fix this bottleneck
-                .map{meta, vcf, tbi, csi ->
-                    if (tbi) [meta, vcf, tbi]
-                    else [meta, vcf, csi]
-                }
+                .join(haplotypecaller_indices, failOnDuplicate:true, failOnMismatch: true)
 
-            ch_versions      = ch_versions.mix(TABIX.out.versions)
             def final_vcf = Channel.empty()
 
             //

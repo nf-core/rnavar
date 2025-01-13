@@ -30,16 +30,14 @@ workflow RECALIBRATE {
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
 
     SAMTOOLS_INDEX(bam_recalibrated)
+    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+
+    def bam_indices = SAMTOOLS_INDEX.out.bai
+        .mix(SAMTOOLS_INDEX.out.csi)
+        .mix(SAMTOOLS_INDEX.out.crai)
 
     def bam_recalibrated_index = bam_recalibrated
-        .join(SAMTOOLS_INDEX.out.bai, by: [0], remainder: true)
-        .join(SAMTOOLS_INDEX.out.csi, by: [0], remainder: true) // TODO fix this bottleneck
-        .map{meta, bam_, bai, csi ->
-            if (bai) [meta, bam_, bai]
-            else [meta, bam_, csi]
-        }
-
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+        .join(bam_indices, failOnMismatch: true, failOnDuplicate: true)
 
     def bam_reports = Channel.empty()
 
