@@ -184,7 +184,7 @@ workflow RNAVAR {
             fasta,
             fasta_fai.map { _meta, fai -> fai },
             dict,
-            interval_list.map { _meta, bed -> bed }
+            interval_list_split
         )
 
         def splitncigar_bam_bai  = SPLITNCIGAR.out.bam_bai
