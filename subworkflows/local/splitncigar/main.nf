@@ -25,7 +25,7 @@ workflow SPLITNCIGAR {
         .transpose(by:3)
         .map { meta, bam_, bai, interval ->
             def new_meta = meta + [id:"${meta.id}_${interval.baseName}", sample: meta.id]
-            [ new_meta, bam_, bai, interval ]
+            [ meta + [id:"${meta.id}_${interval.baseName}", sample: meta.id], bam_, bai, interval ]
         }
 
     GATK4_SPLITNCIGARREADS(bam_interval,
