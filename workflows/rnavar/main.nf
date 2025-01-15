@@ -126,7 +126,7 @@ workflow RNAVAR {
     def interval_list_split = Channel.empty()
     if (!params.skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(interval_list)
-        interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ _meta, bed -> [bed] }.flatten()
+        interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ _meta, bed -> [bed] }.collect()
     }
     else {
         interval_list_split = interval_list.map { _meta, bed -> bed }
@@ -160,13 +160,12 @@ workflow RNAVAR {
             fasta,
             fasta_fai)
 
+        def markduplicate_indices = BAM_MARKDUPLICATES_PICARD.out.bai
+            .mix(BAM_MARKDUPLICATES_PICARD.out.csi)
+            .mix(BAM_MARKDUPLICATES_PICARD.out.crai)
+
         def genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
-            .join(BAM_MARKDUPLICATES_PICARD.out.bai, remainder: true)
-            .join(BAM_MARKDUPLICATES_PICARD.out.csi, remainder: true) // TODO fix this bottleneck
-            .map{meta, bam, bai, csi ->
-                if (bai) [meta, bam, bai]
-                else [meta, bam, csi]
-            }
+            .join(markduplicate_indices, failOnDuplicate:true, failOnMismatch:true)
             .mix(PREPARE_ALIGNMENT.out.bam)
 
         //Gather QC ch_reports
@@ -259,7 +258,12 @@ workflow RNAVAR {
             dbsnp_for_haplotypecaller_tbi = dbsnp_tbi.map{ tbi -> [[id:'dbsnp'], tbi] }
         }
 
-        haplotypecaller_interval_bam = bam_variant_calling.combine(interval_list_split)
+        def haplotypecaller_interval_bam = bam_variant_calling.combine(interval_list_split)
+            .map { meta, bam, bai, interval_lists ->
+                def new_meta = meta + [interval_count: interval_lists instanceof List ? interval_lists.size() : 1]
+                [ new_meta, bam, bai, interval_lists ]
+            }
+            .transpose(by:3)
             .map{ meta, bam, bai, interval_list_ ->
                 [ meta + [ id:meta.id + "_" + interval_list_.baseName, sample:meta.id, variantcaller:'haplotypecaller' ], bam, bai, interval_list_, [] ]
             }
@@ -278,7 +282,13 @@ workflow RNAVAR {
             dbsnp_for_haplotypecaller_tbi
         )
 
-        def haplotypecaller_raw = GATK4_HAPLOTYPECALLER.out.vcf.map{ meta, vcf -> [ meta + [id:meta.sample] - meta.subMap('sample'), vcf ] }.groupTuple() // TODO fix this bottleneck
+        def haplotypecaller_out = GATK4_HAPLOTYPECALLER.out.vcf
+            .join(GATK4_HAPLOTYPECALLER.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .map{ meta, vcf, tbi ->
+                def new_meta = meta + [id:meta.sample] - meta.subMap('sample', "interval_count")
+                [ groupKey(new_meta, meta.interval_count), vcf, tbi ]
+            }
+            .groupTuple()
 
         ch_versions  = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions)
 
@@ -288,6 +298,7 @@ workflow RNAVAR {
             // MODULE: MergeVCFS from GATK4
             // Merge multiple VCF files into one VCF
             //
+            def haplotypecaller_raw = haplotypecaller_out.map { meta, vcfs, _tbis -> [ meta, vcfs ]}
             GATK4_MERGEVCFS(
                 haplotypecaller_raw,
                 dict
@@ -301,16 +312,14 @@ workflow RNAVAR {
             TABIX(
                 haplotypecaller_vcf
             )
+            ch_versions      = ch_versions.mix(TABIX.out.versions)
+
+            def haplotypecaller_indices = TABIX.out.tbi
+                .mix(TABIX.out.csi)
 
             def haplotypecaller_vcf_tbi = haplotypecaller_vcf
-                .join(TABIX.out.tbi, by: [0], remainder: true)
-                .join(TABIX.out.csi, by: [0], remainder: true) // TODO fix this bottleneck
-                .map{meta, vcf, tbi, csi ->
-                    if (tbi) [meta, vcf, tbi]
-                    else [meta, vcf, csi]
-                }
+                .join(haplotypecaller_indices, failOnDuplicate:true, failOnMismatch: true)
 
-            ch_versions      = ch_versions.mix(TABIX.out.versions)
             def final_vcf = Channel.empty()
 
             //
@@ -363,20 +372,13 @@ workflow RNAVAR {
             }
 
         } else {
-            def combinegvcfs_input = GATK4_HAPLOTYPECALLER.out.vcf
-                .join(GATK4_HAPLOTYPECALLER.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-                .map{ meta, vcf, tbi ->
-                    def new_meta = meta + [id:meta.sample]
-                    [new_meta, vcf, tbi]
-                }
-                .groupTuple() // TODO fix this bottleneck
 
             //
             // MODULE: CombineGVCFS from GATK4
             // Merge multiple GVCF files into one GVCF
             //
             GATK4_COMBINEGVCFS(
-                combinegvcfs_input,
+                haplotypecaller_out,
                 fasta.map { _meta, fasta_ -> fasta_ },
                 fasta_fai.map { _meta, fai -> fai },
                 dict.map { _meta, dict_ -> dict_ }
