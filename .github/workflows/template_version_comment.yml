@@ -23,7 +23,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install nf-core==${{ steps.read_yml.outputs['nf_core_version'] }}
-
       - name: Check nf-core outdated
         id: nf_core_outdated
         run: echo "OUTPUT=$(pip list --outdated | grep nf-core)" >> ${GITHUB_ENV}
