@@ -24,7 +24,6 @@ workflow SPLITNCIGAR {
         }
         .transpose(by:3)
         .map { meta, bam_, bai, interval ->
-            def new_meta = meta + [id:"${meta.id}_${interval.baseName}", sample: meta.id]
             [ meta + [id:"${meta.id}_${interval.baseName}", sample: meta.id], bam_, bai, interval ]
         }
 
