@@ -147,7 +147,7 @@
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively species listed in Ensembl Genomes caches can be used."
                 },
                 "vep_cache_version": {
-                    "type": "string",
+                    "type": "integer",
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version.",
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively cache version can be use to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers"
