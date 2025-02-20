@@ -28,10 +28,8 @@ workflow PIPELINE_INITIALISATION {
     take:
     version           // boolean: Display version and exit
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
 
     main:
 
@@ -68,29 +66,34 @@ workflow PIPELINE_INITIALISATION {
     //
     validateInputParameters()
 
+    // Check input path parameters to see if they exist
+    def checkPathParamList = [
+        params.dbsnp,
+        params.dbsnp_tbi,
+        params.dict,
+        params.fasta,
+        params.fasta_fai,
+        params.gff,
+        params.gtf,
+        params.input,
+        params.known_indels,
+        params.known_indels_tbi,
+        params.star_index
+    ]
+
+    // only check if we are using the annotate_tools
+    if (params.annotate_tools && (params.annotate_tools.split(',').contains('snpeff') || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
+    if (params.annotate_tools && (params.annotate_tools.split(',').contains('vep')    || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
+
     //
     // Create channel from input file provided through params.input
     //
 
-    Channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
+    ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+        .map{ meta, fastq_1, fastq_2, bam, bai, cram, crai ->
+            def new_meta = meta + [ single_end: !fastq_2 ]
+            [ meta.id, new_meta, fastq_1, fastq_2, bam, bai, cram, crai ]
         }
-        .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
-        }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
-        }
-        .set { ch_samplesheet }
 
     emit:
     samplesheet = ch_samplesheet
@@ -171,16 +174,43 @@ def validateInputSamplesheet(input) {
 
     return [ metas[0], fastqs ]
 }
+
 //
-// Get attribute from genome config file e.g. fasta
+// Function to check samples are internally consistent after being grouped
 //
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[ params.genome ].containsKey(attribute)) {
-            return params.genomes[ params.genome ][ attribute ]
-        }
+def checkSamplesAfterGrouping(input) {
+    def (_ids, metas, fastqs_1, fastqs_2, bams, bais, crams, crais) = input
+
+    def fastqs_1_list = fastqs_1.findAll { it -> it != [] }
+    def fastqs_2_list = fastqs_2.findAll { it -> it != [] }
+    def bam_list = bams.findAll { it -> it != [] }
+    def bai_list = bais.findAll { it -> it != [] }
+    def cram_list = crams.findAll { it -> it != [] }
+    def crai_list = crais.findAll { it -> it != [] }
+
+    def alignment_file_list = bam_list + cram_list
+    if(alignment_file_list.size() > 1) {
+        error("Please check input samplesheet -> Multiple BAM/CRAM files per sample are not supported: ${metas[0].id}")
     }
-    return null
+
+    def fastqs = fastqs_1_list + fastqs_2_list
+    if(alignment_file_list.size() == 1 && fastqs.size() > 0) {
+        error("Please check input samplesheet -> Detected FASTQ and BAM/CRAM files for the same sample. Please provide only one file type per sample: ${metas[0].id}")
+    }
+
+    // Check that multiple runs of the same sample are of the same strandedness
+    def strandedness_ok = metas.collect{ it.strandedness }.unique().size == 1
+    if (!strandedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same strandedness!: ${metas[0].id}")
+    }
+
+    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
+    def endedness_ok = metas.collect{ it.single_end }.unique().size == 1
+    if (!endedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    }
+
+    return [ metas[0], fastqs, bam_list[0] ?: [], bai_list[0] ?: [], cram_list[0] ?: [], crai_list[0] ?: [] ]
 }
 
 //

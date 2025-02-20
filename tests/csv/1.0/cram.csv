@@ -1,0 +1,2 @@
+sample,cram,crai,strandedness
+GM12878,https://github.com/nf-core/test-datasets/raw/refs/heads/modules/data/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram,https://github.com/nf-core/test-datasets/raw/refs/heads/modules/data/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai,reverse
