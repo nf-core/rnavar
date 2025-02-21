@@ -15,8 +15,8 @@ RNAseq data has been taken from GM12878 GIAB sample SRA Accession [SRR5665260](h
 A sample sheet has been prepared in the following way to set the FASTQ files to run the analysis.
 
 ```console
-sample,fastq_1,fastq_2,strandedness
-GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz,reverse
+sample,fastq_1,fastq_2
+GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz
 ```
 
 ### Execution
