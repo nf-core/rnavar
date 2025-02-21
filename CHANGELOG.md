@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#153](https://github.com/nf-core/rnavar/pull/153) - Template update for nf-core/tools v3.0.2
 - [#153](https://github.com/nf-core/rnavar/pull/153) - Converted pytest tests to nf-test tests
 - [#161](https://github.com/nf-core/rnavar/pull/161) - Template update for nf-core/tools v3.2.0
+- [#167](https://github.com/nf-core/rnavar/pull/167) - Removed the strandedness field from the samplesheet as it wasn't used in the pipeline.
 
 ### Fixed
 
