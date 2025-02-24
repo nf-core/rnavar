@@ -1,7 +1,7 @@
 {
     "Run with profile test": {
         "content": [
-            79,
+            77,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -117,17 +117,13 @@
                 "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz",
                 "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz.tbi",
                 "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/dbsnp_146.hg38.vcf",
-                "variant_calling/dbsnp_146.hg38.vcf/dbsnp_146.hg38.vcf.gz.tbi",
-                "variant_calling/mills_and_1000G.indels.vcf",
-                "variant_calling/mills_and_1000G.indels.vcf/mills_and_1000G.indels.vcf.gz.tbi"
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz.tbi"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.1",
-            "nextflow": "24.10.3"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
         },
-        "timestamp": "2025-01-09T16:41:24.471237186"
+        "timestamp": "2025-02-24T14:23:18.179475664"
     }
 }
