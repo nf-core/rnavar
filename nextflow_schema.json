@@ -108,13 +108,13 @@
                 },
                 "known_indels": {
                     "type": "string",
-                    "description": "Path to known indels VCF file",
+                    "description": "Path to known indels VCF file(s)",
                     "format": "file-path-pattern",
                     "exists": true
                 },
                 "known_indels_tbi": {
                     "type": "string",
-                    "description": "Path to known indels index file",
+                    "description": "Path to known indels index file(s)",
                     "format": "file-path-pattern",
                     "exists": true
                 },
