@@ -320,8 +320,7 @@
         "variant_annotation": {
             "title": "Variant Annotation",
             "type": "object",
-            "description": "",
-            "default": "",
+            "description": "Parameters for variant annotation tools.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
                 "annotate_tools": {
@@ -334,6 +333,8 @@
                 },
                 "vep_cache": {
                     "type": "string",
+                    "format": "directory-path",
+                    "exists": true,
                     "fa_icon": "fas fa-file",
                     "default": "s3://annotation-cache/vep_cache/",
                     "description": "Path to VEP cache.",
@@ -342,6 +343,8 @@
                 "snpeff_cache": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "format": "directory-path",
+                    "exists": true,
                     "default": "s3://annotation-cache/snpeff_cache/",
                     "description": "Path to snpEff cache.",
                     "help_text": "Path to snpEff cache which should contain the relevant genome and build directory in the path ${snpeff_species}.${snpeff_version}"
@@ -362,6 +365,9 @@
                 },
                 "dbnsfp": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.gz$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to dbNSFP processed file.",
                     "help_text": "To be used with `--vep_dbnsfp`.\ndbNSFP files and more information are available at https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#dbnsfp and https://sites.google.com/site/jpopgen/dbNSFP/",
@@ -369,6 +375,9 @@
                 },
                 "dbnsfp_tbi": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.tbi$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to dbNSFP tabix indexed file.",
                     "help_text": "To be used with `--vep_dbnsfp`.",
@@ -405,6 +414,9 @@
                 },
                 "spliceai_snv": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.vcf\\.gz$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores snv file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -412,6 +424,9 @@
                 },
                 "spliceai_snv_tbi": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.tbi$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores snv tabix indexed file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -419,6 +434,9 @@
                 },
                 "spliceai_indel": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.vcf\\.gz$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores indel file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -426,6 +444,9 @@
                 },
                 "spliceai_indel_tbi": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.tbi$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores indel tabix indexed file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -443,7 +464,7 @@
                     "default": "--everything --filter_common --per_gene --total_length --offline --format vcf",
                     "fa_icon": "fas fa-toolbox",
                     "description": "Add an extra custom argument to VEP.",
-                    "help_text": "Using this params you can add custom args to VEP."
+                    "help_text": "Using this parameter, you can add custom args to VEP."
                 },
                 "use_annotation_cache_keys": {
                     "type": "boolean",
@@ -463,7 +484,7 @@
                     "default": "vcf",
                     "description": "VEP output-file format.",
                     "enum": ["json", "tab", "vcf"],
-                    "help_text": "Sets the format of the output-file from VEP. Available formats: json, tab and vcf.",
+                    "help_text": "Sets the format of the output-file from VEP.",
                     "fa_icon": "fas fa-table",
                     "hidden": true
                 }
@@ -511,6 +532,7 @@
                 "gatk_interval_scatter_count": {
                     "type": "integer",
                     "default": 25,
+                    "minimum": 1,
                     "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
                     "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
                 },
@@ -522,26 +544,30 @@
                 "gatk_vf_window_size": {
                     "type": "integer",
                     "default": 35,
+                    "minimum": 0,
                     "description": "The window size (in bases) in which to evaluate clustered SNPs.",
                     "help_text": "This parameter is used by GATK variant filteration step. It defines the window size (in bases) in which to evaluate clustered SNPs. It has to be used together with the other option 'cluster'."
                 },
                 "gatk_vf_cluster_size": {
                     "type": "integer",
                     "default": 3,
+                    "minimum": 2,
                     "description": "The number of SNPs which make up a cluster. Must be at least 2.",
                     "help_text": "This parameter is used by GATK variant filteration step. It defines the number of SNPs which make up a cluster within a window. Must be at least 2."
                 },
                 "gatk_vf_fs_filter": {
                     "type": "number",
                     "default": 30.0,
+                    "minimum": 0.0,
                     "description": "Value to be used for the FisherStrand (FS) filter",
-                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 30.0"
+                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
                 },
                 "gatk_vf_qd_filter": {
                     "type": "number",
                     "default": 2.0,
+                    "minimum": 0.0,
                     "description": "Value to be used for the QualByDepth (QD) filter",
-                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 2.0"
+                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
                 }
             }
         },
