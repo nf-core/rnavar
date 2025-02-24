@@ -65,7 +65,7 @@ workflow NFCORE_RNAVAR {
     ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()         : Channel.empty()
 
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-    ch_dbsnp_raw      = params.dbsnp                   ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}            : Channel.value([])
+    ch_dbsnp_raw      = params.dbsnp                   ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}.collect()   : Channel.value([])
     ch_known_indels_raw   = params.known_indels            ? Channel.fromPath(params.known_indels)                                              : Channel.empty()
     ch_known_indels_tbi_raw = params.known_indels_tbi      ? Channel.fromPath(params.known_indels_tbi)                                          : Channel.empty()
     ch_gff            = params.gff                     ? Channel.fromPath(params.gff).collect()                                                 : Channel.empty()
