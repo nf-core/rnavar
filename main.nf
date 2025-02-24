@@ -27,7 +27,7 @@ params.known_indels      = getGenomeAttribute('known_indels')
 params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
 params.snpeff_db         = getGenomeAttribute('snpeff_db')
 params.snpeff_genome     = getGenomeAttribute('snpeff_genome')
-params.vep_cache_version = getGenomeAttribute('vep_cache_version')
+params.vep_cache_version = getGenomeAttribute('vep_cache_version') as String
 params.vep_genome        = getGenomeAttribute('vep_genome')
 params.vep_species       = getGenomeAttribute('vep_species')
 
