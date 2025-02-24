@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#158](https://github.com/nf-core/rnavar/pull/158) - Fixed language server errors and warnings
 - [#159](https://github.com/nf-core/rnavar/pull/159) - Fixed a couple of bottlenecks in the pipeline
 - [#168](https://github.com/nf-core/rnavar/pull/168) - Allow integer values for `--vep_cache_version` and `--snpeff_db`.
+- [#170](https://github.com/nf-core/rnavar/pull/170) - Fixed pipeline failure when running `--skip_intervallisttools`.
 
 ### Dependencies
 
