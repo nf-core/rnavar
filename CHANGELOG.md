@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#116](https://github.com/nf-core/rnavar/pull/116) - Added `unzip` from nf-core modules for working with unzipped fasta and gtf files
 - [#157](https://github.com/nf-core/rnavar/pull/157) - Added support for `bam` and `cram` input files
+- [#169](https://github.com/nf-core/rnavar/pull/169) - Added the `--star_max_intron_size` parameter to set the `--alignIntronMax` argument in STAR
 
 ### Changed
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#153](https://github.com/nf-core/rnavar/pull/153) - Converted pytest tests to nf-test tests
 - [#161](https://github.com/nf-core/rnavar/pull/161) - Template update for nf-core/tools v3.2.0
 - [#167](https://github.com/nf-core/rnavar/pull/167) - Removed the strandedness field from the samplesheet as it wasn't used in the pipeline.
+- [#172](https://github.com/nf-core/rnavar/pull/172) - Added support for TSV, JSON and YAML samplesheets
 
 ### Fixed
 
@@ -51,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#168](https://github.com/nf-core/rnavar/pull/168) - Allow integer values for `--vep_cache_version` and `--snpeff_db`.
 - [#170](https://github.com/nf-core/rnavar/pull/170) - Fixed pipeline failure when running `--skip_intervallisttools`.
 - [#171](https://github.com/nf-core/rnavar/pull/171) - Fixed the `--dbnsp` and `--known_indels` handling. Uncompressed files are now allowed as inputs to the pipeline as the pipeline will automatically compress these.
+- [#172](https://github.com/nf-core/rnavar/pull/172) - Fixed the parameters JSON schema so the pipeline does better input validation.
 
 ### Dependencies
 
