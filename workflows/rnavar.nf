@@ -199,8 +199,8 @@ workflow RNAVAR {
         if (!params.skip_baserecalibration) {
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
-            def known_sites     = dbsnp.concat(known_indels).collect()
-            def known_sites_tbi = dbsnp_tbi.concat(known_indels_tbi).collect()
+            def known_sites     = dbsnp.map { _meta, dbsnp_ -> dbsnp_ }.concat(known_indels).collect()
+            def known_sites_tbi = dbsnp_tbi.map { _meta, tbi -> tbi }.concat(known_indels_tbi).collect()
 
             def interval_list_recalib = interval_list.map{ _meta, bed -> [bed] }.flatten()
             def splitncigar_bam_bai_interval = splitncigar_bam_bai.combine(interval_list_recalib)
@@ -247,17 +247,6 @@ workflow RNAVAR {
             bam_variant_calling = splitncigar_bam_bai
         }
 
-        // Run haplotyper even in the absence of dbSNP files
-        def dbsnp_for_haplotypecaller = Channel.empty()
-        def dbsnp_for_haplotypecaller_tbi = Channel.empty()
-        if (!params.dbsnp){
-            dbsnp_for_haplotypecaller = [[id:'null'], []]
-            dbsnp_for_haplotypecaller_tbi = [[id:'null'], []]
-        } else {
-            dbsnp_for_haplotypecaller     = dbsnp.map{ vcf -> [[id:'dbsnp'], vcf] }
-            dbsnp_for_haplotypecaller_tbi = dbsnp_tbi.map{ tbi -> [[id:'dbsnp'], tbi] }
-        }
-
         def haplotypecaller_interval_bam = bam_variant_calling.combine(interval_list_split)
             .map { meta, bam, bai, interval_lists ->
                 def new_meta = meta + [interval_count: interval_lists instanceof List ? interval_lists.size() : 1]
@@ -278,8 +267,8 @@ workflow RNAVAR {
             fasta,
             fasta_fai,
             dict,
-            dbsnp_for_haplotypecaller,
-            dbsnp_for_haplotypecaller_tbi
+            dbsnp,
+            dbsnp_tbi
         )
 
         def haplotypecaller_out = GATK4_HAPLOTYPECALLER.out.vcf
