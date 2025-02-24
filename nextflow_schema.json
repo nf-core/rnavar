@@ -14,14 +14,13 @@
             "properties": {
                 "input": {
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "A design file with information about the samples in your experiment. Use this parameter to specify the location of the input files. It has to be a comma-separated file with a header row. See [usage docs](https://nf-co.re/rnavar/usage#input).",
+                    "help_text": "A design file with information about the samples in your experiment. Use this parameter to specify the location of the input files. It has to be a tab or comma-separated file with a header row or a JSON/YAML file. See [usage docs](https://nf-co.re/rnavar/usage#input).",
                     "fa_icon": "fas fa-file-csv",
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
                     "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$"
+                    "pattern": "^\\S+\\.(csv|tsv|yaml|yml|json)$"
                 },
                 "outdir": {
                     "type": "string",
@@ -71,33 +70,49 @@
                 },
                 "dict": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
                     "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.dict$",
                     "description": "Path to FASTA dictionary file.",
                     "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
                 },
                 "fasta_fai": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.fai$",
                     "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference",
                     "description": "Path to FASTA reference index."
                 },
                 "gtf": {
                     "type": "string",
+                    "format": "file-path",
                     "description": "Path to GTF annotation file.",
+                    "exists": true,
+                    "pattern": "^\\S+\\.gtf$",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified."
                 },
                 "gff": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.gff$",
                     "description": "Path to GFF3 annotation file.",
                     "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
                 },
                 "exon_bed": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to BED file containing exon intervals. This will be created from the GTF file if not specified."
                 },
                 "read_length": {
                     "type": "number",
                     "default": 150,
+                    "minimum": 1,
                     "description": "Read length",
                     "help_text": "Specify the read length for the STAR aligner."
                 },
@@ -157,7 +172,8 @@
                 "feature_type": {
                     "type": "string",
                     "description": "Type of feature to parse from annotation file",
-                    "help_text": "This parameter value can be exon, transcript or gene. Default exon"
+                    "enum": ["exon", "transcript", "gene"],
+                    "default": "exon"
                 },
                 "download_cache": {
                     "type": "boolean",
@@ -191,11 +207,14 @@
                 "aligner": {
                     "type": "string",
                     "default": "star",
-                    "description": "Specifies the alignment algorithm to use. Currently available option is 'star'",
-                    "help_text": "This parameter define which aligner is to be used for aligning the RNA reads to the reference genome. Currently only STAR aligner is supported. So use 'star' as the value for this option."
+                    "enum": ["star"],
+                    "description": "Specifies the alignment algorithm to use.",
+                    "help_text": "This parameter define which aligner is to be used for aligning the RNA reads to the reference genome."
                 },
                 "star_index": {
                     "type": "string",
+                    "format": "path",
+                    "exists": true,
                     "description": "Path to STAR index folder or compressed file (tar.gz)",
                     "help_text": "This parameter can be used if there is an pre-defined STAR index available. You can either give the full path to the index directory or a compressed file in tar.gz format."
                 },
@@ -206,24 +225,27 @@
                 },
                 "star_ignore_sjdbgtf": {
                     "type": "boolean",
-                    "description": "Do not use GTF file during STAR index buidling step",
+                    "description": "Do not use GTF file during STAR index building step",
                     "help_text": "Do not use parameter --sjdbGTFfile <GTF file> during the STAR genomeGenerate process."
                 },
                 "star_max_memory_bamsort": {
                     "type": "integer",
                     "default": 0,
+                    "minimum": 0,
                     "description": "Option to limit RAM when sorting BAM file. Value to be specified in bytes. If 0, will be set to the genome index size.",
                     "help_text": "This parameter specifies the maximum available RAM (bytes) for sorting BAM during STAR alignment."
                 },
                 "star_bins_bamsort": {
                     "type": "integer",
                     "default": 50,
+                    "minimum": 0,
                     "description": "Specifies the number of genome bins for coordinate-sorting",
                     "help_text": "This parameter specifies the number of bins to be used for coordinate sorting during STAR alignment step."
                 },
                 "star_max_collapsed_junc": {
                     "type": "integer",
                     "default": 1000000,
+                    "minimum": 0,
                     "description": "Specifies the maximum number of collapsed junctions"
                 },
                 "star_max_intron_size": {
@@ -261,8 +283,7 @@
         "preprocessing": {
             "title": "Preprocessing of alignment",
             "type": "object",
-            "description": "",
-            "default": "",
+            "description": "Parameters for preprocessing analysis.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
                 "remove_duplicates": {
@@ -277,13 +298,13 @@
         "variant_calling": {
             "title": "Variant calling",
             "type": "object",
-            "description": "",
-            "default": "",
+            "description": "Parameters for variant calling tools.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
                 "gatk_hc_call_conf": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 20,
+                    "minimum": 0,
                     "fa_icon": "fas fa-hammer",
                     "description": "The minimum phred-scaled confidence threshold at which variants should be called.",
                     "help_text": "Specify the minimum phred-scaled confidence threshold at which variants should be called.",
@@ -299,8 +320,7 @@
         "variant_annotation": {
             "title": "Variant Annotation",
             "type": "object",
-            "description": "",
-            "default": "",
+            "description": "Parameters for variant annotation tools.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
                 "annotate_tools": {
@@ -313,6 +333,8 @@
                 },
                 "vep_cache": {
                     "type": "string",
+                    "format": "directory-path",
+                    "exists": true,
                     "fa_icon": "fas fa-file",
                     "default": "s3://annotation-cache/vep_cache/",
                     "description": "Path to VEP cache.",
@@ -321,6 +343,8 @@
                 "snpeff_cache": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "format": "directory-path",
+                    "exists": true,
                     "default": "s3://annotation-cache/snpeff_cache/",
                     "description": "Path to snpEff cache.",
                     "help_text": "Path to snpEff cache which should contain the relevant genome and build directory in the path ${snpeff_species}.${snpeff_version}"
@@ -341,6 +365,9 @@
                 },
                 "dbnsfp": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.gz$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to dbNSFP processed file.",
                     "help_text": "To be used with `--vep_dbnsfp`.\ndbNSFP files and more information are available at https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html#dbnsfp and https://sites.google.com/site/jpopgen/dbNSFP/",
@@ -348,6 +375,9 @@
                 },
                 "dbnsfp_tbi": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.tbi$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to dbNSFP tabix indexed file.",
                     "help_text": "To be used with `--vep_dbnsfp`.",
@@ -384,6 +414,9 @@
                 },
                 "spliceai_snv": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.vcf\\.gz$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores snv file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -391,6 +424,9 @@
                 },
                 "spliceai_snv_tbi": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.tbi$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores snv tabix indexed file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -398,6 +434,9 @@
                 },
                 "spliceai_indel": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.vcf\\.gz$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores indel file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -405,6 +444,9 @@
                 },
                 "spliceai_indel_tbi": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.tbi$",
                     "fa_icon": "fas fa-file",
                     "description": "Path to spliceai raw scores indel tabix indexed file.",
                     "help_text": "To be used with `--vep_spliceai`.",
@@ -422,7 +464,7 @@
                     "default": "--everything --filter_common --per_gene --total_length --offline --format vcf",
                     "fa_icon": "fas fa-toolbox",
                     "description": "Add an extra custom argument to VEP.",
-                    "help_text": "Using this params you can add custom args to VEP."
+                    "help_text": "Using this parameter, you can add custom args to VEP."
                 },
                 "use_annotation_cache_keys": {
                     "type": "boolean",
@@ -442,7 +484,7 @@
                     "default": "vcf",
                     "description": "VEP output-file format.",
                     "enum": ["json", "tab", "vcf"],
-                    "help_text": "Sets the format of the output-file from VEP. Available formats: json, tab and vcf.",
+                    "help_text": "Sets the format of the output-file from VEP.",
                     "fa_icon": "fas fa-table",
                     "hidden": true
                 }
@@ -490,6 +532,7 @@
                 "gatk_interval_scatter_count": {
                     "type": "integer",
                     "default": 25,
+                    "minimum": 1,
                     "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
                     "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
                 },
@@ -501,26 +544,30 @@
                 "gatk_vf_window_size": {
                     "type": "integer",
                     "default": 35,
+                    "minimum": 0,
                     "description": "The window size (in bases) in which to evaluate clustered SNPs.",
                     "help_text": "This parameter is used by GATK variant filteration step. It defines the window size (in bases) in which to evaluate clustered SNPs. It has to be used together with the other option 'cluster'."
                 },
                 "gatk_vf_cluster_size": {
                     "type": "integer",
                     "default": 3,
+                    "minimum": 2,
                     "description": "The number of SNPs which make up a cluster. Must be at least 2.",
                     "help_text": "This parameter is used by GATK variant filteration step. It defines the number of SNPs which make up a cluster within a window. Must be at least 2."
                 },
                 "gatk_vf_fs_filter": {
                     "type": "number",
                     "default": 30.0,
+                    "minimum": 0.0,
                     "description": "Value to be used for the FisherStrand (FS) filter",
-                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 30.0"
+                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
                 },
                 "gatk_vf_qd_filter": {
                     "type": "number",
                     "default": 2.0,
+                    "minimum": 0.0,
                     "description": "Value to be used for the QualByDepth (QD) filter",
-                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format. Default is 2.0"
+                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
                 }
             }
         },
