@@ -123,19 +123,27 @@
                 },
                 "known_indels": {
                     "type": "string",
-                    "description": "Path to known indels VCF file"
+                    "description": "Path to known indels VCF file(s)",
+                    "format": "file-path-pattern",
+                    "exists": true
                 },
                 "known_indels_tbi": {
                     "type": "string",
-                    "description": "Path to known indels index file"
+                    "description": "Path to known indels index file(s)",
+                    "format": "file-path-pattern",
+                    "exists": true
                 },
                 "dbsnp": {
                     "type": "string",
-                    "description": "Path to dbSNP VCF file"
+                    "description": "Path to dbSNP VCF file",
+                    "format": "file-path",
+                    "exists": true
                 },
                 "dbsnp_tbi": {
                     "type": "string",
-                    "description": "Path to dbSNP VCF index file"
+                    "description": "Path to dbSNP VCF index file",
+                    "format": "file-path",
+                    "exists": true
                 },
                 "snpeff_db": {
                     "type": ["integer", "string"],

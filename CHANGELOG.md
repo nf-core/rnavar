@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#159](https://github.com/nf-core/rnavar/pull/159) - Fixed a couple of bottlenecks in the pipeline
 - [#168](https://github.com/nf-core/rnavar/pull/168) - Allow integer values for `--vep_cache_version` and `--snpeff_db`.
 - [#170](https://github.com/nf-core/rnavar/pull/170) - Fixed pipeline failure when running `--skip_intervallisttools`.
+- [#171](https://github.com/nf-core/rnavar/pull/171) - Fixed the `--dbnsp` and `--known_indels` handling. Uncompressed files are now allowed as inputs to the pipeline as the pipeline will automatically compress these.
 - [#172](https://github.com/nf-core/rnavar/pull/172) - Fixed the parameters JSON schema so the pipeline does better input validation.
 
 ### Dependencies
