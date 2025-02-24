@@ -226,6 +226,11 @@
                     "default": 1000000,
                     "description": "Specifies the maximum number of collapsed junctions"
                 },
+                "star_max_intron_size": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Specifies the maximum intron size"
+                },
                 "seq_center": {
                     "type": "string",
                     "description": "Sequencing center information to be added to read group of BAM files.",
