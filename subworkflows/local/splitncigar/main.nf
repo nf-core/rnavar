@@ -20,7 +20,7 @@ workflow SPLITNCIGAR {
     def bam_interval = bam
         .combine(intervals)
         .map { meta, bam_, bai, intervals_ ->
-            [ meta + [interval_count:intervals_ instanceof List ? intervals_.size() : 1], bam_, bai, intervals_ ]
+            [ meta + [interval_count:intervals_ instanceof List ? intervals_.size() : 1], bam_, bai, [intervals_] ]
         }
         .transpose(by:3)
         .map { meta, bam_, bai, interval ->
