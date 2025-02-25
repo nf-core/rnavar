@@ -70,6 +70,7 @@ workflow NFCORE_RNAVAR {
     ch_known_indels_tbi_raw = params.known_indels_tbi      ? Channel.fromPath(params.known_indels_tbi)                                          : Channel.empty()
     ch_gff            = params.gff                     ? Channel.fromPath(params.gff).collect()                                                 : Channel.empty()
     ch_gtf_raw        = params.gtf                     ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.collect()      : Channel.empty()
+    ch_star_index_raw = params.star_index              ? Channel.fromPath(params.star_index).map { index -> [[id:index.baseName], index]}       : Channel.value([[],[]])
 
     // Initialize variant annotation associated channels
     snpeff_db         = params.snpeff_db          ?: Channel.empty()
@@ -102,6 +103,7 @@ workflow NFCORE_RNAVAR {
 
     PREPARE_GENOME(
         ch_fasta_raw,
+        ch_star_index_raw,
         ch_gff,
         ch_gtf_raw,
         ch_dbsnp_raw,
