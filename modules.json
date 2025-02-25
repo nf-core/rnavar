@@ -197,7 +197,7 @@
                     },
                     "star/indexversion": {
                         "branch": "master",
-                        "git_sha": "752700e3dd94798d73e247b523cbbf003b2bfbe4",
+                        "git_sha": "f495fdd6f4d28424ecf1465dbd5704d2752094bf",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgziptabix": {
