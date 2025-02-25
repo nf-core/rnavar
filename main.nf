@@ -61,6 +61,10 @@ workflow NFCORE_RNAVAR {
 
     ch_versions = Channel.empty()
 
+    if(params.gtf && params.gff) {
+        error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
+    }
+
     // Initialize fasta file with meta map:
     ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()         : Channel.empty()
 
@@ -68,7 +72,7 @@ workflow NFCORE_RNAVAR {
     ch_dbsnp_raw      = params.dbsnp                   ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}.collect()   : Channel.value([])
     ch_known_indels_raw   = params.known_indels            ? Channel.fromPath(params.known_indels)                                              : Channel.empty()
     ch_known_indels_tbi_raw = params.known_indels_tbi      ? Channel.fromPath(params.known_indels_tbi)                                          : Channel.empty()
-    ch_gff            = params.gff                     ? Channel.fromPath(params.gff).collect()                                                 : Channel.empty()
+    ch_gff            = params.gff                     ? Channel.fromPath(params.gff).map{ gff -> [ [ id:gff.baseName ], gff ] }.collect()      : Channel.empty()
     ch_gtf_raw        = params.gtf                     ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.collect()      : Channel.empty()
 
     // Initialize variant annotation associated channels

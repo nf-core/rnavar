@@ -12,13 +12,13 @@ process GTF2BED {
     val feature_type
 
     output:
-    path '*.bed'       , emit: bed
-    path "versions.yml", emit: versions
+    tuple val(meta), path('*.bed')  , emit: bed
+    path "versions.yml"             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, in nf-core/rnaseq/bin/
+    script:
     def allowed_type = ["exon", "transcript", "gene"];
     if (feature_type){
         feature_type = allowed_type.contains(feature_type) ? feature_type : "exon"
@@ -32,6 +32,16 @@ process GTF2BED {
 
     awk '{print \$1 "\t" (\$2 - 1) "\t" \$3}' tmp.exome.bed > exome.bed
     rm -rf tmp.exome.bed
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        Rscript: \$(echo \$(Rscript --version 2>&1) | sed 's/R scripting front-end version //')
+    END_VERSIONS
+    """
+
+    stub:
+    """
+    touch exome.bed
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

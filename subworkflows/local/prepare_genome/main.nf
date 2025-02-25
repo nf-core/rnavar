@@ -40,13 +40,19 @@ workflow PREPARE_GENOME {
         fasta = fasta_raw
     }
 
-    if (params.gtf.endsWith('.gz')) {
+    def ch_gtf = Channel.empty()
+    if (params.gtf.toString().endsWith('.gz')) {
         GUNZIP_GTF(gtf_raw)
+        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
-        gtf = GUNZIP_GTF.out.gunzip
+        ch_gtf = GUNZIP_GTF.out.gunzip
+    } else if(params.gff) {
+        GFFREAD(gff, fasta.map { _meta, fasta_ -> fasta_}.collect())
+        ch_versions = ch_versions.mix(GFFREAD.out.versions)
 
+        ch_gtf = GFFREAD.out.gtf
     } else {
-        gtf = gtf_raw
+        ch_gtf = gtf_raw
     }
 
     def ch_dbsnp = Channel.value([[],[]])
@@ -98,26 +104,22 @@ workflow PREPARE_GENOME {
         .collect()
 
     GATK4_CREATESEQUENCEDICTIONARY(fasta)
-    GFFREAD(gff, fasta)
     SAMTOOLS_FAIDX(fasta, [['id':'genome'], []])
 
-    gtf = gtf.mix(GFFREAD.out.gtf)
-
-    GTF2BED(gtf, feature_type)
-    STAR_GENOMEGENERATE(fasta, gtf)
+    GTF2BED(ch_gtf, feature_type)
+    STAR_GENOMEGENERATE(fasta, ch_gtf)
 
     ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
-    ch_versions = ch_versions.mix(GFFREAD.out.versions)
     ch_versions = ch_versions.mix(GTF2BED.out.versions)
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
     ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
 
     emit:
     dict             = GATK4_CREATESEQUENCEDICTIONARY.out.dict                              //    path: genome.fasta.dict
-    exon_bed         = GTF2BED.out.bed.map{ bed -> [ [ id:bed.baseName ], bed ] }.collect() //    path: exon.bed
+    exon_bed         = GTF2BED.out.bed.collect()                                             //    path: exon.bed
     fasta            = fasta
     fasta_fai        = SAMTOOLS_FAIDX.out.fai                                               //    path: genome.fasta.fai
-    gtf              = gtf.first()                                                       //    path: genome.gtf
+    gtf              = ch_gtf                                                                  //    path: genome.gtf
     star_index       = STAR_GENOMEGENERATE.out.index.first()                                //    path: star/index/
     dbsnp            = ch_dbsnp                                                               // path: dbsnp.vcf.gz
     dbsnp_tbi        = ch_dbsnp_tbi                                                           // path: dbsnp.vcf.gz.tbi
