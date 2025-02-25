@@ -1,7 +1,7 @@
 {
     "Run with profile test | annotation with merge": {
         "content": [
-            45,
+            46,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -256,11 +256,11 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.4"
         },
-        "timestamp": "2025-02-24T14:34:43.581063475"
+        "timestamp": "2025-02-25T15:11:24.746104582"
     },
     "Run with profile test | annotation with vep": {
         "content": [
-            42,
+            43,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -496,11 +496,11 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.4"
         },
-        "timestamp": "2025-02-24T14:30:05.490462421"
+        "timestamp": "2025-02-25T15:06:02.448281966"
     },
     "Run with profile test | annotation with snpeff": {
         "content": [
-            42,
+            43,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -632,6 +632,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.4"
         },
-        "timestamp": "2025-02-24T14:26:26.781658411"
+        "timestamp": "2025-02-25T15:01:56.312581883"
     }
 }
