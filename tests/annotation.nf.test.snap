@@ -263,7 +263,7 @@
     },
     "Run with profile test | annotation with vep": {
         "content": [
-            42,
+            43,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -506,7 +506,7 @@
     },
     "Run with profile test | annotation with snpeff": {
         "content": [
-            42,
+            43,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"

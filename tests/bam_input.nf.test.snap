@@ -1,7 +1,7 @@
 {
     "Run with profile test": {
         "content": [
-            26,
+            27,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
