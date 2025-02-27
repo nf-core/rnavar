@@ -9,9 +9,9 @@ include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index
 workflow SPLITNCIGAR {
     take:
     bam          // channel: [ val(meta), [ bam ], [bai] ]
-    fasta        // channel: [ fasta ]
-    fai          // channel: [ fai ]
-    dict         // channel: [ dict ]
+    fasta        // channel: [ val(meta), fasta ]
+    fai          // channel: [ val(meta), fai ]
+    dict         // channel: [ val(meta), dict ]
     intervals    // channel: [ interval_list]
 
     main:
@@ -30,7 +30,7 @@ workflow SPLITNCIGAR {
 
     GATK4_SPLITNCIGARREADS(bam_interval,
         fasta,
-        fai.map{ fai_ -> [[id:'genome'], fai_] },
+        fai,
         dict)
 
     def bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
@@ -46,7 +46,7 @@ workflow SPLITNCIGAR {
     SAMTOOLS_MERGE(
         bam_splitncigar_interval,
         fasta,
-        fai.map{ fai_ -> [[id:fai_.baseName], fai_] }
+        fai
     )
 
     def splitncigar_bam = SAMTOOLS_MERGE.out.bam

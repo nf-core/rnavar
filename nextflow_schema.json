@@ -51,6 +51,7 @@
             "type": "object",
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
+            "required": ["fasta"],
             "properties": {
                 "genome": {
                     "type": "string",
@@ -98,7 +99,7 @@
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "pattern": "^\\S+\\.gff$",
+                    "pattern": "^\\S+\\.gff\\d?$",
                     "description": "Path to GFF3 annotation file.",
                     "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
                 },

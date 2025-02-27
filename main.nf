@@ -61,16 +61,25 @@ workflow NFCORE_RNAVAR {
 
     ch_versions = Channel.empty()
 
+    if(params.gtf && params.gff) {
+        error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
+    } else if(!params.gtf && !params.gff) {
+        error("Missing required parameters: --gtf or --gff")
+    }
+
     // Initialize fasta file with meta map:
-    ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()         : Channel.empty()
+    ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()        : Channel.empty()
 
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
-    ch_dbsnp_raw      = params.dbsnp                   ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}.collect()   : Channel.value([])
-    ch_known_indels_raw   = params.known_indels            ? Channel.fromPath(params.known_indels)                                              : Channel.empty()
-    ch_known_indels_tbi_raw = params.known_indels_tbi      ? Channel.fromPath(params.known_indels_tbi)                                          : Channel.empty()
-    ch_gff            = params.gff                     ? Channel.fromPath(params.gff).collect()                                                 : Channel.empty()
-    ch_gtf_raw        = params.gtf                     ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.collect()      : Channel.empty()
-    ch_star_index_raw = params.star_index              ? Channel.fromPath(params.star_index).map { index -> [[id:index.baseName], index]}       : Channel.value([[],[]])
+    ch_dict_raw       = params.dict                    ? Channel.fromPath(params.dict).map{ it -> [ [id:it.baseName], it ] }.collect()         : Channel.empty()
+    ch_fai_raw        = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).map{ it -> [ [id:it.baseName], it ] }.collect()    : Channel.empty()
+    ch_dbsnp_raw      = params.dbsnp                   ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}.collect() : Channel.value([])
+    ch_known_indels_raw   = params.known_indels        ? Channel.fromPath(params.known_indels)                                                 : Channel.empty()
+    ch_known_indels_tbi_raw = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi)                                             : Channel.empty()
+    ch_gff            = params.gff                     ? Channel.fromPath(params.gff).map{ gff -> [ [ id:gff.baseName ], gff ] }.collect()     : Channel.empty()
+    ch_gtf_raw        = params.gtf                     ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.collect()     : Channel.empty()
+    ch_star_index_raw = params.star_index              ? Channel.fromPath(params.star_index).map { index -> [[id:index.baseName], index]}      : Channel.value([[],[]])
+    ch_exon_bed_raw   = params.exon_bed                ? Channel.fromPath(params.exon_bed).map { it -> [[id:it.baseName], it]}                 : Channel.empty()
 
     // Initialize variant annotation associated channels
     snpeff_db         = params.snpeff_db          ?: Channel.empty()
@@ -103,9 +112,12 @@ workflow NFCORE_RNAVAR {
 
     PREPARE_GENOME(
         ch_fasta_raw,
+        ch_dict_raw,
+        ch_fai_raw,
         ch_star_index_raw,
         ch_gff,
         ch_gtf_raw,
+        ch_exon_bed_raw,
         ch_dbsnp_raw,
         ch_known_indels_raw,
         ch_known_indels_tbi_raw,
@@ -114,12 +126,9 @@ workflow NFCORE_RNAVAR {
     ch_fasta            = PREPARE_GENOME.out.fasta
     ch_star_index       = PREPARE_GENOME.out.star_index
     ch_gtf              = PREPARE_GENOME.out.gtf
-    ch_dict             = params.dict           ? Channel.fromPath(params.dict).map{ it -> [ [id:'dict'], it ] }.collect()
-                                                : PREPARE_GENOME.out.dict
-    ch_fasta_fai        = params.fasta_fai      ? Channel.fromPath(params.fasta_fai).map{ it -> [ [id:'fasta_fai'], it ] }.collect()
-                                                : PREPARE_GENOME.out.fasta_fai
-    ch_exon_bed         = params.exon_bed       ? Channel.fromPath(params.exon_bed).map{ it -> [ [id:'exon_bed'], it ] }.collect()
-                                                : PREPARE_GENOME.out.exon_bed
+    ch_dict             = PREPARE_GENOME.out.dict
+    ch_fasta_fai        = PREPARE_GENOME.out.fasta_fai
+    ch_exon_bed         = PREPARE_GENOME.out.exon_bed
     ch_dbsnp            = params.dbsnp && params.dbsnp.endsWith(".gz") ? ch_dbsnp_raw : PREPARE_GENOME.out.dbsnp
     ch_dbsnp_tbi        = params.dbsnp.toString().endsWith(".gz") && params.dbsnp_tbi
                                                 ? Channel.fromPath(params.dbsnp_tbi).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}.collect()
