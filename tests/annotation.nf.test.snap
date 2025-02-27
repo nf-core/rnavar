@@ -1,7 +1,7 @@
 {
     "Run with profile test | annotation with merge": {
         "content": [
-            45,
+            46,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
