@@ -9,7 +9,6 @@ nextflow_pipeline {
 
         when {
             params {
-                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 outdir = "$outputDir"
                 input = "${projectDir}/tests/csv/1.0/all.csv"
             }

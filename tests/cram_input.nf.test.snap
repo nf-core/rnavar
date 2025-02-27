@@ -1,7 +1,7 @@
 {
     "Run with profile test": {
         "content": [
-            27,
+            26,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -13,6 +13,9 @@
                     "gatk4": "4.5.0.0"
                 },
                 "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
                     "gatk4": "4.5.0.0"
                 },
                 "GATK4_MERGEVCFS": {

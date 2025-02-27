@@ -1,10 +1,10 @@
 {
     "Run with profile test | skip_baserecalibration": {
         "content": [
-            36,
+            35,
             {
                 "CAT_FASTQ": {
-                    "cat": 8.3
+                    "cat": 9.5
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -13,6 +13,9 @@
                     "gatk4": "4.5.0.0"
                 },
                 "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.5.0.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
                     "gatk4": "4.5.0.0"
                 },
                 "GATK4_MERGEVCFS": {
