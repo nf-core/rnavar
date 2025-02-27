@@ -37,7 +37,7 @@
                     },
                     "cat/fastq": {
                         "branch": "master",
-                        "git_sha": "4fc983ad0b30e6e32696fa7d980c76c7bfe1c03e",
+                        "git_sha": "c03f4019225fce21c11f194ff32eca396963f305",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/download": {
