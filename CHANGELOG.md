@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#172](https://github.com/nf-core/rnavar/pull/172) - Fixed the parameters JSON schema so the pipeline does better input validation.
 - [#173](https://github.com/nf-core/rnavar/pull/173) - Added STAR index version control, the pipeline will now automatically detect a wrong STAR index version an create the correct index instead.
 - [#175](https://github.com/nf-core/rnavar/pull/175) - Fixed the handling of GFF files so they are now correctly being used.
+- [#177](https://github.com/nf-core/rnavar/pull/177) - Added a check and filter step for unknown regions in the exon BED. You can disable this check with `--skip_exon_bed_check`.
 
 ### Dependencies
 
