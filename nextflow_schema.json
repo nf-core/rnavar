@@ -529,6 +529,11 @@
                     "type": "boolean",
                     "description": "Skip MultiQC reports",
                     "help_text": "This parameter disable all QC reports"
+                },
+                "skip_exon_bed_check": {
+                    "type": "boolean",
+                    "description": "Skip the check of the exon bed",
+                    "help_text": "Set this parameter if you don't want to the pipeline to check and filter unknown regions in the exon bed file."
                 }
             }
         },

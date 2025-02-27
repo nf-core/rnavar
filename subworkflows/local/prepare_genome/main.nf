@@ -17,6 +17,7 @@ include { TABIX_TABIX as TABIX_KNOWN_INDELS             } from '../../../modules
 include { TABIX_BGZIPTABIX as BGZIPTABIX_KNOWN_INDELS   } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { UNTAR                                         } from '../../../modules/nf-core/untar'
 include { STAR_INDEXVERSION                             } from '../../../modules/nf-core/star/indexversion'
+include { REMOVE_UNKNOWN_REGIONS                        } from '../../../modules/local/remove_unkown_regions'
 
 workflow PREPARE_GENOME {
     take:
@@ -47,6 +48,15 @@ workflow PREPARE_GENOME {
         ch_fasta = fasta_raw
     }
 
+    def ch_dict = Channel.empty()
+    if(!params.dict) {
+        GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
+        ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
+        ch_dict = GATK4_CREATESEQUENCEDICTIONARY.out.dict
+    } else {
+        ch_dict = dict_raw
+    }
+
     def ch_gtf = Channel.empty()
     if (params.gtf.toString().endsWith('.gz')) {
         GUNZIP_GTF(gtf_raw)
@@ -62,13 +72,25 @@ workflow PREPARE_GENOME {
         ch_gtf = gtf_raw
     }
 
-    def ch_exon_bed = Channel.empty()
+    def ch_exon_bed_raw = Channel.empty()
     if(!params.exon_bed) {
         GTF2BED(ch_gtf, feature_type)
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
-        ch_exon_bed = GTF2BED.out.bed
+        ch_exon_bed_raw = GTF2BED.out.bed
     } else {
-        ch_exon_bed = exon_bed_raw
+        ch_exon_bed_raw = exon_bed_raw
+    }
+
+    def ch_exon_bed = Channel.empty()
+    if(!params.skip_exon_bed_check) {
+        REMOVE_UNKNOWN_REGIONS(
+            ch_exon_bed_raw,
+            ch_dict
+        )
+        ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
+        ch_exon_bed = REMOVE_UNKNOWN_REGIONS.out.bed
+    } else {
+        ch_exon_bed = ch_exon_bed_raw
     }
 
     def ch_dbsnp = Channel.value([[],[]])
@@ -118,16 +140,6 @@ workflow PREPARE_GENOME {
         .mix(TABIX_KNOWN_INDELS.out.tbi.map { _meta, tbi -> tbi })
         .mix(ch_known_indels_input.bgzip_index.map { _meta, _file, index -> index })
         .collect()
-
-    def ch_dict = Channel.empty()
-    if(!params.dict) {
-        GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
-        ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
-        ch_dict = GATK4_CREATESEQUENCEDICTIONARY.out.dict
-    } else {
-        ch_dict = dict_raw
-    }
-
 
     def ch_fai = Channel.empty()
     if(!params.fasta_fai) {
