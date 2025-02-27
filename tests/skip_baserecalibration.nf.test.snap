@@ -1,7 +1,7 @@
 {
-    "Run with profile test | skip_baserecalibration": {
+    "-profile test --skip_baserecalibration": {
         "content": [
-            35,
+            36,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -97,8 +97,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.01.0"
         },
-        "timestamp": "2025-02-25T15:30:01.903327387"
+        "timestamp": "2025-02-27T19:08:25.175823741"
     }
 }
