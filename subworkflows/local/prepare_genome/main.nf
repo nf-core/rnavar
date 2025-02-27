@@ -21,9 +21,12 @@ include { STAR_INDEXVERSION                             } from '../../../modules
 workflow PREPARE_GENOME {
     take:
     fasta_raw           // channel: /path/to/genome.fasta
+    dict_raw            // channel: /path/to/genome.dict
+    fai_raw             // channel: /path/to/genome.fasta.fai
     star_index          // channel: /path/to/star_index
     gff                 // channel: /path/to/genome.gff
     gtf_raw             // channel: /path/to/genome.gtf
+    exon_bed_raw        // channel: /path/to/genome.bed
     dbsnp               // channel: /path/to/dbnsp.vcf.gz
     known_indels        // channel: [/path/to/known_indels]
     known_indels_tbi    // channel: [/path/to/known_indels_index]
@@ -57,6 +60,15 @@ workflow PREPARE_GENOME {
         ch_gtf = GFFREAD.out.gtf
     } else {
         ch_gtf = gtf_raw
+    }
+
+    def ch_exon_bed = Channel.empty()
+    if(!params.exon_bed) {
+        GTF2BED(ch_gtf, feature_type)
+        ch_versions = ch_versions.mix(GTF2BED.out.versions)
+        ch_exon_bed = GTF2BED.out.bed
+    } else {
+        ch_exon_bed = exon_bed_raw
     }
 
     def ch_dbsnp = Channel.value([[],[]])
@@ -107,11 +119,24 @@ workflow PREPARE_GENOME {
         .mix(ch_known_indels_input.bgzip_index.map { _meta, _file, index -> index })
         .collect()
 
-    GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
-    SAMTOOLS_FAIDX(ch_fasta, [['id':'genome'], []])
+    def ch_dict = Channel.empty()
+    if(!params.dict) {
+        GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
+        ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
+        ch_dict = GATK4_CREATESEQUENCEDICTIONARY.out.dict
+    } else {
+        ch_dict = dict_raw
+    }
 
 
-    GTF2BED(ch_gtf, feature_type)
+    def ch_fai = Channel.empty()
+    if(!params.fasta_fai) {
+        SAMTOOLS_FAIDX(ch_fasta, [['id':'genome'], []])
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+        ch_fai = SAMTOOLS_FAIDX.out.fai
+    } else {
+        ch_fai = fai_raw
+    }
 
     //
     // STAR index handling
@@ -167,17 +192,13 @@ workflow PREPARE_GENOME {
     def star_index_output = STAR_GENOMEGENERATE.out.index
         .mix(star_index_check.compatible)
 
-    ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
-    ch_versions = ch_versions.mix(GTF2BED.out.versions)
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
-
     emit:
-    dict             = GATK4_CREATESEQUENCEDICTIONARY.out.dict                              //    path: genome.fasta.dict
-    exon_bed         = GTF2BED.out.bed.map{ bed -> [ [ id:bed.baseName ], bed ] }.collect() //    path: exon.bed
+    dict             = ch_dict                                                            //    path: genome.fasta.dict
+    exon_bed         = ch_exon_bed                                                      //    path: exon.bed
     fasta            = ch_fasta
-    fasta_fai        = SAMTOOLS_FAIDX.out.fai                                               //    path: genome.fasta.fai
-    gtf              = ch_gtf                                                                  //    path: genome.gtf
-    star_index       = STAR_GENOMEGENERATE.out.index.first()                                //    path: star/index/
+    fasta_fai        = ch_fai                                                          //    path: genome.fasta.fai
+    gtf              = ch_gtf.collect()                                                       //    path: genome.gtf
+    star_index       = star_index_output                                                    //    path: star/index/
     dbsnp            = ch_dbsnp                                                               // path: dbsnp.vcf.gz
     dbsnp_tbi        = ch_dbsnp_tbi                                                           // path: dbsnp.vcf.gz.tbi
     known_indels     = ch_known_indels                                                      // path: {known_indels*}.vcf.gz

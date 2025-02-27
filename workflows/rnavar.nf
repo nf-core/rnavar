@@ -127,6 +127,7 @@ workflow RNAVAR {
     if (!params.skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(interval_list)
         interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map{ _meta, bed -> [bed] }.collect()
+        ch_versions = ch_versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
     }
     else {
         interval_list_split = interval_list.map { _meta, bed -> bed }
@@ -182,7 +183,7 @@ workflow RNAVAR {
 
         SPLITNCIGAR(genome_bam_bai,
             fasta,
-            fasta_fai.map { _meta, fai -> fai },
+            fasta_fai,
             dict,
             interval_list_split
         )
