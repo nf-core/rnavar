@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#161](https://github.com/nf-core/rnavar/pull/161) - Template update for nf-core/tools v3.2.0
 - [#167](https://github.com/nf-core/rnavar/pull/167) - Removed the strandedness field from the samplesheet as it wasn't used in the pipeline.
 - [#172](https://github.com/nf-core/rnavar/pull/172) - Added support for TSV, JSON and YAML samplesheets
+- [#178](https://github.com/nf-core/rnavar/pull/178) - Implement automatic sharding for nf-test tests
 
 ### Fixed
 
