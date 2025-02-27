@@ -63,6 +63,8 @@ workflow NFCORE_RNAVAR {
 
     if(params.gtf && params.gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
+    } else if(!params.gtf && !params.gff) {
+        error("Missing required parameters: --gtf or --gff")
     }
 
     // Initialize fasta file with meta map:
