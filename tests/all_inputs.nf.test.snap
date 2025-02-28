@@ -1,7 +1,7 @@
 {
     "-profile test --input all.csv": {
         "content": [
-            78,
+            79,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -127,6 +127,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.01.0"
         },
-        "timestamp": "2025-02-27T18:32:03.285344136"
+        "timestamp": "2025-02-28T13:33:31.371268626"
     }
 }

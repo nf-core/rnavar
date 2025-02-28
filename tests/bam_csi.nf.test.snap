@@ -1,7 +1,7 @@
 {
     "-profile test --bam_csi_index": {
         "content": [
-            39,
+            40,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.5.0.0"
@@ -102,6 +102,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.01.0"
         },
-        "timestamp": "2025-02-27T18:50:47.33970351"
+        "timestamp": "2025-02-28T13:51:12.605457529"
     }
 }
