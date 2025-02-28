@@ -175,7 +175,7 @@ workflow PREPARE_GENOME {
             def is_compatible = true
             if(!workflow.stubRun) {
                 def minimal_version = version_file.text.replace("\n", "")
-                def index_version = file("${index.toUri()}/genomeParameters.txt", checkIfExists:true)
+                def index_version = index.resolve("genomeParameters.txt")
                     .text
                     .readLines()
                     .find { line -> line.startsWith("versionGenome") }
