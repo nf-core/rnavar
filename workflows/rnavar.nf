@@ -22,6 +22,7 @@ include { MULTIQC                   } from '../modules/nf-core/multiqc'
 include { SAMTOOLS_INDEX            } from '../modules/nf-core/samtools/index'
 include { TABIX_TABIX as TABIX      } from '../modules/nf-core/tabix/tabix'
 include { TABIX_TABIX as TABIXGVCF  } from '../modules/nf-core/tabix/tabix'
+include { UMITOOLS_EXTRACT          } from '../modules/nf-core/umitools/extract'
 
 // local
 include { RECALIBRATE               } from '../subworkflows/local/recalibrate'
@@ -113,6 +114,22 @@ workflow RNAVAR {
     ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     //
+    // MODULE: Extract UMIs from reads
+    //
+
+    def umi_extracted_reads = Channel.empty()
+    if(params.extract_umi) {
+        UMITOOLS_EXTRACT(
+            cat_fastq
+        )
+        ch_versions = ch_versions.mix(UMITOOLS_EXTRACT.out.versions.first())
+        umi_extracted_reads = UMITOOLS_EXTRACT.out.reads
+    } else {
+        umi_extracted_reads = cat_fastq
+    }
+
+
+    //
     // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
     //
 
@@ -138,7 +155,8 @@ workflow RNAVAR {
     //
 
     if (params.aligner == 'star') {
-        FASTQ_ALIGN_STAR(cat_fastq,
+        FASTQ_ALIGN_STAR(
+            umi_extracted_reads,
             star_index,
             gtf,
             params.star_ignore_sjdbgtf,

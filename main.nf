@@ -67,6 +67,10 @@ workflow NFCORE_RNAVAR {
         error("Missing required parameters: --gtf or --gff")
     }
 
+    if(params.extract_umi && !params.umitools_bc_pattern) {
+        error("Expected --umitools_bc_pattern when --extract_umi is specified.")
+    }
+
     // Initialize fasta file with meta map:
     ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()        : Channel.empty()
 
