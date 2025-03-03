@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#116](https://github.com/nf-core/rnavar/pull/116) - Added `unzip` from nf-core modules for working with unzipped fasta and gtf files
 - [#157](https://github.com/nf-core/rnavar/pull/157) - Added support for `bam` and `cram` input files
 - [#169](https://github.com/nf-core/rnavar/pull/169) - Added the `--star_max_intron_size` parameter to set the `--alignIntronMax` argument in STAR
+- [#180](https://github.com/nf-core/rnavar/pull/180) - Added support for UMI extraction. Specify `--extract_umi` to enable this feature
 
 ### Changed
 

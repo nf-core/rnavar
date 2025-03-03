@@ -301,6 +301,37 @@
                     "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
                     "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
                     "hidden": false
+                },
+                "extract_umi": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify whether to remove UMIs from the reads with UMI-tools extract."
+                },
+                "umitools_extract_method": {
+                    "type": "string",
+                    "default": "string",
+                    "fa_icon": "fas fa-barcode",
+                    "description": "UMI pattern to use. Can be either 'string' (default) or 'regex'.",
+                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).\n",
+                    "enum": ["string", "regex"]
+                },
+                "umitools_bc_pattern": {
+                    "type": "string",
+                    "fa_icon": "fas fa-barcode",
+                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).",
+                    "description": "The UMI barcode pattern to use e.g. 'NNNNNN' indicates that the first 6 nucleotides of the read are from the UMI.",
+                    "pattern": "^[NXC]*$"
+                },
+                "umitools_bc_pattern2": {
+                    "type": "string",
+                    "fa_icon": "fas fa-barcode",
+                    "description": "The UMI barcode pattern to use if the UMI is located in read 2.",
+                    "pattern": "^[NXC]*$"
+                },
+                "umitools_umi_separator": {
+                    "type": "string",
+                    "fa_icon": "fas fa-star-half-alt",
+                    "description": "The character that separates the UMI in the read name. Most likely a colon if you skipped the extraction with UMI-tools and used other software."
                 }
             }
         },
