@@ -218,18 +218,29 @@ workflow RNAVAR {
         if (!params.skip_baserecalibration) {
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
-            def known_sites     = dbsnp.map { _meta, dbsnp_ -> dbsnp_ }.concat(known_indels).collect()
-            def known_sites_tbi = dbsnp_tbi.map { _meta, tbi -> tbi }.concat(known_indels_tbi).collect()
+            def known_sites = dbsnp
+                .map { _meta, dbsnp_ -> dbsnp_ }
+                .concat(known_indels)
+                .collect()
+                .map { files ->
+                    [ [id:'known_sites'], files ]
+                }
+            def known_sites_tbi = dbsnp_tbi
+                .map { _meta, tbi -> tbi }
+                .concat(known_indels_tbi)
+                .collect()
+                .map { files ->
+                    [ [id:'known_sites'], files ]
+                }
 
             def interval_list_recalib = interval_list.map{ _meta, bed -> [bed] }.flatten()
             def splitncigar_bam_bai_interval = splitncigar_bam_bai.combine(interval_list_recalib)
-                .map{ meta, bam, bai, interval -> [ meta, bam, bai, interval] }
 
             GATK4_BASERECALIBRATOR(
                 splitncigar_bam_bai_interval,
-                fasta.map{ _meta, fasta_ -> [fasta_] },
-                fasta_fai.map { _meta, fai -> fai },
-                dict.map{ _meta, dict_ -> [dict_] },
+                fasta,
+                fasta_fai,
+                dict,
                 known_sites,
                 known_sites_tbi
             )
