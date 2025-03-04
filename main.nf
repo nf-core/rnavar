@@ -71,6 +71,10 @@ workflow NFCORE_RNAVAR {
         error("Expected --umitools_bc_pattern when --extract_umi is specified.")
     }
 
+    if(!params.skip_baserecalibration && !params.dbsnp && !params.known_indels) {
+        error("Known sites are required for performing base recalibration. Supply them with either --dbsnp and/or --known_sites or disable base recalibration with --skip_baserecalibration")
+    }
+
     // Initialize fasta file with meta map:
     ch_fasta_raw      = params.fasta                   ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect()        : Channel.empty()
 
