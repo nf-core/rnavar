@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline | annotation"
+    name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("Run with profile test | annotation with snpeff") {
+    test("-profile test --annotate_tools snpeff") {
 
         when {
             params {
@@ -34,7 +34,7 @@ nextflow_pipeline {
         }
     }
 
-    test("Run with profile test | annotation with vep") {
+    test("-profile test --annotate_tools vep") {
 
         when {
             params {
@@ -63,7 +63,7 @@ nextflow_pipeline {
         }
     }
 
-    test("Run with profile test | annotation with merge") {
+    test("-profile test --annotate_tools merge") {
 
         when {
             params {

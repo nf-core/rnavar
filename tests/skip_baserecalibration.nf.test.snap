@@ -1,5 +1,5 @@
 {
-    "Run with profile test | skip_baserecalibration": {
+    "-profile test --skip_baserecalibration": {
         "content": [
             37,
             {
@@ -97,7 +97,7 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.01.0"
         },
         "timestamp": "2025-03-03T16:43:53.820362584"
     }

@@ -1,5 +1,5 @@
 {
-    "Run with profile test | annotation with merge": {
+    "-profile test --annotate_tools merge": {
         "content": [
             47,
             {
@@ -258,11 +258,11 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.01.0"
         },
         "timestamp": "2025-03-03T16:12:01.018371164"
     },
-    "Run with profile test | annotation with vep": {
+    "-profile test --annotate_tools vep": {
         "content": [
             44,
             {
@@ -502,11 +502,11 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.01.0"
         },
         "timestamp": "2025-03-03T16:07:16.86368092"
     },
-    "Run with profile test | annotation with snpeff": {
+    "-profile test --annotate_tools snpeff": {
         "content": [
             44,
             {
@@ -641,7 +641,7 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.01.0"
         },
         "timestamp": "2025-03-03T16:01:07.177008312"
     }

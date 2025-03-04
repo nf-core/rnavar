@@ -1,5 +1,5 @@
 {
-    "Run with profile test": {
+    "-profile test --input cram.csv": {
         "content": [
             28,
             {
@@ -71,7 +71,7 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.01.0"
         },
         "timestamp": "2025-03-03T16:24:41.041611867"
     }
