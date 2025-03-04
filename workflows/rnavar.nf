@@ -219,19 +219,21 @@ workflow RNAVAR {
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
             def known_sites = dbsnp
-                .map { _meta, dbsnp_ -> dbsnp_ }
-                .concat(known_indels)
-                .collect()
-                .map { files ->
-                    [ [id:'known_sites'], files ]
+                .combine(known_indels)
+                .map { _meta, dbsnp_, known_indels_=[] ->
+                    def file_list = [dbsnp_]
+                    file_list.add(known_indels_)
+                    return [[id:"known_sites"], file_list.flatten().findAll { entry -> entry != [] }]
                 }
+                .collect()
             def known_sites_tbi = dbsnp_tbi
-                .map { _meta, tbi -> tbi }
-                .concat(known_indels_tbi)
-                .collect()
-                .map { files ->
-                    [ [id:'known_sites'], files ]
+                .combine(known_indels_tbi)
+                .map { _meta, dbsnp_, known_indels_=[] ->
+                    def file_list = [dbsnp_]
+                    file_list.add(known_indels_)
+                    return [[id:"known_sites"], file_list.flatten().findAll { entry -> entry != [] }]
                 }
+                .collect()
 
             def interval_list_recalib = interval_list.map{ _meta, bed -> [bed] }.flatten()
             def splitncigar_bam_bai_interval = splitncigar_bam_bai.combine(interval_list_recalib)
