@@ -10,22 +10,22 @@
                     "fastqc": "0.12.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "GATK4_HAPLOTYPECALLER": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "GATK4_INTERVALLISTTOOLS": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "GATK4_MERGEVCFS": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "GATK4_SPLITNCIGARREADS": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "GATK4_VARIANTFILTRATION": {
-                    "gatk4": "4.5.0.0"
+                    "gatk4": "4.6.1.0"
                 },
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.3.0"
@@ -40,7 +40,7 @@
                     "samtools": 1.21
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.19.2"
+                    "samtools": 1.21
                 },
                 "SAMTOOLS_SORT": {
                     "samtools": 1.21
@@ -54,7 +54,7 @@
                     "gawk": "5.1.0"
                 },
                 "TABIX": {
-                    "tabix": "1.19.1"
+                    "tabix": 1.2
                 },
                 "Workflow": {
                     "nf-core/rnavar": "v2.0.0dev"
@@ -99,6 +99,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.01.0"
         },
-        "timestamp": "2025-02-28T14:08:15.055621292"
+        "timestamp": "2025-03-03T16:43:53.820362584"
     }
 }
