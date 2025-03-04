@@ -2,7 +2,6 @@
 // ANNOTATION
 //
 
-include { VCF_ANNOTATE_BCFTOOLS                         } from '../vcf_annotate_bcftools/main'
 include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vcf_annotate_ensemblvep/main'
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep/main'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff/main'
@@ -26,14 +25,6 @@ workflow VCF_ANNOTATE_ALL {
     def tab_annotated = Channel.empty()
     def json_annotated = Channel.empty()
     def ch_versions = Channel.empty()
-
-    if (tools.split(',').contains('bcfann')) {
-        VCF_ANNOTATE_BCFTOOLS(vcf)
-
-        vcf_annotated = vcf_annotated.mix(VCF_ANNOTATE_BCFTOOLS.out.vcf_tbi)
-        ch_versions = ch_versions.mix(VCF_ANNOTATE_BCFTOOLS.out.versions)
-    }
-
 
     if (tools.split(',').contains('merge') || tools.split(',').contains('snpeff')) {
         VCF_ANNOTATE_SNPEFF(vcf, snpeff_db, snpeff_cache)
