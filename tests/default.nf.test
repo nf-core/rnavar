@@ -5,7 +5,7 @@ nextflow_pipeline {
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("Run with profile test") {
+    test("-profile test") {
 
         when {
             params {

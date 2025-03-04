@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline | skip_baserecalibration"
+    name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("Run with profile test | skip_baserecalibration") {
+    test("-profile test --skip_baserecalibration") {
 
         when {
             params {

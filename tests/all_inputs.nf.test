@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline | all inputs"
+    name "Test pipeline"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("Run with profile test") {
+    test("-profile test --input all.csv") {
 
         when {
             params {
