@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#161](https://github.com/nf-core/rnavar/pull/161) - Template update for nf-core/tools v3.2.0
 - [#167](https://github.com/nf-core/rnavar/pull/167) - Removed the strandedness field from the samplesheet as it wasn't used in the pipeline.
 - [#172](https://github.com/nf-core/rnavar/pull/172) - Added support for TSV, JSON and YAML samplesheets
+- [#182](https://github.com/nf-core/rnavar/pull/182) - Bumped all modules to the latest version (as of 03/03/2025)
 
 ### Fixed
 
@@ -63,14 +64,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
-| bcftools   | 1.17        | 1.18        |
+| bcftools   | 1.17        | 1.20        |
 | bedtools   | 2.31.0      | 2.31.1      |
 | fastqc     | 0.11.9      | 0.12.1      |
-| mosdepth   | 0.3.3       | 0.3.6       |
+| gatk       | 4.2.6.1     | 4.6.1.0     |
+| mosdepth   | 0.3.3       | 0.3.10      |
 | multiqc    | 1.15        | 1.18        |
 | picard     | 3.1.0       | 3.3.0       |
 | samtools   | 1.17        | 1.21        |
 | star       | 2.7.10a     | 2.7.11b     |
+| vep        | 111.0       | 113.0       |
 
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 

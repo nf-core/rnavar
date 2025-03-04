@@ -155,8 +155,8 @@ workflow PREPARE_GENOME {
     //
 
     def star_index_input = star_index.branch { _meta, index ->
-        tarzipped: index.name.endsWith(".tar.gz")
         no_index: !index
+        tarzipped: index.name.endsWith(".tar.gz")
         index: true
     }
 
