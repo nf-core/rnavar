@@ -1,0 +1,78 @@
+{
+    "only cram - no index": {
+        "content": [
+            {
+                "bam": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram",
+                        "test.rna.paired_end.sorted.cram.crai"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b9253c084ace536ae84f4df30fe71912"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-05T13:36:56.176207564"
+    },
+    "bam, cram - no index, index": {
+        "content": [
+            {
+                "bam": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam",
+                        "test.rna.paired_end.sorted.bam.bai"
+                    ],
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram",
+                        "test.rna.paired_end.sorted.cram.crai"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b9253c084ace536ae84f4df30fe71912"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-05T13:37:07.592019675"
+    },
+    "only bam": {
+        "content": [
+            {
+                "bam": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam",
+                        "test.rna.paired_end.sorted.bam.bai"
+                    ]
+                ],
+                "versions": [
+                    
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-05T13:32:21.806173639"
+    }
+}
