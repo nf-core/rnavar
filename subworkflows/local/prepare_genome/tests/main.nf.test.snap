@@ -23,7 +23,7 @@
                         {
                             "id": "dict"
                         },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.dict"
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.dict"
                     ]
                 ],
                 "exon_bed": [
@@ -39,7 +39,7 @@
                         {
                             "id": "fasta"
                         },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
                     ]
                 ],
                 "fasta_fai": [
@@ -55,7 +55,7 @@
                         {
                             "id": "gtf"
                         },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.gtf"
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
                     ]
                 ],
                 "known_indels": [
@@ -106,7 +106,7 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.4"
         },
-        "timestamp": "2025-03-05T13:22:39.746029169"
+        "timestamp": "2025-03-05T14:45:47.366394095"
     },
     "only essentials": {
         "content": [
@@ -152,7 +152,7 @@
                         {
                             "id": "fasta"
                         },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta"
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
                     ]
                 ],
                 "fasta_fai": [
@@ -168,7 +168,7 @@
                         {
                             "id": "gtf"
                         },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.gtf"
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
                     ]
                 ],
                 "known_indels": [
@@ -216,6 +216,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.4"
         },
-        "timestamp": "2025-03-05T13:18:52.117370876"
+        "timestamp": "2025-03-05T14:45:25.808187589"
     }
 }
