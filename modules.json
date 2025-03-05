@@ -182,9 +182,8 @@
                     },
                     "snpeff/snpeff": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
-                        "installed_by": ["modules", "vcf_annotate_snpeff"],
-                        "patch": "modules/nf-core/snpeff/snpeff/snpeff-snpeff.diff"
+                        "git_sha": "22f895866a1ad01556db175f9c0925ca90615d10",
+                        "installed_by": ["modules", "vcf_annotate_snpeff"]
                     },
                     "star/align": {
                         "branch": "master",
