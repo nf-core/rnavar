@@ -79,6 +79,21 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 If multiple libraries/runs have been provided for the same sample in the input samplesheet (e.g. to increase sequencing depth) then these will be merged at the very beginning of the pipeline in order to have consistent sample naming throughout the pipeline. Please refer to the [usage documentation](https://nf-co.re/rnavar/usage#samplesheet-input) to see how to specify these samples in the input samplesheet.
 
+### umitools
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `umitools`
+  - `*.umi_extract.fastq.gz`: For single-end data
+  - `*.umi_extract_1.fastq.gz`: For paired-end data
+  - `*.umi_extract_2.fastq.gz`: For paired-end data
+  - `*.umi_extract.log`: The log of the UMI extraction
+
+</details>
+
+This output directory will only be made when `--extract_umi` has been specified. [UMI-tools](https://github.com/CGATOxford/UMI-tools) is a set of tools for handling Unique Molecular Identifiers in NGS data sets. In this pipeline the `extract` tool has been used to extract UMIs from the FASTQ files. Please refer to the [usage documentation](https://nf-co.re/rnavar/usage#samplesheet-input) for more information.
+
 ## Alignment
 
 ### STAR
@@ -109,7 +124,7 @@ If multiple libraries/runs have been provided for the same sample in the input s
 
 ### MarkDuplicates
 
-[GATK MarkDuplicates](https://gatk.broadinstitute.org/hc/en-us/articles/360042477492-MarkDuplicates-Picard) locates and tags duplicate reads in a `BAM` file. The tool's main output is a new BAM file, in which duplicates have been identified in the SAM flags field for each read.
+[Picard MarkDuplicates](https://gatk.broadinstitute.org/hc/en-us/articles/360042477492-MarkDuplicates-Picard) locates and tags duplicate reads in a `BAM` file. The tool's main output is a new BAM file, in which duplicates have been identified in the SAM flags field for each read.
 
 ![MultiQC - MarkDuplicate stats](images/read_markduplicates_stats.png)
 

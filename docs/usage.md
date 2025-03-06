@@ -90,7 +90,7 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
 
 #### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 4 columns to match those defined in the table below.
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the `sample` column and one of these: `fastq_1`, `bam` or `cram`.
 
 A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
 
@@ -130,16 +130,16 @@ The minimum reference genome requirements are a FASTA and GTF file, all other fi
 
 > **NB:** Compressed reference files are also supported by the pipeline i.e. standard files with the `.gz` extension and indices folders with the `tar.gz` extension.
 
-The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/STAR/index/'`) or via a custom config file.
+The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/STAR/index/'`) or via a parameters file.
 
 > **NB:** If you are supplying a pre-built genome index file via `--star_index`, please ensure that the index has been generated with the latest STAR version i.e. v2.7.9a or above. In case if the pipeline found an incompatible index, it will generate a new one using the reference genome which will consume time and memory unnecessarily.
 
 - If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
-- If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
+- If `--gff` is provided as input then this will be converted to a GTF file.
 - The `--exon_bed` parameter file is expected to be exon coordinates with at least three columns i.e., <chrom> <exon_position_start> <exon_position_end> in the file. The <exon_postion_start> should be 0-based. If this parameter is not provided, the exon coordinates are extracted from the GTF file and generates a bed file by the process `GTF2BED`.
 - If `--star_index` is not provided then it will be generated from the reference genome FASTA file using `STAR --runmode genomeGenerate` command.
 
-> **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. Otherwise `GATK BedToIntervalList` module is likely to fail if the chromosomes/contigs do not match with the reference genome data.
+> **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. The pipeline automatically checks and filters out contigs unknown to the reference (`--fasta`). This check can be turned off with `--skip_exon_bed_check`.
 
 ### Recommendation when using very large genomes
 
@@ -147,26 +147,30 @@ When the pipeline is used on very large genomes having chromosome size greater t
 
 > **NB:** When `--bam_csi_index` is used, variant filtration step will be disabled as `GATK VariantFiltration` does not currently support CSI index for the input VCF. It may be incorporated in the future when newer GATK versions support CSI for VCF inputs.
 
+## FASTQ preprocessing
+
+UMIs (Unique Molecular Identifiers) can be extracted by specifying `--extract_umi`, `--umitools_bc_pattern` and for paired-end reads also `umitools_bc_pattern2`. The pipeline uses [UMI-tools](https://github.com/CGATOxford/UMI-tools) for this preprocessing step. Additionally, the extraction method used can be specified using `--umitools_extract_method` and the UMI separator can be specified using `--umitools_umi_separator`.
+
 ## Alignment options
 
 The pipeline uses [STAR](https://github.com/alexdobin/STAR) to map the raw FastQ reads to the reference genome. STAR is fast but requires a lot of memory to run, typically around 38GB for the Human GRCh37 reference genome.
 
 By default, STAR runs in `2-pass` mode. For the most sensitive novel junction discovery, it is recommend running STAR in the 2-pass
-mode. It does not increase the number of detected novel junctions, but allows to detect more splices reads mapping to novel junctions. The basic idea is to run 1st pass of STAR mapping with the usual parameters, then collect the junctions detected in the first pass, and use them as ”annotated” junctions for the 2nd pass mapping. You can turn off this feature by setting `--star_twopass false` in command line.
+mode. It does not increase the number of detected novel junctions, but allows to detect more spliced reads mapping to novel junctions. The basic idea is to run 1st pass of STAR mapping with the usual parameters, then collect the junctions detected in the first pass, and use them as ”annotated” junctions for the 2nd pass mapping. You can turn off this feature by setting `--star_twopass false` in command line.
 
 Read length is an important parameter therefore it has to be used carefully. The default is set to 150, but it has to be changed according to the input reads. For example, if the input read length is 2x151bp, then you use `--read_length 151`. The `--read_length` parameter is used while generating an index as well as in the alignment process. In both processes, the pipeline use (read_length - 1) to the STAR parameter `--sjdbOverhang` as recommended in STAR documentation.
 
 > **NB:** Read length `--read_length` is an important parameter, therefore it has to set according to the input read length. If you are supplying a pre-built genome index, please make sure that you have used the same (read_length -1) during the genomeGenerate step.
 
-STAR alignment generates a coordinated-sorted BAM file as output. The coordinate-sorting process can be very memory intensive when the input data is deep sequenced or the genome has many highly expressed loci. When the pipeline runs on memory constrained environment, sorting step may fail due to low memory. In such cases you may adjust the limit parameters such as `--star_limitBAMsortRAM`, `--star_outBAMsortingBinsN` and `--star_limitOutSJcollapsed` to increase the sorting memory and genomic bins. Refer the parameter documentation for the default values and adjust as appropriate based on your memory availability.
+STAR alignment generates a coordinated-sorted BAM file as output. The coordinate-sorting process can be very memory intensive when the input data is deep sequenced or the genome has many highly expressed loci. When the pipeline runs on memory constrained environment, sorting step may fail due to low memory. In such cases you may adjust the limit parameters such as `--star_max_memory_bamsort`, `--star_bins_bamsort` and `--star_max_collapsed_junc` to increase the sorting memory and genomic bins. Refer the parameter documentation for the default values and adjust as appropriate based on your memory availability.
 
-## Preprocessing options
+## Postprocessing of alignment output
 
-Marking duplicate reads is performed using `GATK4 MarkDuplicates` tool. The tool does not remove duplicate reads by default, however you can set `--remove_duplicates true` to remove them.
+Marking duplicate reads is performed using `Picard MarkDuplicates` tool. The tool does not remove duplicate reads by default, however you can set `--remove_duplicates` to remove them.
 
 GATK best practices has been followed in this pipeline for RNA analysis, hence it uses GATK modules such as `SplitNCigarReads`, `BaseRecalibrator`, `ApplyBQSR`. The `BaseRecalibrator` process requires known variants sites VCF. ExAc, gnomAD, or dbSNP resources can be used as known sites of variation.You can supply the VCF and index files using parameters such as `--dbsnp`, `--dbsnp_tbi`, `--known_indels`, `--known_indels_tbi`.
 
-> **NB:** Base recalibration can be turned off using `--skip_baserecalibration true` option. This is useful when you are analyzing data from non-model organisms where there is no known variant datasets exist.
+> **NB:** Base recalibration can be turned off using `--skip_baserecalibration` option. This is useful when you are analyzing data from non-model organisms where there is no known variant datasets exist.
 
 `GATK SplitNCigarReads` is very time consuming step, therefore we made an attempt to break the GTF file into multiple chunks (scatters) using `GATK IntervalListTools` to run the process independently on each chunk in a parallel way to speed up the analysis. The default number of splits is set to 25, that means the GTF file is split into 25 smaller files and run `GATK SplitNCigarReads` on each of them in parallel. You can modify the number of splits using parameter `--gatk_interval_scatter_count`.
 
@@ -174,7 +178,7 @@ GATK best practices has been followed in this pipeline for RNA analysis, hence i
 
 `GATK HaplotypeCaller` is used for variant calling with default minimum phred-scaled confidence threshold as 20. This value can be changed using paramerter `--gatk_hc_call_conf`.
 
-The pipeline runs a hard-filtering step on the variants by default. It does not filter out any variants, rather it flags i.e. PASS or other flags such as FS, QD, SnpCluster, etc. in FILTER column of the VCF. The following are the default filter criteria, however it can be changed using the respective parameters.
+The pipeline runs a soft-filtering step on the variants by default. It does not filter out any variants, rather it flags i.e. PASS or other flags such as FS, QD, SnpCluster, etc. in FILTER column of the VCF. The following are the default filter criteria, however it can be changed using the respective parameters.
 
 - `--gatk_vf_cluster_size` is set to 3. It is the number of SNPs which make up a cluster.
 - `--gatk_vf_window_size` is set to 35. The window size (in bases) in which to evaluate clustered SNPs.
@@ -192,9 +196,9 @@ You can skip the variant annotation step using `--skip_variantannotation` parame
 ### Annotation cache
 
 Both `snpEff` and `VEP` enable usage of cache.
-If cache is available on the machine where `rnavar` is run, it is possible to run annotation using cache.
-You need to specify the cache directory using `--snpeff_cache` and `--vep_cache` in the command lines or within configuration files.
-The cache will only be used when `--annotation_cache` and cache directories are specified (either in command lines or in a configuration file).
+If the cache is available on the machine where `rnavar` is run, it is possible to run annotation using the cache.
+You need to specify the cache directory using `--snpeff_cache` and `--vep_cache` on the command line or within a parameters file.
+The cache will only be used when `--annotation_cache` and cache directories are specified (either on the command line or in a parameters file).
 
 Example:
 
@@ -205,39 +209,22 @@ nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile doc
 
 ### Download annotation cache
 
-A `Nextflow` helper script [link](https://raw.githubusercontent.com/nf-core/sarek/master/download_cache.nf) has been designed to help downloading `snpEff` and `VEP` caches.
-Such files are meant to be shared between multiple users, so this script is mainly meant for people administrating servers, clusters and advanced users.
+The [`annotation-cache`](https://github.com/annotation-cache) resource can be used to download `snpEff` and `vep` annotation cache directories.
+
+#### Install snpEff annotation cache
+
+The [`downloadsnpeffcache`](https://github.com/annotation-cache/downloadsnpeffcache) pipeline can be used to download snpEff annotation cache directories. Expected parameters are `--snpeff_db` (e.g. `105`) and `--snpeff_genome` (e.g. `GRCh38`).
 
 ```bash
-nextflow run download_cache.nf --snpeff_cache </path/to/snpEff/cache> --snpeff_db <snpEff DB version> --genome <GENOME>
-nextflow run download_cache.nf --vep_cache </path/to/VEP/cache> --species <species> --vep_cache_version <VEP cache version> --genome <GENOME>
+nextflow run annotation-cache/downloadsnpeffcache --outdir <path/to/output/dir> --snpeff_db <snpEff DB version> --snpeff_genome <GENOME>
 ```
 
-### Using VEP CADD plugin
+#### Install VEP annotation cache
 
-To enable the use of the `VEP` `CADD` plugin:
-
-- Download the `CADD` files
-- Specify them (either on the command line, like in the example or in a configuration file)
-- use the `--cadd_cache` flag
-
-Example:
+The [`downloadvepcache`](https://github.com/annotation-cache/downloadvepcache) pipeline can be used to download VEP annotation cache directories. Expected parameters are `--vep_species` (e.g. `homo_sapiens`), `--vep_cache_version` (e.g. `110`) and `--vep_genome` (e.g. `GRCh38`).
 
 ```bash
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annotate_tools VEP VEP --cadd_cache \
-    --cadd_indels </path/to/CADD/cache/InDels.tsv.gz> \
-    --cadd_indels_tbi </path/to/CADD/cache/InDels.tsv.gz.tbi> \
-    --cadd_wg_snvs </path/to/CADD/cache/whole_genome_SNVs.tsv.gz> \
-    --cadd_wg_snvs_tbi </path/to/CADD/cache/whole_genome_SNVs.tsv.gz.tbi>
-```
-
-### Downloading CADD files
-
-An helper script has been designed to help downloading `CADD` files.
-Such files are meant to be share between multiple users, so this script is mainly meant for people administrating servers, clusters and advanced users.
-
-```bash
-nextflow run download_cache.nf --cadd_cache </path/to/CADD/cache> --cadd_version <CADD version> --genome <GENOME>
+nextflow run annotation-cache/downloadvepcache --outdir </path/to/output/dir> --vep_species <species> --vep_cache_version <VEP cache version> --vep_genome <GENOME>
 ```
 
 ## GENERAL NEXTFLOW ARGUMENTS

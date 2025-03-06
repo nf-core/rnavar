@@ -94,7 +94,7 @@ workflow RNAVAR {
                 return [ meta, cram, crai ]
         }
 
-    // MODULE: Prepare the alignment files (convert CRAM -> BAM and index)
+    // MODULE: Prepare the alignment files (index BAM/CRAM files that are missing an index)
     PREPARE_ALIGNMENT(
         parsed_input.cram,
         parsed_input.bam,

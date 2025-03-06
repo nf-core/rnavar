@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#172](https://github.com/nf-core/rnavar/pull/172) - Added support for TSV, JSON and YAML samplesheets
 - [#178](https://github.com/nf-core/rnavar/pull/178) - Implement automatic sharding for nf-test tests
 - [#182](https://github.com/nf-core/rnavar/pull/182) - Bumped all modules to the latest version (as of 03/03/2025)
+- [#185](https://github.com/nf-core/rnavar/pull/185) - Updated the documentation
 
 ### Fixed
 
