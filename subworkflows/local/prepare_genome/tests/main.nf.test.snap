@@ -1,0 +1,221 @@
+{
+    "all": {
+        "content": [
+            {
+                "dbsnp": [
+                    [
+                        {
+                            "id": "dbsnp"
+                        },
+                        "dbsnp.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
+                    ]
+                ],
+                "dbsnp_tbi": [
+                    [
+                        {
+                            "id": "dbsnp"
+                        },
+                        "dbsnp.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
+                    ]
+                ],
+                "dict": [
+                    [
+                        {
+                            "id": "dict"
+                        },
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.dict"
+                    ]
+                ],
+                "exon_bed": [
+                    [
+                        {
+                            "id": "exon_bed"
+                        },
+                        "exon_bed.exon.bed:md5,87a15eb9c2ff20ccd5cd8735a28708f7"
+                    ]
+                ],
+                "fasta": [
+                    [
+                        {
+                            "id": "fasta"
+                        },
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
+                    ]
+                ],
+                "fasta_fai": [
+                    [
+                        {
+                            "id": "fasta"
+                        },
+                        "genome.fasta.fai:md5,3520cd30e1b100e55f578db9c855f685"
+                    ]
+                ],
+                "gtf": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
+                    ]
+                ],
+                "known_indels": [
+                    [
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz"
+                    ]
+                ],
+                "known_indels_tbi": [
+                    [
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi"
+                    ]
+                ],
+                "star_index": [
+                    [
+                        {
+                            "id": "star"
+                        },
+                        [
+                            "Genome",
+                            "Log.out",
+                            "SA",
+                            "SAindex",
+                            "chrLength.txt",
+                            "chrName.txt",
+                            "chrNameLength.txt",
+                            "chrStart.txt",
+                            "exonGeTrInfo.tab",
+                            "exonInfo.tab",
+                            "geneInfo.tab",
+                            "genomeParameters.txt",
+                            "sjdbInfo.txt",
+                            "sjdbList.fromGTF.out.tab",
+                            "sjdbList.out.tab",
+                            "transcriptInfo.tab"
+                        ]
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,2f8adf49812faab29b90f617e24e7ddc",
+                    "versions.yml:md5,3c6fc57c4c3bf7b143933b0b89ab0386",
+                    "versions.yml:md5,7263c03ca9c7d18bc40fc8d27a5936fa",
+                    "versions.yml:md5,7303f194674b485c6914e28422822a12",
+                    "versions.yml:md5,f104f9bec6db3d55c728ffd041131110"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-05T14:45:47.366394095"
+    },
+    "only essentials": {
+        "content": [
+            {
+                "dbsnp": [
+                    [
+                        [
+                            
+                        ],
+                        [
+                            
+                        ]
+                    ]
+                ],
+                "dbsnp_tbi": [
+                    [
+                        [
+                            
+                        ],
+                        [
+                            
+                        ]
+                    ]
+                ],
+                "dict": [
+                    [
+                        {
+                            "id": "fasta"
+                        },
+                        "genome.dict:md5,2433fe2ba31257337bf4c4bd4cb8da15"
+                    ]
+                ],
+                "exon_bed": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "gtf.exon.bed:md5,17192418c24c524881e7d970f94a4a26"
+                    ]
+                ],
+                "fasta": [
+                    [
+                        {
+                            "id": "fasta"
+                        },
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
+                    ]
+                ],
+                "fasta_fai": [
+                    [
+                        {
+                            "id": "fasta"
+                        },
+                        "genome.fasta.fai:md5,3520cd30e1b100e55f578db9c855f685"
+                    ]
+                ],
+                "gtf": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "/nf-core/test-datasets/raw/refs/heads/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
+                    ]
+                ],
+                "known_indels": [
+                    
+                ],
+                "known_indels_tbi": [
+                    
+                ],
+                "star_index": [
+                    [
+                        {
+                            "id": "fasta"
+                        },
+                        [
+                            "Genome",
+                            "Log.out",
+                            "SA",
+                            "SAindex",
+                            "chrLength.txt",
+                            "chrName.txt",
+                            "chrNameLength.txt",
+                            "chrStart.txt",
+                            "exonGeTrInfo.tab",
+                            "exonInfo.tab",
+                            "geneInfo.tab",
+                            "genomeParameters.txt",
+                            "sjdbInfo.txt",
+                            "sjdbList.fromGTF.out.tab",
+                            "sjdbList.out.tab",
+                            "transcriptInfo.tab"
+                        ]
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,265795dcfabc74e982198a30abb773d5",
+                    "versions.yml:md5,2f8adf49812faab29b90f617e24e7ddc",
+                    "versions.yml:md5,3c6fc57c4c3bf7b143933b0b89ab0386",
+                    "versions.yml:md5,7303f194674b485c6914e28422822a12",
+                    "versions.yml:md5,d2d7ee90a0fefed6042fe0e063c1cbac",
+                    "versions.yml:md5,fd6b20eb9694865490d59c0ca57e04fb"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-05T14:45:25.808187589"
+    }
+}

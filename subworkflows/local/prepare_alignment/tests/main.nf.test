@@ -1,0 +1,112 @@
+nextflow_workflow {
+
+    name "Test Subworkflow PREPARE_ALIGNMENT"
+    script "../main.nf"
+    workflow "PREPARE_ALIGNMENT"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "subworkflows/prepare_alignment"
+    tag "samtools/convert"
+    tag "samtools/index"
+
+    test("only bam") {
+        when {
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [id:'test'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.collectEntries { key, val ->
+                        if(key.matches("\\d+")) {
+                            return null
+                        } else if(key == "bam") {
+                            return [key, val.collect { [it[0], it[1], file(it[2]).name]}]
+                        }
+                        return [key,val]
+                    }.findAll { it != null }
+                ).match() }
+            )
+        }
+    }
+
+    test("only cram - no index") {
+        when {
+
+            workflow {
+                """
+                input[0] = Channel.empty()
+                input[1] = Channel.of([
+                    [id:'test'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    []
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.collectEntries { key, val ->
+                        if(key.matches("\\d+")) {
+                            return null
+                        } else if(key == "bam") {
+                            return [key, val.collect { [it[0], it[1], file(it[2]).name]}]
+                        }
+                        return [key,val]
+                    }.findAll { it != null }
+                ).match() }
+            )
+        }
+    }
+
+    test("bam, cram - no index, index") {
+        when {
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [id:'test'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    []
+                ])
+                input[1] = Channel.of([
+                    [id:'test'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.collectEntries { key, val ->
+                        if(key.matches("\\d+")) {
+                            return null
+                        } else if(key == "bam") {
+                            return [key, val.collect { [it[0], it[1], file(it[2]).name]}]
+                        }
+                        return [key,val]
+                    }.findAll { it != null }
+                ).match() }
+            )
+        }
+    }
+}

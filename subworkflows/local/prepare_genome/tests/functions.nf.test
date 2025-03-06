@@ -2,7 +2,7 @@
 nextflow_function {
 
     name "Test Functions"
-    script "subworkflows/local/prepare_genome/main.nf"
+    script "../main.nf"
     function "isCompatibleStarIndex"
 
     test("Test Function isCompatibleStarIndex - matching numbers") {

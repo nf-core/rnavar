@@ -1,0 +1,57 @@
+nextflow_process {
+
+    name "Test Process REMOVE_UNKNOWN_REGIONS"
+    script "../main.nf"
+    process "REMOVE_UNKNOWN_REGIONS"
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.value([
+                    [id:'exon_bed'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:'dict'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+    test("Should run without failures - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = Channel.value([
+                    [id:'exon_bed'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:'dict'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

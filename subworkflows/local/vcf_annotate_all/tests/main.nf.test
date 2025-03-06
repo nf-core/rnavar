@@ -1,0 +1,166 @@
+nextflow_workflow {
+
+    name "Test Subworkflow VCF_ANNOTATE_ALL"
+    script "../main.nf"
+    workflow "VCF_ANNOTATE_ALL"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "subworkflows/vcf_annotate_all"
+    tag "ensemblvep/vep"
+    tag "snpeff/snpeff"
+    tag "subworkflows/vcf_annotate_ensemblvep"
+    tag "subworkflows/vcf_annotate_snpeff"
+
+    options "-stub"
+
+    setup {
+        run("ENSEMBLVEP_DOWNLOAD") {
+            script "../../../../modules/nf-core/ensemblvep/download/main.nf"
+
+            process {
+                """
+                input[0] = Channel.of([
+                    [id:"cache"],
+                    params.vep_genome,
+                    params.vep_species,
+                    params.vep_cache_version
+                ])
+                """
+            }
+        }
+
+        run("SNPEFF_DOWNLOAD") {
+            script "../../../../modules/nf-core/snpeff/download/main.nf"
+
+            process {
+                """
+                input[0] = Channel.of([
+                    [id:"cache"],
+                    params.snpeff_db
+                ])
+                """
+            }
+        }
+    }
+
+    test("vep") {
+        when {
+            params {
+                annotate_tools = "vep"
+                vep_genome = "WBcel235"
+                vep_species = "caenorhabditis_elegans"
+                vep_cache_version = "110"
+                snpeff_db = "WBcel235.105"
+            }
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = params.annotate_tools
+                input[3] = params.snpeff_db             // snpeff_db
+                input[4] = []                           // snpeff_cache
+                input[5] = params.vep_genome            // vep_genome
+                input[6] = params.vep_species           // vep_species
+                input[7] = params.vep_cache_version     // vep_cache_version
+                input[8] = ENSEMBLVEP_DOWNLOAD.out.cache.map { meta, cache -> cache } // vep_cache
+                input[9] = Channel.value([])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("snpeff") {
+        when {
+            params {
+                annotate_tools = "snpeff"
+                vep_genome = "WBcel235"
+                vep_species = "caenorhabditis_elegans"
+                vep_cache_version = "110"
+                snpeff_db = "WBcel235.105"
+            }
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = params.annotate_tools
+                input[3] = params.snpeff_db             // snpeff_db
+                input[4] = SNPEFF_DOWNLOAD.out.cache    // snpeff_cache
+                input[5] = params.vep_genome            // vep_genome
+                input[6] = params.vep_species           // vep_species
+                input[7] = params.vep_cache_version     // vep_cache_version
+                input[8] = []                           // vep_cache
+                input[9] = Channel.value([])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("merge") {
+        when {
+            params {
+                annotate_tools = "merge"
+                vep_genome = "WBcel235"
+                vep_species = "caenorhabditis_elegans"
+                vep_cache_version = "110"
+                snpeff_db = "WBcel235.105"
+            }
+
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = params.annotate_tools
+                input[3] = params.snpeff_db             // snpeff_db
+                input[4] = SNPEFF_DOWNLOAD.out.cache    // snpeff_cache
+                input[5] = params.vep_genome            // vep_genome
+                input[6] = params.vep_species           // vep_species
+                input[7] = params.vep_cache_version     // vep_cache_version
+                input[8] = ENSEMBLVEP_DOWNLOAD.out.cache.map { meta, cache -> cache } // vep_cache
+                input[9] = Channel.value([])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}
