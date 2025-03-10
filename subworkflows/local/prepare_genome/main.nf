@@ -203,6 +203,7 @@ workflow PREPARE_GENOME {
 
     def star_index_output = STAR_GENOMEGENERATE.out.index
         .mix(star_index_check.compatible)
+        .collect()
 
     emit:
     dict             = ch_dict                                                            //    path: genome.fasta.dict
