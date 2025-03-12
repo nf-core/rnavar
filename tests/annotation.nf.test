@@ -5,12 +5,12 @@ nextflow_pipeline {
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("-profile test --annotate_tools snpeff") {
+    test("-profile test --tools snpeff") {
 
         when {
             params {
                 outdir = "$outputDir"
-                annotate_tools = 'snpeff'
+                tools = 'snpeff'
                 download_cache = true
             }
         }
@@ -34,12 +34,12 @@ nextflow_pipeline {
         }
     }
 
-    test("-profile test --annotate_tools vep") {
+    test("-profile test --tools vep") {
 
         when {
             params {
                 outdir = "$outputDir"
-                annotate_tools = 'vep'
+                tools = 'vep'
                 download_cache = true
             }
         }
@@ -63,12 +63,12 @@ nextflow_pipeline {
         }
     }
 
-    test("-profile test --annotate_tools merge") {
+    test("-profile test --tools merge") {
 
         when {
             params {
                 outdir = "$outputDir"
-                annotate_tools = 'merge'
+                tools = 'merge'
                 download_cache = true
             }
         }

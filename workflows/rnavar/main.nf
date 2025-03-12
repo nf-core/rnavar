@@ -5,42 +5,42 @@
 */
 
 // local
-include { GTF2BED                   } from '../modules/local/gtf2bed'
+include { GTF2BED                   } from '../../modules/local/gtf2bed'
 
 // nf-core
-include { CAT_FASTQ                 } from '../modules/nf-core/cat/fastq'
-include { FASTQC                    } from '../modules/nf-core/fastqc'
-include { GATK4_BASERECALIBRATOR    } from '../modules/nf-core/gatk4/baserecalibrator'
-include { GATK4_BEDTOINTERVALLIST   } from '../modules/nf-core/gatk4/bedtointervallist'
-include { GATK4_COMBINEGVCFS        } from '../modules/nf-core/gatk4/combinegvcfs'
-include { GATK4_HAPLOTYPECALLER     } from '../modules/nf-core/gatk4/haplotypecaller'
-include { GATK4_INDEXFEATUREFILE    } from '../modules/nf-core/gatk4/indexfeaturefile'
-include { GATK4_INTERVALLISTTOOLS   } from '../modules/nf-core/gatk4/intervallisttools'
-include { GATK4_MERGEVCFS           } from '../modules/nf-core/gatk4/mergevcfs'
-include { GATK4_VARIANTFILTRATION   } from '../modules/nf-core/gatk4/variantfiltration'
-include { MULTIQC                   } from '../modules/nf-core/multiqc'
-include { SAMTOOLS_INDEX            } from '../modules/nf-core/samtools/index'
-include { TABIX_TABIX as TABIX      } from '../modules/nf-core/tabix/tabix'
-include { TABIX_TABIX as TABIXGVCF  } from '../modules/nf-core/tabix/tabix'
-include { UMITOOLS_EXTRACT          } from '../modules/nf-core/umitools/extract'
+include { CAT_FASTQ                 } from '../../modules/nf-core/cat/fastq'
+include { FASTQC                    } from '../../modules/nf-core/fastqc'
+include { GATK4_BASERECALIBRATOR    } from '../../modules/nf-core/gatk4/baserecalibrator'
+include { GATK4_BEDTOINTERVALLIST   } from '../../modules/nf-core/gatk4/bedtointervallist'
+include { GATK4_COMBINEGVCFS        } from '../../modules/nf-core/gatk4/combinegvcfs'
+include { GATK4_HAPLOTYPECALLER     } from '../../modules/nf-core/gatk4/haplotypecaller'
+include { GATK4_INDEXFEATUREFILE    } from '../../modules/nf-core/gatk4/indexfeaturefile'
+include { GATK4_INTERVALLISTTOOLS   } from '../../modules/nf-core/gatk4/intervallisttools'
+include { GATK4_MERGEVCFS           } from '../../modules/nf-core/gatk4/mergevcfs'
+include { GATK4_VARIANTFILTRATION   } from '../../modules/nf-core/gatk4/variantfiltration'
+include { MULTIQC                   } from '../../modules/nf-core/multiqc'
+include { SAMTOOLS_INDEX            } from '../../modules/nf-core/samtools/index'
+include { TABIX_TABIX as TABIX      } from '../../modules/nf-core/tabix/tabix'
+include { TABIX_TABIX as TABIXGVCF  } from '../../modules/nf-core/tabix/tabix'
+include { UMITOOLS_EXTRACT          } from '../../modules/nf-core/umitools/extract'
 
 // local
-include { RECALIBRATE               } from '../subworkflows/local/recalibrate'
-include { SPLITNCIGAR               } from '../subworkflows/local/splitncigar'
-include { VCF_ANNOTATE_ALL          } from '../subworkflows/local/vcf_annotate_all'
-include { PREPARE_ALIGNMENT         } from '../subworkflows/local/prepare_alignment'
+include { RECALIBRATE               } from '../../subworkflows/local/recalibrate'
+include { SPLITNCIGAR               } from '../../subworkflows/local/splitncigar'
+include { VCF_ANNOTATE_ALL          } from '../../subworkflows/local/vcf_annotate_all'
+include { PREPARE_ALIGNMENT         } from '../../subworkflows/local/prepare_alignment'
 
 // nf-core
-include { BAM_MARKDUPLICATES_PICARD } from '../subworkflows/nf-core/bam_markduplicates_picard'
-include { FASTQ_ALIGN_STAR          } from '../subworkflows/nf-core/fastq_align_star'
+include { BAM_MARKDUPLICATES_PICARD } from '../../subworkflows/nf-core/bam_markduplicates_picard'
+include { FASTQ_ALIGN_STAR          } from '../../subworkflows/nf-core/fastq_align_star'
 
 // local
-include { checkSamplesAfterGrouping } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
-include { methodsDescriptionText    } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { checkSamplesAfterGrouping } from '../../subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { methodsDescriptionText    } from '../../subworkflows/local/utils_nfcore_rnavar_pipeline'
 
 // nf-core
-include { paramsSummaryMultiqc      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML    } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { paramsSummaryMultiqc      } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML    } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
 
 // plugin
 include { paramsSummaryMap          } from 'plugin/nf-schema'
@@ -366,31 +366,29 @@ workflow RNAVAR {
             //
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
             //
-            if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
+            if((!params.skip_variantannotation) && (params.tools) && (params.tools.contains('merge') || params.tools.contains('snpeff') || params.tools.contains('vep'))) {
 
-                def vep_fasta = [[id: 'null'], []]
-
-                if (params.vep_include_fasta) {
-                    vep_fasta = fasta
-                }
+                vep_fasta = (params.vep_include_fasta) ? fasta : [[id: 'null'], []]
 
                 VCF_ANNOTATE_ALL(
                     final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
                     vep_fasta,
-                    params.annotate_tools,
-                    params.snpeff_genome ? "${params.snpeff_genome}.${params.snpeff_db}" : "${params.genome}.${params.snpeff_db}",
+                    params.tools,
+                    params.snpeff_db,
                     snpeff_cache,
                     vep_genome,
                     vep_species,
                     vep_cache_version,
                     vep_cache,
                     vep_extra_files,
-                )
+                    bcftools_annotations,
+                    bcftools_annotations_tbi,
+                    bcftools_header_lines)
 
-                // Gather QC ch_reports
-                ch_reports  = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
-                ch_versions = ch_versions.mix(VCF_ANNOTATE_ALL.out.versions)
-            }
+                // Gather used softwares versions
+                versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)
+                reports = reports.mix(VCF_ANNOTATE_ALL.out.reports)
+                }
 
         } else {
 

@@ -1,5 +1,5 @@
 {
-    "-profile test --annotate_tools merge": {
+    "-profile test --tools merge": {
         "content": [
             47,
             {
@@ -262,7 +262,7 @@
         },
         "timestamp": "2025-03-03T16:12:01.018371164"
     },
-    "-profile test --annotate_tools vep": {
+    "-profile test --tools vep": {
         "content": [
             44,
             {
@@ -506,7 +506,7 @@
         },
         "timestamp": "2025-03-03T16:07:16.86368092"
     },
-    "-profile test --annotate_tools snpeff": {
+    "-profile test --tools snpeff": {
         "content": [
             44,
             {

@@ -28,6 +28,14 @@
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify which tools RNAvar should use for annotating variants. Values can be 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "help_text": "List of tools to be used for variant annotation.",
+                    "pattern": "^((snpeff|vep|merge)*(,)*)*$",
+                    "hidden": true
+                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
@@ -371,14 +379,6 @@
             "description": "Parameters for variant annotation tools.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
-                "annotate_tools": {
-                    "type": "string",
-                    "fa_icon": "fas fa-hammer",
-                    "description": "Specify which tools RNAvar should use for annotating variants. Values can be 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
-                    "help_text": "List of tools to be used for variant annotation.",
-                    "pattern": "^((snpeff|vep|merge)*(,)*)*$",
-                    "hidden": true
-                },
                 "vep_cache": {
                     "type": "string",
                     "format": "directory-path",
