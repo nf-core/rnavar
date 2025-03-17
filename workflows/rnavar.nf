@@ -65,6 +65,7 @@ workflow RNAVAR {
     known_indels_tbi
     star_index
     snpeff_cache
+    vep_fasta
     vep_genome
     vep_species
     vep_cache_version
@@ -367,8 +368,6 @@ workflow RNAVAR {
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
             //
             if((!params.skip_variantannotation) && (params.tools) && (params.tools.contains('merge') || params.tools.contains('snpeff') || params.tools.contains('vep'))) {
-
-                vep_fasta = (params.vep_include_fasta) ? fasta : [[id: 'null'], []]
 
                 VCF_ANNOTATE_ALL(
                     final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },

@@ -185,6 +185,7 @@ workflow NFCORE_RNAVAR {
         params.vep_genome,
         params.vep_species,
         params.vep_cache_version,
+        vep_fasta,
         vep_cache,
         vep_extra_files,
         seq_center,
