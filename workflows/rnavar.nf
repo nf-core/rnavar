@@ -383,8 +383,8 @@ workflow RNAVAR {
                     vep_extra_files)
 
                 // Gather used softwares versions
-                versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)
-                reports = reports.mix(VCF_ANNOTATE_ALL.out.reports)
+                ch_versions = ch_versions.mix(VCF_ANNOTATE_ALL.out.versions)
+                ch_reports = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
                 }
 
         } else {
