@@ -54,9 +54,6 @@ include { paramsSummaryMap          } from 'plugin/nf-schema'
 workflow RNAVAR {
     take:
     input
-    bcftools_annotations
-    bcftools_annotations_tbi
-    bcftools_header_lines
     dbsnp
     dbsnp_tbi
     dict
@@ -383,10 +380,7 @@ workflow RNAVAR {
                     vep_species,
                     vep_cache_version,
                     vep_cache,
-                    vep_extra_files,
-                    bcftools_annotations,
-                    bcftools_annotations_tbi,
-                    bcftools_header_lines)
+                    vep_extra_files)
 
                 // Gather used softwares versions
                 versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)

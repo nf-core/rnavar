@@ -88,10 +88,6 @@ workflow NFCORE_RNAVAR {
     ch_star_index_raw = params.star_index              ? Channel.fromPath(params.star_index).map { index -> [[id:index.baseName], index]}      : Channel.value([[],[]])
     ch_exon_bed_raw   = params.exon_bed                ? Channel.fromPath(params.exon_bed).map { it -> [[id:it.baseName], it]}                 : Channel.empty()
 
-    // Initialize file channels based on params
-    bcftools_annotations  = params.bcftools_annotations  ? Channel.fromPath(params.bcftools_annotations).collect()  : Channel.empty()
-    bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
-
     // Initialize variant annotation associated channels
     snpeff_db         = params.snpeff_db          ?:  Channel.empty()
     vep_cache_version = params.vep_cache_version  ?:  Channel.empty()
@@ -117,7 +113,6 @@ workflow NFCORE_RNAVAR {
 
     PREPARE_GENOME(
         ch_fasta_raw,
-        bcftools_annotations,
         ch_dict_raw,
         ch_fai_raw,
         ch_star_index_raw,
