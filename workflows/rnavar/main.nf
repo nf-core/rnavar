@@ -54,6 +54,9 @@ include { paramsSummaryMap          } from 'plugin/nf-schema'
 workflow RNAVAR {
     take:
     input
+    bcftools_annotations
+    bcftools_annotations_tbi
+    bcftools_header_lines
     dbsnp
     dbsnp_tbi
     dict
