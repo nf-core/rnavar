@@ -148,7 +148,7 @@ workflow NFCORE_RNAVAR {
         snpeff_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.snpeff_cache
         vep_cache    = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map{ meta, cache -> [ cache ] }
 
-        versions = versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
+        ch_versions = ch_versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
     } else {
         // Looks for cache information either locally or on the cloud
         ANNOTATION_CACHE_INITIALISATION(
