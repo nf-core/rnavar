@@ -56,6 +56,7 @@ include { PREPARE_GENOME                  } from './subworkflows/local/prepare_g
 workflow NFCORE_RNAVAR {
     take:
     samplesheet
+    align
 
     main:
 
@@ -129,7 +130,9 @@ workflow NFCORE_RNAVAR {
         ch_dbsnp_raw,
         ch_known_indels_raw,
         ch_known_indels_tbi_raw,
-        params.feature_type)
+        params.feature_type,
+        align
+    )
 
     ch_fasta            = PREPARE_GENOME.out.fasta
     ch_star_index       = PREPARE_GENOME.out.star_index
@@ -221,7 +224,10 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_RNAVAR(PIPELINE_INITIALISATION.out.samplesheet)
+    NFCORE_RNAVAR(
+        PIPELINE_INITIALISATION.out.samplesheet,
+        PIPELINE_INITIALISATION.out.align
+    )
 
     //
     // SUBWORKFLOW: Run completion tasks
