@@ -57,6 +57,7 @@ nextflow_workflow {
                 input[8] = Channel.empty()
                 input[9] = Channel.empty()
                 input[10] = params.feature_type
+                input[11] = Channel.value(false)
                 """
             }
         }
@@ -133,6 +134,7 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
                 )
                 input[10] = params.feature_type
+                input[11] = Channel.value(true)
                 """
             }
         }

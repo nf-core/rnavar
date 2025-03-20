@@ -32,6 +32,7 @@ workflow PREPARE_GENOME {
     known_indels     // channel: [/path/to/known_indels]
     known_indels_tbi // channel: [/path/to/known_indels_index]
     feature_type
+    align               // The pipeline needs aligner indices or not
 
     main:
     def ch_versions = Channel.empty()
@@ -154,11 +155,19 @@ workflow PREPARE_GENOME {
     // STAR index handling
     //
 
-    def star_index_input = star_index.branch { _meta, index ->
-        no_index: !index
-        tarzipped: index.name.endsWith(".tar.gz")
-        index: true
-    }
+    def star_index_input = star_index
+        .merge(align)
+        .filter { _meta, _index, bool_align ->
+            return bool_align
+        }
+        .branch { meta, index, _align ->
+            no_index: !index
+                return [meta, index]
+            tarzipped: index.name.endsWith(".tar.gz")
+                return [meta, index]
+            index: true
+                return [meta, index]
+        }
 
     UNTAR(
         star_index_input.tarzipped
@@ -201,7 +210,7 @@ workflow PREPARE_GENOME {
     STAR_GENOMEGENERATE(genomegenerate_input, ch_gtf)
     ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
 
-    def star_index_output = STAR_GENOMEGENERATE.out.index
+    star_index_output = STAR_GENOMEGENERATE.out.index
         .mix(star_index_check.compatible)
         .collect()
 

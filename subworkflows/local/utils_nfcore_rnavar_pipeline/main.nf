@@ -89,7 +89,12 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-    ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+    def samplesheetList = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
+    def bool_align = samplesheetList.find { _meta, fastq_1, _fastq_2, _bam, _bai, _cram, _crai, _vcf, _tbi ->
+        fastq_1
+    } ? true : false
+
+    ch_samplesheet = Channel.fromList(samplesheetList)
         .map{ meta, fastq_1, fastq_2, bam, bai, cram, crai, vcf, tbi ->
             def new_meta = meta + [ single_end: !fastq_2 ]
             [ meta.id, new_meta, fastq_1, fastq_2, bam, bai, cram, crai, vcf, tbi ]
@@ -97,6 +102,7 @@ workflow PIPELINE_INITIALISATION {
 
     emit:
     samplesheet = ch_samplesheet
+    align       = bool_align
     versions    = ch_versions
 }
 

@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#175](https://github.com/nf-core/rnavar/pull/175) - Fixed the handling of GFF files so they are now correctly being used.
 - [#177](https://github.com/nf-core/rnavar/pull/177) - Added a check and filter step for unknown regions in the exon BED. You can disable this check with `--skip_exon_bed_check`.
 - [#184](https://github.com/nf-core/rnavar/pull/184) - Added an early error when --dbsnp and/or --known_indels were missing and base recalibration wasn't turned off.
+- [#194](https://github.com/nf-core/rnavar/pull/194) - Only create the STAR index when FASTQ files are used in the input.
 
 ### Dependencies
 
