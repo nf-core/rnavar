@@ -266,8 +266,6 @@
                 "info.txt:md5,33ccb74a030a9a345051628c337cb8af",
                 "versions.yml:md5,5c943283423403b4092ca83cdec2454f",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_data.json:md5,ca82b8713bcdbc5005da494caa2fcfa1",
-                "multiqc_software_versions.txt:md5,25f51eaa06a09ef0318c241398e1c9df",
                 "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490"
             ],
             [

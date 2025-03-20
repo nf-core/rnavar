@@ -57,8 +57,6 @@
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_data.json:md5,99e328942ff852515c973f5bf46a302c",
-                "multiqc_software_versions.txt:md5,e914bffd7ea8d4b8ba0f83278d184abd",
                 "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490",
                 "snpEff_summary.html:md5,9a6677520c49b75f0a8c848d19935190",
                 "test_snpEff.csv:md5,e4faa253b9df7259fedbb7163da07980",
@@ -135,8 +133,6 @@
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_data.json:md5,907e524c56bc24afd92c4d6eadb0fdc1",
-                "multiqc_software_versions.txt:md5,e914bffd7ea8d4b8ba0f83278d184abd",
                 "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490"
             ],
             [
