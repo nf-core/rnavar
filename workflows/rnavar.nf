@@ -65,6 +65,7 @@ workflow RNAVAR {
     known_indels_tbi
     star_index
     snpeff_cache
+    snpeff_db
     vep_fasta
     vep_genome
     vep_species
@@ -373,7 +374,7 @@ workflow RNAVAR {
                     final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
                     vep_fasta,
                     params.tools,
-                    params.snpeff_db,
+                    snpeff_db,
                     snpeff_cache,
                     vep_genome,
                     vep_species,
