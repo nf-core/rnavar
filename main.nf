@@ -142,7 +142,7 @@ workflow NFCORE_RNAVAR {
 
     // Download cache
     if (params.download_cache) {
-        // Assuming that even if the cache is provided, if the user specify download_cache, sarek will download the cache
+        // Assuming that even if the cache is provided, if the user specify download_cache, rnavar will download the cache
         ensemblvep_info = Channel.of([ [ id:"${params.vep_cache_version}_${params.vep_genome}" ], params.vep_genome, params.vep_species, params.vep_cache_version ])
         snpeff_info     = Channel.of([ [ id:"${params.snpeff_db}" ], params.snpeff_db ])
         DOWNLOAD_CACHE_SNPEFF_VEP(ensemblvep_info, snpeff_info)
