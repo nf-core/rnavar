@@ -1,3 +1,6 @@
+.DS_Store
+annotation/test/*.ann.vcf.gz
+annotation/test/*.ann.vcf.gz.tbi
 multiqc/multiqc_data/multiqc.log
 multiqc/multiqc_data/multiqc_data.json
 multiqc/multiqc_data/multiqc_general_stats.txt
@@ -7,3 +10,6 @@ multiqc/multiqc_data/picard_deduplication.txt
 multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 multiqc/multiqc_report.html
 pipeline_info/*.{html,json,txt,yml}
+reports/EnsemblVEP/*/*.ann.summary.html
+reports/multiqc_data/multiqc.log
+reports/multiqc_report.html

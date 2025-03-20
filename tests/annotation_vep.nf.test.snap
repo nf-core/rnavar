@@ -1,7 +1,7 @@
 {
     "-profile test --tools vep --download_cache --vep_include_fasta": {
         "content": [
-            12,
+            11,
             {
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": 113.0,
@@ -158,8 +158,6 @@
                 "reports/multiqc_report.html"
             ],
             [
-                "test_VEP.ann.vcf.gz:md5,27736e1c0be88e90a9e4f5abed22a439",
-                "test_VEP.ann.vcf.gz.tbi:md5,4cb176febbc8c26d717a6c6e67b9c905",
                 "1-1000000.gz:md5,583afc2dd5f7d25b3e7695bc8289b1f7",
                 "10000001-11000000.gz:md5,0be1e09275b1abc4edb4e175bd10e6ee",
                 "1000001-2000000.gz:md5,86be01237a4c21c0a1c3f2ef03339d06",
@@ -267,13 +265,10 @@
                 "chr_synonyms.txt:md5,8a6fce00cc7817ec727c49b7954f10bc",
                 "info.txt:md5,33ccb74a030a9a345051628c337cb8af",
                 "versions.yml:md5,5c943283423403b4092ca83cdec2454f",
-                "test_VEP.ann.summary.html:md5,b5b92c89af097b5f82af7226562e9556",
-                "multiqc.log:md5,4bb8d032c483cd7e02bac7a3c479e94b",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_data.json:md5,b7eda7dc59ff02630dc203326e2a3037",
+                "multiqc_data.json:md5,ca82b8713bcdbc5005da494caa2fcfa1",
                 "multiqc_software_versions.txt:md5,25f51eaa06a09ef0318c241398e1c9df",
-                "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490",
-                "multiqc_report.html:md5,b54707f510582f3a343f763499b8f497"
+                "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490"
             ],
             [
                 [
@@ -286,6 +281,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.02.1"
         },
-        "timestamp": "2025-03-20T17:56:36.420509534"
+        "timestamp": "2025-03-20T19:00:27.202801174"
     }
 }
