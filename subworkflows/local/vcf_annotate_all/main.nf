@@ -20,11 +20,11 @@ workflow VCF_ANNOTATE_ALL {
     vep_extra_files
 
     main:
-    def reports = Channel.empty()
-    def vcf_ann = Channel.empty()
-    def tab_ann = Channel.empty()
-    def json_ann = Channel.empty()
-    def versions = Channel.empty()
+    json_ann = Channel.empty()
+    reports = Channel.empty()
+    tab_ann = Channel.empty()
+    vcf_ann = Channel.empty()
+    versions = Channel.empty()
 
     if (tools.split(',').contains('merge') || tools.split(',').contains('snpeff')) {
         VCF_ANNOTATE_SNPEFF(vcf, snpeff_db, snpeff_cache)
