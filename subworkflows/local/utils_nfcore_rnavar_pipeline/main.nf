@@ -81,9 +81,9 @@ workflow PIPELINE_INITIALISATION {
         params.star_index
     ]
 
-    // only check if we are using the annotate_tools
-    if (params.annotate_tools && (params.annotate_tools.split(',').contains('snpeff') || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
-    if (params.annotate_tools && (params.annotate_tools.split(',').contains('vep')    || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
+    // only check if we are using the tools
+    if (params.tools && (params.tools.split(',').contains('snpeff') || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
+    if (params.tools && (params.tools.split(',').contains('vep')    || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
 
     //
     // Create channel from input file provided through params.input
