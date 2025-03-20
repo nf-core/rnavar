@@ -54,12 +54,27 @@
                 "exists": true,
                 "pattern": "^\\S+\\.crai$",
                 "errorMessage": "CRAI file should end with `.crai`, should not contains spaces and should exist."
+            },
+            "vcf": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.vcf\\.gz$",
+                "errorMessage": "VCF file should end with `.vcf.gz`, should not contains spaces and should exist."
+            },
+            "tbi": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                "errorMessage": "TBI file should end with `.vcf.gz.tbi`, should not contains spaces and should exist."
             }
         },
         "oneOf": [
             { "required": ["sample", "fastq_1"] },
             { "required": ["sample", "bam"] },
-            { "required": ["sample", "cram"] }
+            { "required": ["sample", "cram"] },
+            { "required": ["sample", "vcf"] }
         ]
     }
 }

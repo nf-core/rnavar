@@ -5,71 +5,15 @@ nextflow_pipeline {
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("-profile test --tools snpeff") {
-
-        when {
-            params {
-                outdir = "$outputDir"
-                tools = 'snpeff'
-                download_cache = true
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name
-                ).match() }
-            )
-        }
-    }
-
-    test("-profile test --tools vep") {
-
-        when {
-            params {
-                outdir = "$outputDir"
-                tools = 'vep'
-                download_cache = true
-            }
-        }
-
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
-                    // All stable path name, with a relative path
-                    stable_name
-                ).match() }
-            )
-        }
-    }
-
     test("-profile test --tools merge") {
 
         when {
             params {
                 outdir = "$outputDir"
+                input = "${projectDir}/tests/csv/1.0/vcf.csv"
+                snpeff_cache = 's3://annotation-cache/snpeff_cache/'
+                vep_cache = 's3://annotation-cache/vep_cache/'
                 tools = 'merge'
-                download_cache = true
             }
         }
 
@@ -78,6 +22,8 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // vcf_files: All vcf files
+            def vcf_files  = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz'])
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
@@ -86,7 +32,48 @@ nextflow_pipeline {
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
                     // All stable path name, with a relative path
-                    stable_name
+                    stable_name,
+                    // All files with stable contents
+                    stable_path,
+                    // All vcf files
+                    vcf_files.collect { file -> [file.getName(), path(file.toString()).vcf.variantsMD5] }
+                ).match() }
+            )
+        }
+    }
+
+    test("-profile test --tools merge,snpeff,vep") {
+
+        when {
+            params {
+                input = "${projectDir}/tests/csv/1.0/vcf.csv"
+                outdir = "$outputDir"
+                snpeff_cache = 's3://annotation-cache/snpeff_cache/'
+                vep_cache = 's3://annotation-cache/vep_cache/'
+                tools = 'merge,snpeff,vep'
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // vcf_files: All vcf files
+            def vcf_files  = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz'])
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we tests pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path,
+                    // All vcf files
+                    vcf_files.collect { file -> [file.getName(), path(file.toString()).vcf.variantsMD5] }
                 ).match() }
             )
         }

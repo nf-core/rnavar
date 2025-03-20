@@ -137,8 +137,6 @@ workflow NFCORE_RNAVAR {
     ch_known_indels     = params.known_indels   ? PREPARE_GENOME.out.known_indels     : Channel.value([])
     ch_known_indels_tbi = params.known_indels   ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
 
-    vep_fasta = (params.vep_include_fasta) ? fasta.map{ fasta -> [ [ id:fasta.baseName ], fasta ] } : [[id: 'null'], []]
-
     // Download cache
     if (params.download_cache) {
         // Assuming that even if the cache is provided, if the user specify download_cache, sarek will download the cache
@@ -186,7 +184,7 @@ workflow NFCORE_RNAVAR {
         params.vep_genome,
         params.vep_species,
         params.vep_cache_version,
-        vep_fasta,
+        params.vep_include_fasta,
         vep_cache,
         vep_extra_files,
         seq_center,
