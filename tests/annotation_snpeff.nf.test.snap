@@ -63,7 +63,6 @@
                 "snpEffectPredictor.bin:md5,1d99251d0405f0a42913ed8b5b2c2fa7",
                 "versions.yml:md5,f1b08f4854cb6392d0567334f195e7f6",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490",
                 "snpEff_summary.html:md5,ab78d81332f0cacc7e73b560e008ea68",
                 "test_snpEff.csv:md5,52fd1075abfb6853ca932b093e3a42b4",
                 "test_snpEff.genes.txt:md5,130536bf0237d7f3f746d32aaa32840a"
