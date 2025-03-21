@@ -41,7 +41,7 @@ with:
 ```yaml title="params.yaml"
 input: './samplesheet.csv'
 outdir: './results/'
-genome: 'GRCh37'
+genome: 'GRCh38'
 <...>
 ```
 
@@ -114,6 +114,8 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 | `bai`     | Full path to index file of the BAM file. File has to have the extension ".bai".                                                                                                        |
 | `cram`    | Full path to CRAM file created with STAR and duplicate marked. File has to have the extension ".cram".                                                                                 |
 | `crai`    | Full path to index file of the CRAM file. File has to have the extension ".crai".                                                                                                      |
+| `vcf`     | Full path to vcf.gz file. File has to have the extension ".vcf.gz".                                                                                                                    |
+| `tbi`     | Full path to index file of the vcf.gz file. File has to have the extension ".vcf.gz.tbi".                                                                                              |
 
 :::note
 Only one file type per sample is allowed. Supplying FASTQ files and a BAM/CRAM file for the same sample will cause an error in the pipeline.
@@ -189,9 +191,9 @@ Variant filtering is an optional step. You can skip it using `--skip_variantfilt
 
 ## Variant annotation
 
-The annotation of variants is performed using snpEff and VEP. The parameter to use is `--annotate_tools snpeff` or `--annotate_tools vep`. You can even run both snpEff and VEP using `--annotate_tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
+The annotation of variants is performed using snpEff and VEP. The parameter to use is `--tools snpeff` or `--tools vep`. You can even run both snpEff and VEP using `--tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
 
-You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--annotate_tools` options.
+You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--tools` options.
 
 ### Annotation cache
 
@@ -203,8 +205,8 @@ The cache will only be used when `--annotation_cache` and cache directories are 
 Example:
 
 ```bash
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annoate_tools snpEff --snpeff_cache </path/to/snpEff/cache> --annotation_cache
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annotate_tools VEP --vep_cache </path/to/VEP/cache> --annotation_cache
+nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --tools snpEff --snpeff_cache </path/to/snpEff/cache> --annotation_cache
+nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --tools VEP --vep_cache </path/to/VEP/cache> --annotation_cache
 ```
 
 ### Download annotation cache

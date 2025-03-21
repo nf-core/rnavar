@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#169](https://github.com/nf-core/rnavar/pull/169) - Added the `--star_max_intron_size` parameter to set the `--alignIntronMax` argument in STAR
 - [#180](https://github.com/nf-core/rnavar/pull/180) - Added support for UMI extraction. Specify `--extract_umi` to enable this feature
 - [#187](https://github.com/nf-core/rnavar/pull/187) - Added unit tests for local subworkflows and processes
+- [#193](https://github.com/nf-core/rnavar/pull/193) - Added support for `vcf.gz` input files
 
 ### Changed
 
@@ -33,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#178](https://github.com/nf-core/rnavar/pull/178) - Implement automatic sharding for nf-test tests
 - [#182](https://github.com/nf-core/rnavar/pull/182) - Bumped all modules to the latest version (as of 03/03/2025)
 - [#185](https://github.com/nf-core/rnavar/pull/185) - Updated the documentation
+- [#193](https://github.com/nf-core/rnavar/pull/193) - Replaced param `annotate_tools` with `tools`
+- [#193](https://github.com/nf-core/rnavar/pull/193) - Parameter `snpeff_genome` value is now contained in the `snpeff_db` parameter
 
 ### Fixed
 
@@ -79,6 +82,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools   | 1.17        | 1.21        |
 | star       | 2.7.10a     | 2.7.11b     |
 | vep        | 111.0       | 113.0       |
+
+### Parameter
+
+| Old name         | New name |
+| ---------------- | -------- |
+| `annotate_tools` | `tools`  |
+| `snpeff_genome`  |          |
 
 ## [1.0.0] nfcore/rnavar - 2022/06/20
 
