@@ -25,9 +25,8 @@ params.dbsnp             = getGenomeAttribute('dbsnp')
 params.dbsnp_tbi         = getGenomeAttribute('dbsnp_tbi')
 params.known_indels      = getGenomeAttribute('known_indels')
 params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
-params.snpeff_db         = getGenomeAttribute('snpeff_db') as String
-params.snpeff_genome     = getGenomeAttribute('snpeff_genome')
-params.vep_cache_version = getGenomeAttribute('vep_cache_version') as String
+params.snpeff_db         = getGenomeAttribute('snpeff_db')
+params.vep_cache_version = getGenomeAttribute('vep_cache_version')
 params.vep_genome        = getGenomeAttribute('vep_genome')
 params.vep_species       = getGenomeAttribute('vep_species')
 
@@ -83,7 +82,7 @@ workflow NFCORE_RNAVAR {
     ch_dict_raw       = params.dict                    ? Channel.fromPath(params.dict).map{ it -> [ [id:it.baseName], it ] }.collect()         : Channel.empty()
     ch_fai_raw        = params.fasta_fai               ? Channel.fromPath(params.fasta_fai).map{ it -> [ [id:it.baseName], it ] }.collect()    : Channel.empty()
     ch_dbsnp_raw      = params.dbsnp                   ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id:dbsnp.baseName], dbsnp]}.collect() : Channel.value([])
-    ch_known_indels_raw   = params.known_indels        ? Channel.fromPath(params.known_indels)                                                 : Channel.empty()
+    ch_known_indels_raw     = params.known_indels      ? Channel.fromPath(params.known_indels)                                                 : Channel.empty()
     ch_known_indels_tbi_raw = params.known_indels_tbi  ? Channel.fromPath(params.known_indels_tbi)                                             : Channel.empty()
     ch_gff            = params.gff                     ? Channel.fromPath(params.gff).map{ gff -> [ [ id:gff.baseName ], gff ] }.collect()     : Channel.empty()
     ch_gtf_raw        = params.gtf                     ? Channel.fromPath(params.gtf).map{ gtf -> [ [ id:gtf.baseName ], gtf ] }.collect()     : Channel.empty()
@@ -91,19 +90,13 @@ workflow NFCORE_RNAVAR {
     ch_exon_bed_raw   = params.exon_bed                ? Channel.fromPath(params.exon_bed).map { it -> [[id:it.baseName], it]}                 : Channel.empty()
 
     // Initialize variant annotation associated channels
-    snpeff_db         = params.snpeff_db          ?: Channel.empty()
-    vep_cache_version = params.vep_cache_version  ?: Channel.empty()
-    vep_genome        = params.vep_genome         ?: Channel.empty()
-    vep_species       = params.vep_species        ?: Channel.empty()
+    snpeff_db         = params.snpeff_db          ?:  Channel.empty()
+    vep_cache_version = params.vep_cache_version  ?:  Channel.empty()
+    vep_genome        = params.vep_genome         ?:  Channel.empty()
+    vep_species       = params.vep_species        ?:  Channel.empty()
 
     seq_platform      = params.seq_platform ?: []
     seq_center        = params.seq_center   ?: []
-
-    // Initialize value channels based on params, defined in the params.genomes[params.genome] scope
-    snpeff_db                   = params.snpeff_db          ?:  Channel.empty()
-    vep_cache_version           = params.vep_cache_version  ?:  Channel.empty()
-    vep_genome                  = params.vep_genome         ?:  Channel.empty()
-    vep_species                 = params.vep_species        ?:  Channel.empty()
 
     vep_extra_files = []
 
@@ -147,29 +140,28 @@ workflow NFCORE_RNAVAR {
     ch_known_indels     = params.known_indels   ? PREPARE_GENOME.out.known_indels     : Channel.value([])
     ch_known_indels_tbi = params.known_indels   ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
 
-
     // Download cache
     if (params.download_cache) {
         // Assuming that even if the cache is provided, if the user specify download_cache, rnavar will download the cache
         ensemblvep_info = Channel.of([ [ id:"${params.vep_cache_version}_${params.vep_genome}" ], params.vep_genome, params.vep_species, params.vep_cache_version ])
-        snpeff_info     = Channel.of([ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], "${params.snpeff_genome}.${params.snpeff_db}" ])
+        snpeff_info     = Channel.of([ [ id:"${params.snpeff_db}" ], params.snpeff_db ])
         DOWNLOAD_CACHE_SNPEFF_VEP(ensemblvep_info, snpeff_info)
         snpeff_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.snpeff_cache
-        vep_cache    = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map{ _meta, cache -> [ cache ] }
+        vep_cache    = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map{ meta, cache -> [ cache ] }
 
         ch_versions = ch_versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
     } else {
         // Looks for cache information either locally or on the cloud
         ANNOTATION_CACHE_INITIALISATION(
-            (params.snpeff_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("snpeff") || params.annotate_tools.split(',').contains('merge'))),
+            (params.snpeff_cache && params.tools && (params.tools.split(',').contains("snpeff") || params.tools.split(',').contains('merge'))),
             params.snpeff_cache,
-            params.snpeff_genome,
             params.snpeff_db,
-            (params.vep_cache && params.annotate_tools && (params.annotate_tools.split(',').contains("vep") || params.annotate_tools.split(',').contains('merge'))),
+            (params.vep_cache && params.tools && (params.tools.split(',').contains("vep") || params.tools.split(',').contains('merge'))),
             params.vep_cache,
             params.vep_species,
             params.vep_cache_version,
             params.vep_genome,
+            params.vep_custom_args,
             "Please refer to https://nf-co.re/rnavar/docs/usage/#how-to-customise-snpeff-and-vep-annotation for more information.")
 
             snpeff_cache = ANNOTATION_CACHE_INITIALISATION.out.snpeff_cache
@@ -191,9 +183,11 @@ workflow NFCORE_RNAVAR {
         ch_known_indels_tbi,
         ch_star_index,
         snpeff_cache,
+        params.snpeff_db,
         params.vep_genome,
         params.vep_species,
         params.vep_cache_version,
+        params.vep_include_fasta,
         vep_cache,
         vep_extra_files,
         seq_center,

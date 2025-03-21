@@ -81,23 +81,23 @@ workflow PIPELINE_INITIALISATION {
         params.star_index
     ]
 
-    // only check if we are using the annotate_tools
-    if (params.annotate_tools && (params.annotate_tools.split(',').contains('snpeff') || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
-    if (params.annotate_tools && (params.annotate_tools.split(',').contains('vep')    || params.annotate_tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
+    // only check if we are using the tools
+    if (params.tools && (params.tools.split(',').contains('snpeff') || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.snpeff_cache)
+    if (params.tools && (params.tools.split(',').contains('vep')    || params.tools.split(',').contains('merge'))) checkPathParamList.add(params.vep_cache)
 
     //
     // Create channel from input file provided through params.input
     //
 
     def samplesheetList = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
-    def bool_align = samplesheetList.find { _meta, fastq_1, _fastq_2, _bam, _bai, _cram, _crai ->
+    def bool_align = samplesheetList.find { _meta, fastq_1, _fastq_2, _bam, _bai, _cram, _crai, _vcf, _tbi ->
         fastq_1
     } ? true : false
 
     ch_samplesheet = Channel.fromList(samplesheetList)
-        .map{ meta, fastq_1, fastq_2, bam, bai, cram, crai ->
+        .map{ meta, fastq_1, fastq_2, bam, bai, cram, crai, vcf, tbi ->
             def new_meta = meta + [ single_end: !fastq_2 ]
-            [ meta.id, new_meta, fastq_1, fastq_2, bam, bai, cram, crai ]
+            [ meta.id, new_meta, fastq_1, fastq_2, bam, bai, cram, crai, vcf, tbi ]
         }
 
     emit:
@@ -185,7 +185,7 @@ def validateInputSamplesheet(input) {
 // Function to check samples are internally consistent after being grouped
 //
 def checkSamplesAfterGrouping(input) {
-    def (_ids, metas, fastqs_1, fastqs_2, bams, bais, crams, crais) = input
+    def (_ids, metas, fastqs_1, fastqs_2, bams, bais, crams, crais, vcfs, tbis) = input
 
     def fastqs_1_list = fastqs_1.findAll { it -> it != [] }
     def fastqs_2_list = fastqs_2.findAll { it -> it != [] }
@@ -193,6 +193,8 @@ def checkSamplesAfterGrouping(input) {
     def bai_list = bais.findAll { it -> it != [] }
     def cram_list = crams.findAll { it -> it != [] }
     def crai_list = crais.findAll { it -> it != [] }
+    def vcf_list = vcfs.findAll { it -> it != [] }
+    def tbi_list = tbis.findAll { it -> it != [] }
 
     def alignment_file_list = bam_list + cram_list
     if(alignment_file_list.size() > 1) {
@@ -210,7 +212,7 @@ def checkSamplesAfterGrouping(input) {
         error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
     }
 
-    return [ metas[0], fastqs, bam_list[0] ?: [], bai_list[0] ?: [], cram_list[0] ?: [], crai_list[0] ?: [] ]
+    return [ metas[0], fastqs, bam_list[0] ?: [], bai_list[0] ?: [], cram_list[0] ?: [], crai_list[0] ?: [], vcf_list[0] ?: [], tbi_list[0] ?: [] ]
 }
 
 //

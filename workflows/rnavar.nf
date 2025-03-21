@@ -65,9 +65,11 @@ workflow RNAVAR {
     known_indels_tbi
     star_index
     snpeff_cache
+    snpeff_db
     vep_genome
     vep_species
     vep_cache_version
+    vep_include_fasta
     vep_cache
     vep_extra_files
     seq_center
@@ -83,7 +85,7 @@ workflow RNAVAR {
 
     // Parse the input data
     parsed_input = input.groupTuple().map{ samplesheet -> checkSamplesAfterGrouping(samplesheet) }
-        .branch{ meta, fastqs, bam, bai, cram, crai ->
+        .branch{ meta, fastqs, bam, bai, cram, crai, vcf, tbi ->
             single  : fastqs.size() == 1
                 return [ meta, fastqs.flatten() ]
             multiple: fastqs.size() > 1
@@ -92,6 +94,8 @@ workflow RNAVAR {
                 return [ meta, bam, bai ]
             cram    : cram
                 return [ meta, cram, crai ]
+            vcf    : vcf
+                return [ meta, vcf, tbi ]
         }
 
     // MODULE: Prepare the alignment files (index BAM/CRAM files that are missing an index)
@@ -357,8 +361,8 @@ workflow RNAVAR {
                 )
 
                 def filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
-                final_vcf    = filtered_vcf
-                ch_versions     = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions)
+                final_vcf        = filtered_vcf
+                ch_versions      = ch_versions.mix(GATK4_VARIANTFILTRATION.out.versions)
             } else {
                 final_vcf = haplotypecaller_vcf
             }
@@ -366,31 +370,26 @@ workflow RNAVAR {
             //
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
             //
-            if((!params.skip_variantannotation) && (params.annotate_tools) && (params.annotate_tools.contains('merge') || params.annotate_tools.contains('snpeff') || params.annotate_tools.contains('vep'))) {
+            if((!params.skip_variantannotation) && (params.tools) && (params.tools.contains('merge') || params.tools.contains('snpeff') || params.tools.contains('vep'))) {
 
-                def vep_fasta = [[id: 'null'], []]
-
-                if (params.vep_include_fasta) {
-                    vep_fasta = fasta
-                }
+                final_vcf = final_vcf.mix(parsed_input.vcf.map{meta, vcf, tbi -> [meta, vcf]})
 
                 VCF_ANNOTATE_ALL(
                     final_vcf.map{meta, vcf -> [ meta + [ file_name: vcf.baseName ], vcf ] },
-                    vep_fasta,
-                    params.annotate_tools,
-                    params.snpeff_genome ? "${params.snpeff_genome}.${params.snpeff_db}" : "${params.genome}.${params.snpeff_db}",
+                    fasta.map{ meta, fasta -> [meta, vep_include_fasta ? fasta : []] },
+                    params.tools,
+                    snpeff_db,
                     snpeff_cache,
                     vep_genome,
                     vep_species,
                     vep_cache_version,
                     vep_cache,
-                    vep_extra_files,
-                )
+                    vep_extra_files)
 
-                // Gather QC ch_reports
-                ch_reports  = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
+                // Gather used softwares versions
                 ch_versions = ch_versions.mix(VCF_ANNOTATE_ALL.out.versions)
-            }
+                ch_reports = ch_reports.mix(VCF_ANNOTATE_ALL.out.reports)
+                }
 
         } else {
 

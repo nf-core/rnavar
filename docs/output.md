@@ -41,6 +41,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [Pipeline overview](#pipeline-overview)
   - [Preprocessing](#preprocessing)
     - [cat](#cat)
+    - [umitools](#umitools)
   - [Alignment](#alignment)
     - [STAR](#star)
   - [Alignment post-processing](#alignment-post-processing)
