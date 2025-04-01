@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## dev
+## [1.2.0](https://github.com/nf-core/rnavar/releases/tag/1.2.0) - Mighty Milano
 
 ### Added
 
@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `annotate_tools` | `tools`  |
 | `snpeff_genome`  |          |
 
-## [1.0.0] nfcore/rnavar - 2022/06/20
+## [1.0.0](https://github.com/nf-core/rnavar/releases/tag/1.0.0) - Tiny Firefly
 
 First production release of the pipeline with latest software versions.
 
