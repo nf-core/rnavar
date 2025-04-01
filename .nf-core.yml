@@ -11,4 +11,4 @@ template:
   name: rnavar
   org: nf-core
   outdir: .
-  version: 1.2.0
+  version: 1.1.0
