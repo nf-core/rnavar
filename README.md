@@ -98,11 +98,8 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/rnavar was originally written in Nextflow DSL2 for use at the [Barntumörbanken, Karolinska Institutet](https://ki.se/forskning/barntumorbanken), by Praveen Raj ([@praveenraj2018](https://github.com/praveenraj2018)) and Maxime U Garcia ([@maxulysse](https://github.com/maxulysse)).
-
-nf-core/rnavar was originally written by Praveen Raj at [The Swedish Childhood Tumor Biobank (Barntumörbanken)](https://ki.se/forskning/barntumorbanken).
-Maxime U Garcia at [Seqera](https://seqera.io/) helped with development.
-Nicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) helped with development from version 1.2.0 and on.
+rnavar was originally written by Praveen Raj and Maxime U Garcia at [The Swedish Childhood Tumor Biobank (Barntumörbanken), Karolinska Institutet](https://ki.se/forskning/barntumorbanken).
+Nicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) later joined and helped with further development (v 1.1.0 and forward).
 
 Maintenance is now lead by Maxime U Garcia (now at [Seqera Labs](https://seqera/io))
 
