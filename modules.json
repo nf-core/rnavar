@@ -42,12 +42,12 @@
                     },
                     "ensemblvep/download": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "7452092e1a296442f2989bff9801797f28c28aaf",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "git_sha": "7452092e1a296442f2989bff9801797f28c28aaf",
                         "installed_by": ["modules", "vcf_annotate_ensemblvep"]
                     },
                     "fastqc": {
