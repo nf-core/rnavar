@@ -82,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools   | 1.17        | 1.21        |
 | star       | 2.7.10a     | 2.7.11b     |
 | vep        | 111.0       | 113.0       |
+| r-base     | 3.5.0       | 3.5.1       |
 
 ### Parameter
 

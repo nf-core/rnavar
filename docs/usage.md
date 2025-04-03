@@ -90,7 +90,7 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
 
 #### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the `sample` column and one of these: `fastq_1`, `bam` or `cram`.
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the `sample` column and one of these: `fastq_1`, `bam`, `cram` or `vcf`.
 
 A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
 
@@ -122,7 +122,7 @@ Only one file type per sample is allowed. Supplying FASTQ files and a BAM/CRAM f
 The pipeline also has no support for multiple BAM/CRAM file per sample.
 :::
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+[Example samplesheets](../tests/csv/1.0/) have been provided with the pipeline.
 
 ## PIPELINE PARAMETERS AND DESCRIPTION
 
