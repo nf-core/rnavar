@@ -2,10 +2,10 @@ process GTF2BED {
     tag "$gtf"
     label 'process_low'
 
-    conda "conda-forge::r-base=3.5.0"
+    conda "conda-forge::r-base=3.5.1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-base:3.5.0' :
-        'biocontainers/r-base:3.5.0'}"
+        'https://depot.galaxyproject.org/singularity/r-base:3.5.1' :
+        'biocontainers/r-base:3.5.1'}"
 
     input:
     tuple val(meta), path(gtf)
