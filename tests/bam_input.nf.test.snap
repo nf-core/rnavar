@@ -40,7 +40,7 @@
                     "tabix": 1.2
                 },
                 "Workflow": {
-                    "nf-core/rnavar": "v1.1.0"
+                    "nf-core/rnavar": "v1.2.0dev"
                 }
             },
             [
