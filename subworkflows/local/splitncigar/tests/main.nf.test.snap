@@ -1,0 +1,82 @@
+{
+    "cram": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 2,
+                        "groupTarget": {
+                            "id": "test"
+                        }
+                    },
+                    "67daadcc078bb45be360e1f2af46a8e5",
+                    "test.bam.bai"
+                ]
+            ],
+            [
+                "versions.yml:md5,2ee606c033a70f44ba961106bb4727dd",
+                "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
+                "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
+                "versions.yml:md5,f2707dd02aa42f4f8154476966707508"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-04T17:15:55.786758395"
+    },
+    "no_intervals": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 0,
+                        "groupTarget": {
+                            "id": "test"
+                        }
+                    },
+                    "7ebc60b3ccddb8489781f46522bc5da1",
+                    "test.bam.bai"
+                ]
+            ],
+            [
+                "versions.yml:md5,2ee606c033a70f44ba961106bb4727dd",
+                "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
+                "versions.yml:md5,f2707dd02aa42f4f8154476966707508"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-04T17:16:38.597763964"
+    },
+    "bam": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 2,
+                        "groupTarget": {
+                            "id": "test"
+                        }
+                    },
+                    "67daadcc078bb45be360e1f2af46a8e5",
+                    "test.bam.bai"
+                ]
+            ],
+            [
+                "versions.yml:md5,2ee606c033a70f44ba961106bb4727dd",
+                "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
+                "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
+                "versions.yml:md5,f2707dd02aa42f4f8154476966707508"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-04T17:15:10.999131603"
+    }
+}

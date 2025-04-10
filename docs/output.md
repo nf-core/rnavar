@@ -15,8 +15,8 @@ RNAseq data has been taken from GM12878 GIAB sample SRA Accession [SRR5665260](h
 A sample sheet has been prepared in the following way to set the FASTQ files to run the analysis.
 
 ```console
-sample,fastq_1,fastq_2,strandedness
-GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz,reverse
+sample,fastq_1,fastq_2
+GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz
 ```
 
 ### Execution
@@ -33,33 +33,38 @@ The `<institutional_config>` used in this experiment can be found [here](https:/
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Preprocessing](#preprocessing)
-  - [cat](#cat) - Merge re-sequenced FastQ files
-- [Alignment](#alignment)
-  - [STAR](#star) - Fast spliced aware genome alignment
-- [Alignment post-processing](#alignment-post-processing)
-  - [Picard MarkDuplicates](#picard-markduplicates) - Duplicate read marking
-  - [GATK4 SplitNCigarReads](#gatk4-splitncigarreads) - Splits reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data)
-  - [GATK4 Base Quality Score Recalibration (BQSR)](#gatk4-bqsr) - Estimate and correct systematic bias that affect the assignment of base quality scores by the sequencer
-- [Variant calling](#other-steps)
-  - [GATK4 HaplotypeCaller](#gatk4-haplotypecaller) - Call SNPs and indels via local re-assembly of haplotypes
-- [Variant filtering](#other-steps)
-  - [GATK4 VariantFiltration](#gatk4-variantfiltration) - Hard-filtering variant calls based on certain criteria
-- [Variant annotation](#variant-annotation)
-  - [snpEff](#snpeff)
-  - [VEP](#vep)
-- [QC and reporting](#qc-and-reporting)
-  - [QC](#qc)
-    - [FastQC](#fastqc) - Raw read QC
-    - [GATK MarkDuplicates reports](#gatk-markduplicates-reports)
-    - [samtools stats](#samtools-stats)
-    - [snpEff reports](#snpeff-reports)
-    - [VEP reports](#vep-reports)
-  - [Reporting](#reporting)
-    - [MultiQC](#multiqc) - Present QC for raw reads, alignment, base quality recalibration as well as variant annotation summary.
-- [Workflow reporting and genomes](#workflow-reporting-and-genomes)
-  - [Reference genome files](#reference-genome-files) - Saving reference genome indices/files
-  - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+- [nf-core/rnavar: Output](#nf-corernavar-output)
+  - [Introduction](#introduction)
+    - [Dataset](#dataset)
+    - [Samplesheet](#samplesheet)
+    - [Execution](#execution)
+  - [Pipeline overview](#pipeline-overview)
+  - [Preprocessing](#preprocessing)
+    - [cat](#cat)
+    - [umitools](#umitools)
+  - [Alignment](#alignment)
+    - [STAR](#star)
+  - [Alignment post-processing](#alignment-post-processing)
+    - [MarkDuplicates](#markduplicates)
+    - [SplitNCigarReads](#splitncigarreads)
+    - [Base (Quality Score) Recalibration](#base-quality-score-recalibration)
+      - [GATK BaseRecalibrator](#gatk-baserecalibrator)
+      - [GATK ApplyBQSR](#gatk-applybqsr)
+  - [Variant calling](#variant-calling)
+  - [Variant filtering](#variant-filtering)
+  - [Variant annotation](#variant-annotation)
+    - [snpEff](#snpeff)
+    - [VEP](#vep)
+  - [QC and Reporting](#qc-and-reporting)
+    - [QC](#qc)
+      - [FastQC](#fastqc)
+      - [GATK MarkDuplicates reports](#gatk-markduplicates-reports)
+      - [samtools stats](#samtools-stats)
+      - [snpEff reports](#snpeff-reports)
+      - [VEP reports](#vep-reports)
+    - [Reporting](#reporting)
+      - [MultiQC](#multiqc)
+  - [Pipeline information](#pipeline-information)
 
 ## Preprocessing
 
@@ -74,6 +79,21 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 </details>
 
 If multiple libraries/runs have been provided for the same sample in the input samplesheet (e.g. to increase sequencing depth) then these will be merged at the very beginning of the pipeline in order to have consistent sample naming throughout the pipeline. Please refer to the [usage documentation](https://nf-co.re/rnavar/usage#samplesheet-input) to see how to specify these samples in the input samplesheet.
+
+### umitools
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `umitools`
+  - `*.umi_extract.fastq.gz`: For single-end data
+  - `*.umi_extract_1.fastq.gz`: For paired-end data
+  - `*.umi_extract_2.fastq.gz`: For paired-end data
+  - `*.umi_extract.log`: The log of the UMI extraction
+
+</details>
+
+This output directory will only be made when `--extract_umi` has been specified. [UMI-tools](https://github.com/CGATOxford/UMI-tools) is a set of tools for handling Unique Molecular Identifiers in NGS data sets. In this pipeline the `extract` tool has been used to extract UMIs from the FASTQ files. Please refer to the [usage documentation](https://nf-co.re/rnavar/usage#samplesheet-input) for more information.
 
 ## Alignment
 
@@ -105,7 +125,7 @@ If multiple libraries/runs have been provided for the same sample in the input s
 
 ### MarkDuplicates
 
-[GATK MarkDuplicates](https://gatk.broadinstitute.org/hc/en-us/articles/360042477492-MarkDuplicates-Picard) locates and tags duplicate reads in a `BAM` file. The tool's main output is a new BAM file, in which duplicates have been identified in the SAM flags field for each read.
+[Picard MarkDuplicates](https://gatk.broadinstitute.org/hc/en-us/articles/360042477492-MarkDuplicates-Picard) locates and tags duplicate reads in a `BAM` file. The tool's main output is a new BAM file, in which duplicates have been identified in the SAM flags field for each read.
 
 ![MultiQC - MarkDuplicate stats](images/read_markduplicates_stats.png)
 
@@ -279,6 +299,10 @@ Plots will show:
 ![MultiQC - FASTQC Read Length Distribution](images/fastqc_length_dist.png)
 ![MultiQC - FASTQC Overall summary](images/fastqc_overall_status.png)
 
+:::note
+The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
+:::
+
 #### GATK MarkDuplicates reports
 
 More information in the [GATK MarkDuplicates section](#gatk-markduplicates)
@@ -386,6 +410,7 @@ For more information about how to use `MultiQC` reports, see [https://multiqc.in
   - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
   - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
   - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
+  - Parameters used by the pipeline run: `params.json`.
 
 </details>
 

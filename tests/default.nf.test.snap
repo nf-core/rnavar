@@ -1,0 +1,112 @@
+{
+    "-profile test": {
+        "content": [
+            41,
+            {
+                "APPLYBQSR": {
+                    "gatk4": "4.6.1.0"
+                },
+                "CAT_FASTQ": {
+                    "cat": 9.5
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.6.1.0"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.3.0"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": 1.21
+                },
+                "STAR_ALIGN": {
+                    "star": "2.7.11b",
+                    "samtools": 1.21,
+                    "gawk": "5.1.0"
+                },
+                "TABIX": {
+                    "tabix": 1.2
+                },
+                "Workflow": {
+                    "nf-core/rnavar": "v1.1.0"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/GM12878",
+                "preprocessing/GM12878/GM12878.md.bam",
+                "preprocessing/GM12878/GM12878.md.bam.bai",
+                "preprocessing/GM12878/GM12878.recal.bam",
+                "preprocessing/GM12878/GM12878.recal.bam.bai",
+                "reports",
+                "reports/multiqc_data",
+                "reports/multiqc_data/multiqc.log",
+                "reports/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc_data/multiqc_data.json",
+                "reports/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc_report.html",
+                "reports/stats",
+                "reports/stats/GM12878",
+                "reports/stats/GM12878/GM12878.flagstat",
+                "reports/stats/GM12878/GM12878.stats",
+                "reports/stats/GM12878/STAR_log",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
+                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
+                "samtools",
+                "samtools/GM12878.bam",
+                "samtools/GM12878.bam.bai",
+                "variant_calling",
+                "variant_calling/GM12878",
+                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.01.0"
+        },
+        "timestamp": "2025-03-03T16:29:48.290653989"
+    }
+}

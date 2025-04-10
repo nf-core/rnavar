@@ -4,40 +4,70 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
-## RUNNING THE PIPELINE
+## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
-```console
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker
+```bash
+nextflow run nf-core/rnavar --input ./samplesheet.csv --outdir ./results --genome GRCh38 -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
-```console
+```bash
 work                # Directory containing the nextflow working files
 <OUTDIR>            # Finished results in specified location (defined with --outdir)
 .nextflow_log       # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
 
+If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
+
+Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
+
+> [!WARNING]
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+
+The above pipeline run specified with a params file in yaml format:
+
+```bash
+nextflow run nf-core/rnavar -profile docker -params-file params.yaml
+```
+
+with:
+
+```yaml title="params.yaml"
+input: './samplesheet.csv'
+outdir: './results/'
+genome: 'GRCh38'
+<...>
+```
+
+You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
-```console
+```bash
 nextflow pull nf-core/rnavar
 ```
 
 ### Reproducibility
 
-It is a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
+It is a good idea to specify the pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [nf-core/rnavar releases page](https://github.com/nf-core/rnavar/releases) and find the latest version number - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`.
+First, go to the [nf-core/rnavar releases page](https://github.com/nf-core/rnavar/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
-This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future.
+This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
+
+To further assist in reproducibility, you can use share and reuse [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
+
+:::tip
+If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+:::
 
 ## Samplesheet input
 
@@ -52,37 +82,47 @@ You will need to create a samplesheet with information about the samples you wou
 The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
 
 ```console
-sample,fastq_1,fastq_2,strandedness
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,unstranded
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,unstranded
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,unstranded
+sample,fastq_1,fastq_2
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
+CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
 ```
 
 #### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 4 columns to match those defined in the table below.
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the `sample` column and one of these: `fastq_1`, `bam`, `cram` or `vcf`.
 
 A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
 
 ```console
-sample,fastq_1,fastq_2,strandedness
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,forward
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz,forward
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz,forward
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,,reverse
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,,reverse
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,,reverse
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,,reverse
+sample,fastq_1,fastq_2
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
+CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
+TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
+TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
+TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
+TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
 ```
 
-| Column         | Description                                                                                                                                                                            |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1`      | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2`      | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `strandedness` | Sample strand-specificity. Must be one of `unstranded`, `forward` or `reverse`.                                                                                                        |
+| Column    | Description                                                                                                                                                                            |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `bam`     | Full path to BAM file created with STAR and duplicate marked. File has to have the extension ".bam".                                                                                   |
+| `bai`     | Full path to index file of the BAM file. File has to have the extension ".bai".                                                                                                        |
+| `cram`    | Full path to CRAM file created with STAR and duplicate marked. File has to have the extension ".cram".                                                                                 |
+| `crai`    | Full path to index file of the CRAM file. File has to have the extension ".crai".                                                                                                      |
+| `vcf`     | Full path to vcf.gz file. File has to have the extension ".vcf.gz".                                                                                                                    |
+| `tbi`     | Full path to index file of the vcf.gz file. File has to have the extension ".vcf.gz.tbi".                                                                                              |
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+:::note
+Only one file type per sample is allowed. Supplying FASTQ files and a BAM/CRAM file for the same sample will cause an error in the pipeline.
+The pipeline also has no support for multiple BAM/CRAM file per sample.
+:::
+
+[Example samplesheets](../tests/csv/1.0/) have been provided with the pipeline.
 
 ## PIPELINE PARAMETERS AND DESCRIPTION
 
@@ -92,16 +132,16 @@ The minimum reference genome requirements are a FASTA and GTF file, all other fi
 
 > **NB:** Compressed reference files are also supported by the pipeline i.e. standard files with the `.gz` extension and indices folders with the `tar.gz` extension.
 
-The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/STAR/index/'`) or via a custom config file.
+The index building step can be quite a time-consuming process and it permits their reuse for future runs of the pipeline to save disk space. You can then either provide the appropriate reference genome files on the command-line via the appropriate parameters (e.g. `--star_index '/path/to/STAR/index/'`) or via a parameters file.
 
 > **NB:** If you are supplying a pre-built genome index file via `--star_index`, please ensure that the index has been generated with the latest STAR version i.e. v2.7.9a or above. In case if the pipeline found an incompatible index, it will generate a new one using the reference genome which will consume time and memory unnecessarily.
 
 - If `--genome` is provided then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
-- If `--gff` is provided as input then this will be converted to a GTF file, or the latter will be used if both are provided.
+- If `--gff` is provided as input then this will be converted to a GTF file.
 - The `--exon_bed` parameter file is expected to be exon coordinates with at least three columns i.e., <chrom> <exon_position_start> <exon_position_end> in the file. The <exon_postion_start> should be 0-based. If this parameter is not provided, the exon coordinates are extracted from the GTF file and generates a bed file by the process `GTF2BED`.
 - If `--star_index` is not provided then it will be generated from the reference genome FASTA file using `STAR --runmode genomeGenerate` command.
 
-> **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. Otherwise `GATK BedToIntervalList` module is likely to fail if the chromosomes/contigs do not match with the reference genome data.
+> **NB:** In case if you are providing a GTF and/or a BED file, please ensure that the chromosomes and contigs in the files are also present in the genome FASTA (and in the .dict) file. The pipeline automatically checks and filters out contigs unknown to the reference (`--fasta`). This check can be turned off with `--skip_exon_bed_check`.
 
 ### Recommendation when using very large genomes
 
@@ -109,26 +149,30 @@ When the pipeline is used on very large genomes having chromosome size greater t
 
 > **NB:** When `--bam_csi_index` is used, variant filtration step will be disabled as `GATK VariantFiltration` does not currently support CSI index for the input VCF. It may be incorporated in the future when newer GATK versions support CSI for VCF inputs.
 
+## FASTQ preprocessing
+
+UMIs (Unique Molecular Identifiers) can be extracted by specifying `--extract_umi`, `--umitools_bc_pattern` and for paired-end reads also `umitools_bc_pattern2`. The pipeline uses [UMI-tools](https://github.com/CGATOxford/UMI-tools) for this preprocessing step. Additionally, the extraction method used can be specified using `--umitools_extract_method` and the UMI separator can be specified using `--umitools_umi_separator`.
+
 ## Alignment options
 
 The pipeline uses [STAR](https://github.com/alexdobin/STAR) to map the raw FastQ reads to the reference genome. STAR is fast but requires a lot of memory to run, typically around 38GB for the Human GRCh37 reference genome.
 
 By default, STAR runs in `2-pass` mode. For the most sensitive novel junction discovery, it is recommend running STAR in the 2-pass
-mode. It does not increase the number of detected novel junctions, but allows to detect more splices reads mapping to novel junctions. The basic idea is to run 1st pass of STAR mapping with the usual parameters, then collect the junctions detected in the first pass, and use them as ”annotated” junctions for the 2nd pass mapping. You can turn off this feature by setting `--star_twopass false` in command line.
+mode. It does not increase the number of detected novel junctions, but allows to detect more spliced reads mapping to novel junctions. The basic idea is to run 1st pass of STAR mapping with the usual parameters, then collect the junctions detected in the first pass, and use them as ”annotated” junctions for the 2nd pass mapping. You can turn off this feature by setting `--star_twopass false` in command line.
 
 Read length is an important parameter therefore it has to be used carefully. The default is set to 150, but it has to be changed according to the input reads. For example, if the input read length is 2x151bp, then you use `--read_length 151`. The `--read_length` parameter is used while generating an index as well as in the alignment process. In both processes, the pipeline use (read_length - 1) to the STAR parameter `--sjdbOverhang` as recommended in STAR documentation.
 
 > **NB:** Read length `--read_length` is an important parameter, therefore it has to set according to the input read length. If you are supplying a pre-built genome index, please make sure that you have used the same (read_length -1) during the genomeGenerate step.
 
-STAR alignment generates a coordinated-sorted BAM file as output. The coordinate-sorting process can be very memory intensive when the input data is deep sequenced or the genome has many highly expressed loci. When the pipeline runs on memory constrained environment, sorting step may fail due to low memory. In such cases you may adjust the limit parameters such as `--star_limitBAMsortRAM`, `--star_outBAMsortingBinsN` and `--star_limitOutSJcollapsed` to increase the sorting memory and genomic bins. Refer the parameter documentation for the default values and adjust as appropriate based on your memory availability.
+STAR alignment generates a coordinated-sorted BAM file as output. The coordinate-sorting process can be very memory intensive when the input data is deep sequenced or the genome has many highly expressed loci. When the pipeline runs on memory constrained environment, sorting step may fail due to low memory. In such cases you may adjust the limit parameters such as `--star_max_memory_bamsort`, `--star_bins_bamsort` and `--star_max_collapsed_junc` to increase the sorting memory and genomic bins. Refer the parameter documentation for the default values and adjust as appropriate based on your memory availability.
 
-## Preprocessing options
+## Postprocessing of alignment output
 
-Marking duplicate reads is performed using `GATK4 MarkDuplicates` tool. The tool does not remove duplicate reads by default, however you can set `--remove_duplicates true` to remove them.
+Marking duplicate reads is performed using `Picard MarkDuplicates` tool. The tool does not remove duplicate reads by default, however you can set `--remove_duplicates` to remove them.
 
 GATK best practices has been followed in this pipeline for RNA analysis, hence it uses GATK modules such as `SplitNCigarReads`, `BaseRecalibrator`, `ApplyBQSR`. The `BaseRecalibrator` process requires known variants sites VCF. ExAc, gnomAD, or dbSNP resources can be used as known sites of variation.You can supply the VCF and index files using parameters such as `--dbsnp`, `--dbsnp_tbi`, `--known_indels`, `--known_indels_tbi`.
 
-> **NB:** Base recalibration can be turned off using `--skip_baserecalibration true` option. This is useful when you are analyzing data from non-model organisms where there is no known variant datasets exist.
+> **NB:** Base recalibration can be turned off using `--skip_baserecalibration` option. This is useful when you are analyzing data from non-model organisms where there is no known variant datasets exist.
 
 `GATK SplitNCigarReads` is very time consuming step, therefore we made an attempt to break the GTF file into multiple chunks (scatters) using `GATK IntervalListTools` to run the process independently on each chunk in a parallel way to speed up the analysis. The default number of splits is set to 25, that means the GTF file is split into 25 smaller files and run `GATK SplitNCigarReads` on each of them in parallel. You can modify the number of splits using parameter `--gatk_interval_scatter_count`.
 
@@ -136,7 +180,7 @@ GATK best practices has been followed in this pipeline for RNA analysis, hence i
 
 `GATK HaplotypeCaller` is used for variant calling with default minimum phred-scaled confidence threshold as 20. This value can be changed using paramerter `--gatk_hc_call_conf`.
 
-The pipeline runs a hard-filtering step on the variants by default. It does not filter out any variants, rather it flags i.e. PASS or other flags such as FS, QD, SnpCluster, etc. in FILTER column of the VCF. The following are the default filter criteria, however it can be changed using the respective parameters.
+The pipeline runs a soft-filtering step on the variants by default. It does not filter out any variants, rather it flags i.e. PASS or other flags such as FS, QD, SnpCluster, etc. in FILTER column of the VCF. The following are the default filter criteria, however it can be changed using the respective parameters.
 
 - `--gatk_vf_cluster_size` is set to 3. It is the number of SNPs which make up a cluster.
 - `--gatk_vf_window_size` is set to 35. The window size (in bases) in which to evaluate clustered SNPs.
@@ -147,80 +191,69 @@ Variant filtering is an optional step. You can skip it using `--skip_variantfilt
 
 ## Variant annotation
 
-The annotation of variants is performed using snpEff and VEP. The parameter to use is `--annotate_tools snpeff` or `--annotate_tools vep`. You can even run both snpEff and VEP using `--annotate_tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
+The annotation of variants is performed using snpEff and VEP. The parameter to use is `--tools snpeff` or `--tools vep`. You can even run both snpEff and VEP using `--tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
 
-You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--annotate_tools` options.
+You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--tools` options.
 
 ### Annotation cache
 
 Both `snpEff` and `VEP` enable usage of cache.
-If cache is available on the machine where `rnavar` is run, it is possible to run annotation using cache.
-You need to specify the cache directory using `--snpeff_cache` and `--vep_cache` in the command lines or within configuration files.
-The cache will only be used when `--annotation_cache` and cache directories are specified (either in command lines or in a configuration file).
+If the cache is available on the machine where `rnavar` is run, it is possible to run annotation using the cache.
+You need to specify the cache directory using `--snpeff_cache` and `--vep_cache` on the command line or within a parameters file.
+The cache will only be used when `--annotation_cache` and cache directories are specified (either on the command line or in a parameters file).
 
 Example:
 
 ```bash
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annoate_tools snpEff --snpeff_cache </path/to/snpEff/cache> --annotation_cache
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annotate_tools VEP --vep_cache </path/to/VEP/cache> --annotation_cache
+nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --tools snpEff --snpeff_cache </path/to/snpEff/cache> --annotation_cache
+nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --tools VEP --vep_cache </path/to/VEP/cache> --annotation_cache
 ```
 
 ### Download annotation cache
 
-A `Nextflow` helper script [link](https://raw.githubusercontent.com/nf-core/sarek/master/download_cache.nf) has been designed to help downloading `snpEff` and `VEP` caches.
-Such files are meant to be shared between multiple users, so this script is mainly meant for people administrating servers, clusters and advanced users.
+The [`annotation-cache`](https://github.com/annotation-cache) resource can be used to download `snpEff` and `vep` annotation cache directories.
+
+#### Install snpEff annotation cache
+
+The [`downloadsnpeffcache`](https://github.com/annotation-cache/downloadsnpeffcache) pipeline can be used to download snpEff annotation cache directories. Expected parameters are `--snpeff_db` (e.g. `105`) and `--snpeff_genome` (e.g. `GRCh38`).
 
 ```bash
-nextflow run download_cache.nf --snpeff_cache </path/to/snpEff/cache> --snpeff_db <snpEff DB version> --genome <GENOME>
-nextflow run download_cache.nf --vep_cache </path/to/VEP/cache> --species <species> --vep_cache_version <VEP cache version> --genome <GENOME>
+nextflow run annotation-cache/downloadsnpeffcache --outdir <path/to/output/dir> --snpeff_db <snpEff DB version> --snpeff_genome <GENOME>
 ```
 
-### Using VEP CADD plugin
+#### Install VEP annotation cache
 
-To enable the use of the `VEP` `CADD` plugin:
-
-- Download the `CADD` files
-- Specify them (either on the command line, like in the example or in a configuration file)
-- use the `--cadd_cache` flag
-
-Example:
+The [`downloadvepcache`](https://github.com/annotation-cache/downloadvepcache) pipeline can be used to download VEP annotation cache directories. Expected parameters are `--vep_species` (e.g. `homo_sapiens`), `--vep_cache_version` (e.g. `110`) and `--vep_genome` (e.g. `GRCh38`).
 
 ```bash
-nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --annotate_tools VEP VEP --cadd_cache \
-    --cadd_indels </path/to/CADD/cache/InDels.tsv.gz> \
-    --cadd_indels_tbi </path/to/CADD/cache/InDels.tsv.gz.tbi> \
-    --cadd_wg_snvs </path/to/CADD/cache/whole_genome_SNVs.tsv.gz> \
-    --cadd_wg_snvs_tbi </path/to/CADD/cache/whole_genome_SNVs.tsv.gz.tbi>
-```
-
-### Downloading CADD files
-
-An helper script has been designed to help downloading `CADD` files.
-Such files are meant to be share between multiple users, so this script is mainly meant for people administrating servers, clusters and advanced users.
-
-```bash
-nextflow run download_cache.nf --cadd_cache </path/to/CADD/cache> --cadd_version <CADD version> --genome <GENOME>
+nextflow run annotation-cache/downloadvepcache --outdir </path/to/output/dir> --vep_species <species> --vep_cache_version <VEP cache version> --vep_genome <GENOME>
 ```
 
 ## GENERAL NEXTFLOW ARGUMENTS
 
-> **NB:** These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
+:::note
+These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
+:::
 
 ### `-profile`
 
 Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
-Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Conda) - see below. When using Biocontainers, most of these software packaging methods pull Docker containers from quay.io e.g [FastQC](https://quay.io/repository/biocontainers/fastqc) except for Singularity which directly downloads Singularity images via https hosted by the [Galaxy project](https://depot.galaxyproject.org/singularity/) and Conda which downloads and installs software locally from [Bioconda](https://bioconda.github.io/).
+Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
+> [!IMPORTANT]
 > We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
 
-The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to see if your system is available in these configs please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
+The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
 
 Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended.
+If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
+- `test`
+  - A profile with a complete configuration for automated testing
+  - Includes links to test data so needs no other parameters
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
 - `singularity`
@@ -231,11 +264,12 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
   - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+- `apptainer`
+  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
+- `wave`
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
 - `conda`
-  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter or Charliecloud.
-- `test`
-  - A profile with a complete configuration for automated testing
-  - Includes links to test data so needs no other parameters
+  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
 ### `-resume`
 
@@ -251,99 +285,22 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 ### Resource requests
 
+Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnavar/blob/master/conf/base.config#L17) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-For example, if the nf-core/rnavar pipeline is failing after multiple re-submissions of the `STAR_ALIGN` process due to an exit code of `137` this would indicate that there is an out of memory issue:
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 
-```console
-[62/149eb0] NOTE: Process `NFCORE_RNAVAR:RNAVAR:ALIGN_STAR:STAR_ALIGN (WT_REP1)` terminated with an error exit status (137) -- Execution is retried (1)
-Error executing process > 'NFCORE_RNAVAR:RNAVAR:ALIGN_STAR:STAR_ALIGN (WT_REP1)'
+### Custom Containers
 
-Caused by:
-    Process `NFCORE_RNAVAR:RNAVAR:ALIGN_STAR:STAR_ALIGN (WT_REP1)` terminated with an error exit status (137)
+In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-Command executed:
-    STAR \
-        --genomeDir star \
-        --readFilesIn WT_REP1_trimmed.fq.gz  \
-        --runThreadN 2 \
-        --outFileNamePrefix WT_REP1. \
-        <TRUNCATED>
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 
-Command exit status:
-    137
+### Custom Tool Arguments
 
-Command output:
-    (empty)
+A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-Command error:
-    .command.sh: line 9:  30 Killed    STAR --genomeDir star --readFilesIn WT_REP1_trimmed.fq.gz --runThreadN 2 --outFileNamePrefix WT_REP1. <TRUNCATED>
-Work dir:
-    /home/pipelinetest/work/9d/172ca5881234073e8d76f2a19c88fb
-
-Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
-```
-
-To bypass this error you would need to find exactly which resources are set by the `STAR_ALIGN` process.
-The quickest way is to search for `process STAR_ALIGN` in the [nf-core/rnavar Github repo](https://github.com/nf-core/rnavar/search?q=process+STAR_ALIGN).
-We have standardised the structure of Nextflow DSL2 pipelines such that all module files will be present in the `modules/` directory and so based on the search results the file we want is `modules/nf-core/software/star/align/main.nf`.
-If you click on the link to that file you will notice that there is a `label` directive at the top of the module that is set to [`label process_high`](https://github.com/nf-core/rnavar/blob/master/modules/nf-core/modules/star/align/main.nf#L3).
-The [Nextflow `label`](https://www.nextflow.io/docs/latest/process.html#label) directive allows us to organise workflow processes in separate groups which can be referenced in a configuration file to select and configure subset of processes having similar computing requirements.
-The default values for the `process_high` label are set in the pipeline's [`base.config`](https://github.com/nf-core/rnavar/blob/master/conf/base.config#L37-L41) which in this case is defined as `72GB`.
-Providing you haven't set any other standard nf-core parameters to **cap** the [maximum resources](https://nf-co.re/usage/configuration#max-resources) used by the pipeline then we can try and bypass the `STAR_ALIGN` process failure by creating a custom config file that sets at least `72GB` of memory, in this case increased to `100GB`.
-The custom config below can then be provided to the pipeline via the [`-c`](#-c) parameter as highlighted in previous sections.
-
-```nextflow
-process {
-    withName: 'NFCORE_RNAVAR:RNAVAR:ALIGN_STAR:STAR_ALIGN' {
-        memory = 100.GB
-    }
-}
-```
-
-> **NB:** We specify the full process name i.e. `NFCORE_RNAVAR:RNAVAR:ALIGN_STAR:STAR_ALIGN` in the config file because this takes priority over the short name (`STAR_ALIGN`) and allows existing configuration using the full process name to be correctly overridden.
->
-> If you get a warning suggesting that the process selector isn't recognised check that the process name has been specified correctly.
-
-### Updating containers
-
-The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. If for some reason you need to use a different version of a particular tool with the pipeline then you just need to identify the `process` name and override the Nextflow `container` definition for that process using the `withName` declaration. For example, in the [nf-core/viralrecon](https://nf-co.re/viralrecon) pipeline a tool called [Pangolin](https://github.com/cov-lineages/pangolin) has been used during the COVID-19 pandemic to assign lineages to SARS-CoV-2 genome sequenced samples. Given that the lineage assignments change quite frequently it doesn't make sense to re-release the nf-core/viralrecon everytime a new version of Pangolin has been released. However, you can override the default container used by the pipeline by creating a custom config file and passing it as a command-line argument via `-c custom.config`.
-
-1. Check the default version used by the pipeline in the module file for [Pangolin](https://github.com/nf-core/viralrecon/blob/a85d5969f9025409e3618d6c280ef15ce417df65/modules/nf-core/software/pangolin/main.nf#L14-L19)
-2. Find the latest version of the Biocontainer available on [Quay.io](https://quay.io/repository/biocontainers/pangolin?tag=latest&tab=tags)
-3. Create the custom config accordingly:
-
-   - For Docker:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'quay.io/biocontainers/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
-
-   - For Singularity:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'https://depot.galaxyproject.org/singularity/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
-
-   - For Conda:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             conda = 'bioconda::pangolin=3.0.5'
-         }
-     }
-     ```
-
-> **NB:** If you wish to periodically update individual tool-specific results (e.g. Pangolin) generated by the pipeline then you must ensure to keep the `work/` directory otherwise the `-resume` ability of the pipeline will be compromised and it will restart from scratch.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 
@@ -367,6 +324,6 @@ Some HPC setups also allow you to run nextflow within a cluster job submitted yo
 In some cases, the Nextflow Java virtual machines can start to request a large amount of memory.
 We recommend adding the following line to your environment to limit this (typically in `~/.bashrc` or `~./bash_profile`):
 
-```console
+```bash
 NXF_OPTS='-Xms1g -Xmx4g'
 ```

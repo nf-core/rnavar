@@ -1,1 +1,14 @@
+lint:
+  files_exist:
+    - .github/workflows/ci.yml
+nf_core_version: 3.2.0
 repository_type: pipeline
+template:
+  author: Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke
+  description: GATK4 RNA variant calling pipeline
+  force: false
+  is_nfcore: true
+  name: rnavar
+  org: nf-core
+  outdir: .
+  version: 1.1.0
