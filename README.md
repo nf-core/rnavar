@@ -98,9 +98,6 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-<<<<<<< HEAD
-nf-core/rnavar was originally written by Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke.
-=======
 rnavar was originally written by Praveen Raj and Maxime U Garcia at [The Swedish Childhood Tumor Biobank (Barntumörbanken), Karolinska Institutet](https://ki.se/forskning/barntumorbanken).
 Nicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) later joined and helped with further development (v 1.1.0 and forward).
 
@@ -110,7 +107,6 @@ Main developers:
 
 - [Maxime U Garcia](https://github.com/maxulysse)
 - [Nicolas Vannieuwkerke](https://github.com/nvnieuwk)
-  > > > > > > > dev
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
