@@ -1,0 +1,37 @@
+{
+    "default": {
+        "content": [
+            {
+                "reports": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.mosdepth.global.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53"
+                    ],
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.mosdepth.region.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53"
+                    ],
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.stats:md5,1d1697d8b45e9f1c3280020155ee23d5"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,1ba7e2d7c7c5d0f310ceb2f8e8846a4a",
+                    "versions.yml:md5,ebf112f4081a4bc0e13520fe22ac26bd"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-03-05T13:46:12.688489101"
+    }
+}

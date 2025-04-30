@@ -1,0 +1,130 @@
+nextflow_workflow {
+
+    name "Test Subworkflow SPLITNCIGAR"
+    script "../main.nf"
+    workflow "SPLITNCIGAR"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "subworkflows/splitncigar"
+    tag "samtools/merge"
+    tag "samtools/index"
+    tag "gatk4/splitncigarreads"
+
+    test("bam") {
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.value([
+                    [id:"fai"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = Channel.value([
+                    [id:"dict"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                input[4] = Channel.of([[
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.interval_list', checkIfExists: true)
+                ]])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.bam_bai.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name] },
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("cram") {
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.value([
+                    [id:"fai"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = Channel.value([
+                    [id:"dict"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                input[4] = Channel.of([[
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.interval_list', checkIfExists: true)
+                ]])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.bam_bai.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name] },
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("no_intervals") {
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.value([
+                    [id:"fai"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = Channel.value([
+                    [id:"dict"],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                input[4] = Channel.of([[]])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.bam_bai.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name] },
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+    }
+}
