@@ -76,7 +76,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/rnavar was originally written by Praveen Raj, Maxime U Garcia.
+nf-core/rnavar was originally written by Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
