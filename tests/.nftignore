@@ -15,6 +15,7 @@ reports/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 reports/multiqc_report.html
 reports/snpeff/*/*_snpEff.csv
 reports/snpeff/*/snpEff_summary.html
+reports/stats/*/*.stats
 reports/stats/*/STAR_log/*.Log.final.out
 reports/stats/*/STAR_log/*.Log.out
 reports/stats/*/STAR_log/*.Log.progress.out

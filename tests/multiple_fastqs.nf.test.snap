@@ -122,15 +122,9 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "GM12878.flagstat:md5,ed7c4db43f21dfaf1c7fd57549bb3c71",
-                "GM12878.stats:md5,2eb6fc4bb82d1d0494c95993b43e3e02",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
                 "GM12879.flagstat:md5,ce6a2562f8297c99683eefbabf18ce65",
-                "GM12879.stats:md5,0ab7d272d80985541e7720a9002014f6",
-                "GM12879.SJ.out.tab:md5,37bfb1926b12f3585db23a2b86e6f59e",
-                "GM12878.bam:md5,5798b82205e9708992de623a5435791f",
-                "GM12878.bam.bai:md5,09c8c1989034a381acd578b7fed37944",
-                "GM12879.bam:md5,0e6528f2b627d6845e5ff2d67ced3a70",
-                "GM12879.bam.bai:md5,1965d7fcb4add6668844fe354d329f38"
+                "GM12879.SJ.out.tab:md5,37bfb1926b12f3585db23a2b86e6f59e"
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
