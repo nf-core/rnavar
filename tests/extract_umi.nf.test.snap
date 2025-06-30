@@ -107,10 +107,7 @@
                 "GM12878.flagstat:md5,a89cb59e509dab933063d5486742a185",
                 "GM12878.stats:md5,7f86f7e32c946c2b449c6bc7b845a858",
                 "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
-                "GM12878.bam:md5,de8818fcc2c4956f25dbdde58fc230cb",
-                "GM12878.bam.bai:md5,5d1e993dfc1807f1c34ea3dd7e644eb1",
-                "GM12878.umi_extract.fastq.gz:md5,5ec2ee7620e78b26caf8f9173506fc82",
-                "GM12878.umi_extract.log:md5,02dcfe836aae1955c394622829b0a4d8"
+                "GM12878.umi_extract.fastq.gz:md5,5ec2ee7620e78b26caf8f9173506fc82"
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825",
