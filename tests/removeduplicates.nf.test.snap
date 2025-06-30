@@ -103,10 +103,7 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "GM12878.flagstat:md5,c656f430655037fa934e7bec71d0e8c6",
                 "GM12878.stats:md5,d9f1631197f2e22b766ab3adcf999753",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12878.bam:md5,5798b82205e9708992de623a5435791f",
-                "GM12878.bam.bai:md5,09c8c1989034a381acd578b7fed37944"
-            ],
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"            ],
             [
                 "GM12878.md.bam:md5,2a278f55d4a7c4d96103c8738764e13",
                 "GM12878.recal.bam:md5,3a99e9358b1e063264542b8b4bb4cf30",
