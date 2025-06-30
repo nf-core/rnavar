@@ -38,14 +38,11 @@
                 },
                 "TABIX": {
                     "tabix": 1.2
-                },
-                "Workflow": {
-                    "nf-core/rnavar": "v1.2.0dev"
                 }
             },
             [
                 "pipeline_info",
-                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing",
                 "preprocessing/GM12878",
                 "preprocessing/GM12878/GM12878.recal.bam",
@@ -67,12 +64,24 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "GM12878.stats:md5,d0a9e6f6962a12ef76415f8c82455873"
+            ],
+            [
+                "GM12878.recal.bam:md5,e747417968334d5b32dda69b59e84096"
+            ],
+            "No CRAM files",
+            [
+                "GM12878.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
+                "GM12878.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.4"
         },
-        "timestamp": "2025-03-17T11:48:45.215502183"
+        "timestamp": "2025-06-30T13:05:04.74556285"
     }
 }

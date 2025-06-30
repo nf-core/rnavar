@@ -52,20 +52,17 @@
                     "samtools": 1.21
                 },
                 "STAR_ALIGN": {
-                    "star": "2.7.11b",
+                    "gawk": "5.1.0",
                     "samtools": 1.21,
-                    "gawk": "5.1.0"
+                    "star": "2.7.11b"
                 },
                 "TABIX": {
                     "tabix": 1.2
-                },
-                "Workflow": {
-                    "nf-core/rnavar": "v1.2.0dev"
                 }
             },
             [
                 "pipeline_info",
-                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing",
                 "preprocessing/GM12878",
                 "preprocessing/GM12878/GM12878.md.bam",
@@ -96,12 +93,32 @@
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.csi"
+            ],
+            [
+                "GM12878.md.bam.csi:md5,3d0fdcb197c13361bf579ec37cc8f8c4",
+                "GM12878.recal.bam.csi:md5,af0fd79deca9a3d740935d4c3523c971",
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "GM12878.flagstat:md5,ed7c4db43f21dfaf1c7fd57549bb3c71",
+                "GM12878.stats:md5,2eb6fc4bb82d1d0494c95993b43e3e02",
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
+                "GM12878.bam:md5,5798b82205e9708992de623a5435791f",
+                "GM12878.bam.bai:md5,09c8c1989034a381acd578b7fed37944",
+                "GM12878.haplotypecaller.vcf.gz.csi:md5,cfa299dc46691bc73f111f4daacf9e18"
+            ],
+            [
+                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
+                "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            "No CRAM files",
+            [
+                "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.01.0"
+            "nextflow": "25.04.4"
         },
-        "timestamp": "2025-03-03T16:16:20.863243018"
+        "timestamp": "2025-06-30T13:00:11.088283809"
     }
 }

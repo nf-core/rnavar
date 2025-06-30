@@ -21,9 +21,6 @@
                 },
                 "TABIX_TABIX": {
                     "tabix": 1.2
-                },
-                "Workflow": {
-                    "nf-core/rnavar": "v1.2.0dev"
                 }
             },
             [
@@ -36,7 +33,7 @@
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
                 "pipeline_info",
-                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
                 "reports/EnsemblVEP",
                 "reports/EnsemblVEP/test",
@@ -59,26 +56,19 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "test_snpEff.genes.txt:md5,130536bf0237d7f3f746d32aaa32840a"
             ],
+            "No BAM files",
+            "No CRAM files",
             [
-                [
-                    "test_VEP.ann.vcf.gz",
-                    "d41d8cd98f00b204e9800998ecf8427e"
-                ],
-                [
-                    "test_snpEff.ann.vcf.gz",
-                    "fd266e623365c7d1837bc9eb088fe70c"
-                ],
-                [
-                    "test_snpEff_VEP.ann.vcf.gz",
-                    "d41d8cd98f00b204e9800998ecf8427e"
-                ]
+                "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test_snpEff.ann.vcf.gz:md5,fd266e623365c7d1837bc9eb088fe70c",
+                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.02.1"
+            "nextflow": "25.04.4"
         },
-        "timestamp": "2025-03-20T18:58:17.819472275"
+        "timestamp": "2025-06-30T12:53:47.463067618"
     },
     "-profile test --tools merge": {
         "content": [
@@ -102,9 +92,6 @@
                 },
                 "TABIX_TABIX": {
                     "tabix": 1.2
-                },
-                "Workflow": {
-                    "nf-core/rnavar": "v1.2.0dev"
                 }
             },
             [
@@ -113,7 +100,7 @@
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
                 "pipeline_info",
-                "pipeline_info/nf_core_pipeline_software_mqc_versions.yml",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
                 "reports/EnsemblVEP",
                 "reports/EnsemblVEP/test",
@@ -131,17 +118,16 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
+            "No BAM files",
+            "No CRAM files",
             [
-                [
-                    "test_snpEff_VEP.ann.vcf.gz",
-                    "d41d8cd98f00b204e9800998ecf8427e"
-                ]
+                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.02.1"
+            "nextflow": "25.04.4"
         },
-        "timestamp": "2025-03-20T18:57:30.251610919"
+        "timestamp": "2025-06-30T12:52:52.192748245"
     }
 }
