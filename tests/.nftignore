@@ -2,7 +2,7 @@
 annotation/**/*.vcf.{gz,gz.tbi}
 fastqc/*_fastqc.{html,zip}
 pipeline_info/*.{html,json,txt,yml}
-preprocessing/**/*.{bam,bam.bai,cram,cram.crai}
+preprocessing/**/*.{bam,bam.bai,bam.csi,cram,cram.crai}
 reports/EnsemblVEP/*/*.ann.summary.html
 reports/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
 reports/multiqc_data/multiqc.log
@@ -18,6 +18,6 @@ reports/snpeff/*/snpEff_summary.html
 reports/stats/*/STAR_log/*.Log.final.out
 reports/stats/*/STAR_log/*.Log.out
 reports/stats/*/STAR_log/*.Log.progress.out
-samtools/*.{bam,bam.bai,cram,cram.crai}
+samtools/*.{bam,bam.bai,bam.csi,cram,cram.crai}
 variant_calling/**/*.vcf
-variant_calling/**/*.vcf.{gz,gz.tbi}
+variant_calling/**/*.vcf.{gz,gz.tbi,gz.csi}
