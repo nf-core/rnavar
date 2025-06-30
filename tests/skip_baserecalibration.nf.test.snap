@@ -94,8 +94,8 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "GM12878.flagstat:md5,ed7c4db43f21dfaf1c7fd57549bb3c71",
-                "GM12878.stats:md5,86edaa0f28030a2b1785af0dc53128c3",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"            ],
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+            ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"

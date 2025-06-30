@@ -105,7 +105,6 @@
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
                 "GM12878.flagstat:md5,a89cb59e509dab933063d5486742a185",
-                "GM12878.stats:md5,7f86f7e32c946c2b449c6bc7b845a858",
                 "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
                 "GM12878.umi_extract.fastq.gz:md5,5ec2ee7620e78b26caf8f9173506fc82"
             ],

@@ -66,8 +66,7 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "GM12878.stats:md5,d0a9e6f6962a12ef76415f8c82455873"
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             [
                 "GM12878.recal.bam:md5,6df482a84f61ba5cb7496f037279ac59"

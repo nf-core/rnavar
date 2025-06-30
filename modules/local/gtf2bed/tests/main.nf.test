@@ -20,7 +20,10 @@ nextflow_process {
 
         then {
             assert process.success
-            assert snapshot(process.out).match()
+            assert snapshot(
+                process.out.bed,
+                path(process.out.versions[0]).yaml
+            ).match()
         }
 
     }
@@ -43,7 +46,10 @@ nextflow_process {
 
         then {
             assert process.success
-            assert snapshot(process.out).match()
+            assert snapshot(
+                process.out.bed,
+                path(process.out.versions[0]).yaml
+            ).match()
         }
 
     }
