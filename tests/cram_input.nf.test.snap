@@ -71,6 +71,7 @@
             [
             "No BAM files",
             ],
+            [
             "No CRAM files",
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
