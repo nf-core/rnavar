@@ -128,10 +128,7 @@
                 "GM12878_fastq.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
             ],
             [
-                "GM12878_bam.recal.bam:md5,be9d9da43b927d917fbf58091dde4ee",
-                "GM12878_cram.recal.bam:md5,e747417968334d5b32dda69b59e84096",
                 "GM12878_fastq.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878_fastq.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878_fastq.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",

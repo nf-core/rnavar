@@ -69,7 +69,7 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             [
-                "GM12878.recal.bam:md5,e747417968334d5b32dda69b59e84096"
+            "No BAM files",
             ],
             "No CRAM files",
             [

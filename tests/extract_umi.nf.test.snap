@@ -110,7 +110,6 @@
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825",
-                "GM12878.recal.bam:md5,d22b76de32b498249a24bb3239ef1a55",
                 "GM12878.bam:md5,4191926f68523d8d8dd156194d83e825"
             ],
             "No CRAM files",
