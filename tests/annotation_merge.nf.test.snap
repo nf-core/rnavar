@@ -13,8 +13,25 @@
                 "GATK4_INTERVALLISTTOOLS": {
                     "gatk4": "4.6.1.0"
                 },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "REMOVE_UNKNOWN_REGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.21
+                },
                 "SNPEFF_SNPEFF": {
                     "snpeff": "5.1d"
+                },
+                "STAR_INDEXVERSION": {
+                    "gawk": "5.1.0",
+                    "samtools": 1.21,
+                    "star": "2.7.11b"
                 },
                 "TABIX_BGZIPTABIX": {
                     "tabix": 1.2
@@ -68,7 +85,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.4"
         },
-        "timestamp": "2025-06-30T12:53:47.463067618"
+        "timestamp": "2025-06-30T15:35:18.020007292"
     },
     "-profile test --tools merge": {
         "content": [
@@ -84,8 +101,25 @@
                 "GATK4_INTERVALLISTTOOLS": {
                     "gatk4": "4.6.1.0"
                 },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "REMOVE_UNKNOWN_REGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.21
+                },
                 "SNPEFF_SNPEFF": {
                     "snpeff": "5.1d"
+                },
+                "STAR_INDEXVERSION": {
+                    "gawk": "5.1.0",
+                    "samtools": 1.21,
+                    "star": "2.7.11b"
                 },
                 "TABIX_BGZIPTABIX": {
                     "tabix": 1.2
@@ -128,6 +162,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.4"
         },
-        "timestamp": "2025-06-30T12:52:52.192748245"
+        "timestamp": "2025-06-30T15:34:12.20365183"
     }
 }

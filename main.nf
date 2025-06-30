@@ -141,6 +141,8 @@ workflow NFCORE_RNAVAR {
     ch_known_indels = params.known_indels ? PREPARE_GENOME.out.known_indels : Channel.value([])
     ch_known_indels_tbi = params.known_indels ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
 
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
+
     // Download cache
     if (params.download_cache) {
         // Assuming that even if the cache is provided, if the user specify download_cache, rnavar will download the cache
