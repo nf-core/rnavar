@@ -23,7 +23,7 @@
                         {
                             "id": "dict"
                         },
-                        "/nf-core/test-datasets/heads/rnavar/data/genomics/homo_sapiens/genome/genome.dict"
+                        "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.dict"
                     ]
                 ],
                 "exon_bed": [
@@ -39,7 +39,7 @@
                         {
                             "id": "fasta"
                         },
-                        "/nf-core/test-datasets/heads/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
+                        "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
                     ]
                 ],
                 "fasta_fai": [
@@ -55,7 +55,7 @@
                         {
                             "id": "gtf"
                         },
-                        "/nf-core/test-datasets/heads/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
+                        "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
                     ]
                 ],
                 "known_indels": [
@@ -152,7 +152,7 @@
                         {
                             "id": "fasta"
                         },
-                        "/nf-core/test-datasets/heads/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
+                        "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.fasta"
                     ]
                 ],
                 "fasta_fai": [
@@ -168,7 +168,7 @@
                         {
                             "id": "gtf"
                         },
-                        "/nf-core/test-datasets/heads/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
+                        "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
                     ]
                 ],
                 "known_indels": [
