@@ -288,23 +288,23 @@
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "test.SJ.out.tab:md5,00e98da3dc10fde088657c9d95008aba",
-                "test.flagstat:md5,e56c42369e239bbccab200f04d0a0554"
+                "test.SJ.out.tab:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test.flagstat:md5,c6b56420e8a30bff3487dbd6ec13ba5f"
             ],
             [
-                "test.md.bam:md5,40dd65654ebb2de713e1ce71613fe86d",
-                "test.bam:md5,40dd65654ebb2de713e1ce71613fe86d"
+                "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             "No CRAM files",
             [
-                "test.haplotypecaller.filtered.vcf.gz:md5,7d44ba6000d53a8f4d8ae36e117e56b6",
-                "test.haplotypecaller.vcf.gz:md5,ba1927dafc90e603aaa0c6f57a398eac"
+                "test.haplotypecaller.filtered.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test.haplotypecaller.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-04T16:10:27.681798005"
+        "timestamp": "2025-07-04T16:51:22.962030476"
     }
 }
