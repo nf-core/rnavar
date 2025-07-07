@@ -175,7 +175,7 @@ workflow RNAVAR {
         def genome_bam = FASTQ_ALIGN_STAR.out.bam
 
         // Gather QC ch_reports
-        ch_reports = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_out)
+        ch_reports = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_out.collect { _meta, log_out -> log_out })
         ch_reports = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect { it[1] }.ifEmpty([]))
         ch_versions = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
 
@@ -446,6 +446,7 @@ workflow RNAVAR {
         def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
         def methods_description = Channel.value(methodsDescriptionText(multiqc_custom_methods_description))
 
+        multiqc_files = multiqc_files.mix(ch_reports)
         multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         multiqc_files = multiqc_files.mix(collated_versions)
         multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
