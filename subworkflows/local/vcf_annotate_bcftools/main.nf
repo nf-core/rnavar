@@ -2,7 +2,7 @@
 // Run BCFtools to annotate VCF files
 //
 
-include { BCFTOOLS_ANNOTATE } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_ANNOTATE } from '../../../modules/nf-core/bcftools/annotate'
 
 workflow VCF_ANNOTATE_BCFTOOLS {
     take:

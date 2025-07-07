@@ -4,9 +4,9 @@
 ========================================================================================
 */
 
-include { GATK4_APPLYBQSR as APPLYBQSR } from '../../../modules/nf-core/gatk4/applybqsr/main'
-include { SAMTOOLS_INDEX               } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_STATS               } from '../../../modules/nf-core/samtools/stats/main'
+include { GATK4_APPLYBQSR as APPLYBQSR } from '../../../modules/nf-core/gatk4/applybqsr'
+include { SAMTOOLS_INDEX               } from '../../../modules/nf-core/samtools/index'
+include { SAMTOOLS_STATS               } from '../../../modules/nf-core/samtools/stats'
 
 workflow RECALIBRATE {
     take:

@@ -8,8 +8,8 @@
 // Condition is based on params.step and params.tools
 // If and extra condition exists, it's specified in comments
 
-include { ENSEMBLVEP_DOWNLOAD } from '../../../modules/nf-core/ensemblvep/download/main'
-include { SNPEFF_DOWNLOAD     } from '../../../modules/nf-core/snpeff/download/main'
+include { ENSEMBLVEP_DOWNLOAD } from '../../../modules/nf-core/ensemblvep/download'
+include { SNPEFF_DOWNLOAD     } from '../../../modules/nf-core/snpeff/download'
 
 workflow DOWNLOAD_CACHE_SNPEFF_VEP {
     take:

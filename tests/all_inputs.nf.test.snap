@@ -1,7 +1,7 @@
 {
     "-profile test --input all.csv": {
         "content": [
-            79,
+            49,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.6.1.0"
@@ -18,19 +18,10 @@
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.1.0"
                 },
-                "GATK4_HAPLOTYPECALLER": {
-                    "gatk4": "4.6.1.0"
-                },
                 "GATK4_INTERVALLISTTOOLS": {
                     "gatk4": "4.6.1.0"
                 },
-                "GATK4_MERGEVCFS": {
-                    "gatk4": "4.6.1.0"
-                },
                 "GATK4_SPLITNCIGARREADS": {
-                    "gatk4": "4.6.1.0"
-                },
-                "GATK4_VARIANTFILTRATION": {
                     "gatk4": "4.6.1.0"
                 },
                 "GFFREAD": {
@@ -76,9 +67,6 @@
                     "samtools": 1.21,
                     "star": "2.7.11b"
                 },
-                "TABIX": {
-                    "tabix": 1.2
-                },
                 "UNTAR": {
                     "untar": 1.34
                 }
@@ -88,18 +76,13 @@
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing",
                 "preprocessing/GM12878_bam",
-                "preprocessing/GM12878_bam/GM12878_bam.recal.bam",
-                "preprocessing/GM12878_bam/GM12878_bam.recal.bam.bai",
                 "preprocessing/GM12878_cram",
-                "preprocessing/GM12878_cram/GM12878_cram.recal.bam",
-                "preprocessing/GM12878_cram/GM12878_cram.recal.bam.bai",
                 "preprocessing/GM12878_fastq",
                 "preprocessing/GM12878_fastq/GM12878_fastq.md.bam",
                 "preprocessing/GM12878_fastq/GM12878_fastq.md.bam.bai",
-                "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam",
-                "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam.bai",
                 "reports",
                 "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
                 "reports/multiqc_data/multiqc.log",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
@@ -107,10 +90,6 @@
                 "reports/multiqc_data/multiqc_sources.txt",
                 "reports/multiqc_report.html",
                 "reports/stats",
-                "reports/stats/GM12878_bam",
-                "reports/stats/GM12878_bam/GM12878_bam.stats",
-                "reports/stats/GM12878_cram",
-                "reports/stats/GM12878_cram/GM12878_cram.stats",
                 "reports/stats/GM12878_fastq",
                 "reports/stats/GM12878_fastq/GM12878_fastq.flagstat",
                 "reports/stats/GM12878_fastq/GM12878_fastq.stats",
@@ -121,23 +100,7 @@
                 "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.SJ.out.tab",
                 "samtools",
                 "samtools/GM12878_fastq.bam",
-                "samtools/GM12878_fastq.bam.bai",
-                "variant_calling",
-                "variant_calling/GM12878_bam",
-                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.filtered.vcf.gz",
-                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.filtered.vcf.gz.tbi",
-                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/GM12878_cram",
-                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.filtered.vcf.gz",
-                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.filtered.vcf.gz.tbi",
-                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/GM12878_fastq",
-                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz",
-                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz.tbi",
-                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz.tbi"
+                "samtools/GM12878_fastq.bam.bai"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
@@ -149,19 +112,12 @@
                 "GM12878_fastq.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",
-            [
-                "GM12878_bam.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
-                "GM12878_bam.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0",
-                "GM12878_cram.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
-                "GM12878_cram.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0",
-                "GM12878_fastq.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
-                "GM12878_fastq.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
-            ]
+            "No VCF files"
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-30T15:31:01.347881948"
+        "timestamp": "2025-07-07T14:57:03.523840667"
     }
 }

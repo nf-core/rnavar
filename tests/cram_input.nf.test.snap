@@ -1,7 +1,7 @@
 {
     "-profile test --input cram.csv": {
         "content": [
-            27,
+            17,
             {
                 "APPLYBQSR": {
                     "gatk4": "4.6.1.0"
@@ -12,19 +12,10 @@
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.1.0"
                 },
-                "GATK4_HAPLOTYPECALLER": {
-                    "gatk4": "4.6.1.0"
-                },
                 "GATK4_INTERVALLISTTOOLS": {
                     "gatk4": "4.6.1.0"
                 },
-                "GATK4_MERGEVCFS": {
-                    "gatk4": "4.6.1.0"
-                },
                 "GATK4_SPLITNCIGARREADS": {
-                    "gatk4": "4.6.1.0"
-                },
-                "GATK4_VARIANTFILTRATION": {
                     "gatk4": "4.6.1.0"
                 },
                 "GFFREAD": {
@@ -45,16 +36,10 @@
                 "SAMTOOLS_MERGE": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_STATS": {
-                    "samtools": 1.21
-                },
                 "STAR_INDEXVERSION": {
                     "gawk": "5.1.0",
                     "samtools": 1.21,
                     "star": "2.7.11b"
-                },
-                "TABIX": {
-                    "tabix": 1.2
                 }
             },
             [
@@ -62,40 +47,27 @@
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing",
                 "preprocessing/GM12878",
-                "preprocessing/GM12878/GM12878.recal.bam",
-                "preprocessing/GM12878/GM12878.recal.bam.bai",
                 "reports",
                 "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
                 "reports/multiqc_data/multiqc.log",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
                 "reports/multiqc_data/multiqc_software_versions.txt",
                 "reports/multiqc_data/multiqc_sources.txt",
-                "reports/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.stats",
-                "variant_calling",
-                "variant_calling/GM12878",
-                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
-                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
-                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
+                "reports/multiqc_report.html"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             "No BAM files",
             "No CRAM files",
-            [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
-                "GM12878.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0"
-            ]
+            "No VCF files"
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-30T16:34:39.869781785"
+        "timestamp": "2025-07-07T15:07:44.964967366"
     }
 }
