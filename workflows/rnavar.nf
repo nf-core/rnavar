@@ -294,7 +294,7 @@ workflow RNAVAR {
         def haplotypecaller_interval_bam = bam_variant_calling
             .combine(interval_list_split)
             .map { meta, bam, bai, interval_lists ->
-                [meta + [interval_count: interval_lists instanceof List ? interval_lists.size() : 1], bam, bai, meta.interval_count > 1 ? interval_lists : [interval_lists]]
+                [meta + [interval_count: interval_lists instanceof List ? interval_lists.size() : 1], bam, bai, interval_lists.size() > 1 ? interval_lists : [interval_lists]]
             }
             .transpose(by: 3)
             .map { meta, bam, bai, interval_list_ ->
