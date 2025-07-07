@@ -10,21 +10,21 @@ include { SAMTOOLS_STATS               } from '../../../modules/nf-core/samtools
 
 workflow RECALIBRATE {
     take:
-        skip_samtools  // boolean: true/false
-        bam         // channel: [mandatory] bam
-        dict        // channel: [mandatory] dict
-        fai         // channel: [mandatory] fai
-        fasta       // channel: [mandatory] fasta
+    skip_samtools // boolean: true/false
+    bam           // channel: [mandatory] bam
+    dict          // channel: [mandatory] dict
+    fai           // channel: [mandatory] fai
+    fasta         // channel: [mandatory] fasta
 
     main:
 
     def ch_versions = Channel.empty()
 
-    APPLYBQSR (
+    APPLYBQSR(
         bam,
         fasta,
         fai,
-        dict
+        dict,
     )
     def bam_recalibrated = APPLYBQSR.out.bam
     ch_versions = ch_versions.mix(APPLYBQSR.out.versions.first())
@@ -36,8 +36,7 @@ workflow RECALIBRATE {
         .mix(SAMTOOLS_INDEX.out.csi)
         .mix(SAMTOOLS_INDEX.out.crai)
 
-    def bam_recalibrated_index = bam_recalibrated
-        .join(bam_indices, failOnMismatch: true, failOnDuplicate: true)
+    def bam_recalibrated_index = bam_recalibrated.join(bam_indices, failOnMismatch: true, failOnDuplicate: true)
 
     def bam_reports = Channel.empty()
 
@@ -47,11 +46,8 @@ workflow RECALIBRATE {
         ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions.first())
     }
 
-
     emit:
-    bam         = bam_recalibrated_index
-    qc          = bam_reports
-
-    versions    = ch_versions
-
+    bam      = bam_recalibrated_index
+    qc       = bam_reports
+    versions = ch_versions
 }

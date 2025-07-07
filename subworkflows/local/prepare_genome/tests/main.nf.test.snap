@@ -98,15 +98,15 @@
                     "versions.yml:md5,3c6fc57c4c3bf7b143933b0b89ab0386",
                     "versions.yml:md5,7263c03ca9c7d18bc40fc8d27a5936fa",
                     "versions.yml:md5,7303f194674b485c6914e28422822a12",
-                    "versions.yml:md5,f104f9bec6db3d55c728ffd041131110"
+                    "versions.yml:md5,e1ae3c4313a36fcd13e867ddc4ee45aa"
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-30T14:37:56.543826207"
+        "timestamp": "2025-07-07T15:55:23.201009318"
     },
     "only essentials": {
         "content": [

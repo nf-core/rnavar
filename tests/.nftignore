@@ -4,6 +4,7 @@ fastqc/*_fastqc.{html,zip}
 pipeline_info/*.{html,json,txt,yml}
 preprocessing/**/*.{bam,bam.bai,bam.csi,cram,cram.crai}
 reports/EnsemblVEP/*/*.ann.summary.html
+reports/multiqc_data/BETA-multiqc.parquet
 reports/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
 reports/multiqc_data/multiqc.log
 reports/multiqc_data/multiqc_data.json
