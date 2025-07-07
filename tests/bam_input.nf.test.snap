@@ -102,7 +102,6 @@
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
-                "gatk-base-recalibrator-reported-empirical-plot.txt:md5,48448a7ac8656add1e4a75ecabc9bc85",
                 "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9"
             ],
             "No BAM files",
