@@ -209,7 +209,6 @@
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,1365ef874ba0e23b81b355e7172a8b65",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,b7c9321b4bb0acaab9dc2f0f25163f59",
                 "gatk-base-recalibrator-reported-empirical-plot.txt:md5,fb3f15d2209f934c6574e039ac0898b3",
-                "gatk_base_recalibrator.txt:md5,458cd02869f0b9abbdb501249c530618",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,da7a65bf9367599256c4694f173a61a7",
                 "multiqc_samtools_idxstats.txt:md5,139e6bb3bb170aab59568cfc00d98123",

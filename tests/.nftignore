@@ -5,6 +5,7 @@ pipeline_info/*.{html,json,txt,yml}
 preprocessing/**/*.{bam,bam.bai,bam.csi,cram,cram.crai}
 reports/EnsemblVEP/*/*.ann.summary.html
 reports/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
+reports/multiqc_data/gatk_base_recalibrator.txt
 reports/multiqc_data/multiqc.log
 reports/multiqc_data/multiqc_data.json
 reports/multiqc_data/multiqc_general_stats.txt
