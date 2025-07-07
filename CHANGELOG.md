@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#209](https://github.com/nf-core/rnavar/pull/209) - Rescue versions from DOWNLOAD_CACHE and PREPARE_GENOME subworkflows
 - [#211](https://github.com/nf-core/rnavar/pull/211) - Fix issue with merging paired-end fastq files (cf [#210](https://github.com/nf-core/rnavar/issues/210))
+- [#212](https://github.com/nf-core/rnavar/pull/212) - Fix missing reports (cf [#208](https://github.com/nf-core/rnavar/issues/208))
 - [#213](https://github.com/nf-core/rnavar/pull/213) - Update all modules
 
 ### Dependencies
