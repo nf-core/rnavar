@@ -66,11 +66,28 @@
                 "preprocessing/GM12878/GM12878.recal.bam.bai",
                 "reports",
                 "reports/multiqc_data",
+                "reports/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
+                "reports/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt",
+                "reports/multiqc_data/gatk-base-recalibrator-reported-empirical-plot.txt",
+                "reports/multiqc_data/gatk_base_recalibrator.txt",
                 "reports/multiqc_data/multiqc.log",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
                 "reports/multiqc_data/multiqc_software_versions.txt",
                 "reports/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc_plots",
+                "reports/multiqc_plots/pdf",
+                "reports/multiqc_plots/pdf/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.pdf",
+                "reports/multiqc_plots/pdf/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.pdf",
+                "reports/multiqc_plots/pdf/gatk-base-recalibrator-reported-empirical-plot.pdf",
+                "reports/multiqc_plots/png",
+                "reports/multiqc_plots/png/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.png",
+                "reports/multiqc_plots/png/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.png",
+                "reports/multiqc_plots/png/gatk-base-recalibrator-reported-empirical-plot.png",
+                "reports/multiqc_plots/svg",
+                "reports/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.svg",
+                "reports/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.svg",
+                "reports/multiqc_plots/svg/gatk-base-recalibrator-reported-empirical-plot.svg",
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
@@ -83,7 +100,11 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
-                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
+                "gatk-base-recalibrator-reported-empirical-plot.txt:md5,48448a7ac8656add1e4a75ecabc9bc85",
+                "gatk_base_recalibrator.txt:md5,7245640490a8dcc559486942550c9a25",
+                "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9"
             ],
             "No BAM files",
             "No CRAM files",
@@ -94,8 +115,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-30T15:54:34.952352638"
+        "timestamp": "2025-07-07T13:27:21.922892591"
     }
 }
