@@ -1,0 +1,62 @@
+{
+    "bam - no stats": {
+        "content": [
+            {
+                "bam": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "22e22cd4b7da6967236f1c83277ea7e3",
+                        "test.recal.bam.bai"
+                    ]
+                ],
+                "qc": [
+                    
+                ],
+                "versions": [
+                    "versions.yml:md5,5ac2b80142e8e414d486250387f61a89",
+                    "versions.yml:md5,7254d01c09ca362f258ee3dda431ac92"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-08T10:20:14.080519845"
+    },
+    "bam - stats": {
+        "content": [
+            {
+                "bam": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "22e22cd4b7da6967236f1c83277ea7e3",
+                        "test.recal.bam.bai"
+                    ]
+                ],
+                "qc": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.stats:md5,eafd72617feeeb8644a72e4799281a09"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,40d9d05926d5b2862a346cf91e38655e",
+                    "versions.yml:md5,5ac2b80142e8e414d486250387f61a89",
+                    "versions.yml:md5,7254d01c09ca362f258ee3dda431ac92"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-08T10:19:51.240978907"
+    }
+}

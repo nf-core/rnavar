@@ -1,0 +1,244 @@
+{
+    "-profile test --input all.csv": {
+        "content": [
+            79,
+            {
+                "CAT_FASTQ": {
+                    "cat": 9.5
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_APPLYBQSR": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_BASERECALIBRATOR": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.3.0"
+                },
+                "REMOVE_UNKNOWN_REGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": 1.21
+                },
+                "STAR_ALIGN": {
+                    "gawk": "5.1.0",
+                    "samtools": 1.21,
+                    "star": "2.7.11b"
+                },
+                "STAR_INDEXVERSION": {
+                    "gawk": "5.1.0",
+                    "samtools": 1.21,
+                    "star": "2.7.11b"
+                },
+                "TABIX": {
+                    "tabix": 1.21
+                },
+                "UNTAR": {
+                    "untar": 1.34
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/GM12878_bam",
+                "preprocessing/GM12878_bam/GM12878_bam.recal.bam",
+                "preprocessing/GM12878_bam/GM12878_bam.recal.bam.bai",
+                "preprocessing/GM12878_cram",
+                "preprocessing/GM12878_cram/GM12878_cram.recal.bam",
+                "preprocessing/GM12878_cram/GM12878_cram.recal.bam.bai",
+                "preprocessing/GM12878_fastq",
+                "preprocessing/GM12878_fastq/GM12878_fastq.md.bam",
+                "preprocessing/GM12878_fastq/GM12878_fastq.md.bam.bai",
+                "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam",
+                "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam.bai",
+                "reports",
+                "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
+                "reports/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
+                "reports/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt",
+                "reports/multiqc_data/gatk-base-recalibrator-reported-empirical-plot.txt",
+                "reports/multiqc_data/gatk_base_recalibrator.txt",
+                "reports/multiqc_data/multiqc.log",
+                "reports/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc_data/multiqc_data.json",
+                "reports/multiqc_data/multiqc_general_stats.txt",
+                "reports/multiqc_data/multiqc_picard_dups.txt",
+                "reports/multiqc_data/multiqc_samtools_idxstats.txt",
+                "reports/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc_data/multiqc_star.txt",
+                "reports/multiqc_data/picard_MarkIlluminaAdapters_histogram.txt",
+                "reports/multiqc_data/picard_MeanQualityByCycle_histogram.txt",
+                "reports/multiqc_data/picard_QualityScoreDistribution_histogram.txt",
+                "reports/multiqc_data/picard_deduplication.txt",
+                "reports/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
+                "reports/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
+                "reports/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
+                "reports/multiqc_data/star_alignment_plot.txt",
+                "reports/multiqc_data/star_summary_table.txt",
+                "reports/multiqc_plots",
+                "reports/multiqc_plots/pdf",
+                "reports/multiqc_plots/pdf/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.pdf",
+                "reports/multiqc_plots/pdf/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.pdf",
+                "reports/multiqc_plots/pdf/gatk-base-recalibrator-reported-empirical-plot.pdf",
+                "reports/multiqc_plots/pdf/picard_deduplication-cnt.pdf",
+                "reports/multiqc_plots/pdf/picard_deduplication-pct.pdf",
+                "reports/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.pdf",
+                "reports/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.pdf",
+                "reports/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.pdf",
+                "reports/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.pdf",
+                "reports/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.pdf",
+                "reports/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.pdf",
+                "reports/multiqc_plots/pdf/star_alignment_plot-cnt.pdf",
+                "reports/multiqc_plots/pdf/star_alignment_plot-pct.pdf",
+                "reports/multiqc_plots/pdf/star_summary_table.pdf",
+                "reports/multiqc_plots/png",
+                "reports/multiqc_plots/png/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.png",
+                "reports/multiqc_plots/png/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.png",
+                "reports/multiqc_plots/png/gatk-base-recalibrator-reported-empirical-plot.png",
+                "reports/multiqc_plots/png/picard_deduplication-cnt.png",
+                "reports/multiqc_plots/png/picard_deduplication-pct.png",
+                "reports/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.png",
+                "reports/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.png",
+                "reports/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.png",
+                "reports/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.png",
+                "reports/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.png",
+                "reports/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.png",
+                "reports/multiqc_plots/png/star_alignment_plot-cnt.png",
+                "reports/multiqc_plots/png/star_alignment_plot-pct.png",
+                "reports/multiqc_plots/png/star_summary_table.png",
+                "reports/multiqc_plots/svg",
+                "reports/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.svg",
+                "reports/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.svg",
+                "reports/multiqc_plots/svg/gatk-base-recalibrator-reported-empirical-plot.svg",
+                "reports/multiqc_plots/svg/picard_deduplication-cnt.svg",
+                "reports/multiqc_plots/svg/picard_deduplication-pct.svg",
+                "reports/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.svg",
+                "reports/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.svg",
+                "reports/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.svg",
+                "reports/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.svg",
+                "reports/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.svg",
+                "reports/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.svg",
+                "reports/multiqc_plots/svg/star_alignment_plot-cnt.svg",
+                "reports/multiqc_plots/svg/star_alignment_plot-pct.svg",
+                "reports/multiqc_plots/svg/star_summary_table.svg",
+                "reports/multiqc_report.html",
+                "reports/stats",
+                "reports/stats/GM12878_bam",
+                "reports/stats/GM12878_bam/GM12878_bam.stats",
+                "reports/stats/GM12878_cram",
+                "reports/stats/GM12878_cram/GM12878_cram.stats",
+                "reports/stats/GM12878_fastq",
+                "reports/stats/GM12878_fastq/GM12878_fastq.flagstat",
+                "reports/stats/GM12878_fastq/GM12878_fastq.stats",
+                "reports/stats/GM12878_fastq/STAR_log",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.Log.final.out",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.Log.out",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.Log.progress.out",
+                "reports/stats/GM12878_fastq/STAR_log/GM12878_fastq.SJ.out.tab",
+                "samtools",
+                "samtools/GM12878_fastq.bam",
+                "samtools/GM12878_fastq.bam.bai",
+                "variant_calling",
+                "variant_calling/GM12878_bam",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878_bam/GM12878_bam.haplotypecaller.vcf.gz.tbi",
+                "variant_calling/GM12878_cram",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878_cram/GM12878_cram.haplotypecaller.vcf.gz.tbi",
+                "variant_calling/GM12878_fastq",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz.tbi"
+            ],
+            [
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,1365ef874ba0e23b81b355e7172a8b65",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,b7c9321b4bb0acaab9dc2f0f25163f59",
+                "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
+                "multiqc_picard_dups.txt:md5,da7a65bf9367599256c4694f173a61a7",
+                "multiqc_samtools_idxstats.txt:md5,139e6bb3bb170aab59568cfc00d98123",
+                "multiqc_star.txt:md5,b9ffabd8529481860a9dea0859d778fb",
+                "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,5bb6f3b328f037608e25d6b6ad39123d",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,5bb6f3b328f037608e25d6b6ad39123d",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,d1b00eecb52d1c0c47fceb1f31177c2e",
+                "star_alignment_plot.txt:md5,f525d4d1f43f66ba171f3db4d68b928c",
+                "star_summary_table.txt:md5,6b67b1b7c130f55075939b7acd887671",
+                "GM12878_fastq.flagstat:md5,ed7c4db43f21dfaf1c7fd57549bb3c71",
+                "GM12878_fastq.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+            ],
+            [
+                "GM12878_fastq.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878_fastq.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            "No CRAM files",
+            [
+                "GM12878_bam.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
+                "GM12878_bam.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0",
+                "GM12878_cram.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
+                "GM12878_cram.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0",
+                "GM12878_fastq.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
+                "GM12878_fastq.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-07T18:34:21.510515312"
+    }
+}

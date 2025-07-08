@@ -14,6 +14,7 @@
                 "meta": ["id"]
             },
             "fastq_1": {
+                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
@@ -26,8 +27,55 @@
                 "exists": true,
                 "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+            },
+            "bam": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bam$",
+                "errorMessage": "BAM file should end with `.bam`, should not contains spaces and should exist."
+            },
+            "bai": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bai$",
+                "errorMessage": "BAI file should end with `.bai`, should not contains spaces and should exist."
+            },
+            "cram": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.cram$",
+                "errorMessage": "CRAM file should end with `.cram`, should not contains spaces and should exist."
+            },
+            "crai": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.crai$",
+                "errorMessage": "CRAI file should end with `.crai`, should not contains spaces and should exist."
+            },
+            "vcf": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.vcf\\.gz$",
+                "errorMessage": "VCF file should end with `.vcf.gz`, should not contains spaces and should exist."
+            },
+            "tbi": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                "errorMessage": "TBI file should end with `.vcf.gz.tbi`, should not contains spaces and should exist."
             }
         },
-        "required": ["sample", "fastq_1"]
+        "oneOf": [
+            { "required": ["sample", "fastq_1"] },
+            { "required": ["sample", "bam"] },
+            { "required": ["sample", "cram"] },
+            { "required": ["sample", "vcf"] }
+        ]
     }
 }

@@ -1,0 +1,163 @@
+nextflow_workflow {
+
+    name "Test Subworkflow RECALIBRATE"
+    script "../main.nf"
+    workflow "RECALIBRATE"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "subworkflows/recalibrate"
+    tag "samtools/stats"
+    tag "samtools/index"
+    tag "gatk4/applybqsr"
+    config "./nextflow.config"
+
+    setup {
+        run("GATK4_BASERECALIBRATOR") {
+            script "../../../../modules/nf-core/gatk4/baserecalibrator/main.nf"
+
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true)
+                ])
+                input[1] = Channel.value([
+                    [id:"fasta"],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.value([
+                    [id:"fai"],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = Channel.value([
+                    [id:"dict"],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                input[4] = Channel.value([
+                    [id:"known_sites"],
+                    [
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true)
+                    ]
+                ])
+                input[5] = Channel.value([
+                    [id:"known_sites"],
+                    [
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
+                    ]
+                ])
+                """
+            }
+        }
+    }
+
+    test("bam - stats") {
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                ])
+                .join(GATK4_BASERECALIBRATOR.out.table)
+                .map { meta, bam, bai, table ->
+                    [
+                        meta,
+                        bam,
+                        bai,
+                        table,
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true)
+                    ]
+                }
+                input[2] = Channel.value(
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                )
+                input[3] = Channel.value(
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                )
+                input[4] = Channel.value(
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                )
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.collectEntries { key, val ->
+                        if(key.matches("\\d+")) {
+                            return null
+                        }
+                        if(key == "bam") {
+                            return [key, val.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name]}]
+                        }
+                        return [key, val]
+                    }.findAll { it != null }
+                ).match() }
+            )
+        }
+    }
+
+    test("bam - no stats") {
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = true
+                input[1] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                ])
+                .join(GATK4_BASERECALIBRATOR.out.table)
+                .map { meta, bam, bai, table ->
+                    [
+                        meta,
+                        bam,
+                        bai,
+                        table,
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true)
+                    ]
+                }
+                input[2] = Channel.value(
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                )
+                input[3] = Channel.value(
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                )
+                input[4] = Channel.value(
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                )
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.collectEntries { key, val ->
+                        if(key.matches("\\d+")) {
+                            return null
+                        }
+                        if(key == "bam") {
+                            return [key, val.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name]}]
+                        }
+                        return [key, val]
+                    }.findAll { it != null }
+                ).match() }
+            )
+        }
+    }
+}

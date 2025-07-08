@@ -1,0 +1,57 @@
+nextflow_process {
+
+    name "Test Process GTF2BED"
+    script "../main.nf"
+    process "GTF2BED"
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.value([
+                    [id:'gtf'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
+                ])
+                input[1] = "exon"
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(
+                process.out.bed,
+                path(process.out.versions[0]).yaml
+            ).match()
+        }
+
+    }
+
+    test("Should run without failures - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = Channel.value([
+                    [id:'gtf'],
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
+                ])
+                input[1] = "exon"
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(
+                process.out.bed,
+                path(process.out.versions[0]).yaml
+            ).match()
+        }
+
+    }
+
+}
