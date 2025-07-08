@@ -1,7 +1,4 @@
-lint:
-  files_exist:
-    - .github/workflows/ci.yml
-nf_core_version: 3.3.1
+nf_core_version: 3.3.2
 repository_type: pipeline
 template:
   author: Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke
