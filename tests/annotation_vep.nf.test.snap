@@ -34,7 +34,7 @@
                     "star": "2.7.11b"
                 },
                 "TABIX_TABIX": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 }
             },
             [
@@ -167,6 +167,7 @@
                 "reports/EnsemblVEP/test",
                 "reports/EnsemblVEP/test/test_VEP.ann.summary.html",
                 "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
                 "reports/multiqc_data/multiqc.log",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
@@ -305,6 +306,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-07T13:22:17.636796336"
+        "timestamp": "2025-07-07T18:38:23.149045493"
     }
 }

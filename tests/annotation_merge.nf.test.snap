@@ -34,10 +34,10 @@
                     "star": "2.7.11b"
                 },
                 "TABIX_BGZIPTABIX": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 }
             },
             [
@@ -57,6 +57,7 @@
                 "reports/EnsemblVEP/test/test_VEP.ann.summary.html",
                 "reports/EnsemblVEP/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
                 "reports/multiqc_data/multiqc.log",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
@@ -71,7 +72,6 @@
                 "reports/multiqc_data/vep.txt",
                 "reports/multiqc_plots",
                 "reports/multiqc_plots/pdf",
-                "reports/multiqc_plots/pdf/general_stats_table.pdf",
                 "reports/multiqc_plots/pdf/snpeff_effects-cnt.pdf",
                 "reports/multiqc_plots/pdf/snpeff_effects-pct.pdf",
                 "reports/multiqc_plots/pdf/snpeff_qualities.pdf",
@@ -81,7 +81,6 @@
                 "reports/multiqc_plots/pdf/snpeff_variant_effects_region-pct.pdf",
                 "reports/multiqc_plots/pdf/vep-general-stats.pdf",
                 "reports/multiqc_plots/png",
-                "reports/multiqc_plots/png/general_stats_table.png",
                 "reports/multiqc_plots/png/snpeff_effects-cnt.png",
                 "reports/multiqc_plots/png/snpeff_effects-pct.png",
                 "reports/multiqc_plots/png/snpeff_qualities.png",
@@ -91,7 +90,6 @@
                 "reports/multiqc_plots/png/snpeff_variant_effects_region-pct.png",
                 "reports/multiqc_plots/png/vep-general-stats.png",
                 "reports/multiqc_plots/svg",
-                "reports/multiqc_plots/svg/general_stats_table.svg",
                 "reports/multiqc_plots/svg/snpeff_effects-cnt.svg",
                 "reports/multiqc_plots/svg/snpeff_effects-pct.svg",
                 "reports/multiqc_plots/svg/snpeff_qualities.svg",
@@ -129,7 +127,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-07T13:18:59.560131677"
+        "timestamp": "2025-07-07T18:36:10.599969468"
     },
     "-profile test --tools merge": {
         "content": [
@@ -166,10 +164,10 @@
                     "star": "2.7.11b"
                 },
                 "TABIX_BGZIPTABIX": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 }
             },
             [
@@ -184,6 +182,7 @@
                 "reports/EnsemblVEP/test",
                 "reports/EnsemblVEP/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
                 "reports/multiqc_data/multiqc.log",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
@@ -198,7 +197,6 @@
                 "reports/multiqc_data/vep.txt",
                 "reports/multiqc_plots",
                 "reports/multiqc_plots/pdf",
-                "reports/multiqc_plots/pdf/general_stats_table.pdf",
                 "reports/multiqc_plots/pdf/snpeff_effects-cnt.pdf",
                 "reports/multiqc_plots/pdf/snpeff_effects-pct.pdf",
                 "reports/multiqc_plots/pdf/snpeff_qualities.pdf",
@@ -208,7 +206,6 @@
                 "reports/multiqc_plots/pdf/snpeff_variant_effects_region-pct.pdf",
                 "reports/multiqc_plots/pdf/vep-general-stats.pdf",
                 "reports/multiqc_plots/png",
-                "reports/multiqc_plots/png/general_stats_table.png",
                 "reports/multiqc_plots/png/snpeff_effects-cnt.png",
                 "reports/multiqc_plots/png/snpeff_effects-pct.png",
                 "reports/multiqc_plots/png/snpeff_qualities.png",
@@ -218,7 +215,6 @@
                 "reports/multiqc_plots/png/snpeff_variant_effects_region-pct.png",
                 "reports/multiqc_plots/png/vep-general-stats.png",
                 "reports/multiqc_plots/svg",
-                "reports/multiqc_plots/svg/general_stats_table.svg",
                 "reports/multiqc_plots/svg/snpeff_effects-cnt.svg",
                 "reports/multiqc_plots/svg/snpeff_effects-pct.svg",
                 "reports/multiqc_plots/svg/snpeff_qualities.svg",
@@ -250,6 +246,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-07T13:18:08.897031114"
+        "timestamp": "2025-07-07T18:35:22.188706188"
     }
 }
