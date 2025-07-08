@@ -3,11 +3,11 @@
         "content": [
             41,
             {
-                "GATK4_APPLYBQSR": {
-                    "gatk4": "4.6.1.0"
-                },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "GATK4_APPLYBQSR": {
+                    "gatk4": "4.6.1.0"
                 },
                 "GATK4_BASERECALIBRATOR": {
                     "gatk4": "4.6.1.0"
