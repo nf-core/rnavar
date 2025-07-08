@@ -3,7 +3,7 @@
         "content": [
             27,
             {
-                "APPLYBQSR": {
+                "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.1.0"
                 },
                 "GATK4_BASERECALIBRATOR": {

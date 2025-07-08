@@ -3,7 +3,7 @@
         "content": [
             72,
             {
-                "APPLYBQSR": {
+                "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.1.0"
                 },
                 "CAT_FASTQ": {
@@ -247,7 +247,7 @@
         "content": [
             41,
             {
-                "APPLYBQSR": {
+                "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.1.0"
                 },
                 "CAT_FASTQ": {
