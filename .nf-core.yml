@@ -1,7 +1,5 @@
 nf_core_version: 3.3.2
 repository_type: pipeline
-lint:
-  schema_params: false
 template:
   author: Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke
   description: GATK4 RNA variant calling pipeline

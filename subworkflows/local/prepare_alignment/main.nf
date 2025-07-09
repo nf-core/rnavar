@@ -2,8 +2,7 @@
 // Prepare input alignment files
 //
 
-include { SAMTOOLS_CONVERT } from '../../../modules/nf-core/samtools/convert'
-include { SAMTOOLS_INDEX   } from '../../../modules/nf-core/samtools/index'
+include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index'
 
 workflow PREPARE_ALIGNMENT {
     take:
@@ -29,15 +28,15 @@ workflow PREPARE_ALIGNMENT {
     SAMTOOLS_INDEX(
         bam_no_index
     )
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     def bam_indexed = alignment_branch.not_indexed_bam.join(SAMTOOLS_INDEX.out.bai, failOnMismatch: true, failOnDuplicate: true)
-
     def cram_indexed = alignment_branch.not_indexed_cram.join(SAMTOOLS_INDEX.out.crai, failOnMismatch: true, failOnDuplicate: true)
 
     def alignment_out = bam_indexed
         .mix(cram_indexed)
         .mix(alignment_branch.indexed)
+
+    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
     emit:
     bam      = alignment_out // [ val(meta), path(bam), path(bai) ]

@@ -22,7 +22,7 @@
             "@id": "./",
             "@type": "Dataset",
             "creativeWorkStatus": "InProgress",
-            "datePublished": "2025-07-08T11:58:55+00:00",
+            "datePublished": "2025-07-09T10:32:59+00:00",
             "description": "<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/nf-core-rnavar_logo_dark.png\">\n    <img alt=\"nf-core/rnavar\" src=\"docs/images/nf-core-rnavar_logo_light.png\">\n  </picture>\n</h1>\n\n[![GitHub Actions CI Status](https://github.com/nf-core/rnavar/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/rnavar/actions/workflows/nf-test.yml)\n[![GitHub Actions Linting Status](https://github.com/nf-core/rnavar/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/rnavar/actions/workflows/linting.yml)\n[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/rnavar/results)\n[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.6669636-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.6669636)\n[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)\n\n[![Nextflow](https://img.shields.io/badge/version-%E2%89%A524.10.5-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)\n[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.3.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.3.2)\n[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)\n[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)\n[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)\n[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/rnavar)\n\n[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23rnavar-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/rnavar)\n[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)\n[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)\n[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)\n\n## Introduction\n\n**nf-core/rnavar** is a bioinformatics pipeline for RNA variant calling analysis following GATK4 best practices.\n\n## Pipeline summary\n\n1. Merge re-sequenced FastQ files ([`cat`](http://www.linfo.org/cat.html))\n2. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))\n3. (Optionally) Extract UMIs from FASTQ reads ([`UMI-tools`](https://github.com/CGATOxford/UMI-tools))\n4. Align reads to reference genome ([`STAR`](https://github.com/alexdobin/STAR))\n5. Sort and index alignments ([`SAMtools`](https://sourceforge.net/projects/samtools/files/samtools/))\n6. Duplicate read marking ([`Picard MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard))\n7. Scatter one interval-list into many interval-files ([`GATK4 IntervalListTools`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917392155-IntervalListTools-Picard-))\n8. Splits reads that contain Ns in their cigar string ([`GATK4 SplitNCigarReads`](https://gatk.broadinstitute.org/hc/en-us/articles/4409917482651-SplitNCigarReads))\n9. Estimate and correct systematic bias using base quality score recalibration ([`GATK4 BaseRecalibrator`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897206043-BaseRecalibrator), [`GATK4 ApplyBQSR`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897168667-ApplyBQSR))\n10. Convert a BED file to a Picard Interval List ([`GATK4 BedToIntervalList`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924780827-BedToIntervalList-Picard-))\n11. Call SNPs and indels ([`GATK4 HaplotypeCaller`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897180827-HaplotypeCaller))\n12. Merge multiple VCF files into one VCF ([`GATK4 MergeVCFs`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924817691-MergeVcfs-Picard-))\n13. Index the VCF ([`Tabix`](http://www.htslib.org/doc/tabix.html))\n14. Filter variant calls based on certain criteria ([`GATK4 VariantFiltration`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897204763-VariantFiltration))\n15. Annotate variants ([`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))\n16. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC`](http://multiqc.info/), [`R`](https://www.r-project.org/))\n\n### Summary of tools and version used in the pipeline\n\n| Tool        | Version |\n| ----------- | ------- |\n| BCFtools    | 1.20    |\n| BEDtools    | 2.31.1  |\n| Ensembl VEP | 113.0   |\n| FastQC      | 0.12.1  |\n| GATK        | 4.6.1.0 |\n| mosdepth    | 0.3.10  |\n| MultiQC     | 1.27    |\n| Picard      | 3.3.0   |\n| Samtools    | 1.21    |\n| SnpEff      | 5.1     |\n| STAR        | 2.7.11b |\n| Tabix       | 1.20    |\n| UMI-tools   | 1.1.5   |\n\n## Usage\n\n> [!NOTE]\n> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow.Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.\n\nFirst, prepare a samplesheet with your input data that looks as follows:\n\n`samplesheet.csv`:\n\n```csv\nsample,fastq_1,fastq_2\nCONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz\n```\n\nEach row represents a fastq file (single-end) or a pair of fastq files (paired end).\n\nNow, you can run the pipeline using:\n\n```console\nnextflow run nf-core/rnavar -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv  --outdir <OUTDIR> --genome GRCh38\n```\n\n> [!WARNING]\n> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).\n\nFor more details and further functionality, please refer to the [usage documentation](https://nf-co.re/rnavar/usage) and the [parameter documentation](https://nf-co.re/rnavar/parameters).\n\n## Pipeline output\n\nTo see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/rnavar/results) tab on the nf-core website pipeline page.\nFor more details about the output files and reports, please refer to the\n[output documentation](https://nf-co.re/rnavar/output).\n\n## Credits\n\nrnavar was originally written by Praveen Raj and Maxime U Garcia at [The Swedish Childhood Tumor Biobank (Barntum\u00f6rbanken), Karolinska Institutet](https://ki.se/forskning/barntumorbanken).\nNicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) later joined and helped with further development (v 1.1.0 and forward).\n\nMaintenance is now lead by Maxime U Garcia (now at [Seqera](https://seqera/io))\n\nMain developers:\n\n- [Maxime U Garcia](https://github.com/maxulysse)\n- [Nicolas Vannieuwkerke](https://github.com/nvnieuwk)\n\nWe thank the following people for their extensive assistance in the development of this pipeline:\n\n- [Harshil Patel](https://github.com/drpatelh)\n- [Nicol\u00e1s Schcolnicov](https://github.com/nschcolnicov)\n- [\u00d6mer An](https://github.com/bounlu)\n- [Phil Ewels](https://github.com/ewels)\n- [Praveen Raj](https://github.com/praveenraj2018)\n- [Sarah Maman](https://github.com/SarahMaman)\n\n## Contributions and Support\n\nIf you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).\n\nFor further information or help, don't hesitate to get in touch on the [Slack `#rnavar` channel](https://nfcore.slack.com/channels/rnavar) (you can join with [this invite](https://nf-co.re/join/slack)).\n\n## Citations\n\nIf you use nf-core/rnavar for your analysis, please cite it using the following doi: [10.5281/zenodo.6669636](https://doi.org/10.5281/zenodo.6669636)\n\nAn extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.\n\nYou can cite the `nf-core` publication as follows:\n\n> **The nf-core framework for community-curated bioinformatics pipelines.**\n>\n> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.\n>\n> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).\n",
             "hasPart": [
                 {
@@ -105,7 +105,7 @@
             },
             "mentions": [
                 {
-                    "@id": "#27fadc8c-dea1-49eb-91b1-cf2687c45af8"
+                    "@id": "#f2fd23f5-b56d-43f8-9512-d51ae1005c99"
                 }
             ],
             "name": "nf-core/rnavar"
@@ -132,8 +132,16 @@
                 "SoftwareSourceCode",
                 "ComputationalWorkflow"
             ],
+            "creator": [
+                {
+                    "@id": "https://orcid.org/0009-0003-5619-1555"
+                },
+                {
+                    "@id": "#max.u.garcia@gmail.com"
+                }
+            ],
             "dateCreated": "",
-            "dateModified": "2025-07-08T13:58:55Z",
+            "dateModified": "2025-07-09T12:32:59Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": [
                 "nf-core",
@@ -146,6 +154,14 @@
             ],
             "license": [
                 "MIT"
+            ],
+            "maintainer": [
+                {
+                    "@id": "https://orcid.org/0009-0003-5619-1555"
+                },
+                {
+                    "@id": "#max.u.garcia@gmail.com"
+                }
             ],
             "name": [
                 "nf-core/rnavar"
@@ -177,11 +193,11 @@
             "version": "!>=24.10.5"
         },
         {
-            "@id": "#27fadc8c-dea1-49eb-91b1-cf2687c45af8",
+            "@id": "#f2fd23f5-b56d-43f8-9512-d51ae1005c99",
             "@type": "TestSuite",
             "instance": [
                 {
-                    "@id": "#13b2e44d-2e1f-458f-b9ee-fc1857cc9322"
+                    "@id": "#caaafd1d-841d-493a-89f0-d7c7c6668904"
                 }
             ],
             "mainEntity": {
@@ -190,7 +206,7 @@
             "name": "Test suite for nf-core/rnavar"
         },
         {
-            "@id": "#13b2e44d-2e1f-458f-b9ee-fc1857cc9322",
+            "@id": "#caaafd1d-841d-493a-89f0-d7c7c6668904",
             "@type": "TestInstance",
             "name": "GitHub Actions workflow for testing nf-core/rnavar",
             "resource": "repos/nf-core/rnavar/actions/workflows/nf-test.yml",
@@ -327,6 +343,18 @@
             "@type": "Organization",
             "name": "nf-core",
             "url": "https://nf-co.re/"
+        },
+        {
+            "@id": "https://orcid.org/0009-0003-5619-1555",
+            "@type": "Person",
+            "email": "nicolas.vannieuwkerke@ugent.be",
+            "name": "Nicolas Vannieuwkerke"
+        },
+        {
+            "@id": "#max.u.garcia@gmail.com",
+            "@type": "Person",
+            "email": "max.u.garcia@gmail.com",
+            "name": "Maxime U Garcia"
         }
     ]
 }

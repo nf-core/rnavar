@@ -126,7 +126,7 @@ workflow RNAVAR {
         UMITOOLS_EXTRACT(
             cat_fastq
         )
-        ch_versions = ch_versions.mix(UMITOOLS_EXTRACT.out.versions.first())
+        ch_versions = ch_versions.mix(UMITOOLS_EXTRACT.out.versions)
         umi_extracted_reads = UMITOOLS_EXTRACT.out.reads
     }
     else {

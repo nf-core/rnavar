@@ -2,8 +2,6 @@
 // Prepare reference genome files
 //
 
-include { BEDTOOLS_MERGE                              } from '../../../modules/nf-core/bedtools/merge'
-include { BEDTOOLS_SORT                               } from '../../../modules/nf-core/bedtools/sort'
 include { GATK4_CREATESEQUENCEDICTIONARY              } from '../../../modules/nf-core/gatk4/createsequencedictionary'
 include { GFFREAD                                     } from '../../../modules/nf-core/gffread'
 include { GTF2BED                                     } from '../../../modules/local/gtf2bed'
@@ -44,6 +42,7 @@ workflow PREPARE_GENOME {
         GUNZIP_FASTA(fasta_raw)
 
         ch_fasta = GUNZIP_FASTA.out.gunzip
+        ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     }
     else {
         ch_fasta = fasta_raw
@@ -105,7 +104,7 @@ workflow PREPARE_GENOME {
         BGZIPTABIX_DBSNP(
             dbsnp
         )
-        ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions.first())
+        ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
         ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_tbi.map { meta, vcf, _tbi -> [meta, vcf] }.collect()
         ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_tbi.map { meta, _vcf, tbi -> [meta, tbi] }.collect()
     }
@@ -113,7 +112,7 @@ workflow PREPARE_GENOME {
         TABIX_DBSNP(
             dbsnp
         )
-        ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
         ch_dbsnp_tbi = TABIX_DBSNP.out.tbi.collect()
     }
 
@@ -132,12 +131,12 @@ workflow PREPARE_GENOME {
     BGZIPTABIX_KNOWN_INDELS(
         ch_known_indels_input.plain
     )
-    ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions.first())
+    ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions)
 
     TABIX_KNOWN_INDELS(
         ch_known_indels_input.bgzip_noindex
     )
-    ch_versions = ch_versions.mix(TABIX_KNOWN_INDELS.out.versions.first())
+    ch_versions = ch_versions.mix(TABIX_KNOWN_INDELS.out.versions)
 
     def ch_known_indels = BGZIPTABIX_KNOWN_INDELS.out.gz_tbi
         .map { _meta, file, _index -> file }
