@@ -22,7 +22,7 @@ reports/stats/*/*.stats
 reports/stats/*/STAR_log/*.Log.final.out
 reports/stats/*/STAR_log/*.Log.out
 reports/stats/*/STAR_log/*.Log.progress.out
+reports/stats/umitools/*/*.umi_extract.log
 samtools/*.{bam,bam.bai,bam.csi,cram,cram.crai}
-umitools/*.umi_extract.log
 variant_calling/**/*.vcf
 variant_calling/**/*.vcf.{gz,gz.tbi,gz.csi}
