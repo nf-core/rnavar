@@ -54,6 +54,7 @@ include { paramsSummaryMap          } from 'plugin/nf-schema'
 workflow RNAVAR {
     take:
     input
+    ch_versions
     dbsnp
     dbsnp_tbi
     dict
@@ -74,7 +75,21 @@ workflow RNAVAR {
     vep_extra_files
     seq_center
     seq_platform
-    ch_versions
+    aligner
+    bam_csi_index
+    extract_umi
+    generate_gvcf
+    multiqc_config
+    multiqc_logo
+    multiqc_methods_description
+    outdir
+    skip_baserecalibration
+    skip_intervallisttools
+    skip_multiqc
+    skip_variantannotation
+    skip_variantfiltration
+    star_ignore_sjdbgtf
+    tools
 
     main:
 
@@ -117,12 +132,10 @@ workflow RNAVAR {
     ch_reports = ch_reports.mix(FASTQC.out.zip.collect { _meta, logs -> logs })
     ch_versions = ch_versions.mix(FASTQC.out.versions)
 
-    //
     // MODULE: Extract UMIs from reads
-    //
 
     def umi_extracted_reads = Channel.empty()
-    if (params.extract_umi) {
+    if (extract_umi) {
         UMITOOLS_EXTRACT(
             cat_fastq
         )
@@ -133,20 +146,15 @@ workflow RNAVAR {
         umi_extracted_reads = cat_fastq
     }
 
-
-    //
     // MODULE: Prepare the interval list from the GTF file using GATK4 BedToIntervalList
-    //
 
     GATK4_BEDTOINTERVALLIST(exon_bed, dict)
     def interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
     ch_versions = ch_versions.mix(GATK4_BEDTOINTERVALLIST.out.versions)
 
-    //
     // MODULE: Scatter one interval-list into many interval-files using GATK4 IntervalListTools
-    //
     def interval_list_split = Channel.empty()
-    if (!params.skip_intervallisttools) {
+    if (!skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(interval_list)
         interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map { _meta, bed -> [bed] }.collect()
         ch_versions = ch_versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
@@ -155,16 +163,14 @@ workflow RNAVAR {
         interval_list_split = interval_list.map { _meta, bed -> bed }
     }
 
-    //
     // SUBWORKFLOW: Perform read alignment using STAR aligner
-    //
 
-    if (params.aligner == 'star') {
+    if (aligner == 'star') {
         FASTQ_ALIGN_STAR(
             umi_extracted_reads,
             star_index,
             gtf,
-            params.star_ignore_sjdbgtf,
+            star_ignore_sjdbgtf,
             seq_platform,
             seq_center,
             fasta,
@@ -179,9 +185,7 @@ workflow RNAVAR {
         ch_reports = ch_reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect { it[1] }.ifEmpty([]))
         ch_versions = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
 
-        //
         // SUBWORKFLOW: Mark duplicates with GATK4
-        //
         BAM_MARKDUPLICATES_PICARD(
             genome_bam,
             fasta,
@@ -203,10 +207,8 @@ workflow RNAVAR {
         ch_reports = ch_reports.mix(BAM_MARKDUPLICATES_PICARD.out.idxstats.collect { it[1] }.ifEmpty([]))
         ch_versions = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions)
 
-        //
         // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
-        //
 
         SPLITNCIGAR(
             genome_bam_bai,
@@ -219,13 +221,11 @@ workflow RNAVAR {
         def splitncigar_bam_bai = SPLITNCIGAR.out.bam_bai
         ch_versions = ch_versions.mix(SPLITNCIGAR.out.versions)
 
-        //
         // MODULE: BaseRecalibrator from GATK4
         // Generates a recalibration table based on various co-variates
-        //
         def bam_variant_calling = Channel.empty()
 
-        if (!params.skip_baserecalibration) {
+        if (!skip_baserecalibration) {
             // known_sites is made by grouping both the dbsnp and the known indels ressources
             // they can either or both be optional
             def known_sites = dbsnp
@@ -269,12 +269,10 @@ workflow RNAVAR {
                 .combine(interval_list_applybqsr)
                 .map { meta, bam, bai, table, interval -> [meta, bam, bai, table, interval] }
 
-            //
             // MODULE: ApplyBaseRecalibrator from GATK4
             // Recalibrates the base qualities of the input reads based on the recalibration table produced by the GATK BaseRecalibrator tool.
-            //
             RECALIBRATE(
-                params.skip_multiqc,
+                skip_multiqc,
                 applybqsr_bam_bai_interval,
                 dict.map { _meta, dict_ -> [dict_] },
                 fasta_fai.map { _meta, fai -> fai },
@@ -301,10 +299,8 @@ workflow RNAVAR {
                 [meta + [id: meta.id + "_" + interval_list_.baseName, sample: meta.id, variantcaller: 'haplotypecaller'], bam, bai, interval_list_, []]
             }
 
-        //
         // MODULE: HaplotypeCaller from GATK4
         // Calls germline SNPs and indels via local re-assembly of haplotypes.
-        //
 
         GATK4_HAPLOTYPECALLER(
             haplotypecaller_interval_bam,
@@ -325,11 +321,9 @@ workflow RNAVAR {
         ch_versions = ch_versions.mix(GATK4_HAPLOTYPECALLER.out.versions)
 
         def haplotypecaller_vcf = Channel.empty()
-        if (!params.generate_gvcf) {
-            //
+        if (!generate_gvcf) {
             // MODULE: MergeVCFS from GATK4
             // Merge multiple VCF files into one VCF
-            //
             def haplotypecaller_raw = haplotypecaller_out.map { meta, vcfs, _tbis -> [meta, vcfs] }
             GATK4_MERGEVCFS(
                 haplotypecaller_raw,
@@ -338,9 +332,7 @@ workflow RNAVAR {
             haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
             ch_versions = ch_versions.mix(GATK4_MERGEVCFS.out.versions)
 
-            //
             // MODULE: Index the VCF using TABIX
-            //
             TABIX(
                 haplotypecaller_vcf
             )
@@ -352,11 +344,9 @@ workflow RNAVAR {
 
             def final_vcf = Channel.empty()
 
-            //
             // MODULE: VariantFiltration from GATK4
             // Filter variant calls based on certain criteria
-            //
-            if (!params.skip_variantfiltration && !params.bam_csi_index) {
+            if (!skip_variantfiltration && !bam_csi_index) {
 
                 GATK4_VARIANTFILTRATION(
                     haplotypecaller_vcf_tbi,
@@ -374,17 +364,15 @@ workflow RNAVAR {
                 final_vcf = haplotypecaller_vcf
             }
 
-            //
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
-            //
-            if ((!params.skip_variantannotation) && params.tools && (params.tools.contains('merge') || params.tools.contains('snpeff') || params.tools.contains('vep'))) {
+            if ((!skip_variantannotation) && tools && (tools.contains('merge') || tools.contains('snpeff') || tools.contains('vep'))) {
 
                 final_vcf = final_vcf.mix(parsed_input.vcf.map { meta, vcf, tbi -> [meta, vcf] })
 
                 VCF_ANNOTATE_ALL(
                     final_vcf.map { meta, vcf -> [meta + [file_name: vcf.baseName], vcf] },
                     fasta.map { meta, fasta -> [meta, vep_include_fasta ? fasta : []] },
-                    params.tools,
+                    tools,
                     snpeff_db,
                     snpeff_cache,
                     vep_genome,
@@ -401,10 +389,8 @@ workflow RNAVAR {
         }
         else {
 
-            //
             // MODULE: CombineGVCFS from GATK4
             // Merge multiple GVCF files into one GVCF
-            //
             GATK4_COMBINEGVCFS(
                 haplotypecaller_out,
                 fasta.map { _meta, fasta_ -> fasta_ },
@@ -414,35 +400,29 @@ workflow RNAVAR {
             def haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
             ch_versions = ch_versions.mix(GATK4_COMBINEGVCFS.out.versions)
 
-            //
             // MODULE: Index the VCF using TABIX
-            //
             TABIXGVCF(haplotypecaller_gvcf)
 
             ch_versions = ch_versions.mix(TABIXGVCF.out.versions)
         }
     }
 
-    //
     // Collate and save software ch_versions
-    //
-    def collated_versions = softwareVersionsToYAML(ch_versions).collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_rnavar_software_mqc_versions.yml', sort: true, newLine: true)
+    def collated_versions = softwareVersionsToYAML(ch_versions).collectFile(storeDir: "${outdir}/pipeline_info", name: 'nf_core_rnavar_software_mqc_versions.yml', sort: true, newLine: true)
 
-    //
     // MODULE: MultiQC
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
-    //
     def val_multiqc_report = Channel.empty()
 
-    if (!params.skip_multiqc) {
+    if (!skip_multiqc) {
         def multiqc_files = Channel.empty()
 
         def multiqc_config = Channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
-        def multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
-        def multiqc_logo = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
+        def multiqc_custom_config = multiqc_config ? Channel.fromPath(multiqc_config, checkIfExists: true) : Channel.empty()
+        def multiqc_logo = multiqc_logo ? Channel.fromPath(multiqc_logo, checkIfExists: true) : Channel.empty()
         def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
         def workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
-        def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
+        def multiqc_custom_methods_description = multiqc_methods_description ? file(multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
         def methods_description = Channel.value(methodsDescriptionText(multiqc_custom_methods_description))
 
         multiqc_files = multiqc_files.mix(ch_reports)

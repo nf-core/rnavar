@@ -90,12 +90,6 @@ workflow NFCORE_RNAVAR {
     ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
     ch_exon_bed_raw = params.exon_bed ? Channel.fromPath(params.exon_bed).map { it -> [[id: it.baseName], it] } : Channel.empty()
 
-    // Initialize variant annotation associated channels
-    snpeff_db = params.snpeff_db ?: Channel.empty()
-    vep_cache_version = params.vep_cache_version ?: Channel.empty()
-    vep_genome = params.vep_genome ?: Channel.empty()
-    vep_species = params.vep_species ?: Channel.empty()
-
     seq_platform = params.seq_platform ?: []
     seq_center = params.seq_center ?: []
 
@@ -178,6 +172,7 @@ workflow NFCORE_RNAVAR {
     //
     RNAVAR(
         samplesheet,
+        ch_versions,
         ch_dbsnp,
         ch_dbsnp_tbi,
         ch_dict,
@@ -198,7 +193,21 @@ workflow NFCORE_RNAVAR {
         vep_extra_files,
         seq_center,
         seq_platform,
-        ch_versions,
+        params.aligner,
+        params.bam_csi_index,
+        params.extract_umi,
+        params.generate_gvcf,
+        params.multiqc_config,
+        params.multiqc_logo,
+        params.multiqc_methods_description,
+        params.outdir,
+        params.skip_baserecalibration,
+        params.skip_intervallisttools,
+        params.skip_multiqc,
+        params.skip_variantannotation,
+        params.skip_variantfiltration,
+        params.star_ignore_sjdbgtf,
+        params.tools ?: "no_tools",
     )
 
     emit:
