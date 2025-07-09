@@ -81,8 +81,8 @@ workflow RNAVAR {
     main:
 
     // To gather all QC reports and versions for MultiQC
-    def reports = Channel.empty()
-    def versions = Channel.empty()
+    reports = Channel.empty()
+    versions = Channel.empty()
 
     // Parse the input data
     parsed_input = input

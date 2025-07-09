@@ -68,7 +68,8 @@ workflow NFCORE_RNAVAR {
 
     main:
 
-    ch_versions = Channel.empty()
+    reports = Channel.empty()
+    versions = Channel.empty()
 
     if (params.gtf && params.gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
@@ -144,7 +145,7 @@ workflow NFCORE_RNAVAR {
     ch_known_indels = params.known_indels ? PREPARE_GENOME.out.known_indels : Channel.value([])
     ch_known_indels_tbi = params.known_indels ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
 
-    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
+    versions = versions.mix(PREPARE_GENOME.out.versions)
 
     // Download cache
     if (params.download_cache) {
@@ -155,7 +156,7 @@ workflow NFCORE_RNAVAR {
         snpeff_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.snpeff_cache
         vep_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map { meta, cache -> [cache] }
 
-        ch_versions = ch_versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
+        versions = versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
     }
     else {
         // Looks for cache information either locally or on the cloud
@@ -214,9 +215,12 @@ workflow NFCORE_RNAVAR {
         params.tools ?: "no_tools",
     )
 
+    reports = reports.mix(RNAVAR.out.reports)
+    versions = versions.mix(RNAVAR.out.versions)
+
     emit:
-    versions = RNAVAR.out.versions // channel: [ path(versions.yml) ]
-    reports  = RNAVAR.out.reports // channel: qc reports for multiQC
+    reports  // channel: qc reports for multiQC
+    versions // channel: [ path(versions.yml) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -254,7 +258,7 @@ workflow {
         def multiqc_files = Channel.empty()
 
         def multiqc_config = Channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
-        def multiqc_custom_config = multiqc_config ? Channel.fromPath(multiqc_config, checkIfExists: true) : Channel.empty()
+        def multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
         def multiqc_logo = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
         def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
         def workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
