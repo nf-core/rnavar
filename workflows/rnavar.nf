@@ -70,6 +70,7 @@ workflow RNAVAR {
     bam_csi_index
     extract_umi
     generate_gvcf
+    skip_multiqc
     skip_baserecalibration
     skip_intervallisttools
     skip_variantannotation
