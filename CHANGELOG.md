@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - [#209](https://github.com/nf-core/rnavar/pull/209) - Template update for nf-core/tools v3.3.1
+- [#215](https://github.com/nf-core/rnavar/pull/215) - Template update for nf-core/tools v3.3.2
 
 ### Fixed
 
