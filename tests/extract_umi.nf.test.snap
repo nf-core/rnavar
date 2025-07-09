@@ -92,6 +92,9 @@
                 "preprocessing/GM12878/GM12878.md.bam.bai",
                 "preprocessing/GM12878/GM12878.recal.bam",
                 "preprocessing/GM12878/GM12878.recal.bam.bai",
+                "preprocessing/umitools",
+                "preprocessing/umitools/GM12878",
+                "preprocessing/umitools/GM12878/GM12878.umi_extract.fastq.gz",
                 "reports",
                 "reports/multiqc_data",
                 "reports/multiqc_data/BETA-multiqc.parquet",
@@ -173,12 +176,12 @@
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
+                "reports/stats/umitools",
+                "reports/stats/umitools/GM12878",
+                "reports/stats/umitools/GM12878/GM12878.umi_extract.log",
                 "samtools",
                 "samtools/GM12878.bam",
                 "samtools/GM12878.bam.bai",
-                "umitools",
-                "umitools/GM12878.umi_extract.fastq.gz",
-                "umitools/GM12878.umi_extract.log",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -187,6 +190,7 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
+                "GM12878.umi_extract.fastq.gz:md5,5ec2ee7620e78b26caf8f9173506fc82",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,23f903bb02011a3842b70a5dd19d6b73",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,0467402694fb8cbae973c967273695b6",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
@@ -202,8 +206,7 @@
                 "star_alignment_plot.txt:md5,6e8b7bbfd65f4d3e60a800f448054f8e",
                 "star_summary_table.txt:md5,c754e1fa8ead5914c70dad1fd9e98683",
                 "GM12878.flagstat:md5,a89cb59e509dab933063d5486742a185",
-                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
-                "GM12878.umi_extract.fastq.gz:md5,5ec2ee7620e78b26caf8f9173506fc82"
+                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71"
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825",
@@ -219,6 +222,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-07T18:49:04.995126354"
+        "timestamp": "2025-07-09T13:14:44.011996015"
     }
 }

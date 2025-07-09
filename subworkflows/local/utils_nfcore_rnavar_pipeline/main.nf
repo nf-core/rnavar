@@ -306,7 +306,6 @@ def methodsDescriptionText(mqc_methods_yaml) {
     // meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
     // meta["tool_bibliography"] = toolBibliographyText()
 
-
     def methods_text = mqc_methods_yaml.text
 
     def engine = new groovy.text.SimpleTemplateEngine()
