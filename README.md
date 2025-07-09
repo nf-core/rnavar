@@ -102,7 +102,7 @@ For more details about the output files and reports, please refer to the
 rnavar was originally written by Praveen Raj and Maxime U Garcia at [The Swedish Childhood Tumor Biobank (Barntumörbanken), Karolinska Institutet](https://ki.se/forskning/barntumorbanken).
 Nicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) later joined and helped with further development (v 1.1.0 and forward).
 
-Maintenance is now lead by Maxime U Garcia (now at [Seqera](https://seqera/io))
+Maintenance is now lead by Maxime U Garcia (now at [Seqera](https://seqera.io))
 
 Main developers:
 
