@@ -353,7 +353,7 @@ workflow RNAVAR {
             }
 
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
-            if ((!skip_variantannotation) && tools && (tools.contains('merge') || tools.contains('snpeff') || tools.contains('vep'))) {
+            if ((!skip_variantannotation) && (tools.contains('merge') || tools.contains('snpeff') || tools.contains('vep'))) {
 
                 final_vcf = final_vcf.mix(parsed_input.vcf.map { meta, vcf, tbi -> [meta, vcf] })
 
