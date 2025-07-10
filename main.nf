@@ -42,6 +42,15 @@ include { DOWNLOAD_CACHE_SNPEFF_VEP       } from './subworkflows/local/download_
 include { PIPELINE_INITIALISATION         } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
 include { PIPELINE_COMPLETION             } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
 include { PREPARE_GENOME                  } from './subworkflows/local/prepare_genome'
+include { methodsDescriptionText          } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+
+// nf-core
+include { paramsSummaryMultiqc            } from './subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML          } from './subworkflows/nf-core/utils_nfcore_pipeline'
+include { MULTIQC                         } from './modules/nf-core/multiqc'
+
+// plugin
+include { paramsSummaryMap                } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -59,7 +68,8 @@ workflow NFCORE_RNAVAR {
 
     main:
 
-    ch_versions = Channel.empty()
+    reports = Channel.empty()
+    versions = Channel.empty()
 
     if (params.gtf && params.gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
@@ -89,12 +99,6 @@ workflow NFCORE_RNAVAR {
     ch_gtf_raw = params.gtf ? Channel.fromPath(params.gtf).map { gtf -> [[id: gtf.baseName], gtf] }.collect() : Channel.empty()
     ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
     ch_exon_bed_raw = params.exon_bed ? Channel.fromPath(params.exon_bed).map { it -> [[id: it.baseName], it] } : Channel.empty()
-
-    // Initialize variant annotation associated channels
-    snpeff_db = params.snpeff_db ?: Channel.empty()
-    vep_cache_version = params.vep_cache_version ?: Channel.empty()
-    vep_genome = params.vep_genome ?: Channel.empty()
-    vep_species = params.vep_species ?: Channel.empty()
 
     seq_platform = params.seq_platform ?: []
     seq_center = params.seq_center ?: []
@@ -141,7 +145,7 @@ workflow NFCORE_RNAVAR {
     ch_known_indels = params.known_indels ? PREPARE_GENOME.out.known_indels : Channel.value([])
     ch_known_indels_tbi = params.known_indels ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
 
-    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
+    versions = versions.mix(PREPARE_GENOME.out.versions)
 
     // Download cache
     if (params.download_cache) {
@@ -152,7 +156,7 @@ workflow NFCORE_RNAVAR {
         snpeff_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.snpeff_cache
         vep_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map { meta, cache -> [cache] }
 
-        ch_versions = ch_versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
+        versions = versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
     }
     else {
         // Looks for cache information either locally or on the cloud
@@ -198,11 +202,25 @@ workflow NFCORE_RNAVAR {
         vep_extra_files,
         seq_center,
         seq_platform,
-        ch_versions,
+        params.aligner,
+        params.bam_csi_index,
+        params.extract_umi,
+        params.generate_gvcf,
+        params.skip_multiqc,
+        params.skip_baserecalibration,
+        params.skip_intervallisttools,
+        params.skip_variantannotation,
+        params.skip_variantfiltration,
+        params.star_ignore_sjdbgtf,
+        params.tools ?: "no_tools",
     )
 
+    reports = reports.mix(RNAVAR.out.reports)
+    versions = versions.mix(RNAVAR.out.versions)
+
     emit:
-    multiqc_report = RNAVAR.out.multiqc_report // channel: /path/to/multiqc_report.html
+    reports  // channel: qc reports for multiQC
+    versions // channel: [ path(versions.yml) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -229,6 +247,41 @@ workflow {
         PIPELINE_INITIALISATION.out.align,
     )
 
+    // Collate and save software versions
+    def collated_versions = softwareVersionsToYAML(NFCORE_RNAVAR.out.versions).collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_rnavar_software_mqc_versions.yml', sort: true, newLine: true)
+
+    // MODULE: MultiQC
+    // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
+    def val_multiqc_report = Channel.empty()
+
+    if (!params.skip_multiqc) {
+        def multiqc_files = Channel.empty()
+
+        def multiqc_config = Channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
+        def multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
+        def multiqc_logo = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
+        def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+        def workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
+        def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
+        def methods_description = Channel.value(methodsDescriptionText(multiqc_custom_methods_description))
+
+        multiqc_files = multiqc_files.mix(NFCORE_RNAVAR.out.reports)
+        multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+        multiqc_files = multiqc_files.mix(collated_versions)
+        multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
+
+        MULTIQC(
+            multiqc_files.collect(),
+            multiqc_config.toList(),
+            multiqc_custom_config.toList(),
+            multiqc_logo.toList(),
+            [],
+            [],
+        )
+        val_multiqc_report = MULTIQC.out.report.toList()
+    }
+
+
     //
     // SUBWORKFLOW: Run completion tasks
     //
@@ -239,7 +292,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_RNAVAR.out.multiqc_report,
+        val_multiqc_report,
     )
 }
 
