@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Move multiqc handling to the root main.nf file
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Remove all direct params calls from workflow
 - [#221](https://github.com/nf-core/rnavar/pull/221) - Prepare release 1.1.1
+- [#222](https://github.com/nf-core/rnavar/pull/222) - Remove unstable files from snapshots
 
 #### Fixed
 

@@ -218,9 +218,7 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,172359c5b64240c1039d8b7d67ba04ab",
                 "star_alignment_plot.txt:md5,cc231d33ca6537f3f62f9c14fed9b75d",
                 "star_summary_table.txt:md5,07f02b433c41ff49ed19968beff03de3",
-                "GM12878.flagstat:md5,ed7c4db43f21dfaf1c7fd57549bb3c71",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12879.flagstat:md5,ce6a2562f8297c99683eefbabf18ce65",
                 "GM12879.SJ.out.tab:md5,37bfb1926b12f3585db23a2b86e6f59e"
             ],
             [
@@ -409,8 +407,7 @@
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "star_alignment_plot.txt:md5,c06d6572355da3f2bc3418d56fc2b4e9",
                 "star_summary_table.txt:md5,e05b9c5b2ef4347744de72b79b27b7a6",
-                "test.SJ.out.tab:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "test.flagstat:md5,c6b56420e8a30bff3487dbd6ec13ba5f"
+                "test.SJ.out.tab:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
                 "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
