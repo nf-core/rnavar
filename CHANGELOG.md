@@ -3,13 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.2.0dev
+## [1.1.1](https://github.com/nf-core/rnavar/releases/tag/1.1.1) - Brave Benatar
 
 ### Added
 
 ### Changed
 
-- [#216](https://github.com/nf-core/sarek/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
 
 ### Fixed
 
@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#215](https://github.com/nf-core/rnavar/pull/215) - Template update for nf-core/tools v3.3.2
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Move multiqc handling to the root main.nf file
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Remove all direct params calls from workflow
+- [#221](https://github.com/nf-core/rnavar/pull/221) - Prepare release 1.1.1
 
 #### Fixed
 
