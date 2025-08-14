@@ -3,6 +3,50 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1](https://github.com/nf-core/rnavar/releases/tag/1.1.1) - Brave Benatar
+
+### Added
+
+### Changed
+
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
+
+### Fixed
+
+- [#211](https://github.com/nf-core/rnavar/pull/211) - Fix issue with merging paired-end fastq files (cf [#210](https://github.com/nf-core/rnavar/issues/210))
+- [#212](https://github.com/nf-core/rnavar/pull/212) - Fix missing reports (cf [#208](https://github.com/nf-core/rnavar/issues/208))
+
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| multiqc    | 1.27        | 1.29        |
+| tabix      | 1.2         | 1.21        |
+
+### Parameter
+
+| Old name | New name |
+| -------- | -------- |
+|          |          |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#209](https://github.com/nf-core/rnavar/pull/209) - Template update for nf-core/tools v3.3.1
+- [#213](https://github.com/nf-core/rnavar/pull/213) - Update all modules
+- [#215](https://github.com/nf-core/rnavar/pull/215) - Template update for nf-core/tools v3.3.2
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Move multiqc handling to the root main.nf file
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Remove all direct params calls from workflow
+- [#221](https://github.com/nf-core/rnavar/pull/221) - Prepare release 1.1.1
+- [#222](https://github.com/nf-core/rnavar/pull/222) - Remove unstable files from snapshots
+
+#### Fixed
+
+- [#209](https://github.com/nf-core/rnavar/pull/209) - Rescue versions from DOWNLOAD_CACHE and PREPARE_GENOME subworkflows
+
 ## [1.1.0](https://github.com/nf-core/rnavar/releases/tag/1.1.0) - Mighty Milano
 
 ### Added
