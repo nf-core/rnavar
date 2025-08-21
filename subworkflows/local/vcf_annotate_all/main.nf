@@ -30,6 +30,11 @@ workflow VCF_ANNOTATE_ALL {
     vcf_ann = Channel.empty()
     versions = Channel.empty()
 
+    println("tools: ${tools}")
+    bcftools_annotations.view()
+    bcftools_annotations_index.view()
+    bcftools_header_lines.view()
+
     if (tools.split(',').contains('bcfann')) {
         BCFTOOLS_ANNOTATE(
             vcf.map { meta, vcf_ -> [meta, vcf_, []] }.combine(bcftools_annotations).combine(bcftools_annotations_index),

@@ -1,8 +1,11 @@
 {
     "-profile test --tools bcfann": {
         "content": [
-            8,
+            9,
             {
+                "BCFTOOLS_ANNOTATE": {
+                    "bcftools": 1.21
+                },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.1.0"
                 },
@@ -28,6 +31,9 @@
                 }
             },
             [
+                "annotation",
+                "annotation/test",
+                "annotation/test/test_BCF.ann.vcf.gz",
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
@@ -45,12 +51,14 @@
             ],
             "No BAM files",
             "No CRAM files",
-            "No VCF files"
+            [
+                "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
+            ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-08-21T18:04:29.526069056"
+        "timestamp": "2025-08-21T18:34:19.047450808"
     }
 }
