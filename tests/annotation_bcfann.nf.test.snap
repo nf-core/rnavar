@@ -1,0 +1,56 @@
+{
+    "-profile test --tools bcfann": {
+        "content": [
+            8,
+            {
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.1.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "REMOVE_UNKNOWN_REGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": 1.21
+                },
+                "STAR_INDEXVERSION": {
+                    "gawk": "5.1.0",
+                    "samtools": 1.21,
+                    "star": "2.7.11b"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "reports",
+                "reports/multiqc_data",
+                "reports/multiqc_data/BETA-multiqc.parquet",
+                "reports/multiqc_data/multiqc.log",
+                "reports/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc_data/multiqc_data.json",
+                "reports/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc_report.html"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            "No BAM files",
+            "No CRAM files",
+            "No VCF files"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-08-21T18:04:29.526069056"
+    }
+}

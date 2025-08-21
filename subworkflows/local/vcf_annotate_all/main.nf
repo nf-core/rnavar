@@ -2,15 +2,16 @@
 // ANNOTATION
 //
 
+include { BCFTOOLS_ANNOTATE                             } from '../../../modules/nf-core/bcftools/annotate'
 include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff'
 
 workflow VCF_ANNOTATE_ALL {
     take:
-    vcf               // channel: [ val(meta), vcf ] (mandatory)
-    fasta             // channel: [ val(meta), fasta ] (optional)
-    tools             // array: list of tools to apply (mandatory)
+    vcf                        // channel: [ val(meta), vcf ] (mandatory)
+    fasta                      // channel: [ val(meta), fasta ] (optional)
+    tools                      // array: list of tools to apply (mandatory)
     snpeff_db
     snpeff_cache
     vep_genome
@@ -18,6 +19,9 @@ workflow VCF_ANNOTATE_ALL {
     vep_cache_version
     vep_cache
     vep_extra_files
+    bcftools_annotations
+    bcftools_annotations_index
+    bcftools_header_lines
 
     main:
     json_ann = Channel.empty()
@@ -25,6 +29,18 @@ workflow VCF_ANNOTATE_ALL {
     tab_ann = Channel.empty()
     vcf_ann = Channel.empty()
     versions = Channel.empty()
+
+    if (tools.split(',').contains('bcfann')) {
+        BCFTOOLS_ANNOTATE(
+            vcf.map { meta, vcf_ -> [meta, vcf_, []] }.combine(bcftools_annotations).combine(bcftools_annotations_index),
+            bcftools_header_lines,
+            [],
+        )
+
+        vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
+        versions = versions.mix(BCFTOOLS_ANNOTATE.out.versions)
+    }
+
 
     if (tools.split(',').contains('merge') || tools.split(',').contains('snpeff')) {
         VCF_ANNOTATE_SNPEFF(vcf, snpeff_db, snpeff_cache)

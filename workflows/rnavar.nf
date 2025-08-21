@@ -46,6 +46,9 @@ include { checkSamplesAfterGrouping } from '../subworkflows/local/utils_nfcore_r
 workflow RNAVAR {
     take:
     input
+    bcftools_annotations
+    bcftools_annotations_tbi
+    bcftools_header_lines
     dbsnp
     dbsnp_tbi
     dict
@@ -353,13 +356,15 @@ workflow RNAVAR {
             }
 
             // SUBWORKFLOW: Annotate variants using snpEff and Ensembl VEP if enabled.
-            if ((!skip_variantannotation) && (tools.contains('merge') || tools.contains('snpeff') || tools.contains('vep'))) {
+            if ((!skip_variantannotation) && (tools.contains('bcfann') || tools.contains('merge') || tools.contains('snpeff') || tools.contains('vep'))) {
 
-                final_vcf = final_vcf.mix(parsed_input.vcf.map { meta, vcf, tbi -> [meta, vcf] })
+                final_vcf = final_vcf.mix(parsed_input.vcf.map { meta, vcf, _tbi -> [meta, vcf] })
+
+                final_vcf.view()
 
                 VCF_ANNOTATE_ALL(
                     final_vcf.map { meta, vcf -> [meta + [file_name: vcf.baseName], vcf] },
-                    fasta.map { meta, fasta -> [meta, vep_include_fasta ? fasta : []] },
+                    fasta.map { meta, fasta_ -> [meta, vep_include_fasta ? fasta_ : []] },
                     tools,
                     snpeff_db,
                     snpeff_cache,
@@ -368,6 +373,9 @@ workflow RNAVAR {
                     vep_cache_version,
                     vep_cache,
                     vep_extra_files,
+                    bcftools_annotations,
+                    bcftools_annotations_tbi,
+                    bcftools_header_lines,
                 )
 
                 // Gather used softwares versions

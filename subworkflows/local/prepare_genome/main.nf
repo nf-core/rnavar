@@ -2,35 +2,40 @@
 // Prepare reference genome files
 //
 
-include { GATK4_CREATESEQUENCEDICTIONARY              } from '../../../modules/nf-core/gatk4/createsequencedictionary'
-include { GFFREAD                                     } from '../../../modules/nf-core/gffread'
-include { GTF2BED                                     } from '../../../modules/local/gtf2bed'
-include { SAMTOOLS_FAIDX                              } from '../../../modules/nf-core/samtools/faidx'
-include { STAR_GENOMEGENERATE                         } from '../../../modules/nf-core/star/genomegenerate'
-include { GUNZIP as GUNZIP_FASTA                      } from '../../../modules/nf-core/gunzip'
-include { GUNZIP as GUNZIP_GTF                        } from '../../../modules/nf-core/gunzip'
-include { TABIX_TABIX as TABIX_DBSNP                  } from '../../../modules/nf-core/tabix/tabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_DBSNP        } from '../../../modules/nf-core/tabix/bgziptabix'
-include { TABIX_TABIX as TABIX_KNOWN_INDELS           } from '../../../modules/nf-core/tabix/tabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_KNOWN_INDELS } from '../../../modules/nf-core/tabix/bgziptabix'
-include { UNTAR                                       } from '../../../modules/nf-core/untar'
-include { STAR_INDEXVERSION                           } from '../../../modules/nf-core/star/indexversion'
-include { REMOVE_UNKNOWN_REGIONS                      } from '../../../modules/local/remove_unkown_regions'
+include { GATK4_CREATESEQUENCEDICTIONARY                      } from '../../../modules/nf-core/gatk4/createsequencedictionary'
+include { GFFREAD                                             } from '../../../modules/nf-core/gffread'
+include { GTF2BED                                             } from '../../../modules/local/gtf2bed'
+include { GUNZIP as GUNZIP_FASTA                              } from '../../../modules/nf-core/gunzip'
+include { GUNZIP as GUNZIP_GTF                                } from '../../../modules/nf-core/gunzip'
+include { REMOVE_UNKNOWN_REGIONS                              } from '../../../modules/local/remove_unkown_regions'
+include { SAMTOOLS_FAIDX                                      } from '../../../modules/nf-core/samtools/faidx'
+include { STAR_GENOMEGENERATE                                 } from '../../../modules/nf-core/star/genomegenerate'
+include { STAR_INDEXVERSION                                   } from '../../../modules/nf-core/star/indexversion'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_BCFTOOLS_ANNOTATIONS } from '../../../modules/nf-core/tabix/bgziptabix'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_DBSNP                } from '../../../modules/nf-core/tabix/bgziptabix'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_KNOWN_INDELS         } from '../../../modules/nf-core/tabix/bgziptabix'
+include { TABIX_TABIX as TABIX_BCFTOOLS_ANNOTATIONS           } from '../../../modules/nf-core/tabix/tabix'
+include { TABIX_TABIX as TABIX_DBSNP                          } from '../../../modules/nf-core/tabix/tabix'
+include { TABIX_TABIX as TABIX_KNOWN_INDELS                   } from '../../../modules/nf-core/tabix/tabix'
+include { UNTAR                                               } from '../../../modules/nf-core/untar'
 
 workflow PREPARE_GENOME {
     take:
-    fasta_raw        // channel: /path/to/genome.fasta
-    dict_raw         // channel: /path/to/genome.dict
-    fai_raw          // channel: /path/to/genome.fasta.fai
-    star_index       // channel: /path/to/star_index
-    gff              // channel: /path/to/genome.gff
-    gtf_raw          // channel: /path/to/genome.gtf
-    exon_bed_raw     // channel: /path/to/genome.bed
-    dbsnp            // channel: /path/to/dbnsp.vcf.gz
-    known_indels     // channel: [/path/to/known_indels]
-    known_indels_tbi // channel: [/path/to/known_indels_index]
+    fasta_raw                // channel: /path/to/genome.fasta
+    bcftools_annotations     // channel: /path/to/bcftools_annotations.vcf.gz
+    bcftools_annotations_tbi // channel: /path/to/bcftools_annotations.vcf.gz.tbi
+    dict_raw                 // channel: /path/to/genome.dict
+    fai_raw                  // channel: /path/to/genome.fasta.fai
+    star_index               // channel: /path/to/star_index
+    gff                      // channel: /path/to/genome.gff
+    gtf_raw                  // channel: /path/to/genome.gtf
+    exon_bed_raw             // channel: /path/to/genome.bed
+    dbsnp                    // channel: /path/to/dbnsp.vcf.gz
+    dbsnp_tbi                // channel: /path/to/dbnsp.vcf.gz
+    known_indels             // channel: /path/to/known_indels
+    known_indels_tbi         // channel: /path/to/known_indels_index
     feature_type
-    align            // The pipeline needs aligner indices or not
+    align                    // The pipeline needs aligner indices or not
 
     main:
     def ch_versions = Channel.empty()
@@ -98,23 +103,73 @@ workflow PREPARE_GENOME {
         ch_exon_bed = ch_exon_bed_raw
     }
 
-    def ch_dbsnp = Channel.value([[], []])
-    def ch_dbsnp_tbi = Channel.value([[], []])
-    if (params.dbsnp && !params.dbsnp.toString().endsWith(".gz")) {
-        BGZIPTABIX_DBSNP(
-            dbsnp
-        )
-        ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
-        ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_tbi.map { meta, vcf, _tbi -> [meta, vcf] }.collect()
-        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_tbi.map { meta, _vcf, tbi -> [meta, tbi] }.collect()
-    }
-    else if (params.dbsnp && !params.dbsnp_tbi) {
-        TABIX_DBSNP(
-            dbsnp
-        )
-        ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
-        ch_dbsnp_tbi = TABIX_DBSNP.out.tbi.collect()
-    }
+    def ch_bcftools_annotations_input = bcftools_annotations
+        .map { file -> [[id: file.name], file] }
+        .join(bcftools_annotations_tbi.map { file -> [[id: file.baseName], file] }, failOnDuplicate: true, remainder: true)
+        .branch { meta, file, index ->
+            plain: !file.toString().endsWith(".gz")
+            return [meta, file]
+            bgzip_noindex: !index && file.toString().endsWith(".gz")
+            return [meta, file]
+            bgzip_index: true
+            return [meta, file, index]
+        }
+
+    BGZIPTABIX_BCFTOOLS_ANNOTATIONS(
+        ch_bcftools_annotations_input.plain
+    )
+    ch_versions = ch_versions.mix(BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.versions)
+
+    TABIX_BCFTOOLS_ANNOTATIONS(
+        ch_bcftools_annotations_input.bgzip_noindex
+    )
+    ch_versions = ch_versions.mix(TABIX_BCFTOOLS_ANNOTATIONS.out.versions)
+
+    def ch_bcftools_annotations = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi
+        .map { _meta, file, _index -> file }
+        .mix(ch_bcftools_annotations_input.bgzip_noindex.map { _meta, file -> file })
+        .mix(ch_bcftools_annotations_input.bgzip_index.map { _meta, file, _index -> file })
+        .collect()
+
+    def ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi
+        .map { _meta, _file, index -> index }
+        .mix(TABIX_BCFTOOLS_ANNOTATIONS.out.tbi.map { _meta, tbi -> tbi })
+        .mix(ch_bcftools_annotations_input.bgzip_index.map { _meta, _file, index -> index })
+        .collect()
+
+    def ch_dbsnp_input = dbsnp
+        .map { file -> [[id: file.name], file] }
+        .join(dbsnp_tbi.map { file -> [[id: file.baseName], file] }, failOnDuplicate: true, remainder: true)
+        .branch { meta, file, index ->
+            plain: !file.toString().endsWith(".gz")
+            return [meta, file]
+            bgzip_noindex: !index && file.toString().endsWith(".gz")
+            return [meta, file]
+            bgzip_index: true
+            return [meta, file, index]
+        }
+
+    BGZIPTABIX_DBSNP(
+        ch_dbsnp_input.plain
+    )
+    ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
+
+    TABIX_DBSNP(
+        ch_dbsnp_input.bgzip_noindex
+    )
+    ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
+
+    def ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_tbi
+        .map { _meta, file, _index -> file }
+        .mix(ch_dbsnp_input.bgzip_noindex.map { _meta, file -> file })
+        .mix(ch_dbsnp_input.bgzip_index.map { _meta, file, _index -> file })
+        .collect()
+
+    def ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_tbi
+        .map { _meta, _file, index -> index }
+        .mix(TABIX_DBSNP.out.tbi.map { _meta, tbi -> tbi })
+        .mix(ch_dbsnp_input.bgzip_index.map { _meta, _file, index -> index })
+        .collect()
 
     def ch_known_indels_input = known_indels
         .map { file -> [[id: file.name], file] }
@@ -226,6 +281,8 @@ workflow PREPARE_GENOME {
     fasta_fai        = ch_fai // path: genome.fasta.fai
     gtf              = ch_gtf.collect() // path: genome.gtf
     star_index       = star_index_output // path: star/index/
+    bcfann           = ch_bcftools_annotations // path: bcftools_annotations.vcf.gz
+    bcfann_tbi       = ch_bcftools_annotations_tbi // path: bcftools_annotations.vcf.gz.tbi
     dbsnp            = ch_dbsnp // path: dbsnp.vcf.gz
     dbsnp_tbi        = ch_dbsnp_tbi // path: dbsnp.vcf.gz.tbi
     known_indels     = ch_known_indels // path: {known_indels*}.vcf.gz

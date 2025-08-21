@@ -90,9 +90,13 @@ workflow NFCORE_RNAVAR {
     ch_fasta_raw = params.fasta ? Channel.fromPath(params.fasta).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
 
     // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
+    ch_bcftools_annotations_raw = params.bcftools_annotations ? Channel.fromPath(params.bcftools_annotations) : Channel.empty()
+    ch_bcftools_annotations_tbi_raw = params.bcftools_annotations_tbi ? Channel.fromPath(params.bcftools_annotations_tbi) : Channel.empty()
+    ch_bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
     ch_dict_raw = params.dict ? Channel.fromPath(params.dict).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
     ch_fai_raw = params.fasta_fai ? Channel.fromPath(params.fasta_fai).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
-    ch_dbsnp_raw = params.dbsnp ? Channel.fromPath(params.dbsnp).map { dbsnp -> [[id: dbsnp.baseName], dbsnp] }.collect() : Channel.value([])
+    ch_dbsnp_raw = params.dbsnp ? Channel.fromPath(params.dbsnp) : Channel.empty()
+    ch_dbsnp_tbi_raw = params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi) : Channel.empty()
     ch_known_indels_raw = params.known_indels ? Channel.fromPath(params.known_indels) : Channel.empty()
     ch_known_indels_tbi_raw = params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi) : Channel.empty()
     ch_gff = params.gff ? Channel.fromPath(params.gff).map { gff -> [[id: gff.baseName], gff] }.collect() : Channel.empty()
@@ -119,6 +123,8 @@ workflow NFCORE_RNAVAR {
 
     PREPARE_GENOME(
         ch_fasta_raw,
+        ch_bcftools_annotations_raw,
+        ch_bcftools_annotations_tbi_raw,
         ch_dict_raw,
         ch_fai_raw,
         ch_star_index_raw,
@@ -126,6 +132,7 @@ workflow NFCORE_RNAVAR {
         ch_gtf_raw,
         ch_exon_bed_raw,
         ch_dbsnp_raw,
+        ch_dbsnp_tbi_raw,
         ch_known_indels_raw,
         ch_known_indels_tbi_raw,
         params.feature_type,
@@ -138,10 +145,10 @@ workflow NFCORE_RNAVAR {
     ch_dict = PREPARE_GENOME.out.dict
     ch_fasta_fai = PREPARE_GENOME.out.fasta_fai
     ch_exon_bed = PREPARE_GENOME.out.exon_bed
-    ch_dbsnp = params.dbsnp && params.dbsnp.endsWith(".gz") ? ch_dbsnp_raw : PREPARE_GENOME.out.dbsnp
-    ch_dbsnp_tbi = params.dbsnp.toString().endsWith(".gz") && params.dbsnp_tbi
-        ? Channel.fromPath(params.dbsnp_tbi).map { dbsnp -> [[id: dbsnp.baseName], dbsnp] }.collect()
-        : PREPARE_GENOME.out.dbsnp_tbi
+    ch_bcfann = params.bcftools_annotations ? PREPARE_GENOME.out.bcfann : Channel.value([])
+    ch_bcfann_tbi = params.bcftools_annotations ? PREPARE_GENOME.out.bcfann_tbi : Channel.value([])
+    ch_dbsnp = params.dbsnp ? PREPARE_GENOME.out.dbsnp : Channel.value([])
+    ch_dbsnp_tbi = params.dbsnp ? PREPARE_GENOME.out.dbsnp_tbi : Channel.value([])
     ch_known_indels = params.known_indels ? PREPARE_GENOME.out.known_indels : Channel.value([])
     ch_known_indels_tbi = params.known_indels ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
 
@@ -154,7 +161,7 @@ workflow NFCORE_RNAVAR {
         snpeff_info = Channel.of([[id: "${params.snpeff_db}"], params.snpeff_db])
         DOWNLOAD_CACHE_SNPEFF_VEP(ensemblvep_info, snpeff_info)
         snpeff_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.snpeff_cache
-        vep_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map { meta, cache -> [cache] }
+        vep_cache = DOWNLOAD_CACHE_SNPEFF_VEP.out.ensemblvep_cache.map { _meta, cache -> [cache] }
 
         versions = versions.mix(DOWNLOAD_CACHE_SNPEFF_VEP.out.versions)
     }
@@ -182,6 +189,9 @@ workflow NFCORE_RNAVAR {
     //
     RNAVAR(
         samplesheet,
+        ch_bcfann,
+        ch_bcfann_tbi,
+        ch_bcftools_header_lines,
         ch_dbsnp,
         ch_dbsnp_tbi,
         ch_dict,
