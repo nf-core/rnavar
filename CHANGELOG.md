@@ -24,9 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameter
 
-| Old name | New name |
-| -------- | -------- |
-|          |          |
+| Old name                  | New name |
+| ------------------------- | -------- |
+| use_annotation_cache_keys |          |
 
 ### Developer section
 
@@ -38,6 +38,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#224](https://github.com/nf-core/rnavar/pull/224) - Minor refactor of prepare_genome subworkflow to handle similarly all reference vcf files
 
 #### Fixed
+
+#### Removed
+
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Remove unused parameter `use_annotation_cache_keys`
 
 ## [1.1.1](https://github.com/nf-core/rnavar/releases/tag/1.1.1) - Brave Benatar
 
