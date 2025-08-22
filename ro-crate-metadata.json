@@ -174,10 +174,10 @@
             },
             "url": [
                 "https://github.com/nf-core/rnavar",
-                "https://nf-co.re/rnavar/dev/"
+                "https://nf-co.re/rnavar/1.1.1/"
             ],
             "version": [
-                "1.2.0dev"
+                "1.1.1"
             ]
         },
         {
