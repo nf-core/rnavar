@@ -194,7 +194,7 @@ Currently, the pipeline does not produce the recalibration table file in the out
 
 </details>
 
-HLA typing is performed when the `--run_hlatyping` parameter is specified. The 2-digit resolution provides broad HLA type classification, while 4-digit resolution offers more precise allele-level typing. Expression files contain quantitative information about HLA allele expression levels derived from the RNA-seq data.
+HLA typing is performed when the parameter `--tools seq2hla` is set. The 2-digit resolution provides broad HLA type classification, while 4-digit resolution offers more precise allele-level typing. Expression files contain quantitative information about HLA allele expression levels derived from the RNA-seq data.
 
 ## Variant calling
 

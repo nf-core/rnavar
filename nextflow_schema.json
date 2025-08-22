@@ -31,9 +31,9 @@
                 "tools": {
                     "type": "string",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify which tools RNAvar should use for annotating variants. Values can be 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
-                    "help_text": "List of tools to be used for variant annotation.",
-                    "pattern": "^((snpeff|vep|merge)*(,)*)*$",
+                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "help_text": "List of tools to be used in addition to variant calling: currently hlatyping with Seq2HLA and a choice of annotation tools.",
+                    "pattern": "^((seq2hla|snpeff|vep|merge)*(,)*)*$",
                     "hidden": true
                 },
                 "save_merged_fastq": {
@@ -178,18 +178,6 @@
                     "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
                     "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
                     "hidden": false
-                }
-            }
-        },
-        "hlatyping": {
-            "title": "HLA Typing ",
-            "type": "object",
-            "description": "Enabling hla typing",
-            "fa_icon": "fas fa-toolbox",
-            "properties": {
-                "run_hlatyping": {
-                    "type": "boolean",
-                    "description": "Enables Seq2HLA for hla typing"
                 }
             }
         },
@@ -786,9 +774,6 @@
         },
         {
             "$ref": "#/$defs/postprocessing"
-        },
-        {
-            "$ref": "#/$defs/hlatyping"
         },
         {
             "$ref": "#/$defs/variant_calling"

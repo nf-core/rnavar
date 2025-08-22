@@ -9,7 +9,7 @@ nextflow_pipeline {
         when {
             params {
                 outdir = "$outputDir"
-                run_hlatyping = true
+                tools = 'seq2hla'
             }
         }
 

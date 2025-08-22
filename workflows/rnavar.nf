@@ -71,7 +71,6 @@ workflow RNAVAR {
     bam_csi_index
     extract_umi
     generate_gvcf
-    run_hlatyping
     skip_multiqc
     skip_baserecalibration
     skip_intervallisttools
@@ -154,7 +153,7 @@ workflow RNAVAR {
     }
 
     // MODULE: HLATyping with Seq2HLA
-    if(run_hlatyping) {
+    if(tools.contains('seq2hla')) {
         SEQ2HLA(umi_extracted_reads)
         versions = versions.mix(SEQ2HLA.out.versions)
     }
