@@ -23,10 +23,10 @@ workflow PREPARE_GENOME {
     take:
     fasta                    // params[path]: params.fasta
     dict                     // params[path]: params.dict
-    fai_raw                  // params[path]: params.fasta_fai
+    fai                      // params[path]: params.fasta_fai
     star_index               // params[path]: params.star_index
     gff                      // params[path]: params.gff
-    gtf_raw                  // params[path]: params.gtf
+    gtf                      // params[path]: params.gtf
     exon_bed_raw             // params[path]: params.exon_bed
     bcftools_annotations     // params[path]: params.bcftools_annotations
     bcftools_annotations_tbi // params[path]: params.bcftools_annotations_tbi
@@ -45,7 +45,7 @@ workflow PREPARE_GENOME {
 
     def ch_fasta = Channel.empty()
     if (fasta.endsWith('.gz')) {
-        GUNZIP_FASTA(fasta)
+        GUNZIP_FASTA(fasta.map { fasta_ -> [[id: 'references'], fasta_] })
 
         ch_fasta = GUNZIP_FASTA.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
@@ -66,20 +66,20 @@ workflow PREPARE_GENOME {
     }
 
     def ch_gtf = Channel.empty()
-    if (params.gtf.toString().endsWith('.gz')) {
-        GUNZIP_GTF(gtf_raw)
+    if (gtf.toString().endsWith('.gz')) {
+        GUNZIP_GTF(gtf.map { gtf_ -> [[id: 'references'], gtf_] })
 
         ch_gtf = GUNZIP_GTF.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
     }
-    else if (params.gff) {
-        GFFREAD(gff, ch_fasta.map { _meta, fasta_ -> fasta_ }.collect())
-        ch_versions = ch_versions.mix(GFFREAD.out.versions)
+    else if (gff) {
+        GFFREAD(gff.map { gff_ -> [[id: 'references'], gff_] }, ch_fasta.map { _meta, fasta_ -> fasta_ }.collect())
 
         ch_gtf = GFFREAD.out.gtf
+        ch_versions = ch_versions.mix(GFFREAD.out.versions)
     }
     else {
-        ch_gtf = gtf_raw
+        ch_gtf = Channel.from(gtf).map { gtf_ -> [[id: 'references'], gtf_] }.collect()
     }
 
     def ch_exon_bed_raw = Channel.empty()
@@ -210,13 +210,13 @@ workflow PREPARE_GENOME {
         .collect()
 
     def ch_fai = Channel.empty()
-    if (!fai_raw) {
+    if (!fai) {
         SAMTOOLS_FAIDX(ch_fasta, [[id: 'references'], []], false)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_fai = SAMTOOLS_FAIDX.out.fai
     }
     else {
-        ch_fai = Channel.from(fai_raw).map { fai_ -> [[id: 'references'], fai_] }.collect()
+        ch_fai = Channel.from(fai).map { fai_ -> [[id: 'references'], fai_] }.collect()
     }
 
     //

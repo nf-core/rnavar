@@ -93,8 +93,6 @@ workflow NFCORE_RNAVAR {
     ch_dbsnp_raw = params.dbsnp ? Channel.fromPath(params.dbsnp) : Channel.empty()
     ch_dbsnp_tbi_raw = params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi) : Channel.empty()
     ch_exon_bed_raw = params.exon_bed ? Channel.fromPath(params.exon_bed).map { it -> [[id: it.baseName], it] } : Channel.empty()
-    ch_gff = params.gff ? Channel.fromPath(params.gff).map { gff -> [[id: gff.baseName], gff] }.collect() : Channel.empty()
-    ch_gtf_raw = params.gtf ? Channel.fromPath(params.gtf).map { gtf -> [[id: gtf.baseName], gtf] }.collect() : Channel.empty()
     ch_known_indels_raw = params.known_indels ? Channel.fromPath(params.known_indels) : Channel.empty()
     ch_known_indels_tbi_raw = params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi) : Channel.empty()
     ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
@@ -121,8 +119,8 @@ workflow NFCORE_RNAVAR {
         params.dict,
         params.fasta_fai,
         ch_star_index_raw,
-        ch_gff,
-        ch_gtf_raw,
+        params.gff,
+        params.gtf,
         ch_exon_bed_raw,
         ch_bcftools_annotations_raw,
         ch_bcftools_annotations_tbi_raw,
@@ -136,11 +134,11 @@ workflow NFCORE_RNAVAR {
     )
 
     ch_fasta = PREPARE_GENOME.out.fasta
-    ch_star_index = PREPARE_GENOME.out.star_index
-    ch_gtf = PREPARE_GENOME.out.gtf
     ch_dict = PREPARE_GENOME.out.dict
     ch_fasta_fai = PREPARE_GENOME.out.fasta_fai
+    ch_gtf = PREPARE_GENOME.out.gtf
     ch_exon_bed = PREPARE_GENOME.out.exon_bed
+    ch_star_index = PREPARE_GENOME.out.star_index
     ch_bcfann = params.bcftools_annotations ? PREPARE_GENOME.out.bcfann : Channel.value([])
     ch_bcfann_tbi = params.bcftools_annotations ? PREPARE_GENOME.out.bcfann_tbi : Channel.value([])
     ch_dbsnp = params.dbsnp ? PREPARE_GENOME.out.dbsnp : Channel.value([])
