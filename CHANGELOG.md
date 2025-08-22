@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [#](https://github.com/nf-core/sarek/pull/) - Add Seq2HLA to enable Class I & Class II HLATyping
+- [#225](https://github.com/nf-core/sarek/pull/225) - Add Seq2HLA to enable Class I & Class II HLATyping
 
 ### Changed
 
