@@ -26,11 +26,13 @@ nextflow_workflow {
             params {
                 params.fasta = "genome.fasta"
                 params.dict = null
-                params.fai = null
+                params.fasta_fai = null
                 params.star_index = null
                 params.gff = null
                 params.gtf = "genome.gtf"
                 params.exon_bed = null
+                params.bcftools_annotations = null
+                params.bcftools_annotations_tbi = null
                 params.dbsnp = null
                 params.dbsnp_tbi = null
                 params.known_indels = null
@@ -56,8 +58,11 @@ nextflow_workflow {
                 input[7] = Channel.empty()
                 input[8] = Channel.empty()
                 input[9] = Channel.empty()
-                input[10] = params.feature_type
-                input[11] = Channel.value(false)
+                input[10] = Channel.empty()
+                input[11] = Channel.empty()
+                input[12] = Channel.empty()
+                input[13] = params.feature_type
+                input[14] = Channel.value(false)
                 """
             }
         }
@@ -84,15 +89,17 @@ nextflow_workflow {
             params {
                 params.fasta = "genome.fasta"
                 params.dict = "genome.dict"
-                params.fai = "genome.fasta.fai"
+                params.fasta_fai = "genome.fasta.fai"
                 params.star_index = "star/"
                 params.gff = null
                 params.gtf = "genome.gtf"
                 params.exon_bed = "exon.bed"
+                params.bcftools_annotations = "annotations.vcf.gz"
+                params.bcftools_annotations_tbi = null
                 params.dbsnp = "dbsnp.vcf"
                 params.dbsnp_tbi = null
                 params.known_indels = "indels.vcf.gz"
-                params.known_indels_tbi = "indels.vcf.gz.tbi"
+                params.known_indels_tbi = null
                 params.feature_type = "exon"
             }
 
@@ -123,18 +130,20 @@ nextflow_workflow {
                     [id:'exon_bed'],
                     file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
                 ])
-                input[7] = Channel.value([
-                    [id:'dbsnp'],
+                input[7] = Channel.value(
+                    file(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
+                )
+                input[8] = Channel.empty()
+                input[9] = Channel.value(
                     file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf', checkIfExists: true)
-                ])
-                input[8] = Channel.value(
+                )
+                input[10] = Channel.empty()
+                input[11] = Channel.value(
                     file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true)
                 )
-                input[9] = Channel.value(
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
-                )
-                input[10] = params.feature_type
-                input[11] = Channel.value(true)
+                input[12] = Channel.empty()
+                input[13] = params.feature_type
+                input[14] = Channel.value(true)
                 """
             }
         }

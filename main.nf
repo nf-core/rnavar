@@ -123,14 +123,14 @@ workflow NFCORE_RNAVAR {
 
     PREPARE_GENOME(
         ch_fasta_raw,
-        ch_bcftools_annotations_raw,
-        ch_bcftools_annotations_tbi_raw,
         ch_dict_raw,
         ch_fai_raw,
         ch_star_index_raw,
         ch_gff,
         ch_gtf_raw,
         ch_exon_bed_raw,
+        ch_bcftools_annotations_raw,
+        ch_bcftools_annotations_tbi_raw,
         ch_dbsnp_raw,
         ch_dbsnp_tbi_raw,
         ch_known_indels_raw,

@@ -22,14 +22,14 @@ include { UNTAR                                               } from '../../../m
 workflow PREPARE_GENOME {
     take:
     fasta_raw                // channel: /path/to/genome.fasta
-    bcftools_annotations     // channel: /path/to/bcftools_annotations.vcf.gz
-    bcftools_annotations_tbi // channel: /path/to/bcftools_annotations.vcf.gz.tbi
     dict_raw                 // channel: /path/to/genome.dict
     fai_raw                  // channel: /path/to/genome.fasta.fai
     star_index               // channel: /path/to/star_index
     gff                      // channel: /path/to/genome.gff
     gtf_raw                  // channel: /path/to/genome.gtf
     exon_bed_raw             // channel: /path/to/genome.bed
+    bcftools_annotations     // channel: /path/to/bcftools_annotations.vcf.gz
+    bcftools_annotations_tbi // channel: /path/to/bcftools_annotations.vcf.gz.tbi
     dbsnp                    // channel: /path/to/dbnsp.vcf.gz
     dbsnp_tbi                // channel: /path/to/dbnsp.vcf.gz
     known_indels             // channel: /path/to/known_indels
