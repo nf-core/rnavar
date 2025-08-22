@@ -20,6 +20,7 @@ include { GATK4_MERGEVCFS           } from '../modules/nf-core/gatk4/mergevcfs'
 include { GATK4_VARIANTFILTRATION   } from '../modules/nf-core/gatk4/variantfiltration'
 include { MULTIQC                   } from '../modules/nf-core/multiqc'
 include { SAMTOOLS_INDEX            } from '../modules/nf-core/samtools/index'
+include { SEQ2HLA                   } from '../modules/nf-core/seq2hla/main'
 include { TABIX_TABIX as TABIX      } from '../modules/nf-core/tabix/tabix'
 include { TABIX_TABIX as TABIXGVCF  } from '../modules/nf-core/tabix/tabix'
 include { UMITOOLS_EXTRACT          } from '../modules/nf-core/umitools/extract'
@@ -149,6 +150,12 @@ workflow RNAVAR {
     }
     else {
         interval_list_split = interval_list.map { _meta, bed -> bed }
+    }
+
+    // MODULE: HLATyping with Seq2HLA
+    if(tools.contains('seq2hla')) {
+        SEQ2HLA(umi_extracted_reads)
+        versions = versions.mix(SEQ2HLA.out.versions)
     }
 
     // SUBWORKFLOW: Perform read alignment using STAR aligner

@@ -176,6 +176,11 @@
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["bam_stats_samtools", "modules"]
                     },
+                    "seq2hla": {
+                        "branch": "master",
+                        "git_sha": "c7ce706b235d04da1e1c457ab7f85bb453305ef4",
+                        "installed_by": ["modules"]
+                    },
                     "snpeff/download": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
