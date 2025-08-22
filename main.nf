@@ -206,6 +206,7 @@ workflow NFCORE_RNAVAR {
         params.bam_csi_index,
         params.extract_umi,
         params.generate_gvcf,
+        params.run_hlatyping,
         params.skip_multiqc,
         params.skip_baserecalibration,
         params.skip_intervallisttools,

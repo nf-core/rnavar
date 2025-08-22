@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [#](https://github.com/nf-core/sarek/pull/) - Add Seq2HLA to enable Class I & Class II HLATyping
+
 ### Changed
 
 - [#216](https://github.com/nf-core/sarek/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
@@ -21,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | multiqc    | 1.27        | 1.29        |
+| seq2hla    |             | 2.3         |
 | tabix      | 1.2         | 1.21        |
 
 ### Parameter
