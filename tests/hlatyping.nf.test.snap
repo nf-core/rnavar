@@ -215,7 +215,6 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.flagstat:md5,ed7c4db43f21dfaf1c7fd57549bb3c71",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
                 "GM12878-ClassI-class.HLAgenotype2digits:md5,6b501035e8d1d51ca92fe37fb1c6dda7",
                 "GM12878-ClassI-class.HLAgenotype4digits:md5,cc22f9df7ccdb7a50c1a16b3621422f4",
