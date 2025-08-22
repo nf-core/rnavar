@@ -36,18 +36,6 @@
                     "pattern": "^((snpeff|vep|merge)*(,)*)*$",
                     "hidden": true
                 },
-                "email": {
-                    "type": "string",
-                    "description": "Email address for completion summary.",
-                    "fa_icon": "fas fa-envelope",
-                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                },
-                "multiqc_title": {
-                    "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
-                },
                 "save_merged_fastq": {
                     "type": "boolean",
                     "description": "Save FastQ files after merging re-sequenced libraries in the results directory.",
@@ -55,172 +43,42 @@
                 }
             }
         },
-        "reference_genome_options": {
-            "title": "Reference genome options",
+        "preprocessing": {
+            "title": "Preprocessing of alignment",
             "type": "object",
-            "fa_icon": "fas fa-dna",
-            "description": "Reference genome related files and options required for the workflow.",
-            "properties": {
-                "genome": {
-                    "type": "string",
-                    "description": "Name of iGenomes reference.",
-                    "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
-                    "default": "GRCh38"
-                },
-                "fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
-                },
-                "dict": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.dict$",
-                    "description": "Path to FASTA dictionary file.",
-                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
-                },
-                "fasta_fai": {
-                    "type": "string",
-                    "fa_icon": "fas fa-file",
-                    "format": "file-path",
-                    "exists": true,
-                    "pattern": "^\\S+\\.fai$",
-                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference",
-                    "description": "Path to FASTA reference index."
-                },
-                "gtf": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Path to GTF annotation file.",
-                    "exists": true,
-                    "pattern": "^\\S+\\.gtf$",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified."
-                },
-                "gff": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "pattern": "^\\S+\\.gff\\d?$",
-                    "description": "Path to GFF3 annotation file.",
-                    "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
-                },
-                "exon_bed": {
-                    "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "pattern": "^\\S+\\.bed$",
-                    "description": "Path to BED file containing exon intervals. This will be created from the GTF file if not specified."
-                },
-                "read_length": {
-                    "type": "number",
-                    "default": 150,
-                    "minimum": 1,
-                    "description": "Read length",
-                    "help_text": "Specify the read length for the STAR aligner."
-                },
-                "save_reference": {
-                    "type": "boolean",
-                    "help_text": "If the STAR index is generated by the pipeline, then please use this parameter to save it to your results folder. These index can then be used for future pipeline runs, reducing processing times.",
-                    "description": "If generated by the pipeline, save the STAR index in the results directory."
-                },
-                "known_indels": {
-                    "type": "string",
-                    "description": "Path to known indels VCF file(s)",
-                    "format": "file-path-pattern",
-                    "exists": true
-                },
-                "known_indels_tbi": {
-                    "type": "string",
-                    "description": "Path to known indels index file(s)",
-                    "format": "file-path-pattern",
-                    "exists": true
-                },
-                "dbsnp": {
-                    "type": "string",
-                    "description": "Path to dbSNP VCF file",
-                    "format": "file-path",
-                    "exists": true
-                },
-                "dbsnp_tbi": {
-                    "type": "string",
-                    "description": "Path to dbSNP VCF index file",
-                    "format": "file-path",
-                    "exists": true
-                },
-                "snpeff_db": {
-                    "type": "string",
-                    "fa_icon": "fas fa-database",
-                    "description": "snpEff DB version.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nThis is used to specify the database to be use to annotate with.\nAlternatively databases' names can be listed with the `snpEff databases`."
-                },
-                "vep_genome": {
-                    "type": "string",
-                    "fa_icon": "fas fa-microscope",
-                    "description": "VEP genome.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nThis is used to specify the genome when using the container with pre-downloaded cache."
-                },
-                "vep_species": {
-                    "type": "string",
-                    "fa_icon": "fas fa-microscope",
-                    "description": "VEP species.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively species listed in Ensembl Genomes caches can be used."
-                },
-                "vep_cache_version": {
-                    "type": ["integer", "string"],
-                    "minimum": 1,
-                    "fa_icon": "fas fa-tag",
-                    "description": "VEP cache version.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively cache version can be use to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers"
-                },
-                "feature_type": {
-                    "type": "string",
-                    "description": "Type of feature to parse from annotation file",
-                    "enum": ["exon", "transcript", "gene"],
-                    "default": "exon"
-                },
-                "download_cache": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-download",
-                    "description": "Download annotation cache.",
-                    "help_text": "Set this parameter, if you wish to download annotation cache."
-                },
-                "igenomes_ignore": {
-                    "type": "boolean",
-                    "description": "Do not load the iGenomes reference config.",
-                    "fa_icon": "fas fa-ban",
-                    "hidden": true,
-                    "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
-                },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The base path to the igenomes reference files",
-                    "fa_icon": "fas fa-ban",
-                    "hidden": true,
-                    "default": "s3://ngi-igenomes/igenomes/"
-                }
-            }
-        },
-        "postprocessing": {
-            "title": "Postprocessing of alignment",
-            "type": "object",
-            "description": "Parameters for postprocessing of alignment files.",
+            "description": "Parameters for preprocessing FASTQ files before alignment.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
-                "remove_duplicates": {
+                "extract_umi": {
                     "type": "boolean",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
-                    "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
-                    "hidden": false
+                    "description": "Specify whether to remove UMIs from the reads with UMI-tools extract."
+                },
+                "umitools_extract_method": {
+                    "type": "string",
+                    "default": "string",
+                    "fa_icon": "fas fa-barcode",
+                    "description": "UMI pattern to use. Can be either 'string' (default) or 'regex'.",
+                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).\n",
+                    "enum": ["string", "regex"]
+                },
+                "umitools_bc_pattern": {
+                    "type": "string",
+                    "fa_icon": "fas fa-barcode",
+                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).",
+                    "description": "The UMI barcode pattern to use e.g. 'NNNNNN' indicates that the first 6 nucleotides of the read are from the UMI.",
+                    "pattern": "^[NXC]*$"
+                },
+                "umitools_bc_pattern2": {
+                    "type": "string",
+                    "fa_icon": "fas fa-barcode",
+                    "description": "The UMI barcode pattern to use if the UMI is located in read 2.",
+                    "pattern": "^[NXC]*$"
+                },
+                "umitools_umi_separator": {
+                    "type": "string",
+                    "fa_icon": "fas fa-star-half-alt",
+                    "description": "The character that separates the UMI in the read name. Most likely a colon if you skipped the extraction with UMI-tools and used other software."
                 }
             }
         },
@@ -305,44 +163,21 @@
                     "type": "boolean",
                     "description": "Create a CSI index for BAM files instead of the traditional BAI index. This will be required for genomes with larger chromosome sizes."
                 }
-            }
+            },
+            "required": ["aligner", "seq_platform"]
         },
-        "preprocessing": {
-            "title": "Preprocessing of alignment",
+        "postprocessing": {
+            "title": "Postprocessing of alignment",
             "type": "object",
-            "description": "Parameters for preprocessing FASTQ files before alignment.",
+            "description": "Parameters for postprocessing of alignment files.",
             "fa_icon": "fas fa-toolbox",
             "properties": {
-                "extract_umi": {
+                "remove_duplicates": {
                     "type": "boolean",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify whether to remove UMIs from the reads with UMI-tools extract."
-                },
-                "umitools_extract_method": {
-                    "type": "string",
-                    "default": "string",
-                    "fa_icon": "fas fa-barcode",
-                    "description": "UMI pattern to use. Can be either 'string' (default) or 'regex'.",
-                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).\n",
-                    "enum": ["string", "regex"]
-                },
-                "umitools_bc_pattern": {
-                    "type": "string",
-                    "fa_icon": "fas fa-barcode",
-                    "help_text": "More details can be found in the [UMI-tools documentation](https://umi-tools.readthedocs.io/en/latest/reference/extract.html#extract-method).",
-                    "description": "The UMI barcode pattern to use e.g. 'NNNNNN' indicates that the first 6 nucleotides of the read are from the UMI.",
-                    "pattern": "^[NXC]*$"
-                },
-                "umitools_bc_pattern2": {
-                    "type": "string",
-                    "fa_icon": "fas fa-barcode",
-                    "description": "The UMI barcode pattern to use if the UMI is located in read 2.",
-                    "pattern": "^[NXC]*$"
-                },
-                "umitools_umi_separator": {
-                    "type": "string",
-                    "fa_icon": "fas fa-star-half-alt",
-                    "description": "The character that separates the UMI in the read name. Most likely a colon if you skipped the extraction with UMI-tools and used other software."
+                    "description": "Specify whether to remove duplicates from the BAM during Picard MarkDuplicates step.",
+                    "help_text": "Specify true for removing duplicates from BAM file during Picard MarkDuplicates step.",
+                    "hidden": false
                 }
             }
         },
@@ -377,8 +212,57 @@
                     "type": "boolean",
                     "description": "Enable generation of GVCFs by sample additionnaly to the VCFs.",
                     "help_text": "This parameter enables GATK HAPLOTYPECALLER to generate GVCFs. Default false."
+                },
+                "gatk_interval_scatter_count": {
+                    "type": "integer",
+                    "default": 25,
+                    "minimum": 1,
+                    "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
+                    "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
+                },
+                "no_intervals": {
+                    "type": "boolean",
+                    "description": "Do not use gene interval file during variant calling",
+                    "help_text": "This parameter, if set to True, does not use the gene intervals during the variant calling step, which then results in variants from all regions including non-genic. Default is False"
                 }
             }
+        },
+        "variant_filtering": {
+            "title": "Variant filtering",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gatk_vf_qd_filter": {
+                    "type": "number",
+                    "default": 2,
+                    "minimum": 0,
+                    "description": "Value to be used for the QualByDepth (QD) filter",
+                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
+                },
+                "gatk_vf_fs_filter": {
+                    "type": "number",
+                    "default": 30,
+                    "minimum": 0,
+                    "description": "Value to be used for the FisherStrand (FS) filter",
+                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
+                },
+                "gatk_vf_window_size": {
+                    "type": "integer",
+                    "default": 35,
+                    "minimum": 0,
+                    "description": "The window size (in bases) in which to evaluate clustered SNPs.",
+                    "help_text": "This parameter is used by GATK variant filteration step. It defines the window size (in bases) in which to evaluate clustered SNPs. It has to be used together with the other option 'cluster'."
+                },
+                "gatk_vf_cluster_size": {
+                    "type": "integer",
+                    "default": 3,
+                    "minimum": 2,
+                    "description": "The number of SNPs which make up a cluster. Must be at least 2.",
+                    "help_text": "This parameter is used by GATK variant filteration step. It defines the number of SNPs which make up a cluster within a window. Must be at least 2."
+                }
+            },
+            "fa_icon": "fas fa-filter"
         },
         "variant_annotation": {
             "title": "Variant Annotation",
@@ -571,51 +455,157 @@
                 }
             }
         },
-        "tool_parameters": {
-            "title": "Tool parameters",
+        "reference_genome_options": {
+            "title": "Reference genome options",
             "type": "object",
-            "fa_icon": "fas fa-terminal",
-            "description": "Define parameters of the tools used in the pipeline",
+            "fa_icon": "fas fa-dna",
+            "description": "Reference genome related files and options required for the workflow.",
             "properties": {
-                "gatk_interval_scatter_count": {
-                    "type": "integer",
-                    "default": 25,
+                "genome": {
+                    "type": "string",
+                    "description": "Name of iGenomes reference.",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
+                    "default": "GRCh38"
+                },
+                "fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "description": "Path to FASTA genome file.",
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "dict": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.dict$",
+                    "description": "Path to FASTA dictionary file.",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
+                },
+                "fasta_fai": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.fai$",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference",
+                    "description": "Path to FASTA reference index."
+                },
+                "gtf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to GTF annotation file.",
+                    "exists": true,
+                    "pattern": "^\\S+\\.gtf$",
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified."
+                },
+                "gff": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.gff\\d?$",
+                    "description": "Path to GFF3 annotation file.",
+                    "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
+                },
+                "exon_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "pattern": "^\\S+\\.bed$",
+                    "description": "Path to BED file containing exon intervals. This will be created from the GTF file if not specified."
+                },
+                "read_length": {
+                    "type": "number",
+                    "default": 150,
                     "minimum": 1,
-                    "description": "Number of times the gene interval list to be split in order to run GATK haplotype caller in parallel",
-                    "help_text": "Set this parameter to decide the number of splits for the gene interval list file."
+                    "description": "Read length",
+                    "help_text": "Specify the read length for the STAR aligner."
                 },
-                "no_intervals": {
+                "save_reference": {
                     "type": "boolean",
-                    "description": "Do not use gene interval file during variant calling",
-                    "help_text": "This parameter, if set to True, does not use the gene intervals during the variant calling step, which then results in variants from all regions including non-genic. Default is False"
+                    "help_text": "If the STAR index is generated by the pipeline, then please use this parameter to save it to your results folder. These index can then be used for future pipeline runs, reducing processing times.",
+                    "description": "If generated by the pipeline, save the STAR index in the results directory."
                 },
-                "gatk_vf_window_size": {
-                    "type": "integer",
-                    "default": 35,
-                    "minimum": 0,
-                    "description": "The window size (in bases) in which to evaluate clustered SNPs.",
-                    "help_text": "This parameter is used by GATK variant filteration step. It defines the window size (in bases) in which to evaluate clustered SNPs. It has to be used together with the other option 'cluster'."
+                "known_indels": {
+                    "type": "string",
+                    "description": "Path to known indels VCF file(s)",
+                    "format": "file-path-pattern",
+                    "exists": true
                 },
-                "gatk_vf_cluster_size": {
-                    "type": "integer",
-                    "default": 3,
-                    "minimum": 2,
-                    "description": "The number of SNPs which make up a cluster. Must be at least 2.",
-                    "help_text": "This parameter is used by GATK variant filteration step. It defines the number of SNPs which make up a cluster within a window. Must be at least 2."
+                "known_indels_tbi": {
+                    "type": "string",
+                    "description": "Path to known indels index file(s)",
+                    "format": "file-path-pattern",
+                    "exists": true
                 },
-                "gatk_vf_fs_filter": {
-                    "type": "number",
-                    "default": 30,
-                    "minimum": 0,
-                    "description": "Value to be used for the FisherStrand (FS) filter",
-                    "help_text": "This parameter defines the value to use for the FisherStrand (FS) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
+                "dbsnp": {
+                    "type": "string",
+                    "description": "Path to dbSNP VCF file",
+                    "format": "file-path",
+                    "exists": true
                 },
-                "gatk_vf_qd_filter": {
-                    "type": "number",
-                    "default": 2,
-                    "minimum": 0,
-                    "description": "Value to be used for the QualByDepth (QD) filter",
-                    "help_text": "This parameter defines the value to use for the QualByDepth (QD) filter in the GATK variant-filtering step. \nThe value should given in a float number format."
+                "dbsnp_tbi": {
+                    "type": "string",
+                    "description": "Path to dbSNP VCF index file",
+                    "format": "file-path",
+                    "exists": true
+                },
+                "snpeff_db": {
+                    "type": "string",
+                    "fa_icon": "fas fa-database",
+                    "description": "snpEff DB version.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nThis is used to specify the database to be use to annotate with.\nAlternatively databases' names can be listed with the `snpEff databases`."
+                },
+                "vep_genome": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP genome.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nThis is used to specify the genome when using the container with pre-downloaded cache."
+                },
+                "vep_species": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP species.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively species listed in Ensembl Genomes caches can be used."
+                },
+                "vep_cache_version": {
+                    "type": ["integer", "string"],
+                    "minimum": 1,
+                    "fa_icon": "fas fa-tag",
+                    "description": "VEP cache version.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively cache version can be use to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers"
+                },
+                "feature_type": {
+                    "type": "string",
+                    "description": "Type of feature to parse from annotation file",
+                    "enum": ["exon", "transcript", "gene"],
+                    "default": "exon"
+                },
+                "download_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-download",
+                    "description": "Download annotation cache.",
+                    "help_text": "Set this parameter, if you wish to download annotation cache."
+                },
+                "igenomes_ignore": {
+                    "type": "boolean",
+                    "description": "Do not load the iGenomes reference config.",
+                    "fa_icon": "fas fa-ban",
+                    "hidden": true,
+                    "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "igenomes_base": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The base path to the igenomes reference files",
+                    "fa_icon": "fas fa-ban",
+                    "hidden": true,
+                    "default": "s3://ngi-igenomes/igenomes/"
                 }
             }
         },
@@ -689,6 +679,13 @@
                     "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
                     "hidden": true
                 },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                },
                 "email_on_fail": {
                     "type": "string",
                     "description": "Email address for completion summary, only when pipeline fails.",
@@ -742,6 +739,11 @@
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
                     "fa_icon": "fas fa-cog"
                 },
+                "multiqc_title": {
+                    "type": "string",
+                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
+                    "fa_icon": "fas fa-file-signature"
+                },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
@@ -777,6 +779,30 @@
             "$ref": "#/$defs/input_output_options"
         },
         {
+            "$ref": "#/$defs/preprocessing"
+        },
+        {
+            "$ref": "#/$defs/alignment_options"
+        },
+        {
+            "$ref": "#/$defs/postprocessing"
+        },
+        {
+            "$ref": "#/$defs/hlatyping"
+        },
+        {
+            "$ref": "#/$defs/variant_calling"
+        },
+        {
+            "$ref": "#/$defs/variant_filtering"
+        },
+        {
+            "$ref": "#/$defs/variant_annotation"
+        },
+        {
+            "$ref": "#/$defs/pipeline_stage_options"
+        },
+        {
             "$ref": "#/$defs/reference_genome_options"
         },
         {
@@ -784,28 +810,6 @@
         },
         {
             "$ref": "#/$defs/generic_options"
-        },
-        {
-            "$ref": "#/$defs/tool_parameters"
-        },
-        {
-            "$ref": "#/$defs/pipeline_stage_options"
-        },
-        {
-            "$ref": "#/$defs/postprocessing"
-        },
-        {
-            "$ref": "#/$defs/alignment_options"
-        },
-        {
-            "$ref": "#/$defs/variant_calling"
-        },
-        {
-            "$ref": "#/$defs/variant_annotation"
-        },
-        {
-            "$ref": "#/$defs/preprocessing"
         }
-    ],
-    "required": ["aligner", "seq_platform"]
+    ]
 }
