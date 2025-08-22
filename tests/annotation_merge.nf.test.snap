@@ -1,7 +1,6 @@
 {
     "-profile test --tools merge,snpeff,vep": {
         "content": [
-            14,
             {
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": 114.2,
@@ -131,7 +130,6 @@
     },
     "-profile test --tools merge": {
         "content": [
-            12,
             {
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": 114.2,

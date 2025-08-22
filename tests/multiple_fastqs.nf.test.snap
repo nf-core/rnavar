@@ -1,7 +1,6 @@
 {
     "Test multiple FASTQ files": {
         "content": [
-            72,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -245,7 +244,6 @@
     },
     "Test multiple FASTQ files pair end": {
         "content": [
-            41,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5

@@ -1,7 +1,6 @@
 {
     "-profile test": {
         "content": [
-            41,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5

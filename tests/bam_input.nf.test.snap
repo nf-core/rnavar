@@ -1,7 +1,6 @@
 {
     "-profile test --input bam.csv": {
         "content": [
-            27,
             {
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.1.0"

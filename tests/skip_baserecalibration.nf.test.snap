@@ -1,7 +1,6 @@
 {
     "-profile test --skip_baserecalibration": {
         "content": [
-            37,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5

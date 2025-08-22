@@ -1,7 +1,6 @@
 {
     "Run with profile test | extract_umi": {
         "content": [
-            41,
             {
                 "FASTQC": {
                     "fastqc": "0.12.1"

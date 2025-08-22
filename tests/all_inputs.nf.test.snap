@@ -1,7 +1,6 @@
 {
     "-profile test --input all.csv": {
         "content": [
-            79,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5

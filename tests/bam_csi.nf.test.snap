@@ -1,7 +1,6 @@
 {
     "-profile test --bam_csi_index": {
         "content": [
-            40,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
