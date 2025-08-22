@@ -42,7 +42,7 @@ nextflow_workflow {
                 input[3] = Channel.value([[], []])
                 input[4] = []
                 input[5] = file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
-                input[6] = Channel.empty()
+                input[6] = []
                 input[7] = Channel.empty()
                 input[8] = Channel.empty()
                 input[9] = Channel.empty()
@@ -97,10 +97,7 @@ nextflow_workflow {
                 ])
                 input[4] = []
                 input[5] = file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
-                input[6] = Channel.value([
-                    [id:'exon_bed'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
-                ])
+                input[6] = file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
                 input[7] = Channel.value(
                     file(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
                 )

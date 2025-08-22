@@ -27,7 +27,7 @@ workflow PREPARE_GENOME {
     star_index               // params[path]: params.star_index
     gff                      // params[path]: params.gff
     gtf                      // params[path]: params.gtf
-    exon_bed_raw             // params[path]: params.exon_bed
+    exon_bed                 // params[path]: params.exon_bed
     bcftools_annotations     // params[path]: params.bcftools_annotations
     bcftools_annotations_tbi // params[path]: params.bcftools_annotations_tbi
     dbsnp                    // params[path]: params.dbsnp
@@ -45,13 +45,15 @@ workflow PREPARE_GENOME {
 
     def ch_fasta = Channel.empty()
     if (fasta.endsWith('.gz')) {
-        GUNZIP_FASTA(fasta.map { fasta_ -> [[id: 'references'], fasta_] })
+        GUNZIP_FASTA(fasta.map { fasta_ -> [[id: 'fasta'], fasta_] })
 
         ch_fasta = GUNZIP_FASTA.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     }
     else {
-        ch_fasta = Channel.from(fasta).map { fasta_ -> [[id: 'references'], fasta_] }.collect()
+        ch_fasta = Channel.from(file(fasta, checkIfExists: true))
+            .map { fasta_ -> [[id: 'fasta'], fasta_] }
+            .collect()
     }
 
     def ch_dict = Channel.empty()
@@ -62,36 +64,46 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
     }
     else {
-        ch_dict = Channel.from(dict).map { dict_ -> [[id: 'references'], dict_] }.collect()
+        ch_dict = Channel.from(file(dict, checkIfExists: true))
+            .map { dict_ -> [[id: 'dict'], dict_] }
+            .collect()
     }
 
     def ch_gtf = Channel.empty()
     if (gtf.toString().endsWith('.gz')) {
-        GUNZIP_GTF(gtf.map { gtf_ -> [[id: 'references'], gtf_] })
+        GUNZIP_GTF(gtf.map { gtf_ -> [[id: 'gtf'], gtf_] })
 
         ch_gtf = GUNZIP_GTF.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
     }
     else if (gff) {
-        GFFREAD(gff.map { gff_ -> [[id: 'references'], gff_] }, ch_fasta.map { _meta, fasta_ -> fasta_ }.collect())
+        GFFREAD(gff.map { gff_ -> [[id: 'gtf'], gff_] }, ch_fasta.map { _meta, fasta_ -> fasta_ }.collect())
 
-        ch_gtf = GFFREAD.out.gtf
+        ch_gtf = GFFREAD.out.gtf.collect()
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
     }
     else {
-        ch_gtf = Channel.from(gtf).map { gtf_ -> [[id: 'references'], gtf_] }.collect()
+        ch_gtf = Channel.from(file(gtf, checkIfExists: true))
+            .map { gtf_ -> [[id: 'gtf'], gtf_] }
+            .collect()
     }
 
+    println("exon_bed: ${exon_bed}")
+
     def ch_exon_bed_raw = Channel.empty()
-    if (!params.exon_bed) {
+    if (!exon_bed) {
         GTF2BED(ch_gtf, feature_type)
 
-        ch_exon_bed_raw = GTF2BED.out.bed
+        ch_exon_bed_raw = GTF2BED.out.bed.collect()
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
     else {
-        ch_exon_bed_raw = exon_bed_raw
+        ch_exon_bed_raw = Channel.from(file(exon_bed, checkIfExists: true))
+            .map { exon_bed_ -> [[id: 'exon_bed'], exon_bed_] }
+            .collect()
     }
+
+    ch_exon_bed_raw.view()
 
     def ch_exon_bed = Channel.empty()
     if (!skip_exon_bed_check) {
@@ -100,7 +112,7 @@ workflow PREPARE_GENOME {
             ch_dict,
         )
 
-        ch_exon_bed = REMOVE_UNKNOWN_REGIONS.out.bed
+        ch_exon_bed = REMOVE_UNKNOWN_REGIONS.out.bed.collect()
         ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
     }
     else {
@@ -108,8 +120,8 @@ workflow PREPARE_GENOME {
     }
 
     def ch_bcftools_annotations_input = bcftools_annotations
-        .map { file -> [[id: file.name], file] }
-        .join(bcftools_annotations_tbi.map { file -> [[id: file.baseName], file] }, failOnDuplicate: true, remainder: true)
+        .map { file -> [[id: 'bcfann'], file] }
+        .join(bcftools_annotations_tbi.map { file -> [[id: 'bcfann'], file] }, failOnDuplicate: true, remainder: true)
         .branch { meta, file, index ->
             plain: !file.toString().endsWith(".gz")
             return [meta, file]
@@ -142,8 +154,8 @@ workflow PREPARE_GENOME {
         .collect()
 
     def ch_dbsnp_input = dbsnp
-        .map { file -> [[id: file.name], file] }
-        .join(dbsnp_tbi.map { file -> [[id: file.baseName], file] }, failOnDuplicate: true, remainder: true)
+        .map { file -> [[id: 'dbsnp'], file] }
+        .join(dbsnp_tbi.map { file -> [[id: 'dbsnp'], file] }, failOnDuplicate: true, remainder: true)
         .branch { meta, file, index ->
             plain: !file.toString().endsWith(".gz")
             return [meta, file]
@@ -176,8 +188,8 @@ workflow PREPARE_GENOME {
         .collect()
 
     def ch_known_indels_input = known_indels
-        .map { file -> [[id: file.name], file] }
-        .join(known_indels_tbi.map { file -> [[id: file.baseName], file] }, failOnDuplicate: true, remainder: true)
+        .map { file -> [[id: 'known_indels'], file] }
+        .join(known_indels_tbi.map { file -> [[id: 'known_indels'], file] }, failOnDuplicate: true, remainder: true)
         .branch { meta, file, index ->
             plain: !file.toString().endsWith(".gz")
             return [meta, file]
@@ -211,12 +223,14 @@ workflow PREPARE_GENOME {
 
     def ch_fai = Channel.empty()
     if (!fai) {
-        SAMTOOLS_FAIDX(ch_fasta, [[id: 'references'], []], false)
+        SAMTOOLS_FAIDX(ch_fasta, [[id: 'fai'], []], false)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_fai = SAMTOOLS_FAIDX.out.fai
     }
     else {
-        ch_fai = Channel.from(fai).map { fai_ -> [[id: 'references'], fai_] }.collect()
+        ch_fai = Channel.from(file(fai, checkIfExists: true))
+            .map { fai_ -> [[id: 'fai'], fai_] }
+            .collect()
     }
 
     //
@@ -267,8 +281,8 @@ workflow PREPARE_GENOME {
     def genomegenerate_input = star_index_check.incompatible
         .mix(star_index_input.no_index)
         .combine(ch_fasta)
-        .map { _meta1, _wrong_index, meta2, fasta ->
-            [meta2, fasta]
+        .map { _meta1, _wrong_index, meta2, fasta_ ->
+            [meta2, fasta_]
         }
 
     STAR_GENOMEGENERATE(genomegenerate_input, ch_gtf)

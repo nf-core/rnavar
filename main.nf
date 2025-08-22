@@ -15,16 +15,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 params.fasta             = getGenomeAttribute('fasta')
-params.fasta_fai         = getGenomeAttribute('fasta_fai')
-params.dict              = getGenomeAttribute('dict')
 params.gtf               = getGenomeAttribute('gtf')
 params.gff               = getGenomeAttribute('gff')
-params.exon_bed          = getGenomeAttribute('exon_bed')
 params.star_index        = getGenomeAttribute('star')
-params.dbsnp             = getGenomeAttribute('dbsnp')
-params.dbsnp_tbi         = getGenomeAttribute('dbsnp_tbi')
-params.known_indels      = getGenomeAttribute('known_indels')
-params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
 params.snpeff_db         = getGenomeAttribute('snpeff_db')
 params.vep_cache_version = getGenomeAttribute('vep_cache_version')
 params.vep_genome        = getGenomeAttribute('vep_genome')
@@ -92,7 +85,6 @@ workflow NFCORE_RNAVAR {
     ch_bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
     ch_dbsnp_raw = params.dbsnp ? Channel.fromPath(params.dbsnp) : Channel.empty()
     ch_dbsnp_tbi_raw = params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi) : Channel.empty()
-    ch_exon_bed_raw = params.exon_bed ? Channel.fromPath(params.exon_bed).map { it -> [[id: it.baseName], it] } : Channel.empty()
     ch_known_indels_raw = params.known_indels ? Channel.fromPath(params.known_indels) : Channel.empty()
     ch_known_indels_tbi_raw = params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi) : Channel.empty()
     ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
@@ -121,7 +113,7 @@ workflow NFCORE_RNAVAR {
         ch_star_index_raw,
         params.gff,
         params.gtf,
-        ch_exon_bed_raw,
+        params.exon_bed,
         ch_bcftools_annotations_raw,
         ch_bcftools_annotations_tbi_raw,
         ch_dbsnp_raw,
