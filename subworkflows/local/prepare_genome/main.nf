@@ -21,21 +21,22 @@ include { UNTAR                                               } from '../../../m
 
 workflow PREPARE_GENOME {
     take:
-    fasta_raw                // channel: /path/to/genome.fasta
-    dict_raw                 // channel: /path/to/genome.dict
-    fai_raw                  // channel: /path/to/genome.fasta.fai
-    star_index               // channel: /path/to/star_index
-    gff                      // channel: /path/to/genome.gff
-    gtf_raw                  // channel: /path/to/genome.gtf
-    exon_bed_raw             // channel: /path/to/genome.bed
-    bcftools_annotations     // channel: /path/to/bcftools_annotations.vcf.gz
-    bcftools_annotations_tbi // channel: /path/to/bcftools_annotations.vcf.gz.tbi
-    dbsnp                    // channel: /path/to/dbnsp.vcf.gz
-    dbsnp_tbi                // channel: /path/to/dbnsp.vcf.gz
-    known_indels             // channel: /path/to/known_indels
-    known_indels_tbi         // channel: /path/to/known_indels_index
-    feature_type
-    align                    // The pipeline needs aligner indices or not
+    fasta                    // params[path]: params.fasta
+    dict                     // params[path]: params.dict
+    fai_raw                  // params[path]: params.fasta_fai
+    star_index               // params[path]: params.star_index
+    gff                      // params[path]: params.gff
+    gtf_raw                  // params[path]: params.gtf
+    exon_bed_raw             // params[path]: params.exon_bed
+    bcftools_annotations     // params[path]: params.bcftools_annotations
+    bcftools_annotations_tbi // params[path]: params.bcftools_annotations_tbi
+    dbsnp                    // params[path]: params.dbsnp
+    dbsnp_tbi                // params[path]: params.dbsnp_tbi
+    known_indels             // params[path]: params.known_indels
+    known_indels_tbi         // params[path]: params.known_indels_tbi
+    feature_type             // params[string]: params.feature_type
+    skip_exon_bed_check      // params[boolean]: params.skip_exon_bed_check
+    align                    // boolean: The pipeline needs aligner indices or not
 
     main:
     def ch_versions = Channel.empty()
@@ -43,32 +44,33 @@ workflow PREPARE_GENOME {
     //Unzip reference genome files if needed
 
     def ch_fasta = Channel.empty()
-    if (params.fasta.endsWith('.gz')) {
-        GUNZIP_FASTA(fasta_raw)
+    if (fasta.endsWith('.gz')) {
+        GUNZIP_FASTA(fasta)
 
-        ch_fasta = GUNZIP_FASTA.out.gunzip
+        ch_fasta = GUNZIP_FASTA.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     }
     else {
-        ch_fasta = fasta_raw
+        ch_fasta = Channel.from(fasta).map { fasta_ -> [[id: 'references'], fasta_] }.collect()
     }
 
     def ch_dict = Channel.empty()
-    if (!params.dict) {
+    if (!dict) {
         GATK4_CREATESEQUENCEDICTIONARY(ch_fasta)
+
+        ch_dict = GATK4_CREATESEQUENCEDICTIONARY.out.dict.collect()
         ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
-        ch_dict = GATK4_CREATESEQUENCEDICTIONARY.out.dict
     }
     else {
-        ch_dict = dict_raw
+        ch_dict = Channel.from(dict).map { dict_ -> [[id: 'references'], dict_] }.collect()
     }
 
     def ch_gtf = Channel.empty()
     if (params.gtf.toString().endsWith('.gz')) {
         GUNZIP_GTF(gtf_raw)
-        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
-        ch_gtf = GUNZIP_GTF.out.gunzip
+        ch_gtf = GUNZIP_GTF.out.gunzip.collect()
+        ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
     }
     else if (params.gff) {
         GFFREAD(gff, ch_fasta.map { _meta, fasta_ -> fasta_ }.collect())
@@ -83,21 +85,23 @@ workflow PREPARE_GENOME {
     def ch_exon_bed_raw = Channel.empty()
     if (!params.exon_bed) {
         GTF2BED(ch_gtf, feature_type)
-        ch_versions = ch_versions.mix(GTF2BED.out.versions)
+
         ch_exon_bed_raw = GTF2BED.out.bed
+        ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
     else {
         ch_exon_bed_raw = exon_bed_raw
     }
 
     def ch_exon_bed = Channel.empty()
-    if (!params.skip_exon_bed_check) {
+    if (!skip_exon_bed_check) {
         REMOVE_UNKNOWN_REGIONS(
             ch_exon_bed_raw,
             ch_dict,
         )
-        ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
+
         ch_exon_bed = REMOVE_UNKNOWN_REGIONS.out.bed
+        ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
     }
     else {
         ch_exon_bed = ch_exon_bed_raw
@@ -206,13 +210,13 @@ workflow PREPARE_GENOME {
         .collect()
 
     def ch_fai = Channel.empty()
-    if (!params.fasta_fai) {
-        SAMTOOLS_FAIDX(ch_fasta, [['id': 'genome'], []], false)
+    if (!fai_raw) {
+        SAMTOOLS_FAIDX(ch_fasta, [[id: 'references'], []], false)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_fai = SAMTOOLS_FAIDX.out.fai
     }
     else {
-        ch_fai = fai_raw
+        ch_fai = Channel.from(fai_raw).map { fai_ -> [[id: 'references'], fai_] }.collect()
     }
 
     //

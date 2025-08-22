@@ -24,10 +24,6 @@ nextflow_workflow {
     test("only essentials") {
         when {
             params {
-                params.fasta = "genome.fasta"
-                params.dict = null
-                params.fasta_fai = null
-                params.star_index = null
                 params.gff = null
                 params.gtf = "genome.gtf"
                 params.exon_bed = null
@@ -37,17 +33,13 @@ nextflow_workflow {
                 params.dbsnp_tbi = null
                 params.known_indels = null
                 params.known_indels_tbi = null
-                params.feature_type = "exon"
             }
 
             workflow {
                 """
-                input[0] = Channel.value([
-                    [id:'fasta'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
-                ])
-                input[1] = Channel.empty()
-                input[2] = Channel.empty()
+                input[0] = file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                input[1] = []
+                input[2] = []
                 input[3] = Channel.value([[], []])
                 input[4] = Channel.empty()
                 input[5] = Channel.value([
@@ -61,8 +53,9 @@ nextflow_workflow {
                 input[10] = Channel.empty()
                 input[11] = Channel.empty()
                 input[12] = Channel.empty()
-                input[13] = params.feature_type
-                input[14] = Channel.value(false)
+                input[13] = "exon"
+                input[14] = false
+                input[15] = Channel.value(false)
                 """
             }
         }
@@ -87,10 +80,6 @@ nextflow_workflow {
     test("all") {
         when {
             params {
-                params.fasta = "genome.fasta"
-                params.dict = "genome.dict"
-                params.fasta_fai = "genome.fasta.fai"
-                params.star_index = "star/"
                 params.gff = null
                 params.gtf = "genome.gtf"
                 params.exon_bed = "exon.bed"
@@ -100,23 +89,13 @@ nextflow_workflow {
                 params.dbsnp_tbi = null
                 params.known_indels = "indels.vcf.gz"
                 params.known_indels_tbi = null
-                params.feature_type = "exon"
             }
 
             workflow {
                 """
-                input[0] = Channel.value([
-                    [id:'fasta'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
-                ])
-                input[1] = Channel.value([
-                    [id:'dict'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
-                ])
-                input[2] = Channel.value([
-                    [id:'fai'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
-                ])
+                input[0] = file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                input[1] = file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                input[2] = file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
                 input[3] = Channel.value([
                     [id:'star'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz', checkIfExists: true)
@@ -142,8 +121,9 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true)
                 )
                 input[12] = Channel.empty()
-                input[13] = params.feature_type
-                input[14] = Channel.value(true)
+                input[13] = "exon"
+                input[14] = false
+                input[15] = Channel.value(true)
                 """
             }
         }

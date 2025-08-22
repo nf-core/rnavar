@@ -86,23 +86,18 @@ workflow NFCORE_RNAVAR {
         error("Known sites are required for performing base recalibration. Supply them with either --dbsnp and/or --known_sites or disable base recalibration with --skip_baserecalibration")
     }
 
-    // Initialize fasta file with meta map:
-    ch_fasta_raw = params.fasta ? Channel.fromPath(params.fasta).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
-
-    // Initialize file channels based on params, defined in the params.genomes[params.genome] scope
+    // Initialize file channels based on params
     ch_bcftools_annotations_raw = params.bcftools_annotations ? Channel.fromPath(params.bcftools_annotations) : Channel.empty()
     ch_bcftools_annotations_tbi_raw = params.bcftools_annotations_tbi ? Channel.fromPath(params.bcftools_annotations_tbi) : Channel.empty()
     ch_bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
-    ch_dict_raw = params.dict ? Channel.fromPath(params.dict).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
-    ch_fai_raw = params.fasta_fai ? Channel.fromPath(params.fasta_fai).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
     ch_dbsnp_raw = params.dbsnp ? Channel.fromPath(params.dbsnp) : Channel.empty()
     ch_dbsnp_tbi_raw = params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi) : Channel.empty()
-    ch_known_indels_raw = params.known_indels ? Channel.fromPath(params.known_indels) : Channel.empty()
-    ch_known_indels_tbi_raw = params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi) : Channel.empty()
+    ch_exon_bed_raw = params.exon_bed ? Channel.fromPath(params.exon_bed).map { it -> [[id: it.baseName], it] } : Channel.empty()
     ch_gff = params.gff ? Channel.fromPath(params.gff).map { gff -> [[id: gff.baseName], gff] }.collect() : Channel.empty()
     ch_gtf_raw = params.gtf ? Channel.fromPath(params.gtf).map { gtf -> [[id: gtf.baseName], gtf] }.collect() : Channel.empty()
+    ch_known_indels_raw = params.known_indels ? Channel.fromPath(params.known_indels) : Channel.empty()
+    ch_known_indels_tbi_raw = params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi) : Channel.empty()
     ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
-    ch_exon_bed_raw = params.exon_bed ? Channel.fromPath(params.exon_bed).map { it -> [[id: it.baseName], it] } : Channel.empty()
 
     seq_platform = params.seq_platform ?: []
     seq_center = params.seq_center ?: []
@@ -122,9 +117,9 @@ workflow NFCORE_RNAVAR {
     }
 
     PREPARE_GENOME(
-        ch_fasta_raw,
-        ch_dict_raw,
-        ch_fai_raw,
+        params.fasta,
+        params.dict,
+        params.fasta_fai,
         ch_star_index_raw,
         ch_gff,
         ch_gtf_raw,
@@ -136,6 +131,7 @@ workflow NFCORE_RNAVAR {
         ch_known_indels_raw,
         ch_known_indels_tbi_raw,
         params.feature_type,
+        params.skip_exon_bed_check,
         align,
     )
 
