@@ -1,26 +1,26 @@
 process GTF2BED {
-    tag "$gtf"
+    tag "${gtf}"
     label 'process_low'
 
     conda "conda-forge::r-base=3.5.1"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-base:3.5.1' :
-        'biocontainers/r-base:3.5.1'}"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/r-base:3.5.1'
+        : 'biocontainers/r-base:3.5.1'}"
 
     input:
     tuple val(meta), path(gtf)
     val feature_type
 
     output:
-    tuple val(meta), path('*.bed')  , emit: bed
-    path "versions.yml"             , emit: versions
+    tuple val(meta), path('*.bed'), emit: bed
+    path "versions.yml", emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def allowed_type = ["exon", "transcript", "gene"];
-    if (feature_type){
+    def allowed_type = ["exon", "transcript", "gene"]
+    if (feature_type) {
         feature_type = allowed_type.contains(feature_type) ? feature_type : "exon"
     }
     """
