@@ -21,8 +21,8 @@ nextflow_pipeline {
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.failed
             assertAll(
-                { assert workflow.failed},
                 { assert workflow.stdout.toString().contains("This path is not available within annotation-cache") }
             )
         }

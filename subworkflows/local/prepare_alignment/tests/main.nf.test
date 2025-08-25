@@ -26,8 +26,8 @@ nextflow_workflow {
         }
 
         then {
+            assert workflow.success
             assertAll(
-                { assert workflow.success},
                 { assert snapshot(
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
@@ -58,8 +58,8 @@ nextflow_workflow {
         }
 
         then {
+            assert workflow.success
             assertAll(
-                { assert workflow.success},
                 { assert snapshot(
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
@@ -94,8 +94,8 @@ nextflow_workflow {
         }
 
         then {
+            assert workflow.success
             assertAll(
-                { assert workflow.success},
                 { assert snapshot(
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
