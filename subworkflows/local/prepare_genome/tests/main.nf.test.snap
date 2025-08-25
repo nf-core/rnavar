@@ -64,8 +64,8 @@
                 ],
                 "known_indels": [
                     [
-                        "/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/vcf/test2.vcf.gz",
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz"
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz",
+                        "/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/vcf/test2.vcf.gz"
                     ]
                 ],
                 "known_indels_tbi": [
@@ -113,7 +113,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.07.0"
         },
-        "timestamp": "2025-08-25T12:25:58.994517824"
+        "timestamp": "2025-08-25T12:55:39.853844404"
     },
     "only essentials": {
         "content": [

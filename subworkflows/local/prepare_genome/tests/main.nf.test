@@ -82,6 +82,10 @@ nextflow_workflow {
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
                             return null
+                        } else if(key == "known_indels") {
+                            return [key, val.sort { it.toString() }]
+                        } else if(key == "known_indels_tbi") {
+                            return [key, val.sort { it.toString() }]
                         } else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
                         }
