@@ -50,6 +50,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Base (Quality Score) Recalibration](#base-quality-score-recalibration)
       - [GATK BaseRecalibrator](#gatk-baserecalibrator)
       - [GATK ApplyBQSR](#gatk-applybqsr)
+  - [HLA typing](#hla-typing)
   - [Variant calling](#variant-calling)
   - [Variant filtering](#variant-filtering)
   - [Variant annotation](#variant-annotation)
@@ -168,6 +169,32 @@ Currently, the pipeline does not produce the recalibration table file in the out
   - `[SAMPLE].recal.bam.bai`: This is the index of the above recalibrated bam.
 
 </details>
+
+## HLA typing
+
+[seq2HLA](https://github.com/TRON-Bioinformatics/seq2HLA) performs precision HLA typing and expression analysis from RNA-seq data. The tool uses Bowtie2 alignment to map reads to HLA reference sequences and determines HLA genotypes at both 2-digit and 4-digit resolution for both classical and non-classical HLA Class I alleles, as well as Class II alleles.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `seq2hla/[SAMPLE]/`
+  - `[SAMPLE]-ClassI-class.HLAgenotype2digits`: HLA Class I 2-digit genotype results for classical alleles
+  - `[SAMPLE]-ClassI-class.HLAgenotype4digits`: HLA Class I 4-digit genotype results for classical alleles
+  - `[SAMPLE]-ClassI-class.expression`: Expression levels of HLA Class I classical alleles
+  - `[SAMPLE]-ClassI-class.bowtielog`: Bowtie2 alignment log for HLA Class I classical alleles
+  - `[SAMPLE]-ClassI-nonclass.HLAgenotype2digits`: HLA Class I 2-digit genotype results for non-classical alleles
+  - `[SAMPLE]-ClassI-nonclass.HLAgenotype4digits`: HLA Class I 4-digit genotype results for non-classical alleles
+  - `[SAMPLE]-ClassI-nonclass.expression`: Expression levels of HLA Class I non-classical alleles
+  - `[SAMPLE]-ClassI-nonclass.bowtielog`: Bowtie2 alignment log for HLA Class I non-classical alleles
+  - `[SAMPLE]-ClassII.HLAgenotype2digits`: HLA Class II 2-digit genotype results
+  - `[SAMPLE]-ClassII.HLAgenotype4digits`: HLA Class II 4-digit genotype results
+  - `[SAMPLE]-ClassII.expression`: Expression levels of HLA Class II alleles
+  - `[SAMPLE]-ClassII.bowtielog`: Bowtie2 alignment log for HLA Class II alleles
+  - `[SAMPLE].ambiguity`: Reports typing ambiguities when more than one solution for an allele is possible (optional)
+
+</details>
+
+HLA typing is performed when the parameter `--tools seq2hla` is set. The 2-digit resolution provides broad HLA type classification, while 4-digit resolution offers more precise allele-level typing. Expression files contain quantitative information about HLA allele expression levels derived from the RNA-seq data.
 
 ## Variant calling
 

@@ -204,7 +204,6 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,dde3fdb0b856dcf586106ae2f7505ae2",
                 "star_alignment_plot.txt:md5,6e8b7bbfd65f4d3e60a800f448054f8e",
                 "star_summary_table.txt:md5,c754e1fa8ead5914c70dad1fd9e98683",
-                "GM12878.flagstat:md5,a89cb59e509dab933063d5486742a185",
                 "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71"
             ],
             [

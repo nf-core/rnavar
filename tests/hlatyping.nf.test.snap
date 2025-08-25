@@ -1,6 +1,7 @@
 {
-    "-profile test --remove_duplicates": {
+    "-profile test --run_hlatyping": {
         "content": [
+            42,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -64,6 +65,9 @@
                 },
                 "SAMTOOLS_STATS": {
                     "samtools": 1.21
+                },
+                "SEQ2HLA": {
+                    "seq2hla": 2.2
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -175,6 +179,20 @@
                 "samtools",
                 "samtools/GM12878.bam",
                 "samtools/GM12878.bam.bai",
+                "seq2hla",
+                "seq2hla/GM12878",
+                "seq2hla/GM12878/GM12878-ClassI-class.HLAgenotype2digits",
+                "seq2hla/GM12878/GM12878-ClassI-class.HLAgenotype4digits",
+                "seq2hla/GM12878/GM12878-ClassI-class.bowtielog",
+                "seq2hla/GM12878/GM12878-ClassI-class.expression",
+                "seq2hla/GM12878/GM12878-ClassI-nonclass.HLAgenotype2digits",
+                "seq2hla/GM12878/GM12878-ClassI-nonclass.HLAgenotype4digits",
+                "seq2hla/GM12878/GM12878-ClassI-nonclass.bowtielog",
+                "seq2hla/GM12878/GM12878-ClassI-nonclass.expression",
+                "seq2hla/GM12878/GM12878-ClassII.HLAgenotype2digits",
+                "seq2hla/GM12878/GM12878-ClassII.HLAgenotype4digits",
+                "seq2hla/GM12878/GM12878-ClassII.bowtielog",
+                "seq2hla/GM12878/GM12878-ClassII.expression",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -187,20 +205,32 @@
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,c1e12cf18f996c0729fa37b0ca17ca24",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
-                "multiqc_samtools_idxstats.txt:md5,b6f1428f211a5a07dcedc67f40c0b2fe",
+                "multiqc_samtools_idxstats.txt:md5,776a2525b1f9482ef584682efe5241c1",
                 "multiqc_star.txt:md5,7e6521313553e98304f39d749df30dc6",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
                 "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,601168010d563139869c9bf929b67f03",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
+                "GM12878-ClassI-class.HLAgenotype2digits:md5,6b501035e8d1d51ca92fe37fb1c6dda7",
+                "GM12878-ClassI-class.HLAgenotype4digits:md5,cc22f9df7ccdb7a50c1a16b3621422f4",
+                "GM12878-ClassI-class.bowtielog:md5,6e932ca10d185c4f226a20a4948ab175",
+                "GM12878-ClassI-class.expression:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "GM12878-ClassI-nonclass.HLAgenotype2digits:md5,b97d79e23ef66f946478ea913dc0e641",
+                "GM12878-ClassI-nonclass.HLAgenotype4digits:md5,63958dcdcd2d912b44ee9bb3ca651b10",
+                "GM12878-ClassI-nonclass.bowtielog:md5,6e932ca10d185c4f226a20a4948ab175",
+                "GM12878-ClassI-nonclass.expression:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "GM12878-ClassII.HLAgenotype2digits:md5,2a8996f46f7749486b2bbb3bbf15032f",
+                "GM12878-ClassII.HLAgenotype4digits:md5,d48e48f6fb7bd4309e1071b78acaaffa",
+                "GM12878-ClassII.bowtielog:md5,6e932ca10d185c4f226a20a4948ab175",
+                "GM12878-ClassII.expression:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
-                "GM12878.md.bam:md5,2a278f55d4a7c4d96103c8738764e13",
+                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",
@@ -213,6 +243,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-07-07T18:57:20.194769212"
+        "timestamp": "2025-08-22T10:19:57.15939926"
     }
 }

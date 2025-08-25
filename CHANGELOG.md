@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [#225](https://github.com/nf-core/sarek/pull/225) - Add Seq2HLA to enable Class I & Class II HLATyping
+
 ### Changed
 
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
@@ -61,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | multiqc    | 1.27        | 1.29        |
+| seq2hla    |             | 2.3         |
 | tabix      | 1.2         | 1.21        |
 
 ### Parameter
@@ -81,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Move multiqc handling to the root main.nf file
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Remove all direct params calls from workflow
 - [#221](https://github.com/nf-core/rnavar/pull/221) - Prepare release 1.1.1
+- [#222](https://github.com/nf-core/rnavar/pull/222) - Remove unstable files from snapshots
 
 #### Fixed
 
