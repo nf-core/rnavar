@@ -31,9 +31,9 @@
                 "tools": {
                     "type": "string",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'bcfann', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
                     "help_text": "List of tools to be used in addition to variant calling: currently hlatyping with Seq2HLA and a choice of annotation tools.",
-                    "pattern": "^((seq2hla|snpeff|vep|merge)*(,)*)*$",
+                    "pattern": "^((bcfann|seq2hla|snpeff|vep|merge)*(,)*)*$",
                     "hidden": true
                 },
                 "save_merged_fastq": {
@@ -381,12 +381,6 @@
                     "description": "Add an extra custom argument to VEP.",
                     "help_text": "Using this parameter, you can add custom args to VEP."
                 },
-                "use_annotation_cache_keys": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-toolbox",
-                    "description": "Use annotation cache keys for snpeff_cache and vep_cache.\nOnly when using annotation-cache or a similar structure.\nSee [here](https://annotation-cache.github.io/) for more information.",
-                    "hidden": true
-                },
                 "outdir_cache": {
                     "type": "string",
                     "format": "directory-path",
@@ -402,6 +396,27 @@
                     "help_text": "Sets the format of the output-file from VEP.",
                     "fa_icon": "fas fa-table",
                     "hidden": true
+                },
+                "bcftools_annotations": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.vcf\\.gz$",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "A vcf file containing custom annotations to be used with bcftools annotate. Needs to be bgzipped."
+                },
+                "bcftools_annotations_tbi": {
+                    "type": "string",
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "Index file for `bcftools_annotations`"
+                },
+                "bcftools_header_lines": {
+                    "type": "string",
+                    "fa_icon": "fas fa-align-center",
+                    "description": "Text file with the header lines of `bcftools_annotations`"
                 }
             }
         },

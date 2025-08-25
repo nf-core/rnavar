@@ -1,7 +1,6 @@
 {
     "Test multiple FASTQ files": {
         "content": [
-            72,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -204,8 +203,8 @@
                 "variant_calling/GM12879/GM12879.haplotypecaller.vcf.gz.tbi"
             ],
             [
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,f448601fce67fd63c4f68c04cc4e3e9c",
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,036f3561ccf15f16a172fcc263cc172f",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,d5c34238ce74cd479d740560442f061b",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,b2f00fab9b67642a3b6d970ccb4b66e4",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,b6168b2b8ac759da4f2f61e9951636ed",
                 "multiqc_samtools_idxstats.txt:md5,07909b1c9da9032a36c3730ce094ed12",
@@ -229,21 +228,20 @@
             ],
             "No CRAM files",
             [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
-                "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48",
+                "GM12878.haplotypecaller.filtered.vcf.gz:md5,3ef293d24c20de93d22d0f6674536790",
+                "GM12878.haplotypecaller.vcf.gz:md5,77f64b61203685317dfee3ddb5e5af40",
                 "GM12879.haplotypecaller.filtered.vcf.gz:md5,4dea749242a5e53787b805b82c813c1e",
                 "GM12879.haplotypecaller.vcf.gz:md5,46f85ad9632e760add202f9affcf04d8"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nextflow": "25.07.0"
         },
-        "timestamp": "2025-07-07T18:52:14.584281096"
+        "timestamp": "2025-08-25T16:50:30.68871581"
     },
     "Test multiple FASTQ files pair end": {
         "content": [
-            41,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5

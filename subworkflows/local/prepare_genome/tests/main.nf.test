@@ -6,65 +6,34 @@ nextflow_workflow {
 
     tag "subworkflows"
     tag "subworkflows_local"
-    tag "subworkflows/prepare_genome"
-    tag "bedtools/merge"
-    tag "bedtools/stats"
-    tag "gatk4/createsequencedictionary"
-    tag "gffread"
-    tag "gtf2bed"
-    tag "samtools/faidx"
-    tag "star/genomegenerate"
-    tag "gunzip"
-    tag "tabix/tabix"
-    tag "tabix/bgziptabix"
-    tag "untar"
-    tag "star/indexversion"
-    tag "remove_unknown_regions"
 
     test("only essentials") {
         when {
-            params {
-                params.fasta = "genome.fasta"
-                params.dict = null
-                params.fai = null
-                params.star_index = null
-                params.gff = null
-                params.gtf = "genome.gtf"
-                params.exon_bed = null
-                params.dbsnp = null
-                params.dbsnp_tbi = null
-                params.known_indels = null
-                params.known_indels_tbi = null
-                params.feature_type = "exon"
-            }
-
             workflow {
                 """
-                input[0] = Channel.value([
-                    [id:'fasta'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
-                ])
-                input[1] = Channel.empty()
-                input[2] = Channel.empty()
-                input[3] = Channel.value([[], []])
-                input[4] = Channel.empty()
-                input[5] = Channel.value([
-                    [id:'gtf'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
-                ])
-                input[6] = Channel.empty()
-                input[7] = Channel.empty()
-                input[8] = Channel.empty()
-                input[9] = Channel.empty()
-                input[10] = params.feature_type
-                input[11] = Channel.value(false)
+                input[0] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                input[1] = []
+                input[2] = []
+                input[3] = []
+                input[4] = []
+                input[5] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
+                input[6] = []
+                input[7] = []
+                input[8] = []
+                input[9] = []
+                input[10] = []
+                input[11] = []
+                input[12] = []
+                input[13] = "exon"
+                input[14] = false
+                input[15] = Channel.value(false)
                 """
             }
         }
 
         then {
+            assert workflow.success
             assertAll(
-                { assert workflow.success},
                 { assert snapshot(
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
@@ -81,71 +50,42 @@ nextflow_workflow {
 
     test("all") {
         when {
-            params {
-                params.fasta = "genome.fasta"
-                params.dict = "genome.dict"
-                params.fai = "genome.fasta.fai"
-                params.star_index = "star/"
-                params.gff = null
-                params.gtf = "genome.gtf"
-                params.exon_bed = "exon.bed"
-                params.dbsnp = "dbsnp.vcf"
-                params.dbsnp_tbi = null
-                params.known_indels = "indels.vcf.gz"
-                params.known_indels_tbi = "indels.vcf.gz.tbi"
-                params.feature_type = "exon"
-            }
-
             workflow {
                 """
-                input[0] = Channel.value([
-                    [id:'fasta'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
-                ])
-                input[1] = Channel.value([
-                    [id:'dict'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
-                ])
-                input[2] = Channel.value([
-                    [id:'fai'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
-                ])
-                input[3] = Channel.value([
-                    [id:'star'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz', checkIfExists: true)
-                ])
-                input[4] = Channel.empty()
-                input[5] = Channel.value([
-                    [id:'gtf'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
-                ])
-                input[6] = Channel.value([
-                    [id:'exon_bed'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
-                ])
-                input[7] = Channel.value([
-                    [id:'dbsnp'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf', checkIfExists: true)
-                ])
-                input[8] = Channel.value(
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true)
-                )
-                input[9] = Channel.value(
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
-                )
-                input[10] = params.feature_type
-                input[11] = Channel.value(true)
+                input[0] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                input[1] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                input[2] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                input[3] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz', checkIfExists: true)
+                input[4] = []
+                input[5] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
+                input[6] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
+                input[7] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
+                input[8] = []
+                input[9] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf', checkIfExists: true)
+                input[10] = []
+                input[11] = Channel.of([
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
+                ]).collect()
+                input[12] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
+                input[13] = "exon"
+                input[14] = false
+                input[15] = Channel.value(true)
                 """
             }
         }
 
         then {
+            assert workflow.success
             assertAll(
-                { assert workflow.success},
                 { assert snapshot(
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
                             return null
+                        } else if(key == "known_indels") {
+                            return [key, val.sort { it.toString() }]
+                        } else if(key == "known_indels_tbi") {
+                            return [key, val.sort { it.toString() }]
                         } else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
                         }

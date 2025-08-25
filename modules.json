@@ -7,24 +7,8 @@
                 "nf-core": {
                     "bcftools/annotate": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/bcftools/annotate/bcftools-annotate.diff"
-                    },
-                    "bcftools/concat": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["vcf_annotate_ensemblvep", "vcf_annotate_snpeff"]
-                    },
-                    "bcftools/pluginscatter": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["vcf_annotate_ensemblvep", "vcf_annotate_snpeff"]
-                    },
-                    "bcftools/sort": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["vcf_annotate_ensemblvep", "vcf_annotate_snpeff"]
+                        "git_sha": "8b09455ee60fe0cbf1323d1dee5bf9039e1ac733",
+                        "installed_by": ["modules"]
                     },
                     "bedtools/merge": {
                         "branch": "master",
@@ -43,12 +27,12 @@
                     },
                     "ensemblvep/download": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "48ca3de1737b0144aa9fe05bea2b681f0ae45a95",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "48ca3de1737b0144aa9fe05bea2b681f0ae45a95",
                         "installed_by": ["modules", "vcf_annotate_ensemblvep"]
                     },
                     "fastqc": {
@@ -188,7 +172,7 @@
                     },
                     "snpeff/snpeff": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "48ca3de1737b0144aa9fe05bea2b681f0ae45a95",
                         "installed_by": ["modules", "vcf_annotate_snpeff"]
                     },
                     "star/align": {
@@ -208,12 +192,12 @@
                     },
                     "tabix/bgziptabix": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "f2cfcf9d3f6a2d123e6c44aefa788aa232204a7a",
                         "installed_by": ["modules", "vcf_annotate_snpeff"]
                     },
                     "tabix/tabix": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "f2cfcf9d3f6a2d123e6c44aefa788aa232204a7a",
                         "installed_by": ["modules", "vcf_annotate_ensemblvep"]
                     },
                     "umitools/extract": {
@@ -267,12 +251,12 @@
                     },
                     "vcf_annotate_ensemblvep": {
                         "branch": "master",
-                        "git_sha": "a96f42708b631dfc736f48980dbf2be418dd784b",
+                        "git_sha": "48ca3de1737b0144aa9fe05bea2b681f0ae45a95",
                         "installed_by": ["subworkflows"]
                     },
                     "vcf_annotate_snpeff": {
                         "branch": "master",
-                        "git_sha": "88200cde7c1a7e580283e9d010de5d81f2c23550",
+                        "git_sha": "48ca3de1737b0144aa9fe05bea2b681f0ae45a95",
                         "installed_by": ["subworkflows"]
                     }
                 }

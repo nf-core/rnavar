@@ -25,7 +25,6 @@ nextflow_process {
                 path(process.out.versions[0]).yaml
             ).match()
         }
-
     }
 
     test("Should run without failures - stub") {
@@ -51,7 +50,5 @@ nextflow_process {
                 path(process.out.versions[0]).yaml
             ).match()
         }
-
     }
-
 }

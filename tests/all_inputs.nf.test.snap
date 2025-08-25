@@ -1,7 +1,6 @@
 {
     "-profile test --input all.csv": {
         "content": [
-            79,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -204,8 +203,8 @@
                 "variant_calling/GM12878_fastq/GM12878_fastq.haplotypecaller.vcf.gz.tbi"
             ],
             [
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,1365ef874ba0e23b81b355e7172a8b65",
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,b7c9321b4bb0acaab9dc2f0f25163f59",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,70076218b6b012ca7fb6df5074a03002",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,b45f27f3545b15e42a426aa2348606f5",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,da7a65bf9367599256c4694f173a61a7",
                 "multiqc_samtools_idxstats.txt:md5,139e6bb3bb170aab59568cfc00d98123",
@@ -226,18 +225,18 @@
             ],
             "No CRAM files",
             [
-                "GM12878_bam.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
-                "GM12878_bam.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0",
-                "GM12878_cram.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
-                "GM12878_cram.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0",
-                "GM12878_fastq.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
-                "GM12878_fastq.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
+                "GM12878_bam.haplotypecaller.filtered.vcf.gz:md5,f5e9f469ec348daea9af46a843502838",
+                "GM12878_bam.haplotypecaller.vcf.gz:md5,44c117b71b2d0c6bf098744cb56a343e",
+                "GM12878_cram.haplotypecaller.filtered.vcf.gz:md5,f5e9f469ec348daea9af46a843502838",
+                "GM12878_cram.haplotypecaller.vcf.gz:md5,44c117b71b2d0c6bf098744cb56a343e",
+                "GM12878_fastq.haplotypecaller.filtered.vcf.gz:md5,3ef293d24c20de93d22d0f6674536790",
+                "GM12878_fastq.haplotypecaller.vcf.gz:md5,77f64b61203685317dfee3ddb5e5af40"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nextflow": "25.07.0"
         },
-        "timestamp": "2025-07-07T18:34:21.510515312"
+        "timestamp": "2025-08-25T16:18:00.159198873"
     }
 }

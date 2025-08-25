@@ -45,7 +45,6 @@ nextflow_process {
                 { assert file(process.out.class1_nonclass_expression[0][1]).name.endsWith("ClassI-nonclass.expression") }
             )
         }
-
     }
 
     test("homo_sapiens - fastq - stub") {
@@ -72,7 +71,5 @@ nextflow_process {
                 { assert snapshot(process.out).match() }
             )
         }
-
     }
-
 }

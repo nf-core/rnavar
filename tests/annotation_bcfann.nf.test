@@ -5,12 +5,15 @@ nextflow_pipeline {
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("-profile test --input bam.csv") {
+    test("-profile test --tools bcfann") {
 
         when {
             params {
                 outdir = "$outputDir"
-                input = "${projectDir}/tests/csv/1.0/bam.csv"
+                input = "${projectDir}/tests/csv/1.0/vcf.csv"
+                snpeff_cache = 's3://annotation-cache/snpeff_cache/'
+                vep_cache = 's3://annotation-cache/vep_cache/'
+                tools = 'bcfann'
             }
         }
 
