@@ -64,7 +64,7 @@ nextflow_workflow {
                 input[9] = file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf', checkIfExists: true)
                 input[10] = []
                 input[11] = file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true)
-                input[12] = []
+                input[12] = file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
                 input[13] = "exon"
                 input[14] = false
                 input[15] = Channel.value(true)

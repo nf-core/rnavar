@@ -46,7 +46,7 @@ workflow PREPARE_GENOME {
     def ch_fasta = Channel.empty()
     if (fasta.endsWith('.gz')) {
         GUNZIP_FASTA(
-            Channel.fromPath(fasta, checkIfExists: true).map { fasta_ -> [[id: 'fasta'], fasta_] }
+            Channel.fromPath(fasta, checkIfExists: true).map { fasta_ -> [[id: fasta_.baseName], fasta_] }
         )
 
         ch_fasta = GUNZIP_FASTA.out.gunzip.collect()
@@ -54,7 +54,7 @@ workflow PREPARE_GENOME {
     }
     else {
         ch_fasta = Channel.fromPath(fasta, checkIfExists: true)
-            .map { fasta_ -> [[id: 'fasta'], fasta_] }
+            .map { fasta_ -> [[id: fasta_.baseName], fasta_] }
             .collect()
     }
 
@@ -67,14 +67,14 @@ workflow PREPARE_GENOME {
     }
     else {
         ch_dict = Channel.fromPath(dict, checkIfExists: true)
-            .map { dict_ -> [[id: 'dict'], dict_] }
+            .map { dict_ -> [[id: dict_.baseName], dict_] }
             .collect()
     }
 
     def ch_gtf = Channel.empty()
     if (gtf.toString().endsWith('.gz')) {
         GUNZIP_GTF(
-            Channel.fromPath(gtf, checkIfExists: true).map { gtf_ -> [[id: 'gtf'], gtf_] }
+            Channel.fromPath(gtf, checkIfExists: true).map { gtf_ -> [[id: gtf_.baseName], gtf_] }
         )
 
         ch_gtf = GUNZIP_GTF.out.gunzip.collect()
@@ -82,7 +82,7 @@ workflow PREPARE_GENOME {
     }
     else if (gff) {
         GFFREAD(
-            Channel.fromPath(gff, checkIfExists: true).map { gff_ -> [[id: 'gtf'], gff_] },
+            Channel.fromPath(gff, checkIfExists: true).map { gff_ -> [[id: gff_.baseName], gff_] },
             ch_fasta.map { _meta, fasta_ -> fasta_ }.collect(),
         )
 
@@ -91,7 +91,7 @@ workflow PREPARE_GENOME {
     }
     else {
         ch_gtf = Channel.fromPath(gtf, checkIfExists: true)
-            .map { gtf_ -> [[id: 'gtf'], gtf_] }
+            .map { gtf_ -> [[id: gtf_.baseName], gtf_] }
             .collect()
     }
 
@@ -104,7 +104,7 @@ workflow PREPARE_GENOME {
     }
     else {
         ch_exon_bed_raw = Channel.fromPath(exon_bed, checkIfExists: true)
-            .map { exon_bed_ -> [[id: 'exon_bed'], exon_bed_] }
+            .map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }
             .collect()
     }
 
@@ -123,11 +123,11 @@ workflow PREPARE_GENOME {
     }
 
     def bcftools_annotations_input = bcftools_annotations
-        ? Channel.fromPath(bcftools_annotations, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        ? Channel.fromPath(bcftools_annotations, checkIfExists: true).map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def bcftools_annotations_tbi_input = bcftools_annotations_tbi
-        ? Channel.fromPath(bcftools_annotations_tbi, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        ? Channel.fromPath(bcftools_annotations_tbi, checkIfExists: true).map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_bcftools_annotations_input = bcftools_annotations_input
@@ -164,11 +164,11 @@ workflow PREPARE_GENOME {
         .collect()
 
     def dbsnp_input = dbsnp
-        ? Channel.fromPath(dbsnp, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        ? Channel.fromPath(dbsnp, checkIfExists: true).map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def dbsnp_tbi_input = dbsnp_tbi
-        ? Channel.fromPath(dbsnp_tbi, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        ? Channel.fromPath(dbsnp_tbi, checkIfExists: true).map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_dbsnp_input = dbsnp_input
@@ -205,11 +205,11 @@ workflow PREPARE_GENOME {
         .collect()
 
     def known_indels_input = known_indels
-        ? Channel.fromPath(known_indels, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        ? Channel.fromPath(known_indels, checkIfExists: true).map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def known_indels_tbi_input = known_indels_tbi
-        ? Channel.fromPath(known_indels_tbi, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        ? Channel.fromPath(known_indels_tbi, checkIfExists: true).map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_known_indels_input = known_indels_input
@@ -247,13 +247,13 @@ workflow PREPARE_GENOME {
 
     def ch_fai = Channel.empty()
     if (!fai) {
-        SAMTOOLS_FAIDX(ch_fasta, [[id: 'fai'], []], false)
+        SAMTOOLS_FAIDX(ch_fasta, [[id: ch_fasta.baseName], []], false)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         ch_fai = SAMTOOLS_FAIDX.out.fai
     }
     else {
         ch_fai = Channel.fromPath(fai, checkIfExists: true)
-            .map { fai_ -> [[id: 'fai'], fai_] }
+            .map { fai_ -> [[id: fai_.baseName], fai_] }
             .collect()
     }
 
@@ -337,6 +337,13 @@ workflow PREPARE_GENOME {
     versions         = ch_versions // channel: [ versions.yml ]
 }
 
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+// Check if the STAR index is compatible with the minimal version
 def isCompatibleStarIndex(index_version, minimal_index_version) {
     def is_compatible = true
     if (minimal_index_version.isNumber()) {
@@ -372,6 +379,7 @@ def isCompatibleStarIndex(index_version, minimal_index_version) {
     return is_compatible
 }
 
+// Convert a version string to a list of numbers and characters
 def convertVersionToList(version) {
     def init_list = version.tokenize(".")
     if (!init_list[-1].isNumber()) {
