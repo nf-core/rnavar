@@ -83,8 +83,8 @@ workflow PREPARE_GENOME {
     else if (gff) {
         GFFREAD(
             gff.map { gff_ -> [[id: gff_.baseName], gff_] },
-            ch_fasta.map { _meta, fasta_ -> fasta_ }.collect(),
-        )
+            ch_fasta.map { _meta, fasta_ -> fasta_ },
+        ).collect()
 
         ch_gtf = GFFREAD.out.gtf.collect()
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
@@ -249,7 +249,7 @@ workflow PREPARE_GENOME {
     if (!fai) {
         SAMTOOLS_FAIDX(ch_fasta, [[id: ch_fasta.baseName], []], false)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
-        ch_fai = SAMTOOLS_FAIDX.out.fai
+        ch_fai = SAMTOOLS_FAIDX.out.fai.collect()
     }
     else {
         ch_fai = fai
