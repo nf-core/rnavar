@@ -84,7 +84,7 @@ workflow PREPARE_GENOME {
         GFFREAD(
             gff.map { gff_ -> [[id: gff_.baseName], gff_] },
             ch_fasta.map { _meta, fasta_ -> fasta_ },
-        ).collect()
+        )
 
         ch_gtf = GFFREAD.out.gtf.collect()
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
