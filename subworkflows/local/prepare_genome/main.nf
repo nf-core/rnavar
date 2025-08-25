@@ -44,16 +44,16 @@ workflow PREPARE_GENOME {
     //Unzip reference genome files if needed
 
     def ch_fasta = Channel.empty()
-    if (fasta.endsWith('.gz')) {
+    if (fasta.toString().endsWith('.gz')) {
         GUNZIP_FASTA(
-            Channel.fromPath(fasta, checkIfExists: true).map { fasta_ -> [[id: fasta_.baseName], fasta_] }
+            fasta.map { fasta_ -> [[id: fasta_.baseName], fasta_] }
         )
 
         ch_fasta = GUNZIP_FASTA.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     }
     else {
-        ch_fasta = Channel.fromPath(fasta, checkIfExists: true)
+        ch_fasta = fasta
             .map { fasta_ -> [[id: fasta_.baseName], fasta_] }
             .collect()
     }
@@ -66,7 +66,7 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
     }
     else {
-        ch_dict = Channel.fromPath(dict, checkIfExists: true)
+        ch_dict = dict
             .map { dict_ -> [[id: dict_.baseName], dict_] }
             .collect()
     }
@@ -74,7 +74,7 @@ workflow PREPARE_GENOME {
     def ch_gtf = Channel.empty()
     if (gtf.toString().endsWith('.gz')) {
         GUNZIP_GTF(
-            Channel.fromPath(gtf, checkIfExists: true).map { gtf_ -> [[id: gtf_.baseName], gtf_] }
+            gtf.map { gtf_ -> [[id: gtf_.baseName], gtf_] }
         )
 
         ch_gtf = GUNZIP_GTF.out.gunzip.collect()
@@ -82,7 +82,7 @@ workflow PREPARE_GENOME {
     }
     else if (gff) {
         GFFREAD(
-            Channel.fromPath(gff, checkIfExists: true).map { gff_ -> [[id: gff_.baseName], gff_] },
+            gff.map { gff_ -> [[id: gff_.baseName], gff_] },
             ch_fasta.map { _meta, fasta_ -> fasta_ }.collect(),
         )
 
@@ -90,7 +90,7 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
     }
     else {
-        ch_gtf = Channel.fromPath(gtf, checkIfExists: true)
+        ch_gtf = gtf
             .map { gtf_ -> [[id: gtf_.baseName], gtf_] }
             .collect()
     }
@@ -103,7 +103,7 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
     else {
-        ch_exon_bed_raw = Channel.fromPath(exon_bed, checkIfExists: true)
+        ch_exon_bed_raw = exon_bed
             .map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }
             .collect()
     }
@@ -123,11 +123,11 @@ workflow PREPARE_GENOME {
     }
 
     def bcftools_annotations_input = bcftools_annotations
-        ? Channel.fromPath(bcftools_annotations, checkIfExists: true).map { vcf -> [[id: vcf.name], vcf] }
+        ? bcftools_annotations.map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def bcftools_annotations_tbi_input = bcftools_annotations_tbi
-        ? Channel.fromPath(bcftools_annotations_tbi, checkIfExists: true).map { tbi -> [[id: tbi.baseName], tbi] }
+        ? bcftools_annotations_tbi.map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_bcftools_annotations_input = bcftools_annotations_input
@@ -164,11 +164,11 @@ workflow PREPARE_GENOME {
         .collect()
 
     def dbsnp_input = dbsnp
-        ? Channel.fromPath(dbsnp, checkIfExists: true).map { vcf -> [[id: vcf.name], vcf] }
+        ? dbsnp.map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def dbsnp_tbi_input = dbsnp_tbi
-        ? Channel.fromPath(dbsnp_tbi, checkIfExists: true).map { tbi -> [[id: tbi.baseName], tbi] }
+        ? dbsnp_tbi.map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_dbsnp_input = dbsnp_input
@@ -205,11 +205,11 @@ workflow PREPARE_GENOME {
         .collect()
 
     def known_indels_input = known_indels
-        ? Channel.fromPath(known_indels, checkIfExists: true).map { vcf -> [[id: vcf.name], vcf] }
+        ? known_indels.map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def known_indels_tbi_input = known_indels_tbi
-        ? Channel.fromPath(known_indels_tbi, checkIfExists: true).map { tbi -> [[id: tbi.baseName], tbi] }
+        ? known_indels_tbi.map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_known_indels_input = known_indels_input
@@ -252,7 +252,7 @@ workflow PREPARE_GENOME {
         ch_fai = SAMTOOLS_FAIDX.out.fai
     }
     else {
-        ch_fai = Channel.fromPath(fai, checkIfExists: true)
+        ch_fai = fai
             .map { fai_ -> [[id: fai_.baseName], fai_] }
             .collect()
     }
@@ -262,7 +262,7 @@ workflow PREPARE_GENOME {
     //
 
     def star_index_input = star_index
-        ? Channel.fromPath(star_index, checkIfExists: true).map { index -> [[id: 'star'], index] }
+        ? star_index.map { index -> [[id: 'star'], index] }
         : Channel.of([[], []])
 
     ch_star_index_input = star_index_input
