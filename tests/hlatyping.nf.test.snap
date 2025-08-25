@@ -1,7 +1,6 @@
 {
     "-profile test --run_hlatyping": {
         "content": [
-            42,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
