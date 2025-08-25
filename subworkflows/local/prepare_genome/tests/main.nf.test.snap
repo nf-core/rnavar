@@ -64,12 +64,14 @@
                 ],
                 "known_indels": [
                     [
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz"
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz",
+                        "/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/vcf/test2.vcf.gz"
                     ]
                 ],
                 "known_indels_tbi": [
                     [
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi"
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi",
+                        "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
                     ]
                 ],
                 "star_index": [
@@ -101,6 +103,7 @@
                     "versions.yml:md5,2f8adf49812faab29b90f617e24e7ddc",
                     "versions.yml:md5,3c6fc57c4c3bf7b143933b0b89ab0386",
                     "versions.yml:md5,7263c03ca9c7d18bc40fc8d27a5936fa",
+                    "versions.yml:md5,96821d80d1ae1744552ce21ab7086b47",
                     "versions.yml:md5,a82353f8a33715eb11949d1751e222f5",
                     "versions.yml:md5,e1ae3c4313a36fcd13e867ddc4ee45aa"
                 ]
@@ -110,7 +113,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.07.0"
         },
-        "timestamp": "2025-08-25T09:25:22.817379007"
+        "timestamp": "2025-08-25T09:54:16.017033174"
     },
     "only essentials": {
         "content": [

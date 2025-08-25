@@ -164,11 +164,11 @@ workflow PREPARE_GENOME {
         .collect()
 
     def dbsnp_input = dbsnp
-        ? dbsnp.map { vcf -> [[id: vcf.name], vcf] }
+        ? dbsnp.flatten().map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def dbsnp_tbi_input = dbsnp_tbi
-        ? dbsnp_tbi.map { tbi -> [[id: tbi.baseName], tbi] }
+        ? dbsnp_tbi.flatten().map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_dbsnp_input = dbsnp_input
@@ -205,11 +205,11 @@ workflow PREPARE_GENOME {
         .collect()
 
     def known_indels_input = known_indels
-        ? known_indels.map { vcf -> [[id: vcf.name], vcf] }
+        ? known_indels.flatten().map { vcf -> [[id: vcf.name], vcf] }
         : Channel.empty()
 
     def known_indels_tbi_input = known_indels_tbi
-        ? known_indels_tbi.map { tbi -> [[id: tbi.baseName], tbi] }
+        ? known_indels_tbi.flatten().map { tbi -> [[id: tbi.baseName], tbi] }
         : Channel.empty()
 
     def ch_known_indels_input = known_indels_input

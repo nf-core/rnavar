@@ -63,7 +63,10 @@ nextflow_workflow {
                 input[8] = []
                 input[9] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf', checkIfExists: true)
                 input[10] = []
-                input[11] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true)
+                input[11] = Channel.of([
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
+                ]).collect()
                 input[12] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
                 input[13] = "exon"
                 input[14] = false
