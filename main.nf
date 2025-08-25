@@ -83,7 +83,6 @@ workflow NFCORE_RNAVAR {
 
     // Initialize file channels based on params
     ch_bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
-    ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
 
     seq_platform = params.seq_platform ?: []
     seq_center = params.seq_center ?: []
@@ -103,19 +102,19 @@ workflow NFCORE_RNAVAR {
     }
 
     PREPARE_GENOME(
-        params.fasta,
-        params.dict,
-        params.fasta_fai,
-        ch_star_index_raw,
-        params.gff,
-        params.gtf,
-        params.exon_bed,
-        params.bcftools_annotations,
-        params.bcftools_annotations_tbi,
-        params.dbsnp,
-        params.dbsnp_tbi,
-        params.known_indels,
-        params.known_indels_tbi,
+        params.fasta ? Channel.fromPath(params.fasta, checkIfExists: true) : Channel.empty(),
+        params.dict ? Channel.fromPath(params.dict, checkIfExists: true) : Channel.empty(),
+        params.fasta_fai ? Channel.fromPath(params.fasta_fai, checkIfExists: true) : Channel.empty(),
+        params.star_index ? Channel.fromPath(params.star_index, checkIfExists: true) : Channel.empty(),
+        params.gff ? Channel.fromPath(params.gff, checkIfExists: true) : Channel.empty(),
+        params.gtf ? Channel.fromPath(params.gtf, checkIfExists: true) : Channel.empty(),
+        params.exon_bed ? Channel.fromPath(params.exon_bed, checkIfExists: true) : Channel.empty(),
+        params.bcftools_annotations ? Channel.fromPath(params.bcftools_annotations, checkIfExists: true) : Channel.empty(),
+        params.bcftools_annotations_tbi ? Channel.fromPath(params.bcftools_annotations_tbi, checkIfExists: true) : Channel.empty(),
+        params.dbsnp ? Channel.fromPath(params.dbsnp, checkIfExists: true) : Channel.empty(),
+        params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi, checkIfExists: true) : Channel.empty(),
+        params.known_indels ? Channel.fromPath(params.known_indels, checkIfExists: true) : Channel.empty(),
+        params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi, checkIfExists: true) : Channel.empty(),
         params.feature_type,
         params.skip_exon_bed_check,
         align,
