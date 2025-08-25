@@ -45,13 +45,15 @@ workflow PREPARE_GENOME {
 
     def ch_fasta = Channel.empty()
     if (fasta.endsWith('.gz')) {
-        GUNZIP_FASTA(fasta.map { fasta_ -> [[id: 'fasta'], fasta_] })
+        GUNZIP_FASTA(
+            Channel.fromPath(fasta, checkIfExists: true).map { fasta_ -> [[id: 'fasta'], fasta_] }
+        )
 
         ch_fasta = GUNZIP_FASTA.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
     }
     else {
-        ch_fasta = Channel.from(file(fasta, checkIfExists: true))
+        ch_fasta = Channel.fromPath(fasta, checkIfExists: true)
             .map { fasta_ -> [[id: 'fasta'], fasta_] }
             .collect()
     }
@@ -64,31 +66,34 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
     }
     else {
-        ch_dict = Channel.from(file(dict, checkIfExists: true))
+        ch_dict = Channel.fromPath(dict, checkIfExists: true)
             .map { dict_ -> [[id: 'dict'], dict_] }
             .collect()
     }
 
     def ch_gtf = Channel.empty()
     if (gtf.toString().endsWith('.gz')) {
-        GUNZIP_GTF(gtf.map { gtf_ -> [[id: 'gtf'], gtf_] })
+        GUNZIP_GTF(
+            Channel.fromPath(gtf, checkIfExists: true).map { gtf_ -> [[id: 'gtf'], gtf_] }
+        )
 
         ch_gtf = GUNZIP_GTF.out.gunzip.collect()
         ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
     }
     else if (gff) {
-        GFFREAD(gff.map { gff_ -> [[id: 'gtf'], gff_] }, ch_fasta.map { _meta, fasta_ -> fasta_ }.collect())
+        GFFREAD(
+            Channel.fromPath(gff, checkIfExists: true).map { gff_ -> [[id: 'gtf'], gff_] },
+            ch_fasta.map { _meta, fasta_ -> fasta_ }.collect(),
+        )
 
         ch_gtf = GFFREAD.out.gtf.collect()
         ch_versions = ch_versions.mix(GFFREAD.out.versions)
     }
     else {
-        ch_gtf = Channel.from(file(gtf, checkIfExists: true))
+        ch_gtf = Channel.fromPath(gtf, checkIfExists: true)
             .map { gtf_ -> [[id: 'gtf'], gtf_] }
             .collect()
     }
-
-    println("exon_bed: ${exon_bed}")
 
     def ch_exon_bed_raw = Channel.empty()
     if (!exon_bed) {
@@ -98,12 +103,10 @@ workflow PREPARE_GENOME {
         ch_versions = ch_versions.mix(GTF2BED.out.versions)
     }
     else {
-        ch_exon_bed_raw = Channel.from(file(exon_bed, checkIfExists: true))
+        ch_exon_bed_raw = Channel.fromPath(exon_bed, checkIfExists: true)
             .map { exon_bed_ -> [[id: 'exon_bed'], exon_bed_] }
             .collect()
     }
-
-    ch_exon_bed_raw.view()
 
     def ch_exon_bed = Channel.empty()
     if (!skip_exon_bed_check) {
@@ -119,9 +122,16 @@ workflow PREPARE_GENOME {
         ch_exon_bed = ch_exon_bed_raw
     }
 
-    def ch_bcftools_annotations_input = bcftools_annotations
-        .map { file -> [[id: 'bcfann'], file] }
-        .join(bcftools_annotations_tbi.map { file -> [[id: 'bcfann'], file] }, failOnDuplicate: true, remainder: true)
+    def bcftools_annotations_input = bcftools_annotations
+        ? Channel.fromPath(bcftools_annotations, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        : Channel.empty()
+
+    def bcftools_annotations_tbi_input = bcftools_annotations_tbi
+        ? Channel.fromPath(bcftools_annotations_tbi, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        : Channel.empty()
+
+    def ch_bcftools_annotations_input = bcftools_annotations_input
+        .join(bcftools_annotations_tbi_input, failOnDuplicate: true, remainder: true)
         .branch { meta, file, index ->
             plain: !file.toString().endsWith(".gz")
             return [meta, file]
@@ -153,9 +163,16 @@ workflow PREPARE_GENOME {
         .mix(ch_bcftools_annotations_input.bgzip_index.map { _meta, _file, index -> index })
         .collect()
 
-    def ch_dbsnp_input = dbsnp
-        .map { file -> [[id: 'dbsnp'], file] }
-        .join(dbsnp_tbi.map { file -> [[id: 'dbsnp'], file] }, failOnDuplicate: true, remainder: true)
+    def dbsnp_input = dbsnp
+        ? Channel.fromPath(dbsnp, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        : Channel.empty()
+
+    def dbsnp_tbi_input = dbsnp_tbi
+        ? Channel.fromPath(dbsnp_tbi, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        : Channel.empty()
+
+    def ch_dbsnp_input = dbsnp_input
+        .join(dbsnp_tbi_input, failOnDuplicate: true, remainder: true)
         .branch { meta, file, index ->
             plain: !file.toString().endsWith(".gz")
             return [meta, file]
@@ -187,9 +204,16 @@ workflow PREPARE_GENOME {
         .mix(ch_dbsnp_input.bgzip_index.map { _meta, _file, index -> index })
         .collect()
 
-    def ch_known_indels_input = known_indels
-        .map { file -> [[id: 'known_indels'], file] }
-        .join(known_indels_tbi.map { file -> [[id: 'known_indels'], file] }, failOnDuplicate: true, remainder: true)
+    def known_indels_input = known_indels
+        ? Channel.fromPath(known_indels, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        : Channel.empty()
+
+    def known_indels_tbi_input = known_indels_tbi
+        ? Channel.fromPath(known_indels_tbi, checkIfExists: true).map { index -> [[id: 'bcfann'], index] }
+        : Channel.empty()
+
+    def ch_known_indels_input = known_indels_input
+        .join(known_indels_tbi_input, failOnDuplicate: true, remainder: true)
         .branch { meta, file, index ->
             plain: !file.toString().endsWith(".gz")
             return [meta, file]
@@ -228,7 +252,7 @@ workflow PREPARE_GENOME {
         ch_fai = SAMTOOLS_FAIDX.out.fai
     }
     else {
-        ch_fai = Channel.from(file(fai, checkIfExists: true))
+        ch_fai = Channel.fromPath(fai, checkIfExists: true)
             .map { fai_ -> [[id: 'fai'], fai_] }
             .collect()
     }
@@ -238,6 +262,11 @@ workflow PREPARE_GENOME {
     //
 
     def star_index_input = star_index
+        ? Channel.fromPath(star_index, checkIfExists: true).map { index -> [[id: 'star'], index] }
+        : Channel.of([[], []])
+
+    ch_star_index_input = star_index_input
+        .map { _meta, index -> [[id: 'star'], index] }
         .merge(align)
         .filter { _meta, _index, bool_align ->
             return bool_align
@@ -252,14 +281,14 @@ workflow PREPARE_GENOME {
         }
 
     UNTAR(
-        star_index_input.tarzipped
+        ch_star_index_input.tarzipped
     )
     ch_versions = ch_versions.mix(UNTAR.out.versions)
 
     STAR_INDEXVERSION()
     ch_versions = ch_versions.mix(STAR_INDEXVERSION.out.versions)
 
-    def star_index_check = star_index_input.index
+    def star_index_check = ch_star_index_input.index
         .mix(UNTAR.out.untar)
         .combine(STAR_INDEXVERSION.out.index_version)
         .branch { meta, index, version_file ->
@@ -279,7 +308,7 @@ workflow PREPARE_GENOME {
         }
 
     def genomegenerate_input = star_index_check.incompatible
-        .mix(star_index_input.no_index)
+        .mix(ch_star_index_input.no_index)
         .combine(ch_fasta)
         .map { _meta1, _wrong_index, meta2, fasta_ ->
             [meta2, fasta_]
@@ -293,18 +322,18 @@ workflow PREPARE_GENOME {
         .collect()
 
     emit:
-    dict             = ch_dict // path: genome.fasta.dict
-    exon_bed         = ch_exon_bed // path: exon.bed
-    fasta            = ch_fasta // path: genome.fasta
-    fasta_fai        = ch_fai // path: genome.fasta.fai
-    gtf              = ch_gtf.collect() // path: genome.gtf
-    star_index       = star_index_output // path: star/index/
     bcfann           = ch_bcftools_annotations // path: bcftools_annotations.vcf.gz
     bcfann_tbi       = ch_bcftools_annotations_tbi // path: bcftools_annotations.vcf.gz.tbi
     dbsnp            = ch_dbsnp // path: dbsnp.vcf.gz
     dbsnp_tbi        = ch_dbsnp_tbi // path: dbsnp.vcf.gz.tbi
+    dict             = ch_dict // path: genome.fasta.dict
+    exon_bed         = ch_exon_bed // path: exon.bed
+    fasta            = ch_fasta // path: genome.fasta
+    fasta_fai        = ch_fai // path: genome.fasta.fai
+    gtf              = ch_gtf // path: genome.gtf
     known_indels     = ch_known_indels // path: {known_indels*}.vcf.gz
     known_indels_tbi = ch_known_indels_tbi // path: {known_indels*}.vcf.gz.tbi
+    star_index       = star_index_output // path: star/index/
     versions         = ch_versions // channel: [ versions.yml ]
 }
 

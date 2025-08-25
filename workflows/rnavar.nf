@@ -367,8 +367,6 @@ workflow RNAVAR {
 
                 final_vcf = final_vcf.mix(parsed_input.vcf.map { meta, vcf, _tbi -> [meta, vcf] })
 
-                final_vcf.view()
-
                 VCF_ANNOTATE_ALL(
                     final_vcf.map { meta, vcf -> [meta + [file_name: vcf.baseName], vcf] },
                     fasta.map { meta, fasta_ -> [meta, vep_include_fasta ? fasta_ : []] },

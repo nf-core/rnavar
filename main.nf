@@ -15,6 +15,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 params.fasta             = getGenomeAttribute('fasta')
+params.fasta_fai         = getGenomeAttribute('fasta_fai')
+params.exon_bed          = getGenomeAttribute('exon_bed')
 params.gtf               = getGenomeAttribute('gtf')
 params.gff               = getGenomeAttribute('gff')
 params.star_index        = getGenomeAttribute('star')
@@ -80,13 +82,7 @@ workflow NFCORE_RNAVAR {
     }
 
     // Initialize file channels based on params
-    ch_bcftools_annotations_raw = params.bcftools_annotations ? Channel.fromPath(params.bcftools_annotations) : Channel.empty()
-    ch_bcftools_annotations_tbi_raw = params.bcftools_annotations_tbi ? Channel.fromPath(params.bcftools_annotations_tbi) : Channel.empty()
     ch_bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
-    ch_dbsnp_raw = params.dbsnp ? Channel.fromPath(params.dbsnp) : Channel.empty()
-    ch_dbsnp_tbi_raw = params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi) : Channel.empty()
-    ch_known_indels_raw = params.known_indels ? Channel.fromPath(params.known_indels) : Channel.empty()
-    ch_known_indels_tbi_raw = params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi) : Channel.empty()
     ch_star_index_raw = params.star_index ? Channel.fromPath(params.star_index).map { index -> [[id: index.baseName], index] } : Channel.value([[], []])
 
     seq_platform = params.seq_platform ?: []
@@ -114,12 +110,12 @@ workflow NFCORE_RNAVAR {
         params.gff,
         params.gtf,
         params.exon_bed,
-        ch_bcftools_annotations_raw,
-        ch_bcftools_annotations_tbi_raw,
-        ch_dbsnp_raw,
-        ch_dbsnp_tbi_raw,
-        ch_known_indels_raw,
-        ch_known_indels_tbi_raw,
+        params.bcftools_annotations,
+        params.bcftools_annotations_tbi,
+        params.dbsnp,
+        params.dbsnp_tbi,
+        params.known_indels,
+        params.known_indels_tbi,
         params.feature_type,
         params.skip_exon_bed_check,
         align,
@@ -131,12 +127,12 @@ workflow NFCORE_RNAVAR {
     ch_gtf = PREPARE_GENOME.out.gtf
     ch_exon_bed = PREPARE_GENOME.out.exon_bed
     ch_star_index = PREPARE_GENOME.out.star_index
-    ch_bcfann = params.bcftools_annotations ? PREPARE_GENOME.out.bcfann : Channel.value([])
-    ch_bcfann_tbi = params.bcftools_annotations ? PREPARE_GENOME.out.bcfann_tbi : Channel.value([])
-    ch_dbsnp = params.dbsnp ? PREPARE_GENOME.out.dbsnp : Channel.value([])
-    ch_dbsnp_tbi = params.dbsnp ? PREPARE_GENOME.out.dbsnp_tbi : Channel.value([])
-    ch_known_indels = params.known_indels ? PREPARE_GENOME.out.known_indels : Channel.value([])
-    ch_known_indels_tbi = params.known_indels ? PREPARE_GENOME.out.known_indels_tbi : Channel.value([])
+    ch_bcfann = PREPARE_GENOME.out.bcfann
+    ch_bcfann_tbi = PREPARE_GENOME.out.bcfann_tbi
+    ch_dbsnp = PREPARE_GENOME.out.dbsnp
+    ch_dbsnp_tbi = PREPARE_GENOME.out.dbsnp_tbi
+    ch_known_indels = PREPARE_GENOME.out.known_indels
+    ch_known_indels_tbi = PREPARE_GENOME.out.known_indels_tbi
 
     versions = versions.mix(PREPARE_GENOME.out.versions)
 
