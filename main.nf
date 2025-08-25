@@ -102,13 +102,13 @@ workflow NFCORE_RNAVAR {
     }
 
     PREPARE_GENOME(
-        params.fasta ? Channel.fromPath(params.fasta, checkIfExists: true) : Channel.empty(),
-        params.dict ? Channel.fromPath(params.dict, checkIfExists: true) : Channel.empty(),
-        params.fasta_fai ? Channel.fromPath(params.fasta_fai, checkIfExists: true) : Channel.empty(),
-        params.star_index ? Channel.fromPath(params.star_index, checkIfExists: true) : Channel.empty(),
-        params.gff ? Channel.fromPath(params.gff, checkIfExists: true) : Channel.empty(),
-        params.gtf ? Channel.fromPath(params.gtf, checkIfExists: true) : Channel.empty(),
-        params.exon_bed ? Channel.fromPath(params.exon_bed, checkIfExists: true) : Channel.empty(),
+        Channel.fromPath(params.fasta, checkIfExists: true),
+        params.dict ? Channel.fromPath(params.dict, checkIfExists: true) : null,
+        params.fasta_fai ? Channel.fromPath(params.fasta_fai, checkIfExists: true) : null,
+        params.star_index ? Channel.fromPath(params.star_index, checkIfExists: true) : null,
+        params.gff ? Channel.fromPath(params.gff, checkIfExists: true) : null,
+        params.gtf ? Channel.fromPath(params.gtf, checkIfExists: true) : null,
+        params.exon_bed ? Channel.fromPath(params.exon_bed, checkIfExists: true) : null,
         params.bcftools_annotations ? Channel.fromPath(params.bcftools_annotations, checkIfExists: true) : Channel.empty(),
         params.bcftools_annotations_tbi ? Channel.fromPath(params.bcftools_annotations_tbi, checkIfExists: true) : Channel.empty(),
         params.dbsnp ? Channel.fromPath(params.dbsnp, checkIfExists: true).collect() : Channel.empty(),
