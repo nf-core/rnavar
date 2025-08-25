@@ -48,16 +48,18 @@ workflow PREPARE_GENOME {
         : Channel.empty()
 
     GUNZIP_FASTA(fasta_input)
+    ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
 
     ch_fasta = GUNZIP_FASTA.out.gunzip
-        .collect()
         .mix(fasta.map { fasta_ -> [[id: fasta_.baseName], fasta_] })
+        .collect()
 
     def dict_input = dict
         ? Channel.empty()
         : ch_fasta
 
     GATK4_CREATESEQUENCEDICTIONARY(dict_input)
+    ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
 
     def ch_dict = dict
         ? dict.map { dict_ -> [[id: dict_.baseName], dict_] }.collect()
@@ -68,12 +70,14 @@ workflow PREPARE_GENOME {
         : Channel.empty()
 
     GUNZIP_GTF(gtf_input)
+    ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
     def gff_input = gff
         ? gff.map { gff_ -> [[id: gff_.baseName], gff_] }
         : Channel.empty()
 
     GFFREAD(gff_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
+    ch_versions = ch_versions.mix(GFFREAD.out.versions)
 
     def ch_gtf = gtf.toString().endsWith('.gz')
         ? GUNZIP_GTF.out.gunzip.collect()
@@ -84,6 +88,7 @@ workflow PREPARE_GENOME {
     def gtf2bed_input = !exon_bed ? ch_gtf : Channel.empty()
 
     GTF2BED(gtf2bed_input, feature_type)
+    ch_versions = ch_versions.mix(GTF2BED.out.versions)
 
     def ch_exon_bed_raw = exon_bed
         ? exon_bed.map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }.collect()
@@ -92,6 +97,7 @@ workflow PREPARE_GENOME {
     def input_exon_bed = !skip_exon_bed_check ? ch_exon_bed_raw : Channel.empty()
 
     REMOVE_UNKNOWN_REGIONS(input_exon_bed, ch_dict)
+    ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
 
     def ch_exon_bed = skip_exon_bed_check ? REMOVE_UNKNOWN_REGIONS.out.bed.collect() : ch_exon_bed_raw
 
@@ -115,7 +121,10 @@ workflow PREPARE_GENOME {
         }
 
     BGZIPTABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations_input.plain)
+    ch_versions = ch_versions.mix(BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.versions)
+
     TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations_input.bgzip_noindex)
+    ch_versions = ch_versions.mix(TABIX_BCFTOOLS_ANNOTATIONS.out.versions)
 
     def ch_bcftools_annotations = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi
         .map { _meta, file, _index -> file }
@@ -149,7 +158,10 @@ workflow PREPARE_GENOME {
         }
 
     BGZIPTABIX_DBSNP(ch_dbsnp_input.plain)
+    ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
+
     TABIX_DBSNP(ch_dbsnp_input.bgzip_noindex)
+    ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
 
     def ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_tbi
         .map { _meta, file, _index -> file }
@@ -183,7 +195,10 @@ workflow PREPARE_GENOME {
         }
 
     BGZIPTABIX_KNOWN_INDELS(ch_known_indels_input.plain)
+    ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions)
+
     TABIX_KNOWN_INDELS(ch_known_indels_input.bgzip_noindex)
+    ch_versions = ch_versions.mix(TABIX_KNOWN_INDELS.out.versions)
 
     def ch_known_indels = BGZIPTABIX_KNOWN_INDELS.out.gz_tbi
         .map { _meta, file, _index -> file }
@@ -202,6 +217,7 @@ workflow PREPARE_GENOME {
         : ch_fasta
 
     SAMTOOLS_FAIDX(fai_input, [[id: 'no_fai'], []], false)
+    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
     def ch_fai = fai
         ? fai.map { fai_ -> [[id: fai_.baseName], fai_] }.collect()
@@ -231,8 +247,10 @@ workflow PREPARE_GENOME {
         }
 
     UNTAR(ch_star_index_input.tarzipped)
+    ch_versions = ch_versions.mix(UNTAR.out.versions)
 
     STAR_INDEXVERSION()
+    ch_versions = ch_versions.mix(STAR_INDEXVERSION.out.versions)
 
     def star_index_check = ch_star_index_input.index
         .mix(UNTAR.out.untar)
@@ -261,27 +279,11 @@ workflow PREPARE_GENOME {
         }
 
     STAR_GENOMEGENERATE(genomegenerate_input, ch_gtf)
+    ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
 
     star_index_output = STAR_GENOMEGENERATE.out.index
         .mix(star_index_check.compatible)
         .collect()
-
-    ch_versions = ch_versions.mix(BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.versions)
-    ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
-    ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions)
-    ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
-    ch_versions = ch_versions.mix(GFFREAD.out.versions)
-    ch_versions = ch_versions.mix(GTF2BED.out.versions)
-    ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
-    ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
-    ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
-    ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
-    ch_versions = ch_versions.mix(STAR_INDEXVERSION.out.versions)
-    ch_versions = ch_versions.mix(TABIX_BCFTOOLS_ANNOTATIONS.out.versions)
-    ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
-    ch_versions = ch_versions.mix(TABIX_KNOWN_INDELS.out.versions)
-    ch_versions = ch_versions.mix(UNTAR.out.versions)
 
     emit:
     bcfann           = ch_bcftools_annotations // path: bcftools_annotations.vcf.gz

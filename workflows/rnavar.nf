@@ -156,7 +156,7 @@ workflow RNAVAR {
     }
 
     // MODULE: HLATyping with Seq2HLA
-    if(tools.contains('seq2hla')) {
+    if (tools.contains('seq2hla')) {
         SEQ2HLA(umi_extracted_reads)
         versions = versions.mix(SEQ2HLA.out.versions)
     }
@@ -231,7 +231,7 @@ workflow RNAVAR {
                 .map { _meta, dbsnp_, known_indels_ = [] ->
                     def file_list = [dbsnp_]
                     file_list.add(known_indels_)
-                    return [[id: "known_sites"], file_list.flatten().findAll { entry -> entry != [] }]
+                    return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
                 }
                 .collect()
             def known_sites_tbi = dbsnp_tbi
@@ -239,7 +239,7 @@ workflow RNAVAR {
                 .map { _meta, dbsnp_, known_indels_ = [] ->
                     def file_list = [dbsnp_]
                     file_list.add(known_indels_)
-                    return [[id: "known_sites"], file_list.flatten().findAll { entry -> entry != [] }]
+                    return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
                 }
                 .collect()
 
@@ -305,8 +305,8 @@ workflow RNAVAR {
             fasta,
             fasta_fai,
             dict,
-            dbsnp,
-            dbsnp_tbi,
+            dbsnp.map { dbsnp_ -> [[id: dbsnp_.baseName], dbsnp_] },
+            dbsnp_tbi.map { dbsnp_tbi_ -> [[id: dbsnp_tbi_.baseName], dbsnp_tbi_] },
         )
 
         def haplotypecaller_out = GATK4_HAPLOTYPECALLER.out.vcf
