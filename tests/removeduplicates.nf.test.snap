@@ -183,8 +183,8 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,c1e12cf18f996c0729fa37b0ca17ca24",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,489af228231ffe43ecbc5877d9bb5b6a",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,ee7391c5c8bc1ade5190367c818a7108",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
                 "multiqc_samtools_idxstats.txt:md5,b6f1428f211a5a07dcedc67f40c0b2fe",
@@ -205,14 +205,14 @@
             ],
             "No CRAM files",
             [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
-                "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
+                "GM12878.haplotypecaller.filtered.vcf.gz:md5,3ef293d24c20de93d22d0f6674536790",
+                "GM12878.haplotypecaller.vcf.gz:md5,77f64b61203685317dfee3ddb5e5af40"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nextflow": "25.07.0"
         },
-        "timestamp": "2025-07-07T18:57:20.194769212"
+        "timestamp": "2025-08-25T16:56:03.014900425"
     }
 }
