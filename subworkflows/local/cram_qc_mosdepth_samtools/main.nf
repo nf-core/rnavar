@@ -4,8 +4,8 @@
 // For all modules here:
 // A when clause condition is defined in the conf/modules.config to determine if the module should be run
 
-include { SAMTOOLS_STATS } from '../../../modules/nf-core/samtools/stats'
 include { MOSDEPTH       } from '../../../modules/nf-core/mosdepth'
+include { SAMTOOLS_STATS } from '../../../modules/nf-core/samtools/stats'
 
 workflow CRAM_QC_MOSDEPTH_SAMTOOLS {
     take:
@@ -23,9 +23,9 @@ workflow CRAM_QC_MOSDEPTH_SAMTOOLS {
     MOSDEPTH(cram.combine(intervals.map { _meta, bed -> [bed ?: []] }), fasta)
 
     // Gather all reports generated
-    reports = reports.mix(SAMTOOLS_STATS.out.stats)
     reports = reports.mix(MOSDEPTH.out.global_txt)
     reports = reports.mix(MOSDEPTH.out.regions_txt)
+    reports = reports.mix(SAMTOOLS_STATS.out.stats)
 
     // Gather versions of all tools used
     versions = versions.mix(MOSDEPTH.out.versions)
