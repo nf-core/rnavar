@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
+- [#227](https://github.com/nf-core/rnavar/pull/227) - Update docs for `bcfann`
 
 ### Fixed
 
