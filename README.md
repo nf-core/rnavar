@@ -44,20 +44,20 @@
 13. Merge multiple VCF files into one VCF ([`GATK4 MergeVCFs`](https://gatk.broadinstitute.org/hc/en-us/articles/4409924817691-MergeVcfs-Picard-))
 14. Index the VCF ([`Tabix`](http://www.htslib.org/doc/tabix.html))
 15. Filter variant calls based on certain criteria ([`GATK4 VariantFiltration`](https://gatk.broadinstitute.org/hc/en-us/articles/4409897204763-VariantFiltration))
-16. Annotate variants ([`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))
+16. Annotate variants ([`BCFtools Annotate`](https://samtools.github.io/bcftools/bcftools.html), [`snpEff`](https://pcingola.github.io/SnpEff/se_introduction/), [Ensembl VEP](https://www.ensembl.org/info/docs/tools/vep/index.html))
 17. Present QC for raw read, alignment, gene biotype, sample similarity, and strand-specificity checks ([`MultiQC`](http://multiqc.info/), [`R`](https://www.r-project.org/))
 
 ### Summary of tools and version used in the pipeline
 
 | Tool        | Version |
 | ----------- | ------- |
-| BCFtools    | 1.20    |
+| BCFtools    | 1.21    |
 | BEDtools    | 2.31.1  |
-| Ensembl VEP | 113.0   |
+| Ensembl VEP | 114.2   |
 | FastQC      | 0.12.1  |
 | GATK        | 4.6.1.0 |
 | mosdepth    | 0.3.10  |
-| MultiQC     | 1.27    |
+| MultiQC     | 1.29    |
 | Picard      | 3.3.0   |
 | Samtools    | 1.21    |
 | Seq2HLA     | 2.3     |
