@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#224](https://github.com/nf-core/rnavar/pull/224) - Annotation is now possible with bcftools annotate (--tools bcfann)
 - [#225](https://github.com/nf-core/rnavar/pull/225) - Add Seq2HLA to enable Class I & Class II HLATyping
+- [#227](https://github.com/nf-core/rnavar/pull/227) - Update docs for `bcfann`
 
 ### Changed
 
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | ensemblvep | 113.0       | 114.2       |
+| seq2hla    |             | 2.3         |
 
 ### Parameter
 
@@ -43,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Fixed
 
+- [#227](https://github.com/nf-core/rnavar/pull/227), [#229](https://github.com/nf-core/rnavar/pull/229) - Minor CHANGELOG fixes
+
 #### Removed
 
 - [#224](https://github.com/nf-core/rnavar/pull/224) - Remove unused parameter `use_annotation_cache_keys`
@@ -54,7 +58,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - [#216](https://github.com/nf-core/rnavar/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
-- [#227](https://github.com/nf-core/rnavar/pull/227) - Update docs for `bcfann`
 
 ### Fixed
 
@@ -66,7 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | multiqc    | 1.27        | 1.29        |
-| seq2hla    |             | 2.3         |
 | tabix      | 1.2         | 1.21        |
 
 ### Parameter
