@@ -191,7 +191,7 @@ Variant filtering is an optional step. You can skip it using `--skip_variantfilt
 
 ## Variant annotation
 
-The annotation of variants is performed using snpEff and VEP. The parameter to use is `--tools snpeff` or `--tools vep`. You can even run both snpEff and VEP using `--tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
+The annotation of variants is performed using snpEff, VEP and BCFtools annotate. The parameter to use is `--tools snpeff`, `--tools vep` or `--tools bcfann`. You can even run both snpEff and VEP using `--tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
 
 You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--tools` options.
 
@@ -228,6 +228,14 @@ The [`downloadvepcache`](https://github.com/annotation-cache/downloadvepcache) p
 ```bash
 nextflow run annotation-cache/downloadvepcache --outdir </path/to/output/dir> --vep_species <species> --vep_cache_version <VEP cache version> --vep_genome <GENOME>
 ```
+
+### BCFTOOLS Annotate
+
+It is possible to annotate a VCF file with a custom annotation file using [BCFTOOLS Annotate](https://samtools.github.io/bcftools/bcftools.html#annotate). This can be done by setting adding `bcfann` to the tools list and setting the following parameters:
+
+- annotations: path to vcf annotation file
+- annotations_index: path to vcf annotation index file
+- header_lines: path to header lines file
 
 ## GENERAL NEXTFLOW ARGUMENTS
 

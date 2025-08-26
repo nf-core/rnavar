@@ -24,7 +24,7 @@ GM12878,/data/GM12878/SRR5665260_1.fastq.gz,/data/GM12878/SRR5665260_2.fastq.gz
 The pipeline has been executed with the following command:
 
 ```console
-nextflow run nf-core/rnavar -profile <institutional_config>,docker --input samplesheet.csv --genome GRCh38 --annotate_tools merge --outdir results
+nextflow run nf-core/rnavar -profile <institutional_config>,docker --input samplesheet.csv --genome GRCh38 --tools merge --outdir results
 ```
 
 The `<institutional_config>` used in this experiment can be found [here](https://github.com/nf-core/configs/blob/master/conf/pipeline/rnavar/munin.config). However, you can create your own institutional config and place it on [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf/pipeline/rnavar) and then use the config name directly in the command instead of `<institutional_config>` to use your own data and parameters.
@@ -56,6 +56,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [Variant annotation](#variant-annotation)
     - [snpEff](#snpeff)
     - [VEP](#vep)
+    - [BCFtools annotate](#bcftools-annotate)
   - [QC and Reporting](#qc-and-reporting)
     - [QC](#qc)
       - [FastQC](#fastqc)
@@ -224,7 +225,7 @@ HLA typing is performed when the parameter `--tools seq2hla` is set. The 2-digit
 
 ## Variant annotation
 
-This directory contains results from the final annotation steps: two tools are used for annotation, [snpEff](http://snpeff.sourceforge.net/) and [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html).
+This directory contains results from the final annotation steps: three tools are used for annotation, [BCFtools Annotate](https://samtools.github.io/bcftools/bcftools.html), [snpEff](http://snpeff.sourceforge.net/) and [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html).
 
 ### snpEff
 
@@ -232,7 +233,7 @@ This directory contains results from the final annotation steps: two tools are u
 It annotates and predicts the effects of variants on genes (such as amino acid changes) using multiple databases for annotations.
 The generated `VCF` header contains the software version and the used command line.
 
-To annotate variants using `snpeff`, you can use `--annotate_tools snpeff` or `--annotate_tools merge`.
+To annotate variants using `snpeff`, you can use `--tools snpeff` or `--tools merge`.
 The annotated variant files in VCF format can be found in `results/variant_annotation` folder.
 
 ![MultiQC - snpEff variant by region](images/snpeff_variants_by_region.png)
@@ -270,7 +271,7 @@ Currently, it contains:
 - `Protein_position`: Relative position of amino acid in protein
 - `BIOTYPE`: Biotype of transcript or regulatory feature
 
-To annotate variants using `vep`, you can use `--annotate_tools vep`.
+To annotate variants using `vep`, you can use `--tools vep`.
 The annotated variant files in VCF format can be found in `results/variant_annotation` folder.
 
 ![MultiQC - VEP general statistics](images/vep_general_stats.png)
@@ -286,7 +287,7 @@ The annotated variant files in VCF format can be found in `results/variant_annot
 
 </details>
 
-When `--annotate_tools merge` option is used, the annotation from both `snpeff` and `vep` are combined into a single VCF file which can be found with the following naming convention.
+When `--tools merge` option is used, the annotation from both `snpeff` and `vep` are combined into a single VCF file which can be found with the following naming convention.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -298,6 +299,18 @@ When `--annotate_tools merge` option is used, the annotation from both `snpeff` 
 </details>
 
 For further reading and documentation see the [VEP manual](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+### BCFtools annotate
+
+[BCFtools annotate](https://samtools.github.io/bcftools/bcftools.html#annotate) is used to add annotations to VCF files. The annotations are added to the INFO column of the VCF file. The annotations are added to the VCF header and the VCF header is updated with the new annotations. For further reading and documentation see the [BCFtools annotate manual](https://samtools.github.io/bcftools/bcftools.html#annotate).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `sample._BCF.ann.vcf.gz` and `sample._BCF.ann.vcf.gz.tbi`
+  - VCF with tabix index
+
+</details>
 
 ## QC and Reporting
 
