@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [#225](https://github.com/nf-core/sarek/pull/225) - Add Seq2HLA to enable Class I & Class II HLATyping
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Annotation is now possible with bcftools annotate (--tools bcfann)
+- [#225](https://github.com/nf-core/rnavar/pull/225) - Add Seq2HLA to enable Class I & Class II HLATyping
 
 ### Changed
 
