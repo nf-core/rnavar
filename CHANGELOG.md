@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#224](https://github.com/nf-core/rnavar/pull/224) - Back to dev
 - [#224](https://github.com/nf-core/rnavar/pull/224) - Minor refactor of prepare_genome subworkflow to handle similarly all reference vcf files
+- [#227](https://github.com/nf-core/rnavar/pull/227) - Prepare release 1.2.0
 
 #### Fixed
 
