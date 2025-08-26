@@ -458,18 +458,52 @@
                 }
             }
         },
+        "general_reference_genome_options": {
+            "title": "General reference genome options",
+            "type": "object",
+            "description": "General options to interact with reference genomes.",
+            "default": "",
+            "properties": {
+                "igenomes_base": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The base path to the igenomes reference files",
+                    "fa_icon": "fas fa-ban",
+                    "default": "s3://ngi-igenomes/igenomes/"
+                },
+                "igenomes_ignore": {
+                    "type": "boolean",
+                    "description": "Do not load the iGenomes reference config.",
+                    "fa_icon": "fas fa-ban",
+                    "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`. **NB** You can then run `Sarek` by specifying at least a FASTA genome file"
+                },
+                "save_reference": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-download",
+                    "description": "Save built references.",
+                    "help_text": "Set this parameter, if you wish to save all computed reference files. This is useful to avoid re-computation on future runs."
+                },
+                "download_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-download",
+                    "description": "Download annotation cache.",
+                    "help_text": "Set this parameter, if you wish to download annotation cache.\nUsing this parameter will download cache even if --snpeff_cache and --vep_cache are provided."
+                }
+            },
+            "fa_icon": "fas fa-dna"
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
             "fa_icon": "fas fa-dna",
-            "description": "Reference genome related files and options required for the workflow.",
+            "description": "Reference genome related files and options required for the workflow. If you use AWS iGenomes, this has already been set for you appropriately.",
             "properties": {
                 "genome": {
                     "type": "string",
                     "description": "Name of iGenomes reference.",
+                    "default": "GRCh38",
                     "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
-                    "default": "GRCh38"
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`.\n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
                 },
                 "fasta": {
                     "type": "string",
@@ -478,29 +512,30 @@
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified.\n\nIf you use AWS iGenomes, this has already been set for you appropriately.",
+                    "fa_icon": "fas fa-file"
                 },
                 "dict": {
                     "type": "string",
                     "format": "file-path",
+                    "pattern": "^\\S+\\.dict$",
                     "exists": true,
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.dict$",
                     "description": "Path to FASTA dictionary file.",
-                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference. Combine with `--save_reference` to save for future runs.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "fasta_fai": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "exists": true,
-                    "pattern": "^\\S+\\.fai$",
-                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference",
+                    "mimetype": "text/plain",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference. Combine with `--save_reference` to save for future runs.\n\nIf you use AWS iGenomes, this has already been set for you appropriately.",
                     "description": "Path to FASTA reference index."
                 },
                 "gtf": {
                     "type": "string",
+                    "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "description": "Path to GTF annotation file.",
                     "exists": true,
@@ -509,6 +544,7 @@
                 },
                 "gff": {
                     "type": "string",
+                    "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "exists": true,
                     "pattern": "^\\S+\\.gff\\d?$",
@@ -517,6 +553,7 @@
                 },
                 "exon_bed": {
                     "type": "string",
+                    "fa_icon": "fas fa-file",
                     "format": "file-path",
                     "exists": true,
                     "pattern": "^\\S+\\.bed$",
@@ -529,86 +566,71 @@
                     "description": "Read length",
                     "help_text": "Specify the read length for the STAR aligner."
                 },
-                "save_reference": {
-                    "type": "boolean",
-                    "help_text": "If the STAR index is generated by the pipeline, then please use this parameter to save it to your results folder. These index can then be used for future pipeline runs, reducing processing times.",
-                    "description": "If generated by the pipeline, save the STAR index in the results directory."
-                },
                 "known_indels": {
                     "type": "string",
-                    "description": "Path to known indels VCF file(s)",
+                    "fa_icon": "fas fa-copy",
                     "format": "file-path-pattern",
-                    "exists": true
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "description": "Path to known indels file.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "known_indels_tbi": {
                     "type": "string",
-                    "description": "Path to known indels index file(s)",
+                    "fa_icon": "fas fa-copy",
                     "format": "file-path-pattern",
-                    "exists": true
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "description": "Path to known indels file index.",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the known index file, if provided. Combine with `--save_reference` to save for future runs.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "dbsnp": {
                     "type": "string",
-                    "description": "Path to dbSNP VCF file",
                     "format": "file-path",
-                    "exists": true
+                    "pattern": "^\\S+\\.vcf\\.gz$",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to dbsnp file.",
+                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "dbsnp_tbi": {
                     "type": "string",
-                    "description": "Path to dbSNP VCF index file",
                     "format": "file-path",
-                    "exists": true
+                    "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to dbsnp index.",
+                    "help_text": "> **NB** If none provided, will be generated automatically from the dbsnp file. Combine with `--save_reference` to save for future runs.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "snpeff_db": {
                     "type": "string",
                     "fa_icon": "fas fa-database",
                     "description": "snpEff DB version.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nThis is used to specify the database to be use to annotate with.\nAlternatively databases' names can be listed with the `snpEff databases`."
+                    "help_text": "This is used to specify the database to be use to annotate with.\nAlternatively databases' names can be listed with the `snpEff databases`.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "vep_genome": {
                     "type": "string",
                     "fa_icon": "fas fa-microscope",
                     "description": "VEP genome.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nThis is used to specify the genome when using the container with pre-downloaded cache."
+                    "help_text": "This is used to specify the genome when looking for local cache, or cloud based cache.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "vep_species": {
                     "type": "string",
                     "fa_icon": "fas fa-microscope",
                     "description": "VEP species.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively species listed in Ensembl Genomes caches can be used."
+                    "help_text": "Alternatively species listed in Ensembl Genomes caches can be used.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "vep_cache_version": {
-                    "type": ["integer", "string"],
-                    "minimum": 1,
+                    "type": "string",
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version.",
-                    "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\nAlternatively cache version can be use to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers"
+                    "help_text": "Alternative cache version can be used to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "feature_type": {
                     "type": "string",
                     "description": "Type of feature to parse from annotation file",
                     "enum": ["exon", "transcript", "gene"],
                     "default": "exon"
-                },
-                "download_cache": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-download",
-                    "description": "Download annotation cache.",
-                    "help_text": "Set this parameter, if you wish to download annotation cache."
-                },
-                "igenomes_ignore": {
-                    "type": "boolean",
-                    "description": "Do not load the iGenomes reference config.",
-                    "fa_icon": "fas fa-ban",
-                    "hidden": true,
-                    "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
-                },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The base path to the igenomes reference files",
-                    "fa_icon": "fas fa-ban",
-                    "hidden": true,
-                    "default": "s3://ngi-igenomes/igenomes/"
                 }
             }
         },
@@ -801,6 +823,9 @@
         },
         {
             "$ref": "#/$defs/pipeline_stage_options"
+        },
+        {
+            "$ref": "#/$defs/general_reference_genome_options"
         },
         {
             "$ref": "#/$defs/reference_genome_options"
