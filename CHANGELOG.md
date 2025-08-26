@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#227](https://github.com/nf-core/rnavar/pull/227), [#229](https://github.com/nf-core/rnavar/pull/229) - Minor CHANGELOG fixes
 - [#229](https://github.com/nf-core/rnavar/pull/229) - Add skip_baserecalibration to test_full.config since no dbsnp or known_indels are provided
+- [#229](https://github.com/nf-core/rnavar/pull/229) - Fix typo for remove_unknown_regions modules folder
+- [#229](https://github.com/nf-core/rnavar/pull/229) - Fix schema for max_intron_size parameter
 
 #### Removed
 

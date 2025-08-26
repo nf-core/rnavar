@@ -7,7 +7,7 @@ include { GFFREAD                                             } from '../../../m
 include { GTF2BED                                             } from '../../../modules/local/gtf2bed'
 include { GUNZIP as GUNZIP_FASTA                              } from '../../../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_GTF                                } from '../../../modules/nf-core/gunzip'
-include { REMOVE_UNKNOWN_REGIONS                              } from '../../../modules/local/remove_unkown_regions'
+include { REMOVE_UNKNOWN_REGIONS                              } from '../../../modules/local/remove_unknown_regions'
 include { SAMTOOLS_FAIDX                                      } from '../../../modules/nf-core/samtools/faidx'
 include { STAR_GENOMEGENERATE                                 } from '../../../modules/nf-core/star/genomegenerate'
 include { STAR_INDEXVERSION                                   } from '../../../modules/nf-core/star/indexversion'
