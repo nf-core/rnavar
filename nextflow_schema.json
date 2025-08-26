@@ -134,9 +134,10 @@
                     "description": "Specifies the maximum number of collapsed junctions"
                 },
                 "star_max_intron_size": {
-                    "type": "integer",
+                    "type": ["integer", "string"],
                     "minimum": 0,
-                    "description": "Specifies the maximum intron size"
+                    "description": "Specifies the maximum intron size",
+                    "help_text": "This parameter specifies the maximum intron size for STAR alignment"
                 },
                 "seq_center": {
                     "type": "string",
@@ -621,7 +622,8 @@
                     "help_text": "Alternatively species listed in Ensembl Genomes caches can be used.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
                 },
                 "vep_cache_version": {
-                    "type": "string",
+                    "type": ["integer", "string"],
+                    "minimum": 1,
                     "fa_icon": "fas fa-tag",
                     "description": "VEP cache version.",
                     "help_text": "Alternative cache version can be used to specify the correct Ensembl Genomes version number as these differ from the concurrent Ensembl/VEP version numbers.\n\nIf you use AWS iGenomes, this has already been set for you appropriately."
