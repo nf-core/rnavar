@@ -128,19 +128,6 @@ workflow NFCORE_RNAVAR {
         align,
     )
 
-    ch_fasta = PREPARE_GENOME.out.fasta
-    ch_dict = PREPARE_GENOME.out.dict
-    ch_fasta_fai = PREPARE_GENOME.out.fasta_fai
-    ch_gtf = PREPARE_GENOME.out.gtf
-    ch_exon_bed = PREPARE_GENOME.out.exon_bed
-    ch_star_index = PREPARE_GENOME.out.star_index
-    ch_bcfann = PREPARE_GENOME.out.bcfann
-    ch_bcfann_tbi = PREPARE_GENOME.out.bcfann_tbi
-    ch_dbsnp = PREPARE_GENOME.out.dbsnp
-    ch_dbsnp_tbi = PREPARE_GENOME.out.dbsnp_tbi
-    ch_known_indels = PREPARE_GENOME.out.known_indels
-    ch_known_indels_tbi = PREPARE_GENOME.out.known_indels_tbi
-
     versions = versions.mix(PREPARE_GENOME.out.versions)
 
     // Download cache
@@ -178,19 +165,19 @@ workflow NFCORE_RNAVAR {
     //
     RNAVAR(
         samplesheet,
-        ch_bcfann,
-        ch_bcfann_tbi,
+        PREPARE_GENOME.out.bcfann,
+        PREPARE_GENOME.out.bcfann_tbi,
         ch_bcftools_header_lines,
-        ch_dbsnp,
-        ch_dbsnp_tbi,
-        ch_dict,
-        ch_exon_bed,
-        ch_fasta,
-        ch_fasta_fai,
-        ch_gtf,
-        ch_known_indels,
-        ch_known_indels_tbi,
-        ch_star_index,
+        PREPARE_GENOME.out.dbsnp,
+        PREPARE_GENOME.out.dbsnp_tbi,
+        PREPARE_GENOME.out.dict,
+        PREPARE_GENOME.out.exon_bed,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fasta_fai,
+        PREPARE_GENOME.out.gtf,
+        PREPARE_GENOME.out.known_indels,
+        PREPARE_GENOME.out.known_indels_tbi,
+        PREPARE_GENOME.out.star_index,
         snpeff_cache,
         params.snpeff_db,
         params.vep_genome,
