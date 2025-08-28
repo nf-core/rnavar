@@ -1,46 +1,70 @@
 {
     "Should run without failures - stub": {
         "content": [
-            [
-                [
-                    {
-                        "id": "gtf"
-                    },
-                    "exome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ]
-            ],
             {
-                "GTF2BED": {
-                    "Rscript": "3.5.1 (2018-07-02)"
-                }
+                "0": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "exome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "GTF2BED",
+                        "Rscript",
+                        "3.5.1 (2018-07-02)"
+                    ]
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "exome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
             }
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-30T14:33:17.7904128"
+        "timestamp": "2025-08-28T17:43:38.424129747"
     },
     "Should run without failures": {
         "content": [
-            [
-                [
-                    {
-                        "id": "gtf"
-                    },
-                    "exome.bed:md5,17192418c24c524881e7d970f94a4a26"
-                ]
-            ],
             {
-                "GTF2BED": {
-                    "Rscript": "3.5.1 (2018-07-02)"
-                }
+                "0": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "exome.bed:md5,17192418c24c524881e7d970f94a4a26"
+                    ]
+                ],
+                "1": [
+                    [
+                        "GTF2BED",
+                        "Rscript",
+                        "3.5.1 (2018-07-02)"
+                    ]
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "exome.bed:md5,17192418c24c524881e7d970f94a4a26"
+                    ]
+                ]
             }
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.4"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-06-30T14:33:04.885526129"
+        "timestamp": "2025-08-28T17:43:22.966051465"
     }
 }
