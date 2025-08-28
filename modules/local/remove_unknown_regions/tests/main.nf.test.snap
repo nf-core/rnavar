@@ -1,5 +1,5 @@
 {
-    "Should run without failures - stub": {
+    "bed+dict - stub": {
         "content": [
             [
                 [
@@ -26,7 +26,7 @@
         },
         "timestamp": "2025-08-28T17:58:06.020712079"
     },
-    "Should run without failures": {
+    "bed+dict": {
         "content": [
             [
                 [

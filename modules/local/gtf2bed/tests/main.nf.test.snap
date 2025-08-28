@@ -1,32 +1,5 @@
 {
-    "Should run without failures - stub": {
-        "content": [
-            [
-                [
-                    {
-                        "id": "gtf"
-                    },
-                    "exome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ]
-            ],
-            [
-                "versions",
-                [
-                    [
-                        "GTF2BED",
-                        "Rscript",
-                        "3.5.1 (2018-07-02)"
-                    ]
-                ]
-            ]
-        ],
-        "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
-        },
-        "timestamp": "2025-08-28T17:57:39.74431341"
-    },
-    "Should run without failures": {
+    "gtf": {
         "content": [
             [
                 [
@@ -52,5 +25,32 @@
             "nextflow": "25.04.6"
         },
         "timestamp": "2025-08-28T17:57:24.796286422"
+    },
+    "gtf - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "gtf"
+                    },
+                    "exome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                "versions",
+                [
+                    [
+                        "GTF2BED",
+                        "Rscript",
+                        "3.5.1 (2018-07-02)"
+                    ]
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-08-28T17:57:39.74431341"
     }
 }
