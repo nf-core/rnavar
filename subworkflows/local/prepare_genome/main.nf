@@ -88,7 +88,6 @@ workflow PREPARE_GENOME {
     def gtf2bed_input = !exon_bed ? ch_gtf : Channel.empty()
 
     GTF2BED(gtf2bed_input, feature_type)
-    ch_versions = ch_versions.mix(GTF2BED.out.versions)
 
     def ch_exon_bed_raw = exon_bed
         ? exon_bed.map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }.collect()
@@ -97,7 +96,6 @@ workflow PREPARE_GENOME {
     def input_exon_bed = !skip_exon_bed_check ? ch_exon_bed_raw : Channel.empty()
 
     REMOVE_UNKNOWN_REGIONS(input_exon_bed, ch_dict)
-    ch_versions = ch_versions.mix(REMOVE_UNKNOWN_REGIONS.out.versions)
 
     def ch_exon_bed = skip_exon_bed_check ? REMOVE_UNKNOWN_REGIONS.out.bed.collect() : ch_exon_bed_raw
 
@@ -299,6 +297,7 @@ workflow PREPARE_GENOME {
     known_indels_tbi = ch_known_indels_tbi // path: {known_indels*}.vcf.gz.tbi
     star_index       = star_index_output // path: star/index/
     versions         = ch_versions // channel: [ versions.yml ]
+    topic_versions   = channel.topic('versions')
 }
 
 /*

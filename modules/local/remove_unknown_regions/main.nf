@@ -13,7 +13,7 @@ process REMOVE_UNKNOWN_REGIONS {
 
     output:
     tuple val(meta), path('*.bed'), emit: bed
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,21 +22,11 @@ process REMOVE_UNKNOWN_REGIONS {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     remove_unknown_regions.py ${bed} ${dict} ${prefix}.bed
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.bed
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 }

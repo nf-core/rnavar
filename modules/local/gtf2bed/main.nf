@@ -13,7 +13,7 @@ process GTF2BED {
 
     output:
     tuple val(meta), path('*.bed'), emit: bed
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('Rscript'), eval("Rscript --version 2>&1 | sed 's/R scripting front-end version //'"), topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -32,20 +32,10 @@ process GTF2BED {
 
     awk '{print \$1 "\t" (\$2 - 1) "\t" \$3}' tmp.exome.bed > exome.bed
     rm -rf tmp.exome.bed
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        Rscript: \$(echo \$(Rscript --version 2>&1) | sed 's/R scripting front-end version //')
-    END_VERSIONS
     """
 
     stub:
     """
     touch exome.bed
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        Rscript: \$(echo \$(Rscript --version 2>&1) | sed 's/R scripting front-end version //')
-    END_VERSIONS
     """
 }

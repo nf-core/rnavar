@@ -40,6 +40,8 @@ nextflow_workflow {
                             return null
                         } else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
+                        } else if(key == "versions") {
+                            return [key, val.collect { path(it).yaml }]
                         }
                         return [key,val]
                     }.findAll { it != null }
@@ -88,6 +90,8 @@ nextflow_workflow {
                             return [key, val.sort { it.toString() }]
                         } else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
+                        } else if(key == "versions") {
+                            return [key, val.collect { path(it).yaml }]
                         }
                         return [key,val]
                     }.findAll { it != null }
