@@ -49,6 +49,7 @@ include { PREPARE_GENOME                  } from './subworkflows/local/prepare_g
 // MULTIQC
 include { MULTIQC                         } from './modules/nf-core/multiqc'
 include { getWorkflowVersion              } from 'plugin/nf-core-utils'
+include { paramsSummaryMultiqc            } from './subworkflows/nf-core/utils_nfcore_pipeline'
 include { processVersionsFromFile         } from 'plugin/nf-core-utils'
 include { methodsDescriptionText          } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
 include { paramsSummaryMap                } from 'plugin/nf-schema'
@@ -341,37 +342,4 @@ def topicVersionToYAML(taskProcess, tools, versions) {
     |${taskProcess.tokenize(':').last()}:
     |  ${toolsVersions.join('\n|  ')}
     """.stripMargin().trim()
-}
-//
-// Get workflow summary for MultiQC
-//
-def paramsSummaryMultiqc(summary_params) {
-    def summary_section = ''
-    summary_params
-        .keySet()
-        .each { group ->
-            def group_params = summary_params.get(group)
-            // This gets the parameters of that particular group
-            if (group_params) {
-                summary_section += "    <p style=\"font-size:110%\"><b>${group}</b></p>\n"
-                summary_section += "    <dl class=\"dl-horizontal\">\n"
-                group_params
-                    .keySet()
-                    .sort()
-                    .each { param ->
-                        summary_section += "        <dt>${param}</dt><dd><samp>${group_params.get(param) ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>\n"
-                    }
-                summary_section += "    </dl>\n"
-            }
-        }
-
-    def yaml_file_text = "id: '${workflow.manifest.name.replace('/', '-')}-summary'\n" as String
-    yaml_file_text += "description: ' - this information is collected when the pipeline is started.'\n"
-    yaml_file_text += "section_name: '${workflow.manifest.name} Workflow Summary'\n"
-    yaml_file_text += "section_href: 'https://github.com/${workflow.manifest.name}'\n"
-    yaml_file_text += "plot_type: 'html'\n"
-    yaml_file_text += "data: |\n"
-    yaml_file_text += "${summary_section}"
-
-    return yaml_file_text
 }
