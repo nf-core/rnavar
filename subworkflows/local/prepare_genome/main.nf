@@ -21,19 +21,19 @@ include { UNTAR                                               } from '../../../m
 
 workflow PREPARE_GENOME {
     take:
-    fasta                    // params[path]: params.fasta
-    dict                     // params[path]: params.dict
-    fai                      // params[path]: params.fasta_fai
-    star_index               // params[path]: params.star_index
-    gff                      // params[path]: params.gff
-    gtf                      // params[path]: params.gtf
-    exon_bed                 // params[path]: params.exon_bed
     bcftools_annotations     // params[path]: params.bcftools_annotations
     bcftools_annotations_tbi // params[path]: params.bcftools_annotations_tbi
     dbsnp                    // params[path]: params.dbsnp
     dbsnp_tbi                // params[path]: params.dbsnp_tbi
+    dict                     // params[path]: params.dict
+    exon_bed                 // params[path]: params.exon_bed
+    fasta                    // params[path]: params.fasta
+    fasta_fai                // params[path]: params.fasta_fai
+    gff                      // params[path]: params.gff
+    gtf                      // params[path]: params.gtf
     known_indels             // params[path]: params.known_indels
     known_indels_tbi         // params[path]: params.known_indels_tbi
+    star_index               // params[path]: params.star_index
     feature_type             // params[string]: params.feature_type
     skip_exon_bed_check      // params[boolean]: params.skip_exon_bed_check
     align                    // boolean: The pipeline needs aligner indices or not
@@ -42,183 +42,148 @@ workflow PREPARE_GENOME {
     def ch_versions = Channel.empty()
 
     // Unzip reference genome files if needed
-
-    def fasta_input = fasta.toString().endsWith('.gz')
-        ? fasta.map { fasta_ -> [[id: fasta_.baseName], fasta_] }
+    def ch_gunzip_fasta_input = fasta.toString().endsWith('.gz')
+        ? Channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
         : Channel.empty()
 
-    GUNZIP_FASTA(fasta_input)
+    GUNZIP_FASTA(ch_gunzip_fasta_input)
+
+    def ch_fasta = fasta.toString().endsWith('.gz')
+        ? GUNZIP_FASTA.out.gunzip.collect()
+        : Channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
+
     ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
 
-    ch_fasta = GUNZIP_FASTA.out.gunzip
-        .mix(fasta.map { fasta_ -> [[id: fasta_.baseName], fasta_] })
-        .collect()
-
-    def dict_input = dict
-        ? Channel.empty()
-        : ch_fasta
+    def dict_input = dict ? Channel.empty() : ch_fasta
 
     GATK4_CREATESEQUENCEDICTIONARY(dict_input)
     ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
 
     def ch_dict = dict
-        ? dict.map { dict_ -> [[id: dict_.baseName], dict_] }.collect()
+        ? Channel.fromPath(dict).map { dict_ -> [[id: dict_.baseName], dict_] }.collect()
         : GATK4_CREATESEQUENCEDICTIONARY.out.dict.collect()
 
     def gtf_input = gtf.toString().endsWith('.gz')
-        ? gtf.map { gtf_ -> [[id: gtf_.baseName], gtf_] }
+        ? Channel.fromPath(gtf).map { gtf_ -> [[id: gtf_.baseName], gtf_] }
         : Channel.empty()
 
     GUNZIP_GTF(gtf_input)
     ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
-    def gff_input = gff
-        ? gff.map { gff_ -> [[id: gff_.baseName], gff_] }
+    def ch_gffread_input = gff
+        ? Channel.fromPath(gff).map { gff_ -> [[id: gff_.baseName], gff_] }
         : Channel.empty()
 
-    GFFREAD(gff_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
+    GFFREAD(ch_gffread_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
     ch_versions = ch_versions.mix(GFFREAD.out.versions)
 
     def ch_gtf = gtf.toString().endsWith('.gz')
         ? GUNZIP_GTF.out.gunzip.collect()
         : gff
             ? GFFREAD.out.gtf.collect()
-            : gtf.map { gtf_ -> [[id: gtf_.baseName], gtf_] }.collect()
+            : Channel.fromPath(gtf).map { gtf_ -> [[id: gtf_.baseName], gtf_] }.collect()
 
-    def gtf2bed_input = !exon_bed ? ch_gtf : Channel.empty()
+    def ch_gtf2bed_input = !exon_bed ? ch_gtf : Channel.empty()
 
-    GTF2BED(gtf2bed_input, feature_type)
+    GTF2BED(ch_gtf2bed_input, feature_type)
 
-    def ch_exon_bed_raw = exon_bed
-        ? exon_bed.map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }.collect()
+    def ch_exon_bed_input = exon_bed
+        ? Channel.fromPath(exon_bed).map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }.collect()
         : GTF2BED.out.bed.collect()
 
-    def input_exon_bed = !skip_exon_bed_check ? ch_exon_bed_raw : Channel.empty()
+    def ch_remove_unknown_regions_input = !skip_exon_bed_check ? ch_exon_bed_input : Channel.empty()
 
-    REMOVE_UNKNOWN_REGIONS(input_exon_bed, ch_dict)
+    REMOVE_UNKNOWN_REGIONS(ch_remove_unknown_regions_input, ch_dict)
 
-    def ch_exon_bed = skip_exon_bed_check ? REMOVE_UNKNOWN_REGIONS.out.bed.collect() : ch_exon_bed_raw
+    def ch_exon_bed = skip_exon_bed_check ? REMOVE_UNKNOWN_REGIONS.out.bed.flatten() : ch_exon_bed_input
 
-    def bcftools_annotations_input = bcftools_annotations
-        ? bcftools_annotations.flatten().map { vcf -> [[id: vcf.name], vcf] }
-        : Channel.empty()
+    def ch_bcftools_annotations = bcftools_annotations
+        ? Channel.fromPath(bcftools_annotations).collect()
+        : Channel.value([])
+    def ch_bcftools_annotations_tbi = bcftools_annotations_tbi
+        ? Channel.fromPath(bcftools_annotations_tbi).collect()
+        : Channel.value([])
 
-    def bcftools_annotations_tbi_input = bcftools_annotations_tbi
-        ? bcftools_annotations_tbi.flatten().map { tbi -> [[id: tbi.baseName], tbi] }
-        : Channel.empty()
+    if (!bcftools_annotations_tbi && bcftools_annotations && bcftools_annotations.toString().endsWith(".gz")) {
+        TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: vcf.baseName], vcf] })
+        ch_bcftools_annotations_tbi = TABIX_BCFTOOLS_ANNOTATIONS.out.tbi.map { _meta, tbi -> [tbi] }.collect()
+        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_ANNOTATIONS.out.versions)
+    }
+    else if (!bcftools_annotations_tbi && bcftools_annotations) {
+        BGZIPTABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: vcf.baseName], vcf] })
+        ch_bcftools_annotations = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi.map { _meta, file, _index -> [file] }.collect()
+        ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi.map { _meta, _file, tbi -> [tbi] }.collect()
+        ch_versions = ch_versions.mix(BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.versions)
+    }
 
-    def ch_bcftools_annotations_input = bcftools_annotations_input
-        .join(bcftools_annotations_tbi_input, failOnDuplicate: true, remainder: true)
-        .branch { meta, file, index ->
-            plain: !file.toString().endsWith(".gz")
-            return [meta, file]
-            bgzip_noindex: !index && file.toString().endsWith(".gz")
-            return [meta, file]
-            bgzip_index: true
-            return [meta, file, index]
+    def ch_dbsnp = dbsnp
+        ? Channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
+        : Channel.value([[id: null], []])
+    def ch_dbsnp_tbi = dbsnp_tbi
+        ? Channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
+        : Channel.value([[id: null], []])
+
+    if (!dbsnp_tbi && dbsnp && (dbsnp.toString().endsWith(".gz") || dbsnp[0].toString().endsWith(".gz"))) {
+        TABIX_DBSNP(ch_dbsnp)
+        ch_dbsnp_tbi = TABIX_DBSNP.out.tbi.map { meta, tbi -> [meta, tbi] }
+        ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
+    }
+    else if (!dbsnp_tbi && dbsnp) {
+        BGZIPTABIX_DBSNP(ch_dbsnp)
+        ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_tbi.map { meta, file, _index -> [meta, file] }
+        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_tbi.map { meta, _file, tbi -> [meta, tbi] }
+        ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
+    }
+
+    def ch_known_indels = known_indels
+        ? Channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
+        : Channel.value([[id: null], []])
+    def ch_known_indels_tbi = known_indels_tbi
+        ? Channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
+        : Channel.value([[id: null], []])
+
+    if (!known_indels_tbi && known_indels && (known_indels.toString().endsWith(".gz") || known_indels[0].toString().endsWith(".gz"))) {
+        TABIX_KNOWN_INDELS(ch_known_indels)
+        ch_known_indels_tbi = TABIX_KNOWN_INDELS.out.tbi.map { meta, tbi -> [meta, tbi] }
+        ch_versions = ch_versions.mix(TABIX_KNOWN_INDELS.out.versions)
+    }
+    else if (!known_indels_tbi && known_indels) {
+        BGZIPTABIX_KNOWN_INDELS(ch_known_indels)
+        ch_known_indels = BGZIPTABIX_KNOWN_INDELS.out.gz_tbi.map { meta, file, _index -> [meta, file] }
+        ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.gz_tbi.map { meta, _file, tbi -> [meta, tbi] }
+        ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions)
+    }
+
+    // known_sites is made by grouping both the dbsnp and the known indels resources
+    // Which can either or both be optional
+    def ch_known_sites = ch_dbsnp
+        .map { _meta, file -> [file] }
+        .combine(ch_known_indels.map { _meta, file -> [file] })
+        .map { _meta, dbsnp_, known_indels_ = [] ->
+            def file_list = [dbsnp_]
+            file_list.add(known_indels_)
+            return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
         }
-
-    BGZIPTABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations_input.plain)
-    ch_versions = ch_versions.mix(BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.versions)
-
-    TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations_input.bgzip_noindex)
-    ch_versions = ch_versions.mix(TABIX_BCFTOOLS_ANNOTATIONS.out.versions)
-
-    def ch_bcftools_annotations = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi
-        .map { _meta, file, _index -> file }
-        .mix(ch_bcftools_annotations_input.bgzip_noindex.map { _meta, file -> file })
-        .mix(ch_bcftools_annotations_input.bgzip_index.map { _meta, file, _index -> file })
         .collect()
-
-    def ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_tbi
-        .map { _meta, _file, index -> index }
-        .mix(TABIX_BCFTOOLS_ANNOTATIONS.out.tbi.map { _meta, tbi -> tbi })
-        .mix(ch_bcftools_annotations_input.bgzip_index.map { _meta, _file, index -> index })
-        .collect()
-
-    def dbsnp_input = dbsnp
-        ? dbsnp.flatten().map { vcf -> [[id: vcf.name], vcf] }
-        : Channel.empty()
-
-    def dbsnp_tbi_input = dbsnp_tbi
-        ? dbsnp_tbi.flatten().map { tbi -> [[id: tbi.baseName], tbi] }
-        : Channel.empty()
-
-    def ch_dbsnp_input = dbsnp_input
-        .join(dbsnp_tbi_input, failOnDuplicate: true, remainder: true)
-        .branch { meta, file, index ->
-            plain: !file.toString().endsWith(".gz")
-            return [meta, file]
-            bgzip_noindex: !index && file.toString().endsWith(".gz")
-            return [meta, file]
-            bgzip_index: true
-            return [meta, file, index]
+    def ch_known_sites_tbi = ch_dbsnp_tbi
+        .map { _meta, file -> [file] }
+        .combine(ch_known_indels_tbi.map { _meta, file -> [file] })
+        .map { _meta, dbsnp_, known_indels_ = [] ->
+            def file_list = [dbsnp_]
+            file_list.add(known_indels_)
+            return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
         }
-
-    BGZIPTABIX_DBSNP(ch_dbsnp_input.plain)
-    ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
-
-    TABIX_DBSNP(ch_dbsnp_input.bgzip_noindex)
-    ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
-
-    def ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_tbi
-        .map { _meta, file, _index -> file }
-        .mix(ch_dbsnp_input.bgzip_noindex.map { _meta, file -> file })
-        .mix(ch_dbsnp_input.bgzip_index.map { _meta, file, _index -> file })
         .collect()
 
-    def ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_tbi
-        .map { _meta, _file, index -> index }
-        .mix(TABIX_DBSNP.out.tbi.map { _meta, tbi -> tbi })
-        .mix(ch_dbsnp_input.bgzip_index.map { _meta, _file, index -> index })
-        .collect()
-
-    def known_indels_input = known_indels
-        ? known_indels.flatten().map { vcf -> [[id: vcf.name], vcf] }
-        : Channel.empty()
-
-    def known_indels_tbi_input = known_indels_tbi
-        ? known_indels_tbi.flatten().map { tbi -> [[id: tbi.baseName], tbi] }
-        : Channel.empty()
-
-    def ch_known_indels_input = known_indels_input
-        .join(known_indels_tbi_input, failOnDuplicate: true, remainder: true)
-        .branch { meta, file, index ->
-            plain: !file.toString().endsWith(".gz")
-            return [meta, file]
-            bgzip_noindex: !index && file.toString().endsWith(".gz")
-            return [meta, file]
-            bgzip_index: true
-            return [meta, file, index]
-        }
-
-    BGZIPTABIX_KNOWN_INDELS(ch_known_indels_input.plain)
-    ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions)
-
-    TABIX_KNOWN_INDELS(ch_known_indels_input.bgzip_noindex)
-    ch_versions = ch_versions.mix(TABIX_KNOWN_INDELS.out.versions)
-
-    def ch_known_indels = BGZIPTABIX_KNOWN_INDELS.out.gz_tbi
-        .map { _meta, file, _index -> file }
-        .mix(ch_known_indels_input.bgzip_noindex.map { _meta, file -> file })
-        .mix(ch_known_indels_input.bgzip_index.map { _meta, file, _index -> file })
-        .collect()
-
-    def ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.gz_tbi
-        .map { _meta, _file, index -> index }
-        .mix(TABIX_KNOWN_INDELS.out.tbi.map { _meta, tbi -> tbi })
-        .mix(ch_known_indels_input.bgzip_index.map { _meta, _file, index -> index })
-        .collect()
-
-    def fai_input = fai
+    def fai_input = fasta_fai
         ? Channel.empty()
         : ch_fasta
 
     SAMTOOLS_FAIDX(fai_input, [[id: 'no_fai'], []], false)
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
-    def ch_fai = fai
-        ? fai.map { fai_ -> [[id: fai_.baseName], fai_] }.collect()
+    def ch_fai = fasta_fai
+        ? Channel.fromPath(fasta_fai).map { fai_ -> [[id: fai_.baseName], fai_] }.collect()
         : SAMTOOLS_FAIDX.out.fai.collect()
 
     //
@@ -226,7 +191,7 @@ workflow PREPARE_GENOME {
     //
 
     def star_index_input = star_index
-        ? star_index.map { index -> [[id: 'star'], index] }
+        ? Channel.fromPath(star_index).map { index -> [[id: 'star'], index] }
         : Channel.of([[], []])
 
     ch_star_index_input = star_index_input
@@ -286,15 +251,17 @@ workflow PREPARE_GENOME {
     emit:
     bcfann           = ch_bcftools_annotations // path: bcftools_annotations.vcf.gz
     bcfann_tbi       = ch_bcftools_annotations_tbi // path: bcftools_annotations.vcf.gz.tbi
-    dbsnp            = ch_dbsnp // path: dbsnp.vcf.gz
-    dbsnp_tbi        = ch_dbsnp_tbi // path: dbsnp.vcf.gz.tbi
+    dbsnp            = ch_dbsnp.collect() // Channel: [meta, dbsnp.vcf.gz]
+    dbsnp_tbi        = ch_dbsnp_tbi.collect() // Channel: [meta, dbsnp.vcf.gz.tbi]
     dict             = ch_dict // path: genome.fasta.dict
     exon_bed         = ch_exon_bed // path: exon.bed
     fasta            = ch_fasta // path: genome.fasta
     fasta_fai        = ch_fai // path: genome.fasta.fai
     gtf              = ch_gtf // path: genome.gtf
-    known_indels     = ch_known_indels // path: {known_indels*}.vcf.gz
-    known_indels_tbi = ch_known_indels_tbi // path: {known_indels*}.vcf.gz.tbi
+    known_indels     = ch_known_indels.collect() // path: {known_indels*}.vcf.gz
+    known_indels_tbi = ch_known_indels_tbi.collect() // path: {known_indels*}.vcf.gz.tbi
+    known_sites      = ch_known_sites // path: {known_sites*}.vcf.gz
+    known_sites_tbi  = ch_known_sites_tbi // path: {known_sites*}.vcf.gz.tbi
     star_index       = star_index_output // path: star/index/
     versions         = ch_versions // channel: [ versions.yml ]
     topic_versions   = channel.topic('versions')

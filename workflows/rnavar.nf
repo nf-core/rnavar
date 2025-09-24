@@ -57,8 +57,8 @@ workflow RNAVAR {
     fasta
     fasta_fai
     gtf
-    known_indels
-    known_indels_tbi
+    known_sites
+    known_sites_tbi
     star_index
     snpeff_cache
     snpeff_db
@@ -224,25 +224,6 @@ workflow RNAVAR {
         def bam_variant_calling = Channel.empty()
 
         if (!skip_baserecalibration) {
-            // known_sites is made by grouping both the dbsnp and the known indels ressources
-            // they can either or both be optional
-            def known_sites = dbsnp
-                .combine(known_indels)
-                .map { _meta, dbsnp_, known_indels_ = [] ->
-                    def file_list = [dbsnp_]
-                    file_list.add(known_indels_)
-                    return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
-                }
-                .collect()
-            def known_sites_tbi = dbsnp_tbi
-                .combine(known_indels_tbi)
-                .map { _meta, dbsnp_, known_indels_ = [] ->
-                    def file_list = [dbsnp_]
-                    file_list.add(known_indels_)
-                    return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
-                }
-                .collect()
-
             def interval_list_recalib = interval_list.map { _meta, bed -> [bed] }.flatten()
             def splitncigar_bam_bai_interval = splitncigar_bam_bai.combine(interval_list_recalib)
 
@@ -305,8 +286,8 @@ workflow RNAVAR {
             fasta,
             fasta_fai,
             dict,
-            dbsnp.map { dbsnp_ -> [[id: dbsnp_.baseName], dbsnp_] },
-            dbsnp_tbi.map { dbsnp_tbi_ -> [[id: dbsnp_tbi_.baseName], dbsnp_tbi_] },
+            dbsnp,
+            dbsnp_tbi,
         )
 
         def haplotypecaller_out = GATK4_HAPLOTYPECALLER.out.vcf

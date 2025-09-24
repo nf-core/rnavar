@@ -69,7 +69,6 @@ workflow NFCORE_RNAVAR {
     align
 
     main:
-
     reports = Channel.empty()
     versions = Channel.empty()
 
@@ -88,40 +87,20 @@ workflow NFCORE_RNAVAR {
         error("Known sites are required for performing base recalibration. Supply them with either --dbsnp and/or --known_indels or disable base recalibration with --skip_baserecalibration")
     }
 
-    // Initialize file channels based on params
-    ch_bcftools_header_lines = params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty()
-
-    seq_platform = params.seq_platform ?: []
-    seq_center = params.seq_center ?: []
-
-    vep_extra_files = []
-
-    if (params.dbnsfp && params.dbnsfp_tbi) {
-        vep_extra_files.add(file(params.dbnsfp, checkIfExists: true))
-        vep_extra_files.add(file(params.dbnsfp_tbi, checkIfExists: true))
-    }
-
-    if (params.spliceai_snv && params.spliceai_snv_tbi && params.spliceai_indel && params.spliceai_indel_tbi) {
-        vep_extra_files.add(file(params.spliceai_indel, checkIfExists: true))
-        vep_extra_files.add(file(params.spliceai_indel_tbi, checkIfExists: true))
-        vep_extra_files.add(file(params.spliceai_snv, checkIfExists: true))
-        vep_extra_files.add(file(params.spliceai_snv_tbi, checkIfExists: true))
-    }
-
     PREPARE_GENOME(
-        Channel.fromPath(params.fasta, checkIfExists: true),
-        params.dict ? Channel.fromPath(params.dict, checkIfExists: true) : null,
-        params.fasta_fai ? Channel.fromPath(params.fasta_fai, checkIfExists: true) : null,
-        params.star_index ? Channel.fromPath(params.star_index, checkIfExists: true) : null,
-        params.gff ? Channel.fromPath(params.gff, checkIfExists: true) : null,
-        params.gtf ? Channel.fromPath(params.gtf, checkIfExists: true) : null,
-        params.exon_bed ? Channel.fromPath(params.exon_bed, checkIfExists: true) : null,
-        params.bcftools_annotations ? Channel.fromPath(params.bcftools_annotations, checkIfExists: true) : Channel.empty(),
-        params.bcftools_annotations_tbi ? Channel.fromPath(params.bcftools_annotations_tbi, checkIfExists: true) : Channel.empty(),
-        params.dbsnp ? Channel.fromPath(params.dbsnp, checkIfExists: true).collect() : Channel.empty(),
-        params.dbsnp_tbi ? Channel.fromPath(params.dbsnp_tbi, checkIfExists: true).collect() : Channel.empty(),
-        params.known_indels ? Channel.fromPath(params.known_indels, checkIfExists: true).collect() : Channel.empty(),
-        params.known_indels_tbi ? Channel.fromPath(params.known_indels_tbi, checkIfExists: true).collect() : Channel.empty(),
+        params.bcftools_annotations,
+        params.bcftools_annotations_tbi,
+        params.dbsnp,
+        params.dbsnp_tbi,
+        params.dict,
+        params.exon_bed,
+        params.fasta,
+        params.fasta_fai,
+        params.gff,
+        params.gtf,
+        params.known_indels,
+        params.known_indels_tbi,
+        params.star_index,
         params.feature_type,
         params.skip_exon_bed_check,
         align,
@@ -159,6 +138,25 @@ workflow NFCORE_RNAVAR {
         vep_cache = ANNOTATION_CACHE_INITIALISATION.out.ensemblvep_cache
     }
 
+    vep_extra_files = []
+
+    if (params.dbnsfp && params.dbnsfp_tbi) {
+        vep_extra_files.add(file(params.dbnsfp, checkIfExists: true))
+        vep_extra_files.add(file(params.dbnsfp_tbi, checkIfExists: true))
+    }
+    else if (params.dbnsfp && !params.dbnsfp_tbi) {
+        System.err.println("DBNSFP: ${params.dbnsfp} has been provided with `--dbnsfp, but no dbnsfp_tbi has")
+        System.err.println("cf: https://nf-co.re/rnavar/parameters/#dbnsfp")
+        error("Execution halted due to dbnsfp inconsistency.")
+    }
+
+    if (params.spliceai_snv && params.spliceai_snv_tbi && params.spliceai_indel && params.spliceai_indel_tbi) {
+        vep_extra_files.add(file(params.spliceai_indel, checkIfExists: true))
+        vep_extra_files.add(file(params.spliceai_indel_tbi, checkIfExists: true))
+        vep_extra_files.add(file(params.spliceai_snv, checkIfExists: true))
+        vep_extra_files.add(file(params.spliceai_snv_tbi, checkIfExists: true))
+    }
+
     //
     // WORKFLOW: Run pipeline
     //
@@ -166,7 +164,7 @@ workflow NFCORE_RNAVAR {
         samplesheet,
         PREPARE_GENOME.out.bcfann,
         PREPARE_GENOME.out.bcfann_tbi,
-        ch_bcftools_header_lines,
+        params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty(),
         PREPARE_GENOME.out.dbsnp,
         PREPARE_GENOME.out.dbsnp_tbi,
         PREPARE_GENOME.out.dict,
@@ -174,8 +172,8 @@ workflow NFCORE_RNAVAR {
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fasta_fai,
         PREPARE_GENOME.out.gtf,
-        PREPARE_GENOME.out.known_indels,
-        PREPARE_GENOME.out.known_indels_tbi,
+        PREPARE_GENOME.out.known_sites,
+        PREPARE_GENOME.out.known_sites_tbi,
         PREPARE_GENOME.out.star_index,
         snpeff_cache,
         params.snpeff_db,
@@ -185,8 +183,8 @@ workflow NFCORE_RNAVAR {
         params.vep_include_fasta,
         vep_cache,
         vep_extra_files,
-        seq_center,
-        seq_platform,
+        params.seq_center ?: [],
+        params.seq_platform ?: [],
         params.aligner,
         params.bam_csi_index,
         params.extract_umi,
@@ -241,7 +239,7 @@ workflow {
 
     // MODULE: MultiQC
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
-    def val_multiqc_report = Channel.empty()
+    def multiqc_report = Channel.empty()
 
     // MULTIQC
     if (!params.skip_multiqc) {
@@ -268,7 +266,7 @@ workflow {
             [],
             [],
         )
-        val_multiqc_report = MULTIQC.out.report.toList()
+        multiqc_report = MULTIQC.out.report.toList()
     }
 
 
@@ -282,7 +280,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        val_multiqc_report,
+        multiqc_report,
     )
 }
 

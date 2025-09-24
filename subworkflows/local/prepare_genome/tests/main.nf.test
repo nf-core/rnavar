@@ -11,16 +11,16 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                input[0] = []
                 input[1] = []
                 input[2] = []
                 input[3] = []
                 input[4] = []
-                input[5] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
-                input[6] = []
+                input[5] = []
+                input[6] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
                 input[7] = []
                 input[8] = []
-                input[9] = []
+                input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
                 input[10] = []
                 input[11] = []
                 input[12] = []
@@ -38,7 +38,11 @@ nextflow_workflow {
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
                             return null
-                        } else if(key == "star_index") {
+                        }
+                        else if (val == [[]]) {
+                            return null
+                        }
+                        else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
                         } else if(key == "versions") {
                             return [key, val.collect { path(it).yaml }]
@@ -54,22 +58,22 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
-                input[1] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
-                input[2] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
-                input[3] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz', checkIfExists: true)
-                input[4] = []
-                input[5] = Channel.fromPath(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
-                input[6] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
-                input[7] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
+                input[0] = params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz'
+                input[1] = []
+                input[2] = params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf'
+                input[3] = []
+                input[4] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict'
+                input[5] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed'
+                input[6] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
+                input[7] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai'
                 input[8] = []
-                input[9] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf', checkIfExists: true)
-                input[10] = []
-                input[11] = Channel.of([
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz', checkIfExists: true),
-                    file(params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true)
-                ]).collect()
-                input[12] = Channel.fromPath(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz.tbi', checkIfExists: true)
+                input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
+                input[10] = [
+                    params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz',
+                    params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz'
+                ]
+                input[11] = []
+                input[12] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz'
                 input[13] = "exon"
                 input[14] = false
                 input[15] = Channel.value(true)
@@ -84,11 +88,23 @@ nextflow_workflow {
                     workflow.out.collectEntries { key, val ->
                         if(key.matches("\\d+")) {
                             return null
-                        } else if(key == "known_indels") {
+                        }
+                        else if (val == [[]]) {
+                            return null
+                        }
+                        else if(key == "known_indels") {
                             return [key, val.sort { it.toString() }]
-                        } else if(key == "known_indels_tbi") {
+                        }
+                        else if(key == "known_indels_tbi") {
                             return [key, val.sort { it.toString() }]
-                        } else if(key == "star_index") {
+                        }
+                        else if(key == "known_sites") {
+                            return [key, val.sort { it.toString() }]
+                        }
+                        else if(key == "known_sites_tbi") {
+                            return [key, val.sort { it.toString() }]
+                        }
+                        else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
                         } else if(key == "versions") {
                             return [key, val.collect { path(it).yaml }]

@@ -3,7 +3,7 @@
         "content": [
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": 114.2,
+                    "ensemblvep": 115.1,
                     "tabix": 1.21
                 },
                 "GATK4_BEDTOINTERVALLIST": {
@@ -127,13 +127,13 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-08-27T11:55:29.091566969"
+        "timestamp": "2025-09-16T10:15:41.09089482"
     },
     "-profile test --tools merge": {
         "content": [
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": 114.2,
+                    "ensemblvep": 115.1,
                     "tabix": 1.21
                 },
                 "GATK4_BEDTOINTERVALLIST": {
@@ -246,6 +246,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-08-27T11:53:01.144985692"
+        "timestamp": "2025-09-16T10:14:34.260420358"
     }
 }
