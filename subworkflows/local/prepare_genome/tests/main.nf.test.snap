@@ -83,13 +83,13 @@
                 "known_indels_tbi": [
                     [
                         {
-                            "id": "test.rnaseq.vcf"
-                        },
-                        "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
-                        {
                             "id": "test2.vcf"
                         },
-                        "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                        "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8",
+                        {
+                            "id": "test.rnaseq.vcf"
+                        },
+                        "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a"
                     ]
                 ],
                 "known_sites": [
@@ -114,13 +114,13 @@
                             "id": "known_sites"
                         },
                         [
-                            "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a"
+                            "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
                         ],
                         {
                             "id": "known_sites"
                         },
                         [
-                            "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                            "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a"
                         ]
                     ]
                 ],
@@ -175,6 +175,11 @@
                         }
                     },
                     {
+                        "PREPARE_GENOME:TABIX_KNOWN_INDELS": {
+                            "tabix": 1.21
+                        }
+                    },
+                    {
                         "PREPARE_GENOME:TABIX_BCFTOOLS_ANNOTATIONS": {
                             "tabix": 1.21
                         }
@@ -191,7 +196,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.7"
         },
-        "timestamp": "2025-09-18T12:38:01.886111426"
+        "timestamp": "2025-09-24T11:21:14.39207449"
     },
     "only essentials": {
         "content": [

@@ -93,16 +93,16 @@ nextflow_workflow {
                             return null
                         }
                         else if(key == "known_indels") {
-                            return [key, val.sort { it.toString() }]
+                            return [key, val.sort{ it }]
                         }
                         else if(key == "known_indels_tbi") {
-                            return [key, val.sort { it.toString() }]
+                            return [key, val.sort{ it }]
                         }
                         else if(key == "known_sites") {
-                            return [key, val.sort { it.toString() }]
+                            return [key, val.sort{ it }]
                         }
                         else if(key == "known_sites_tbi") {
-                            return [key, val.sort { it.toString() }]
+                            return [key, val.sort{ it }]
                         }
                         else if(key == "star_index") {
                             return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
