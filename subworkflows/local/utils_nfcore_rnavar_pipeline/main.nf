@@ -8,14 +8,19 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { UTILS_NFSCHEMA_PLUGIN   } from '../../nf-core/utils_nfschema_plugin'
-include { paramsSummaryMap        } from 'plugin/nf-schema'
-include { samplesheetToList       } from 'plugin/nf-schema'
-include { completionEmail         } from '../../nf-core/utils_nfcore_pipeline'
-include { completionSummary       } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification          } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
-include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
+include { checkCondaChannels   } from 'plugin/nf-core-utils'
+include { checkConfigProvided  } from 'plugin/nf-core-utils'
+include { checkProfileProvided } from 'plugin/nf-core-utils'
+include { completionEmail      } from 'plugin/nf-core-utils'
+include { completionSummary    } from 'plugin/nf-core-utils'
+include { dumpParametersToJSON } from 'plugin/nf-core-utils'
+include { getWorkflowVersion   } from 'plugin/nf-core-utils'
+include { imNotification       } from 'plugin/nf-core-utils'
+
+include { paramsSummaryLog     } from 'plugin/nf-schema'
+include { paramsSummaryMap     } from 'plugin/nf-schema'
+include { samplesheetToList    } from 'plugin/nf-schema'
+include { validateParameters   } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,64 +39,36 @@ workflow PIPELINE_INITIALISATION {
 
     ch_versions = Channel.empty()
 
-    //
-    // Print version and exit if required and dump pipeline parameters to JSON file
-    //
-    UTILS_NEXTFLOW_PIPELINE(
-        version,
-        true,
-        outdir,
-        workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1,
-    )
+    // Print workflow version and exit on --version
+    if (version) {
+        log.info("${workflow.manifest.name} ${getWorkflowVersion()}")
+        System.exit(0)
+    }
 
-    //
+    // Dump pipeline parameters to a JSON file
+    if (outdir) {
+        dumpParametersToJSON(outdir, params)
+    }
+
+    // When running with Conda, warn if channels have not been set-up appropriately
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        checkCondaChannels()
+    }
+
     // Validate parameters and generate parameter summary to stdout
-    //
-    UTILS_NFSCHEMA_PLUGIN(
-        workflow,
-        validate_params,
-        null,
-    )
+    log.info(paramsSummaryLog(workflow))
+    if (validate_params) {
+        validateParameters()
+    }
 
-    //
     // Check config provided to the pipeline
-    //
-    UTILS_NFCORE_PIPELINE(
-        nextflow_cli_args
-    )
+    checkConfigProvided()
+    checkProfileProvided(nextflow_cli_args)
 
-    //
     // Custom validation for pipeline parameters
-    //
     validateInputParameters()
 
-    // Check input path parameters to see if they exist
-    def checkPathParamList = [
-        params.dbsnp,
-        params.dbsnp_tbi,
-        params.dict,
-        params.fasta,
-        params.fasta_fai,
-        params.gff,
-        params.gtf,
-        params.input,
-        params.known_indels,
-        params.known_indels_tbi,
-        params.star_index,
-    ]
-
-    // only check if we are using the tools
-    if (params.tools && (params.tools.split(',').contains('snpeff') || params.tools.split(',').contains('merge'))) {
-        checkPathParamList.add(params.snpeff_cache)
-    }
-    if (params.tools && (params.tools.split(',').contains('vep') || params.tools.split(',').contains('merge'))) {
-        checkPathParamList.add(params.vep_cache)
-    }
-
-    //
     // Create channel from input file provided through params.input
-    //
-
     def samplesheetList = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
     def bool_align = samplesheetList.find { _meta, fastq_1, _fastq_2, _bam, _bai, _cram, _crai, _vcf, _tbi ->
         fastq_1
@@ -246,6 +223,7 @@ def genomeExistsError() {
         error(error_string)
     }
 }
+
 //
 // Generate methods description for MultiQC
 //
