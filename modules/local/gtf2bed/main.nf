@@ -13,7 +13,7 @@ process GTF2BED {
 
     output:
     tuple val(meta), path('*.bed'), emit: bed
-    tuple val("${task.process}"), val('Rscript'), eval("Rscript --version 2>&1 | sed 's/R scripting front-end version //'"), topic: versions
+    tuple val("${task.process}"), val('Rscript'), eval("Rscript --version 2>&1 | sed 's/R scripting front-end version //'"), topic: versions, emit: versions
 
     when:
     task.ext.when == null || task.ext.when

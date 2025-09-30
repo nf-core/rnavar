@@ -13,7 +13,7 @@ process REMOVE_UNKNOWN_REGIONS {
 
     output:
     tuple val(meta), path('*.bed'), emit: bed
-    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), topic: versions
+    tuple val("${task.process}"), val('python'), eval("python --version | sed 's/Python //g'"), topic: versions, emit: versions
 
     when:
     task.ext.when == null || task.ext.when
