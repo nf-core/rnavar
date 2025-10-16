@@ -149,13 +149,6 @@
                         ]
                     ]
                 ],
-                "topic_versions": [
-                    [
-                        "PREPARE_GENOME:REMOVE_UNKNOWN_REGIONS",
-                        "python",
-                        "3.8.3"
-                    ]
-                ],
                 "versions": [
                     {
                         "PREPARE_GENOME:STAR_INDEXVERSION": {
@@ -303,18 +296,6 @@
                 ],
                 "star_index": [
                     
-                ],
-                "topic_versions": [
-                    [
-                        "PREPARE_GENOME:GTF2BED",
-                        "Rscript",
-                        "3.5.1 (2018-07-02)"
-                    ],
-                    [
-                        "PREPARE_GENOME:REMOVE_UNKNOWN_REGIONS",
-                        "python",
-                        "3.8.3"
-                    ]
                 ],
                 "versions": [
                     {

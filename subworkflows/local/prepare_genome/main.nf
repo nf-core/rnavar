@@ -264,7 +264,6 @@ workflow PREPARE_GENOME {
     known_sites_tbi  = ch_known_sites_tbi // path: {known_sites*}.vcf.gz.tbi
     star_index       = star_index_output // path: star/index/
     versions         = ch_versions // channel: [ versions.yml ]
-    topic_versions   = channel.topic('versions')
 }
 
 /*
