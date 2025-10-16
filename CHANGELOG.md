@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#234](https://github.com/nf-core/rnavar/pull/234) - Refactor local modules and subworkflows tests
 - [#234](https://github.com/nf-core/rnavar/pull/234) - Use topics for local modules
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
+- [#243](https://github.com/nf-core/rnavar/pull/243) - Template update for nf-core/tools v3.4.1
 
 #### Fixed
 
