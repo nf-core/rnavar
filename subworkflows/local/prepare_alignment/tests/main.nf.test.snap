@@ -38,7 +38,7 @@
                             "id": "test"
                         },
                         "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram",
-                        "test.rna.paired_end.sorted.cram.crai"
+                        "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai"
                     ]
                 ],
                 "versions": [
@@ -50,7 +50,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T13:30:22.777547298"
+        "timestamp": "2025-10-16T15:49:44.503180333"
     },
     "only bam": {
         "content": [

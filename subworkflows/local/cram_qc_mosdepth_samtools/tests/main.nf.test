@@ -34,16 +34,7 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.collectEntries { key, val ->
-                        if(key.matches("\\d+")) {
-                            return null
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(sanitizeOutput(workflow.out)).match()
         }
     }
 }

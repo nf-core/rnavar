@@ -33,24 +33,9 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.collectEntries { key, val ->
-                        if(key.matches("\\d+")) {
-                            return null
-                        }
-                        else if (val == [[]]) {
-                            return null
-                        }
-                        else if(key == "star_index") {
-                            return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
-                        } else if(key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(
+                sanitizeOutput(workflow.out, unstableKeys:["star_index"])
+            ).match()
         }
     }
 
@@ -83,36 +68,9 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.collectEntries { key, val ->
-                        if(key.matches("\\d+")) {
-                            return null
-                        }
-                        else if (val == [[]]) {
-                            return null
-                        }
-                        else if(key == "known_indels") {
-                            return [key, val.sort{ it }]
-                        }
-                        else if(key == "known_indels_tbi") {
-                            return [key, val.sort{ it }]
-                        }
-                        else if(key == "known_sites") {
-                            return [key, val.sort{ it }]
-                        }
-                        else if(key == "known_sites_tbi") {
-                            return [key, val.sort{ it }]
-                        }
-                        else if(key == "star_index") {
-                            return [key, val.collect { [it[0], path(it[1]).list().collect { file(it.toString()).name }] }]
-                        } else if(key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(
+                sanitizeOutput(workflow.out, unstableKeys:["star_index"])
+            ).match()
         }
     }
 }

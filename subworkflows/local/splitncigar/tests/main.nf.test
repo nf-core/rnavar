@@ -42,12 +42,9 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.bam_bai.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name] },
-                    workflow.out.versions
-                ).match() }
-            )
+            assert snapshot(
+                sanitizeOutput(workflow.out, unstableKeys:["bam_bai"])
+            ).match()
         }
     }
 
@@ -82,12 +79,9 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.bam_bai.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name] },
-                    workflow.out.versions
-                ).match() }
-            )
+            assert snapshot(
+                sanitizeOutput(workflow.out, unstableKeys:["bam_bai"])
+            ).match()
         }
     }
 
@@ -119,12 +113,9 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.bam_bai.collect { [it[0], bam(it[1]).readsMD5, file(it[2].toString()).name] },
-                    workflow.out.versions
-                ).match() }
-            )
+            assert snapshot(
+                sanitizeOutput(workflow.out, unstableKeys:["bam"])
+            ).match()
         }
     }
 }

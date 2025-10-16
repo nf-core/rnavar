@@ -59,18 +59,7 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.collectEntries { key, val ->
-                        if(key.matches("\\d+")) {
-                            return null
-                        } else if(key == "bam") {
-                            return [key, val.collect { [it[0], it[1], file(it[2]).name]}]
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(sanitizeOutput(workflow.out, unstableKeys:["bam"])).match()
         }
     }
 
@@ -95,18 +84,7 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assertAll(
-                { assert snapshot(
-                    workflow.out.collectEntries { key, val ->
-                        if(key.matches("\\d+")) {
-                            return null
-                        } else if(key == "bam") {
-                            return [key, val.collect { [it[0], it[1], file(it[2]).name]}]
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(sanitizeOutput(workflow.out, unstableKeys:["bam"])).match()
         }
     }
 }
