@@ -37,9 +37,9 @@
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
                 "reports/multiqc_data",
-                "reports/multiqc_data/BETA-multiqc.parquet",
                 "reports/multiqc_data/llms-full.txt",
                 "reports/multiqc_data/multiqc.log",
+                "reports/multiqc_data/multiqc.parquet",
                 "reports/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc_data/multiqc_data.json",
                 "reports/multiqc_data/multiqc_software_versions.txt",
@@ -56,9 +56,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
         },
-        "timestamp": "2025-08-27T11:49:05.784005388"
+        "timestamp": "2025-10-16T12:12:48.676459013"
     }
 }

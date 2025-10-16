@@ -3,6 +3,44 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## dev
+
+### Added
+
+### Changed
+
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Back to dev
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Update MultiQC to 1.31
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Update Picard to 3.4.0
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Update Samtools to 1.22.1
+
+### Fixed
+
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| multiqc    | 1.30        | 1.31        |
+| picard     | 3.3.0       | 3.4.0       |
+| samtools   | 1.21        | 1.22.1      |
+
+### Parameter
+
+| Old name | New name |
+| -------- | -------- |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
+
+#### Fixed
+
+#### Removed
+
 ## [1.2.1](https://github.com/nf-core/rnavar/releases/tag/1.2.1) - Red Swordfish II
 
 ### Added
@@ -37,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#231](https://github.com/nf-core/rnavar/pull/231) - Back to dev
 - [#232](https://github.com/nf-core/rnavar/pull/232) - Update all modules
 - [#232](https://github.com/nf-core/rnavar/pull/232) - Simplify modules config file
+- [#239](https://github.com/nf-core/rnavar/pull/239) - Prepare release 1.2.1
 
 #### Fixed
 

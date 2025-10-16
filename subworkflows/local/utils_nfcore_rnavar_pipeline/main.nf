@@ -17,6 +17,7 @@ include { dumpParametersToJSON } from 'plugin/nf-core-utils'
 include { getWorkflowVersion   } from 'plugin/nf-core-utils'
 include { imNotification       } from 'plugin/nf-core-utils'
 
+include { paramsHelp           } from 'plugin/nf-schema'
 include { paramsSummaryLog     } from 'plugin/nf-schema'
 include { paramsSummaryMap     } from 'plugin/nf-schema'
 include { samplesheetToList    } from 'plugin/nf-schema'
@@ -34,6 +35,10 @@ workflow PIPELINE_INITIALISATION {
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
+    input             //  string: Path to input samplesheet
+    help              // boolean: Display help message and exit
+    help_full         // boolean: Show the full help message
+    show_hidden       // boolean: Show hidden parameters in the help message
 
     main:
 
@@ -56,20 +61,73 @@ workflow PIPELINE_INITIALISATION {
     }
 
     // Validate parameters and generate parameter summary to stdout
-    log.info(paramsSummaryLog(workflow))
-    if (validate_params) {
-        validateParameters()
+    //
+    before_text = """
+-\033[2m----------------------------------------------------\033[0m-
+                                        \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
+\033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
+\033[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         \033[0;33m}  {\033[0m
+\033[0;34m  | \\| |       \\__, \\__/ |  \\ |___     \033[0;32m\\`-._,-`-,\033[0m
+                                        \033[0;32m`._,._,\'\033[0m
+\033[0;35m  nf-core/rnavar ${workflow.manifest.version}\033[0m
+-\033[2m----------------------------------------------------\033[0m-
+"""
+    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { "    https://doi.org/${it.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/rnavar/blob/master/CITATIONS.md
+"""
+    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+
+    if (help || help_full) {
+        help_options = [
+            beforeText: before_text,
+            afterText: after_text,
+            command: command,
+            showHidden: show_hidden,
+            fullHelp: help_full,
+        ]
+        if (null) {
+            help_options << [parametersSchema: null]
+        }
+        log.info(
+            paramsHelp(
+                help_options,
+                params.help instanceof String ? params.help : "",
+            )
+        )
+        exit(0)
     }
 
-    // Check config provided to the pipeline
-    checkConfigProvided()
-    checkProfileProvided(nextflow_cli_args)
+    //
+    // Print parameter summary to stdout. This will display the parameters
+    // that differ from the default given in the JSON schema
+    //
 
-    // Custom validation for pipeline parameters
-    validateInputParameters()
+    summary_options = [:]
+    if (null) {
+        summary_options << [parametersSchema: null]
+    }
+    log.info(before_text)
+    log.info(paramsSummaryLog(summary_options, workflow))
+    log.info(after_text)
 
-    // Create channel from input file provided through params.input
-    def samplesheetList = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
+    //
+    // Validate the parameters using nextflow_schema.json or the schema
+    // given via the validation.parametersSchema configuration option
+    //
+    if (validate_params) {
+        validateOptions = [:]
+        if (null) {
+            validateOptions << [parametersSchema: null]
+        }
+        validateParameters(validateOptions)
+    }
+
+    // Create channel from input file provided through input
+    def samplesheetList = samplesheetToList(input, "${projectDir}/assets/schema_input.json")
     def bool_align = samplesheetList.find { _meta, fastq_1, _fastq_2, _bam, _bai, _cram, _crai, _vcf, _tbi ->
         fastq_1
     }
