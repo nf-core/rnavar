@@ -29,17 +29,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Old name | New name |
 | -------- | -------- |
 
+### Modules / Subworkflows
+
+| Dependency   | Old name                | New name |
+| ------------ | ----------------------- | -------- |
+| subworkflows | utils_nextflow_pipeline |          |
+| subworkflows | utils_nfcore_pipeline   |          |
+| subworkflows | utils_nfschema_plugin   |          |
+
+### Plugins
+
+| Dependency     | Old version | New version |
+| -------------- | ----------- | ----------- |
+| nf-core-schema | 2.4.2       | 2.5.1       |
+| nf-core-utils  |             | 0.3.0       |
+
 ### Developer section
 
 #### Added
 
 #### Changed
 
+- [#233](https://github.com/nf-core/rnavar/pull/233) - Start to use the nf-core-utils plugins and remove all utils subworfklows from nf-core/modules
+- [#234](https://github.com/nf-core/rnavar/pull/234) - Refactor local modules and subworkflows tests
+- [#234](https://github.com/nf-core/rnavar/pull/234) - Use topics for local modules
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
 
 #### Fixed
 
 #### Removed
+
+| Old name | New name |
+| -------- | -------- |
 
 ## [1.2.1](https://github.com/nf-core/rnavar/releases/tag/1.2.1) - Red Swordfish II
 
