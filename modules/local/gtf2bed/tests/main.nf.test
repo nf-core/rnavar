@@ -22,7 +22,7 @@ nextflow_process {
             assert process.success
             assert snapshot(
                 process.out.bed,
-                ['versions', process.out.versions]
+                ['versions', process.out.versions_rscript]
             ).match()
         }
     }
@@ -47,7 +47,7 @@ nextflow_process {
             assert process.success
             assert snapshot(
                 process.out.bed,
-                ['versions', process.out.versions]
+                ['versions', process.out.versions_rscript]
             ).match()
         }
     }
