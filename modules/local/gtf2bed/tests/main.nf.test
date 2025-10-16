@@ -20,10 +20,16 @@ nextflow_process {
 
         then {
             assert process.success
-            assert snapshot(
-                process.out.bed,
-                ['versions', process.out.versions_rscript]
-            ).match()
+            assertAll(
+                { assert snapshot(
+                    process.out.collectEntries { key, val ->
+                        if (key.matches("\\d+") || val == [[]]) {
+                            return null
+                        }
+                        return [key,val]
+                    }.findAll { it != null }
+                ).match() }
+            )
         }
     }
 
@@ -45,10 +51,16 @@ nextflow_process {
 
         then {
             assert process.success
-            assert snapshot(
-                process.out.bed,
-                ['versions', process.out.versions_rscript]
-            ).match()
+            assertAll(
+                { assert snapshot(
+                    process.out.collectEntries { key, val ->
+                        if (key.matches("\\d+") || val == [[]]) {
+                            return null
+                        }
+                        return [key,val]
+                    }.findAll { it != null }
+                ).match() }
+            )
         }
     }
 }
