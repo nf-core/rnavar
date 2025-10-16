@@ -69,60 +69,20 @@
                     ]
                 ],
                 "known_indels": [
-                    [
-                        {
-                            "id": "test.rnaseq.vcf"
-                        },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz",
-                        {
-                            "id": "test2.vcf"
-                        },
-                        "/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/vcf/test2.vcf.gz"
-                    ]
+                    "test.rnaseq.vcf.gz",
+                    "test2.vcf.gz"
                 ],
                 "known_indels_tbi": [
-                    [
-                        {
-                            "id": "test.rnaseq.vcf"
-                        },
-                        "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
-                        {
-                            "id": "test2.vcf"
-                        },
-                        "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
-                    ]
+                    "test.rnaseq.vcf.gz.tbi",
+                    "test2.vcf.gz.tbi"
                 ],
                 "known_sites": [
-                    [
-                        {
-                            "id": "known_sites"
-                        },
-                        [
-                            "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz"
-                        ],
-                        {
-                            "id": "known_sites"
-                        },
-                        [
-                            "/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/vcf/test2.vcf.gz"
-                        ]
-                    ]
+                    "test.rnaseq.vcf.gz",
+                    "test2.vcf.gz"
                 ],
                 "known_sites_tbi": [
-                    [
-                        {
-                            "id": "known_sites"
-                        },
-                        [
-                            "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a"
-                        ],
-                        {
-                            "id": "known_sites"
-                        },
-                        [
-                            "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
-                        ]
-                    ]
+                    "test.rnaseq.vcf.gz.tbi",
+                    "test2.vcf.gz.tbi"
                 ],
                 "star_index": [
                     [
@@ -186,7 +146,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T16:56:11.419196991"
+        "timestamp": "2025-10-16T18:21:41.182806009"
     },
     "only essentials": {
         "content": [
