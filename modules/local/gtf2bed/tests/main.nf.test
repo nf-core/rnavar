@@ -20,16 +20,7 @@ nextflow_process {
 
         then {
             assert process.success
-            assertAll(
-                { assert snapshot(
-                    process.out.collectEntries { key, val ->
-                        if (key.matches("\\d+") || val == [[]]) {
-                            return null
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(sanitizeOutput(process.out)).match()
         }
     }
 
@@ -51,16 +42,7 @@ nextflow_process {
 
         then {
             assert process.success
-            assertAll(
-                { assert snapshot(
-                    process.out.collectEntries { key, val ->
-                        if (key.matches("\\d+") || val == [[]]) {
-                            return null
-                        }
-                        return [key,val]
-                    }.findAll { it != null }
-                ).match() }
-            )
+            assert snapshot(sanitizeOutput(process.out)).match()
         }
     }
 }
