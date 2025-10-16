@@ -80,8 +80,12 @@ nextflow_workflow {
                         if (key == "star_index") {
                             return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
                         }
-                        else if (key in ["known_indels", "known_indels_tbi", "known_sites", "known_sites_tbi"]) {
-                            def array = [file(val[0][1].toString().replace("]", "")).name, file(val[0][3].toString().replace("]", "")).name].sort()
+                        else if (key in ["known_indels", "known_indels_tbi"]) {
+                            def array = [file(val[0][1].toString()).name, file(val[0][3].toString()).name].sort()
+                            return [key, array]
+                        }
+                        else if (key in ["known_sites", "known_sites_tbi"]) {
+                            def array = [file(val[0][1][0].toString()).name, file(val[0][3][0].toString()).name].sort()
                             return [key, array]
                         }
                         else if (key == "versions") {
