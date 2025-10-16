@@ -23,8 +23,16 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,d510e13e6f3226359738b5a6449068fe",
-                    "versions.yml:md5,ebf112f4081a4bc0e13520fe22ac26bd"
+                    {
+                        "CRAM_QC_MOSDEPTH_SAMTOOLS:SAMTOOLS_STATS": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "CRAM_QC_MOSDEPTH_SAMTOOLS:MOSDEPTH": {
+                            "mosdepth": "0.3.10"
+                        }
+                    }
                 ]
             }
         ],
@@ -32,6 +40,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T13:29:59.544723665"
+        "timestamp": "2025-10-16T16:26:56.945283583"
     }
 }

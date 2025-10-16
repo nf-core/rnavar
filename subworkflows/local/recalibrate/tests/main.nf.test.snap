@@ -4,10 +4,7 @@
             {
                 "bam": [
                     [
-                        {
-                            "id": "test"
-                        },
-                        "test.recal.bam",
+                        "test.recal.bam:md5sum,22e22cd4b7da6967236f1c83277ea7e3",
                         "test.recal.bam.bai"
                     ]
                 ],
@@ -15,8 +12,16 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,7254d01c09ca362f258ee3dda431ac92",
-                    "versions.yml:md5,acb5344e2c8cbcc9176f5dc649fc318f"
+                    {
+                        "RECALIBRATE:GATK4_APPLYBQSR": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "RECALIBRATE:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    }
                 ]
             }
         ],
@@ -24,17 +29,14 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:58:47.251455292"
+        "timestamp": "2025-10-16T16:52:42.660073624"
     },
     "bam - stats": {
         "content": [
             {
                 "bam": [
                     [
-                        {
-                            "id": "test"
-                        },
-                        "test.recal.bam",
+                        "test.recal.bam:md5sum,22e22cd4b7da6967236f1c83277ea7e3",
                         "test.recal.bam.bai"
                     ]
                 ],
@@ -47,9 +49,21 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,7254d01c09ca362f258ee3dda431ac92",
-                    "versions.yml:md5,acb5344e2c8cbcc9176f5dc649fc318f",
-                    "versions.yml:md5,fc7d4a5e2faa4d15e3d4a1e8363d5c00"
+                    {
+                        "RECALIBRATE:GATK4_APPLYBQSR": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "RECALIBRATE:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "RECALIBRATE:SAMTOOLS_STATS": {
+                            "samtools": "1.22.1"
+                        }
+                    }
                 ]
             }
         ],
@@ -57,6 +71,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:58:28.039790218"
+        "timestamp": "2025-10-16T16:52:23.276253059"
     }
 }

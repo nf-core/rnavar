@@ -34,7 +34,14 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assert snapshot(sanitizeOutput(workflow.out)).match()
+            assert snapshot(
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        if (key == "versions") {
+                            return [key, val.collect { path(it).yaml }]
+                        }
+                        return [key, val]
+                    }
+            ).match()
         }
     }
 }

@@ -4,21 +4,31 @@
             {
                 "bam_bai": [
                     [
-                        {
-                            "groupSize": 2,
-                            "groupTarget": {
-                                "id": "test"
-                            }
-                        },
-                        "test.bam",
+                        "test.bam:md5sum,67daadcc078bb45be360e1f2af46a8e5",
                         "test.bam.bai"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,52ea2bcf303abe4dc03ce08ccce5b65c",
-                    "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
-                    "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
-                    "versions.yml:md5,f2707dd02aa42f4f8154476966707508"
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_MERGE": {
+                            "samtools": 1.21
+                        }
+                    }
                 ]
             }
         ],
@@ -26,27 +36,33 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:59:24.341343336"
+        "timestamp": "2025-10-16T16:46:16.471176014"
     },
     "no_intervals": {
         "content": [
             {
                 "bam_bai": [
                     [
-                        {
-                            "groupSize": 0,
-                            "groupTarget": {
-                                "id": "test"
-                            }
-                        },
-                        "test.bam:md5,4442c40c11b93434206dde8207f8486f",
-                        "test.bam.bai:md5,53f3529b465ba73c86cc87d18fd0700a"
+                        "test.bam:md5sum,7ebc60b3ccddb8489781f46522bc5da1",
+                        "test.bam.bai"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,52ea2bcf303abe4dc03ce08ccce5b65c",
-                    "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
-                    "versions.yml:md5,f2707dd02aa42f4f8154476966707508"
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_MERGE": {
+                            "samtools": 1.21
+                        }
+                    }
                 ]
             }
         ],
@@ -54,28 +70,38 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:59:41.554834625"
+        "timestamp": "2025-10-16T16:46:32.902834857"
     },
     "bam": {
         "content": [
             {
                 "bam_bai": [
                     [
-                        {
-                            "groupSize": 2,
-                            "groupTarget": {
-                                "id": "test"
-                            }
-                        },
-                        "test.bam",
+                        "test.bam:md5sum,67daadcc078bb45be360e1f2af46a8e5",
                         "test.bam.bai"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,52ea2bcf303abe4dc03ce08ccce5b65c",
-                    "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
-                    "versions.yml:md5,7809d5e62a9a71923012f7d06dc7a0fb",
-                    "versions.yml:md5,f2707dd02aa42f4f8154476966707508"
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_MERGE": {
+                            "samtools": 1.21
+                        }
+                    }
                 ]
             }
         ],
@@ -83,6 +109,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:59:04.823937452"
+        "timestamp": "2025-10-16T16:45:57.860937816"
     }
 }

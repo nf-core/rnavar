@@ -126,19 +126,59 @@
                 ],
                 "star_index": [
                     [
-                        {
-                            "id": "star"
-                        },
-                        "star"
+                        [
+                            "Genome",
+                            "Log.out",
+                            "SA",
+                            "SAindex",
+                            "chrLength.txt",
+                            "chrName.txt",
+                            "chrNameLength.txt",
+                            "chrStart.txt",
+                            "exonGeTrInfo.tab",
+                            "exonInfo.tab",
+                            "geneInfo.tab",
+                            "genomeParameters.txt",
+                            "sjdbInfo.txt",
+                            "sjdbList.fromGTF.out.tab",
+                            "sjdbList.out.tab",
+                            "transcriptInfo.tab"
+                        ]
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,3c6fc57c4c3bf7b143933b0b89ab0386",
-                    "versions.yml:md5,7263c03ca9c7d18bc40fc8d27a5936fa",
-                    "versions.yml:md5,96821d80d1ae1744552ce21ab7086b47",
-                    "versions.yml:md5,96821d80d1ae1744552ce21ab7086b47",
-                    "versions.yml:md5,a82353f8a33715eb11949d1751e222f5",
-                    "versions.yml:md5,e1ae3c4313a36fcd13e867ddc4ee45aa"
+                    {
+                        "PREPARE_GENOME:STAR_INDEXVERSION": {
+                            "star": "2.7.11b",
+                            "samtools": 1.21,
+                            "gawk": "5.1.0"
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:UNTAR": {
+                            "untar": 1.34
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:TABIX_KNOWN_INDELS": {
+                            "tabix": 1.21
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:TABIX_KNOWN_INDELS": {
+                            "tabix": 1.21
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:TABIX_BCFTOOLS_ANNOTATIONS": {
+                            "tabix": 1.21
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:BGZIPTABIX_DBSNP": {
+                            "tabix": 1.21
+                        }
+                    }
                 ]
             }
         ],
@@ -146,7 +186,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:54:05.069356735"
+        "timestamp": "2025-10-16T16:56:11.419196991"
     },
     "only essentials": {
         "content": [
@@ -265,9 +305,23 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,265795dcfabc74e982198a30abb773d5",
-                    "versions.yml:md5,3c6fc57c4c3bf7b143933b0b89ab0386",
-                    "versions.yml:md5,7303f194674b485c6914e28422822a12"
+                    {
+                        "PREPARE_GENOME:GATK4_CREATESEQUENCEDICTIONARY": {
+                            "gatk4": "4.6.1.0"
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:STAR_INDEXVERSION": {
+                            "star": "2.7.11b",
+                            "samtools": 1.21,
+                            "gawk": "5.1.0"
+                        }
+                    },
+                    {
+                        "PREPARE_GENOME:SAMTOOLS_FAIDX": {
+                            "samtools": 1.21
+                        }
+                    }
                 ]
             }
         ],
@@ -275,6 +329,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T15:53:55.479492587"
+        "timestamp": "2025-10-16T16:18:25.24525716"
     }
 }

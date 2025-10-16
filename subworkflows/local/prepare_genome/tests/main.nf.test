@@ -34,7 +34,14 @@ nextflow_workflow {
         then {
             assert workflow.success
             assert snapshot(
-                sanitizeOutput(workflow.out, unstableKeys:["star_index"])
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        if (key == "star_index") {
+                            return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
+                        } else if (key == "versions") {
+                            return [key, val.collect { path(it).yaml }]
+                        }
+                        return [key, val]
+                    }
             ).match()
         }
     }
@@ -69,7 +76,14 @@ nextflow_workflow {
         then {
             assert workflow.success
             assert snapshot(
-                sanitizeOutput(workflow.out, unstableKeys:["star_index"])
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        if (key == "star_index") {
+                            return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
+                        } else if (key == "versions") {
+                            return [key, val.collect { path(it).yaml }]
+                        }
+                        return [key, val]
+                    }
             ).match()
         }
     }
