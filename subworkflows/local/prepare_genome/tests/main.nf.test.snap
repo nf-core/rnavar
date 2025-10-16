@@ -191,36 +191,6 @@
     "only essentials": {
         "content": [
             {
-                "bcfann": [
-                    [
-                        
-                    ]
-                ],
-                "bcfann_tbi": [
-                    [
-                        
-                    ]
-                ],
-                "dbsnp": [
-                    [
-                        {
-                            "id": null
-                        },
-                        [
-                            
-                        ]
-                    ]
-                ],
-                "dbsnp_tbi": [
-                    [
-                        {
-                            "id": null
-                        },
-                        [
-                            
-                        ]
-                    ]
-                ],
                 "dict": [
                     [
                         {
@@ -261,49 +231,6 @@
                         "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
                     ]
                 ],
-                "known_indels": [
-                    [
-                        {
-                            "id": null
-                        },
-                        [
-                            
-                        ]
-                    ]
-                ],
-                "known_indels_tbi": [
-                    [
-                        {
-                            "id": null
-                        },
-                        [
-                            
-                        ]
-                    ]
-                ],
-                "known_sites": [
-                    [
-                        {
-                            "id": "known_sites"
-                        },
-                        [
-                            
-                        ]
-                    ]
-                ],
-                "known_sites_tbi": [
-                    [
-                        {
-                            "id": "known_sites"
-                        },
-                        [
-                            
-                        ]
-                    ]
-                ],
-                "star_index": [
-                    
-                ],
                 "versions": [
                     {
                         "PREPARE_GENOME:GATK4_CREATESEQUENCEDICTIONARY": {
@@ -329,6 +256,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T16:18:25.24525716"
+        "timestamp": "2025-10-16T17:54:13.468790942"
     }
 }

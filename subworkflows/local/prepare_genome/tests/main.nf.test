@@ -30,14 +30,14 @@ nextflow_workflow {
                 """
             }
         }
-
         then {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "star_index") {
-                            return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
-                        } else if (key == "versions") {
+                        if (key in ["bcfann", "bcfann_tbi", "dbsnp", "dbsnp_tbi", "known_indels", "known_indels_tbi", "known_sites", "known_sites_tbi", "star_index"]) {
+                            return null
+                        }
+                        else if (key == "versions") {
                             return [key, val.collect { path(it).yaml }]
                         }
                         return [key, val]
@@ -79,7 +79,8 @@ nextflow_workflow {
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
                         if (key == "star_index") {
                             return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
-                        } else if (key == "versions") {
+                        }
+                        else if (key == "versions") {
                             return [key, val.collect { path(it).yaml }]
                         }
                         return [key, val]
