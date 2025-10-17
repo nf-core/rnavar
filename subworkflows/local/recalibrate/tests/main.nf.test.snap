@@ -13,13 +13,13 @@
                 ],
                 "versions": [
                     {
-                        "RECALIBRATE:GATK4_APPLYBQSR": {
-                            "gatk4": "4.6.1.0"
+                        "RECALIBRATE:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
                         }
                     },
                     {
-                        "RECALIBRATE:SAMTOOLS_INDEX": {
-                            "samtools": "1.22.1"
+                        "RECALIBRATE:GATK4_APPLYBQSR": {
+                            "gatk4": "4.6.2.0"
                         }
                     }
                 ]
@@ -29,7 +29,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T16:52:42.660073624"
+        "timestamp": "2025-10-17T12:33:02.863755886"
     },
     "bam - stats": {
         "content": [
@@ -50,13 +50,13 @@
                 ],
                 "versions": [
                     {
-                        "RECALIBRATE:GATK4_APPLYBQSR": {
-                            "gatk4": "4.6.1.0"
+                        "RECALIBRATE:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
                         }
                     },
                     {
-                        "RECALIBRATE:SAMTOOLS_INDEX": {
-                            "samtools": "1.22.1"
+                        "RECALIBRATE:GATK4_APPLYBQSR": {
+                            "gatk4": "4.6.2.0"
                         }
                     },
                     {
@@ -71,6 +71,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T16:52:23.276253059"
+        "timestamp": "2025-10-17T12:32:44.092124677"
     }
 }

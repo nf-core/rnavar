@@ -193,8 +193,8 @@
                 ],
                 "versions": [
                     {
-                        "PREPARE_GENOME:GATK4_CREATESEQUENCEDICTIONARY": {
-                            "gatk4": "4.6.1.0"
+                        "PREPARE_GENOME:SAMTOOLS_FAIDX": {
+                            "samtools": "1.22.1"
                         }
                     },
                     {
@@ -205,8 +205,8 @@
                         }
                     },
                     {
-                        "PREPARE_GENOME:SAMTOOLS_FAIDX": {
-                            "samtools": 1.21
+                        "PREPARE_GENOME:GATK4_CREATESEQUENCEDICTIONARY": {
+                            "gatk4": "4.6.2.0"
                         }
                     }
                 ]
@@ -216,6 +216,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T17:54:13.468790942"
+        "timestamp": "2025-10-17T12:32:14.396004376"
     }
 }
