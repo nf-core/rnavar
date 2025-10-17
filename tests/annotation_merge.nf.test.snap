@@ -3,7 +3,7 @@
         "content": [
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": 115.1,
+                    "ensemblvep": 115.2,
                     "tabix": 1.21
                 },
                 "GATK4_BEDTOINTERVALLIST": {
@@ -25,7 +25,7 @@
                     "samtools": 1.21
                 },
                 "SNPEFF_SNPEFF": {
-                    "snpeff": "5.1d"
+                    "snpeff": "5.3a"
                 },
                 "STAR_INDEXVERSION": {
                     "gawk": "5.1.0",
@@ -127,13 +127,13 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T12:17:58.751967565"
+        "timestamp": "2025-10-17T10:21:54.401140711"
     },
     "-profile test --tools merge": {
         "content": [
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": 115.1,
+                    "ensemblvep": 115.2,
                     "tabix": 1.21
                 },
                 "GATK4_BEDTOINTERVALLIST": {
@@ -155,7 +155,7 @@
                     "samtools": 1.21
                 },
                 "SNPEFF_SNPEFF": {
-                    "snpeff": "5.1d"
+                    "snpeff": "5.3a"
                 },
                 "STAR_INDEXVERSION": {
                     "gawk": "5.1.0",
@@ -246,6 +246,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T12:17:03.316940044"
+        "timestamp": "2025-10-17T10:21:08.442029248"
     }
 }

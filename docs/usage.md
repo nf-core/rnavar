@@ -209,24 +209,169 @@ nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile doc
 nextflow run nf-core/rnavar --input samplesheet.csv --genome GRCh38 -profile docker --tools VEP --vep_cache </path/to/VEP/cache> --annotation_cache
 ```
 
-### Download annotation cache
+## How to customise SnpEff and VEP annotation
 
-The [`annotation-cache`](https://github.com/annotation-cache) resource can be used to download `snpEff` and `vep` annotation cache directories.
+SNPeff and VEP both require a large resource of files known as a cache.
+These are folders composed of multiple gigabytes of files which need to be available for the software to properly function.
+To use these, supply the parameters `--vep_cache` and/or `--snpeff_cache` with the locations to the root of the annotation cache folder for each tool.
 
-#### Install snpEff annotation cache
+## What happened with snpeff db 105
 
-The [`downloadsnpeffcache`](https://github.com/annotation-cache/downloadsnpeffcache) pipeline can be used to download snpEff annotation cache directories. Expected parameters are `--snpeff_db` (e.g. `105`) and `--snpeff_genome` (e.g. `GRCh38`).
+At the time of writing, the SnpEff db 105 is not available to download from the SnpEff website, or to use with snpeff 5.3a, even with an already downloaded cache.
+If you wish to continue using cache 105, we would recommend to overwrite with a custom config the container for the snpeff process and use a prior version of the tool.
+ie:
 
-```bash
-nextflow run annotation-cache/downloadsnpeffcache --outdir <path/to/output/dir> --snpeff_db <snpEff DB version> --snpeff_genome <GENOME>
+```nextflow
+withName: SNPEFF_SNPEFF {
+    container = 'quay.io/biocontainers/snpeff:5.1--hdfd78af_2'
+}
 ```
 
-#### Install VEP annotation cache
+Please note that if you do so, the download is not working anymore.
 
-The [`downloadvepcache`](https://github.com/annotation-cache/downloadvepcache) pipeline can be used to download VEP annotation cache directories. Expected parameters are `--vep_species` (e.g. `homo_sapiens`), `--vep_cache_version` (e.g. `110`) and `--vep_genome` (e.g. `GRCh38`).
+### Specify the cache location
+
+Params `--snpeff_cache` and `--vep_cache` are used to specify the locations to the root of the annotation cache folder.
+The cache will be located within a subfolder with the path `${snpeff_species}.${snpeff_version}` for SnpEff and `${vep_species}/${vep_cache_version}_${vep_genome}` for VEP.
+If this directory is missing, rnavar will raise an error.
+
+For example this is a typical folder structure for `GRCh38` and `WBCel235`, with SNPeff cache version 99 and VEP cache version 110:
+
+```text
+/data/
+├─ snpeff_cache/
+│  ├─ GRCh38.99/
+│  ├─ WBcel235.99/
+├─ vep_cache/
+│  ├─ caenorhabditis_elegans/
+│  │  ├─ 110_WBCel235/
+│  ├─ homo_sapiens/
+│  │  ├─ 110_GRCh38/
+```
+
+For this example, the parameters `--snpeff_cache /data/snpeff_cache` and `--vep_cache /data/vep_cache` would be used.
+Both SnpEff and VEP will figure out internally the path towards the specific cache version / species the annotation should be performed given the parameters specified to rnavar.
+
+### Change cache version and species
+
+By default all is specified in the [igenomes.config](https://github.com/nf-core/rnavar/blob/master/conf/igenomes.config) file.
+Explanation can be found for all params in the documentation:
+
+- [snpeff_db](https://nf-co.re/rnavar/parameters#snpeff_db)
+- [vep_genome](https://nf-co.re/rnavar/parameters#vep_genome)
+- [vep_species](https://nf-co.re/rnavar/parameters#vep_species)
+- [vep_cache_version](https://nf-co.re/rnavar/parameters#vep_cache_version)
+
+With the previous example of `GRCh38`, these are the values that were used for these params:
 
 ```bash
-nextflow run annotation-cache/downloadvepcache --outdir </path/to/output/dir> --vep_species <species> --vep_cache_version <VEP cache version> --vep_genome <GENOME>
+snpeff_db         = 'GRCh38.99'
+vep_cache_version = '110'
+vep_genome        = 'GRCh38'
+vep_species       = 'homo_sapiens'
+```
+
+### Usage recommendation with AWS iGenomes
+
+The cache for each of these annotation tools has its own structure and is frequently updated, therefore it is kept separate from AWS iGenomes. It is not recommended to put any cache for each of this annotation tools in your local AWS iGenomes folder.
+
+A classical organisation on a shared storage area might be:
+
+```bash
+/data/igenomes/
+/data/cache/snpeff_cache
+/data/cache/vep_cache
+```
+
+Which can then be used this way in rnavar:
+
+```bash
+nextflow run nf-core/rnavar \
+    --igenomes_base /data/igenomes/ \
+    --snpeff_cache /data/cache/snpeff_cache/ \
+    --vep_cache /data/cache/vep_cache/ \
+    ...
+```
+
+Alternatively the data may be stored on AWS S3 storage, therefore the parameters might be:
+
+```bash
+s3://my-reference-data/igenomes/
+s3://my-reference-data/cache/snpeff_cache/
+s3://my-reference-data/cache/vep_cache/
+```
+
+Which can then be used this way in rnavar:
+
+```bash
+nextflow run nf-core/rnavar \
+    --igenomes_base s3://my-reference-data/igenomes/ \
+    --snpeff_cache s3://my-reference-data/cache/ensemblvep/ \
+    --vep_cache s3://my-reference-data/cache/snpeff/ \
+    ...
+```
+
+These params can be specified in a config file or in a profile using the params scope, or even in a json or a yaml file using the `-params-file` nextflow option.
+
+Note: we recommend storing each annotation cache in a separate directory so each cache version is handled differently.
+This may mean you have many similar directories but will dramatically reduce the storage burden on machines running the SnpEff or VEP process.
+
+### Use annotation-cache for SnpEff and VEP
+
+[Annotation-cache](https://annotation-cache.github.io) is an open AWS registry resource that stores a mirror of some cache files on AWS S3 which can be used with rnavar.
+It contains some genome builds which can be found by checking the contents of the S3 bucket.
+
+SNPeff and VEP cache are stored at the following location on S3:
+
+```bash
+snpeff_cache = s3://annotation-cache/snpeff_cache/
+vep_cache = s3://annotation-cache/vep_cache/
+```
+
+The contents of said cache can be listed with the following command using the S3 CLI:
+
+```bash
+aws s3 --no-sign-request ls s3://annotation-cache/snpeff_cache
+aws s3 --no-sign-request ls s3://annotation-cache/vep_cache/
+```
+
+Since both Snpeff and VEP are internally figuring the path towards the specific cache version / species, `annotation-cache` is using an extra set of keys to specify the species and genome build.
+
+Which is handled internally by rnavar.
+
+Please refer to the [annotation-cache documentation](https://annotation-cache.github.io) for more details.
+
+### Use rnavar to download cache and annotate in one go
+
+Both VEP and snpEff come with built-in download functionality to download the cache prior to use.
+rnavar includes these as optional processes.
+Use the params `--download_cache`, and specify the tool with `--tools` and rnavar will download the relevant cache (`snpeff` and/or `vep`) using their respective download functions.
+It is recommended to save the cache somewhere highly accessible for subsequent runs of rnavar, so the cache does not have to be re-downloaded.
+
+rnavar will automatically download the cache using each tools (SnpEff and/or VEP) to your work directory.
+And subsequently perform the annotation of VCF files specified as an input in a samplesheet or produced by rnavar.
+
+### Location for the cache
+
+Cache can be downloaded in the specified `--outdir_cache` location.
+Else, it will be downloaded in `cache/` in the specified `--outdir` location.
+
+This command could be used to download the cache for both tools in the specified `--outdir_cache` location:
+
+```bash
+nextflow run nf-core/rnavar --outdir results --outdir_cache /path_to/my-own-cache --tools vep,snpeff --download_cache
+```
+
+This command could be used to point to the recently downloaded cache and run SnpEff and VEP:
+
+```bash
+nextflow run nf-core/rnavar --outdir results --vep_cache /path_to/my-own-cache/vep_cache --snpeff_cache /path_to/my-own-cache/snpeff_cache --tools vep,snpeff --input samplesheet_vcf.csv
+```
+
+Here is an example on how rnavar may be used to download the SnpEff cache for Candida auris:
+
+```bash
+nextflow run nf-core/rnavar --outdir results --outdir_cache /path_to/my-own-cache --tools snpeff --download_cache --snpeff_db _candida_auris_gca_001189475 --step annotate --genome null --igenomes_ignore
 ```
 
 ### BCFTOOLS Annotate

@@ -13,16 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update MultiQC to 1.31
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update Picard to 3.4.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update Samtools to 1.22.1
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Downgrade snpeff db to at least 99 due to 105 not being available at the moment
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Update ensembl-vep to 115.2
 
 ### Fixed
 
 ### Dependencies
 
-| Dependency | Old version | New version |
-| ---------- | ----------- | ----------- |
-| multiqc    | 1.30        | 1.31        |
-| picard     | 3.3.0       | 3.4.0       |
-| samtools   | 1.21        | 1.22.1      |
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| ensembl-vep | 115.1       | 115.2       |
+| multiqc     | 1.30        | 1.31        |
+| picard      | 3.3.0       | 3.4.0       |
+| samtools    | 1.21        | 1.22.1      |
+| snpeff      | 5.1d        | 5.3.0a      |
 
 ### Parameter
 
