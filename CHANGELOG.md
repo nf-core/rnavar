@@ -20,9 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
+| gatk4      | 4.6.1.0     | 4.6.2.0     |
+| htslib     | 1.21        | 1.22.1      |
 | multiqc    | 1.30        | 1.31        |
 | picard     | 3.3.0       | 3.4.0       |
 | samtools   | 1.21        | 1.22.1      |
+| umi_tools  | 1.1.5       | 1.1.6       |
 
 ### Parameter
 

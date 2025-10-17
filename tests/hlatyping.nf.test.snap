@@ -9,28 +9,28 @@
                     "fastqc": "0.12.1"
                 },
                 "GATK4_APPLYBQSR": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_BASERECALIBRATOR": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_HAPLOTYPECALLER": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_INTERVALLISTTOOLS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_MERGEVCFS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_SPLITNCIGARREADS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_VARIANTFILTRATION": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GFFREAD": {
                     "gffread": "0.12.7"
@@ -45,7 +45,7 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_FLAGSTAT": {
                     "samtools": "1.22.1"
@@ -57,7 +57,7 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT": {
                     "samtools": "1.22.1"
@@ -245,6 +245,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-16T12:34:57.108617588"
+        "timestamp": "2025-10-17T11:08:27.460573121"
     }
 }
