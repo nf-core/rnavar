@@ -64,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#234](https://github.com/nf-core/rnavar/pull/234) - Use topics for local modules
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
 - [#243](https://github.com/nf-core/rnavar/pull/243) - Template update for nf-core/tools v3.4.1
-- [#246](https://github.com/nf-core/rnavar/pull/246) - Prepare release 1.2.2
+- [#247](https://github.com/nf-core/rnavar/pull/247) - Prepare release 1.2.2
 
 #### Fixed
 
