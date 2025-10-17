@@ -107,7 +107,7 @@
                     },
                     "mosdepth": {
                         "branch": "master",
-                        "git_sha": "2cd32e2448fb70ed1e1ab3143cee7dbdbede7271",
+                        "git_sha": "d855e94e07edc6460419e3e4a1ef0a85209ae596",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
@@ -202,7 +202,7 @@
                     },
                     "umitools/extract": {
                         "branch": "master",
-                        "git_sha": "c8be52dba1166c678e74cda9c3a3c221635c8bb1",
+                        "git_sha": "d855e94e07edc6460419e3e4a1ef0a85209ae596",
                         "installed_by": ["modules"]
                     },
                     "untar": {
