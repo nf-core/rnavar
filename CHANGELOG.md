@@ -73,10 +73,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Fixed
 
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Fix conda environment for gtf2bed module to include r-base dependency
+- [#251](https://github.com/nf-core/rnavar/pull/251) - Use the conda env, do not load the dependency in the gtf2bed module
+
 #### Removed
 
-| Old name | New name |
-| -------- | -------- |
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Remove default channels from remove_unknown_regions conda environment
 
 ## [1.2.1](https://github.com/nf-core/rnavar/releases/tag/1.2.1) - Red Swordfish II
 
@@ -116,11 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Fixed
 
-- [#249](https://github.com/nf-core/rnavar/pull/249) - Fix conda environment for gtf2bed module to include r-base dependency
-
 #### Removed
-
-- [#249](https://github.com/nf-core/rnavar/pull/249) - Remove default channels from remove_unknown_regions conda environment
 
 ## [1.2.0](https://github.com/nf-core/rnavar/releases/tag/1.2.0) - Black Bebop
 
