@@ -14,11 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update Picard to 3.4.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update Samtools to 1.22.1
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Downgrade snpeff db to at least 99 due to 105 not being available at the moment
-- [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Update ensembl-vep to 115.2
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
 - [#245](https://github.com/nf-core/rnavar/pull/245) - Update gatk4 to 4.6.2.0
-- [#245](https://github.com/nf-core/rnavar/pull/245) - Update umi_tools to 1.1.6
 - [#245](https://github.com/nf-core/rnavar/pull/245) - Update htslib to 1.22.1
+- [#245](https://github.com/nf-core/rnavar/pull/245) - Update umi_tools to 1.1.6
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools to 1.22
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools/annotate to pick up columns file input
 
 ### Fixed
 
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency  | Old version | New version |
 | ----------- | ----------- | ----------- |
+| bcftools    | 1.21        | 1.22        |
 | ensembl-vep | 115.1       | 115.2       |
 | gatk4       | 4.6.1.0     | 4.6.2.0     |
 | htslib      | 1.21        | 1.22.1      |
@@ -37,8 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameter
 
-| Old name | New name |
-| -------- | -------- |
+| Old name | New name         |
+| -------- | ---------------- |
+|          | bcftools_columns |
 
 ### Modules / Subworkflows
 

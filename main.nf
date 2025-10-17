@@ -15,23 +15,21 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.bcftools_annotations     = getGenomeAttribute('bcftools_annotations')
-params.bcftools_annotations_tbi = getGenomeAttribute('bcftools_annotations_tbi')
-params.dbsnp                    = getGenomeAttribute('dbsnp')
-params.dbsnp_tbi                = getGenomeAttribute('dbsnp_tbi')
-params.dict                     = getGenomeAttribute('dict')
-params.exon_bed                 = getGenomeAttribute('exon_bed')
-params.fasta                    = getGenomeAttribute('fasta')
-params.fasta_fai                = getGenomeAttribute('fasta_fai')
-params.gff                      = getGenomeAttribute('gff')
-params.gtf                      = getGenomeAttribute('gtf')
-params.known_indels             = getGenomeAttribute('known_indels')
-params.known_indels_tbi         = getGenomeAttribute('known_indels_tbi')
-params.snpeff_db                = getGenomeAttribute('snpeff_db')
-params.star_index               = getGenomeAttribute('star')
-params.vep_cache_version        = getGenomeAttribute('vep_cache_version')
-params.vep_genome               = getGenomeAttribute('vep_genome')
-params.vep_species              = getGenomeAttribute('vep_species')
+params.dbsnp             = getGenomeAttribute('dbsnp')
+params.dbsnp_tbi         = getGenomeAttribute('dbsnp_tbi')
+params.dict              = getGenomeAttribute('dict')
+params.exon_bed          = getGenomeAttribute('exon_bed')
+params.fasta             = getGenomeAttribute('fasta')
+params.fasta_fai         = getGenomeAttribute('fasta_fai')
+params.gff               = getGenomeAttribute('gff')
+params.gtf               = getGenomeAttribute('gtf')
+params.known_indels      = getGenomeAttribute('known_indels')
+params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
+params.snpeff_db         = getGenomeAttribute('snpeff_db')
+params.star_index        = getGenomeAttribute('star')
+params.vep_cache_version = getGenomeAttribute('vep_cache_version')
+params.vep_genome        = getGenomeAttribute('vep_genome')
+params.vep_species       = getGenomeAttribute('vep_species')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,6 +161,7 @@ workflow NFCORE_RNAVAR {
         samplesheet,
         PREPARE_GENOME.out.bcfann,
         PREPARE_GENOME.out.bcfann_tbi,
+        params.bcftools_columns ? Channel.fromPath(params.bcftools_columns).collect() : Channel.value([]),
         params.bcftools_header_lines ? Channel.fromPath(params.bcftools_header_lines).collect() : Channel.empty(),
         PREPARE_GENOME.out.dbsnp,
         PREPARE_GENOME.out.dbsnp_tbi,
