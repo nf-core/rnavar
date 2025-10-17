@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Downgrade snpeff db to at least 99 due to 105 not being available at the moment
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Update ensembl-vep to 115.2
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
-- [#245](https://github.com/nf-core/rnavar/pull/245) - Update bcftools to 1.22
-- [#245](https://github.com/nf-core/rnavar/pull/245) - Update bcftools/annotate to pick up columns file input
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools to 1.22
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools/annotate to pick up columns file input
 
 ### Fixed
 
