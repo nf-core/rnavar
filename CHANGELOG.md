@@ -14,8 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update Picard to 3.4.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Update Samtools to 1.22.1
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Downgrade snpeff db to at least 99 due to 105 not being available at the moment
-- [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
 - [#244](https://github.com/nf-core/rnavar/pull/244) - Update ensembl-vep to 115.2
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
+- [#245](https://github.com/nf-core/rnavar/pull/245) - Update bcftools to 1.22
+- [#245](https://github.com/nf-core/rnavar/pull/245) - Update bcftools/annotate to pick up columns file input
 
 ### Fixed
 
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency  | Old version | New version |
 | ----------- | ----------- | ----------- |
+| bcftools    | 1.21        | 1.22        |
 | ensembl-vep | 115.1       | 115.2       |
 | multiqc     | 1.30        | 1.31        |
 | picard      | 3.3.0       | 3.4.0       |
@@ -31,8 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameter
 
-| Old name | New name |
-| -------- | -------- |
+| Old name | New name         |
+| -------- | ---------------- |
+|          | bcftools_columns |
 
 ### Modules / Subworkflows
 

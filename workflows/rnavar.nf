@@ -49,6 +49,7 @@ workflow RNAVAR {
     input
     bcftools_annotations
     bcftools_annotations_tbi
+    bcftools_columns
     bcftools_header_lines
     dbsnp
     dbsnp_tbi
@@ -361,6 +362,7 @@ workflow RNAVAR {
                     vep_extra_files,
                     bcftools_annotations,
                     bcftools_annotations_tbi,
+                    bcftools_columns,
                     bcftools_header_lines,
                 )
 

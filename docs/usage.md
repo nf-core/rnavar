@@ -376,11 +376,15 @@ nextflow run nf-core/rnavar --outdir results --outdir_cache /path_to/my-own-cach
 
 ### BCFTOOLS Annotate
 
-It is possible to annotate a VCF file with a custom annotation file using [BCFTOOLS Annotate](https://samtools.github.io/bcftools/bcftools.html#annotate). This can be done by setting adding `bcfann` to the tools list and setting the following parameters:
+It is possible to annotate a VCF file with a custom annotation file using [BCFTOOLS Annotate](https://samtools.github.io/bcftools/bcftools.html#annotate). This can be done by adding `bcfann` to the tools list. The following parameters are mandatory:
 
-- annotations: path to vcf annotation file
-- annotations_index: path to vcf annotation index file
-- header_lines: path to header lines file
+- `--bcftools_annotations`, path to vcf annotation file
+- `--bcftools_annotations_tbi`, path to vcf annotation index file
+- `--bcftools_header_lines`, path to vcf annotation header lines file
+
+The following parameters are optional:
+
+- `--bcftools_columns`, path to vcf annotation columns file
 
 ## GENERAL NEXTFLOW ARGUMENTS
 
