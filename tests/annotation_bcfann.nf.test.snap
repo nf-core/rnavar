@@ -68,10 +68,10 @@
                     "bcftools": 1.22
                 },
                 "GATK4_BEDTOINTERVALLIST": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GATK4_INTERVALLISTTOOLS": {
-                    "gatk4": "4.6.1.0"
+                    "gatk4": "4.6.2.0"
                 },
                 "GFFREAD": {
                     "gffread": "0.12.7"
@@ -83,7 +83,7 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "STAR_INDEXVERSION": {
                     "gawk": "5.1.0",
@@ -121,6 +121,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-17T12:05:16.273954831"
+        "timestamp": "2025-10-17T12:54:49.833026594"
     }
 }
