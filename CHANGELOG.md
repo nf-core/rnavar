@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## dev
+## [1.2.2](https://github.com/nf-core/rnavar/releases/tag/1.2.2) - Gray Red Tail
 
 ### Added
 
@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#234](https://github.com/nf-core/rnavar/pull/234) - Use topics for local modules
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
 - [#243](https://github.com/nf-core/rnavar/pull/243) - Template update for nf-core/tools v3.4.1
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Prepare release 1.2.2
 
 #### Fixed
 
