@@ -110,7 +110,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Fixed
 
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Fix conda environment for gtf2bed module to include r-base dependency
+
 #### Removed
+
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Remove default channels from remove_unknown_regions conda environment
 
 ## [1.2.0](https://github.com/nf-core/rnavar/releases/tag/1.2.0) - Black Bebop
 
