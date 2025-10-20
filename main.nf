@@ -11,6 +11,26 @@
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { RNAVAR                          } from './workflows/rnavar'
+include { ANNOTATION_CACHE_INITIALISATION } from './subworkflows/local/annotation_cache_initialisation'
+include { DOWNLOAD_CACHE_SNPEFF_VEP       } from './subworkflows/local/download_cache_snpeff_vep'
+include { PIPELINE_INITIALISATION         } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { PIPELINE_COMPLETION             } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { PREPARE_GENOME                  } from './subworkflows/local/prepare_genome'
+
+// MULTIQC
+include { MULTIQC                         } from './modules/nf-core/multiqc'
+include { getGenomeAttribute              } from 'plugin/nf-core-utils'
+include { softwareVersionsToYAML          } from 'plugin/nf-core-utils'
+include { methodsDescriptionText          } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { paramsSummaryMap                } from 'plugin/nf-schema'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -30,26 +50,6 @@ params.star_index        = getGenomeAttribute('star')
 params.vep_cache_version = getGenomeAttribute('vep_cache_version')
 params.vep_genome        = getGenomeAttribute('vep_genome')
 params.vep_species       = getGenomeAttribute('vep_species')
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { RNAVAR                          } from './workflows/rnavar'
-include { ANNOTATION_CACHE_INITIALISATION } from './subworkflows/local/annotation_cache_initialisation'
-include { DOWNLOAD_CACHE_SNPEFF_VEP       } from './subworkflows/local/download_cache_snpeff_vep'
-include { PIPELINE_INITIALISATION         } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
-include { PIPELINE_COMPLETION             } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
-include { PREPARE_GENOME                  } from './subworkflows/local/prepare_genome'
-
-// MULTIQC
-include { MULTIQC                         } from './modules/nf-core/multiqc'
-include { getWorkflowVersion              } from 'plugin/nf-core-utils'
-include { processVersionsFromFile         } from 'plugin/nf-core-utils'
-include { methodsDescriptionText          } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
-include { paramsSummaryMap                } from 'plugin/nf-schema'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -232,35 +232,15 @@ workflow {
         PIPELINE_INITIALISATION.out.align,
     )
 
-    //
-    // Collate and save software versions
-    //
-    def topic_versions = channel
-        .topic("versions")
-        .distinct()
-        .branch { entry ->
-            versions_file: entry instanceof Path
-            versions_tuple: true
-        }
-
-    def topic_versions_string = topic_versions.versions_tuple
-        .map { process, tool, version ->
-            [process[process.lastIndexOf(':') + 1..-1], "  ${tool}: ${version}"]
-        }
-        .groupTuple(by: 0)
-        .map { process, tool_versions ->
-            tool_versions.unique().sort()
-            "${process}:\n${tool_versions.join('\n')}"
-        }
-
-    def collated_versions = softwareVersionsToYAML(NFCORE_RNAVAR.out.versions.mix(topic_versions.versions_file))
-        .mix(topic_versions_string)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_' + 'rnavar_software_' + 'mqc_' + 'versions.yml',
-            sort: true,
-            newLine: true,
-        )
+    def collated_versions = softwareVersionsToYAML(
+        softwareVersions: NFCORE_RNAVAR.out.versions.mix(channel.topic("versions")),
+        nextflowVersion: workflow.nextflow.version
+    ).collectFile(
+        storeDir: "${params.outdir}/pipeline_info",
+        name: 'nf_core_' + 'rnavar_software_' + 'mqc_' + 'versions.yml',
+        sort: true,
+        newLine: true,
+    )
 
     // MODULE: MultiQC
     // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
@@ -314,59 +294,6 @@ workflow {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-//
-// Get attribute from genome config file e.g. fasta
-//
-
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[params.genome].containsKey(attribute)) {
-            return params.genomes[params.genome][attribute]
-        }
-    }
-    return null
-}
-
-//
-// Get software versions for pipeline
-//
-def processVersionsFromYAML(yaml_file) {
-    def yaml = new org.yaml.snakeyaml.Yaml()
-    def versions = yaml.load(yaml_file).collectEntries { k, v -> [k.tokenize(':')[-1], v] }
-    return yaml.dumpAsMap(versions).trim()
-}
-
-//
-// Get workflow version for pipeline
-//
-def workflowVersionToYAML() {
-    return """
-    Workflow:
-        ${workflow.manifest.name}: ${getWorkflowVersion()}
-        Nextflow: ${workflow.nextflow.version}
-    """.stripIndent().trim()
-}
-
-//
-// Get channel of software versions used in pipeline in YAML format
-//
-def softwareVersionsToYAML(ch_versions) {
-    return ch_versions.unique().map { version -> processVersionsFromYAML(version) }.unique().mix(Channel.of(workflowVersionToYAML()))
-}
-
-//
-// Process versions from topic channel
-//
-def topicVersionToYAML(taskProcess, tools, versions) {
-    def toolsVersions = [tools, versions]
-        .transpose()
-        .collect { k, v -> "${k}: ${v}" }
-    return """
-    |${taskProcess.tokenize(':').last()}:
-    |  ${toolsVersions.join('\n|  ')}
-    """.stripMargin().trim()
-}
 
 //
 // Get workflow summary for MultiQC
