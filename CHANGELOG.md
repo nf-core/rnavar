@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [#243](https://github.com/nf-core/rnavar/pull/243) - Fix issue with known_indels and dbsnp params that was not working as expected when passed along as known_sites to GATK BaseRecalibrator
+
 ### Dependencies
 
 | Dependency  | Old version | New version |
