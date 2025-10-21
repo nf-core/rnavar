@@ -157,23 +157,14 @@ workflow PREPARE_GENOME {
     // known_sites is made by grouping both the dbsnp and the known indels resources
     // Which can either or both be optional
     def ch_known_sites = ch_dbsnp
-        .map { _meta, file -> [file] }
-        .combine(ch_known_indels.map { _meta, file -> [file] })
-        .map { _meta, dbsnp_, known_indels_ = [] ->
-            def file_list = [dbsnp_]
-            file_list.add(known_indels_)
-            return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
-        }
-        .collect()
+        .mix(ch_known_indels)
+        .collect { _meta, file -> file }
+        .map { file -> [[id: 'known_sites'], file] }
+
     def ch_known_sites_tbi = ch_dbsnp_tbi
-        .map { _meta, file -> [file] }
-        .combine(ch_known_indels_tbi.map { _meta, file -> [file] })
-        .map { _meta, dbsnp_, known_indels_ = [] ->
-            def file_list = [dbsnp_]
-            file_list.add(known_indels_)
-            return [[id: 'known_sites'], file_list.flatten().findAll { entry -> entry != [] }]
-        }
-        .collect()
+        .mix(ch_known_indels_tbi)
+        .collect { _meta, file -> file }
+        .map { file -> [[id: 'known_sites'], file] }
 
     def fai_input = fasta_fai
         ? Channel.empty()

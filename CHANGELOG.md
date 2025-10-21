@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## dev
+## [1.2.2](https://github.com/nf-core/rnavar/releases/tag/1.2.2) - Gray Red Tail
 
 ### Added
 
@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools/annotate to pick up columns file input
 
 ### Fixed
+
+- [#243](https://github.com/nf-core/rnavar/pull/243) - Fix issue with known_indels and dbsnp params that was not working as expected when passed along as known_sites to GATK BaseRecalibrator
 
 ### Dependencies
 
@@ -70,15 +72,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#234](https://github.com/nf-core/rnavar/pull/234) - Use topics for local modules
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
 - [#243](https://github.com/nf-core/rnavar/pull/243) - Template update for nf-core/tools v3.4.1
+- [#247](https://github.com/nf-core/rnavar/pull/247) - Prepare release 1.2.2
 - [#252](https://github.com/nf-core/rnavar/pull/252) - Upgrade nf-core-utils plugins to 0.3.1
 - [#252](https://github.com/nf-core/rnavar/pull/252) - Use `getGenomeAttribute()` and `softwareVersionsToYAML()` from nf-core-utils plugins
 
 #### Fixed
 
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Fix conda environment for gtf2bed module to include r-base dependency
+- [#250](https://github.com/nf-core/rnavar/pull/250) - No name for conda environment for all local modules
+- [#251](https://github.com/nf-core/rnavar/pull/251) - Use the conda env, do not load the dependency in the gtf2bed module
+
 #### Removed
 
-| Old name | New name |
-| -------- | -------- |
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Remove default channels from remove_unknown_regions conda environment
 
 ## [1.2.1](https://github.com/nf-core/rnavar/releases/tag/1.2.1) - Red Swordfish II
 

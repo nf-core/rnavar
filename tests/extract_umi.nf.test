@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline | extract_umi"
+    name "Test pipeline with extract_umi"
     script "../main.nf"
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("Run with profile test | extract_umi") {
+    test("Run with profile test --extract_umi") {
 
         when {
             params {
