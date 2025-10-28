@@ -11,6 +11,26 @@
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { RNAVAR                          } from './workflows/rnavar'
+include { ANNOTATION_CACHE_INITIALISATION } from './subworkflows/local/annotation_cache_initialisation'
+include { DOWNLOAD_CACHE_SNPEFF_VEP       } from './subworkflows/local/download_cache_snpeff_vep'
+include { PIPELINE_INITIALISATION         } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { PIPELINE_COMPLETION             } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { PREPARE_GENOME                  } from './subworkflows/local/prepare_genome'
+
+// MULTIQC
+include { MULTIQC                         } from './modules/nf-core/multiqc'
+include { getWorkflowVersion              } from 'plugin/nf-core-utils'
+include { processVersionsFromFile         } from 'plugin/nf-core-utils'
+include { methodsDescriptionText          } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { paramsSummaryMap                } from 'plugin/nf-schema'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -353,19 +373,6 @@ def workflowVersionToYAML() {
 //
 def softwareVersionsToYAML(ch_versions) {
     return ch_versions.unique().map { version -> processVersionsFromYAML(version) }.unique().mix(Channel.of(workflowVersionToYAML()))
-}
-
-//
-// Process versions from topic channel
-//
-def topicVersionToYAML(taskProcess, tools, versions) {
-    def toolsVersions = [tools, versions]
-        .transpose()
-        .collect { k, v -> "${k}: ${v}" }
-    return """
-    |${taskProcess.tokenize(':').last()}:
-    |  ${toolsVersions.join('\n|  ')}
-    """.stripMargin().trim()
 }
 
 //
