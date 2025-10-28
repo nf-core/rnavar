@@ -6,8 +6,8 @@
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { paramsSummaryMultiqc   } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
 
 /*

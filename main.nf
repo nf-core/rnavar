@@ -20,6 +20,16 @@ include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_rnav
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
 
+// Import nf-core-utils plugin functions
+include { getWorkflowVersion      } from 'plugin/nf-core-utils'
+include { dumpParametersToJSON    } from 'plugin/nf-core-utils'
+include { checkCondaChannels      } from 'plugin/nf-core-utils'
+include { completionEmail         } from 'plugin/nf-core-utils'
+include { completionSummary       } from 'plugin/nf-core-utils'
+include { imNotification          } from 'plugin/nf-core-utils'
+include { checkConfigProvided     } from 'plugin/nf-core-utils'
+include { checkProfileProvided    } from 'plugin/nf-core-utils'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
