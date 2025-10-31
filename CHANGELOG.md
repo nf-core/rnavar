@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency     | Old version | New version |
 | -------------- | ----------- | ----------- |
 | nf-core-schema | 2.4.2       | 2.5.1       |
-| nf-core-utils  |             | 0.3.1       |
+| nf-core-utils  |             | 0.4.0       |
 
 ### Developer section
 
