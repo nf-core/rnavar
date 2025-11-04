@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency     | Old version | New version |
 | -------------- | ----------- | ----------- |
 | nf-core-schema | 2.4.2       | 2.5.1       |
-| nf-core-utils  |             | 0.3.0       |
+| nf-core-utils  |             | 0.4.0       |
 
 ### Developer section
 
@@ -73,6 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
 - [#243](https://github.com/nf-core/rnavar/pull/243) - Template update for nf-core/tools v3.4.1
 - [#247](https://github.com/nf-core/rnavar/pull/247) - Prepare release 1.2.2
+- [#252](https://github.com/nf-core/rnavar/pull/252) - Upgrade nf-core-utils plugins to 0.3.1
+- [#252](https://github.com/nf-core/rnavar/pull/252) - Use `getGenomeAttribute()` and `softwareVersionsToYAML()` from nf-core-utils plugins
 
 #### Fixed
 
