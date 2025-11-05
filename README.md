@@ -5,7 +5,7 @@
   </picture>
 </h1>
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new/nf-core/rnavar)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/rnavar)
 [![GitHub Actions CI Status](https://github.com/nf-core/rnavar/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/rnavar/actions/workflows/nf-test.yml)
 [![GitHub Actions Linting Status](https://github.com/nf-core/rnavar/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/rnavar/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/rnavar/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.6669636-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.6669636)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
