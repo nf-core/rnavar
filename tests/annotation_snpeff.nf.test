@@ -1,0 +1,29 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    test("-profile test --tools snpeff --snpeff_db na") {
+        when {
+            params {
+                input     = "${projectDir}/tests/csv/1.0/vcf.csv"
+                outdir    = "$outputDir"
+                snpeff_db = "na"
+                tools     = 'snpeff'
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assert workflow.failed
+            assertAll(
+                { assert workflow.stdout.toString().contains("This path is not available within annotation-cache") }
+            )
+        }
+    }
+}

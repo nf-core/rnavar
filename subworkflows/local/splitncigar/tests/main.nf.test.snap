@@ -1,0 +1,114 @@
+{
+    "cram": {
+        "content": [
+            {
+                "bam_bai": [
+                    [
+                        "test.bam:md5sum,67daadcc078bb45be360e1f2af46a8e5",
+                        "test.bam.bai"
+                    ]
+                ],
+                "versions": [
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.2.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.2.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_MERGE": {
+                            "samtools": "1.22.1"
+                        }
+                    }
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
+        },
+        "timestamp": "2025-10-17T12:33:36.718220911"
+    },
+    "no_intervals": {
+        "content": [
+            {
+                "bam_bai": [
+                    [
+                        "test.bam:md5sum,7ebc60b3ccddb8489781f46522bc5da1",
+                        "test.bam.bai"
+                    ]
+                ],
+                "versions": [
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.2.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_MERGE": {
+                            "samtools": "1.22.1"
+                        }
+                    }
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
+        },
+        "timestamp": "2025-10-17T12:33:53.273196988"
+    },
+    "bam": {
+        "content": [
+            {
+                "bam_bai": [
+                    [
+                        "test.bam:md5sum,67daadcc078bb45be360e1f2af46a8e5",
+                        "test.bam.bai"
+                    ]
+                ],
+                "versions": [
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.2.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
+                            "gatk4": "4.6.2.0"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
+                            "samtools": "1.22.1"
+                        }
+                    },
+                    {
+                        "SPLITNCIGAR:SAMTOOLS_MERGE": {
+                            "samtools": "1.22.1"
+                        }
+                    }
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
+        },
+        "timestamp": "2025-10-17T12:33:19.5134345"
+    }
+}
