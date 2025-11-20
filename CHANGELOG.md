@@ -3,14 +3,332 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.2.2 - [date]
+## [1.2.2](https://github.com/nf-core/rnavar/releases/tag/1.2.2) - Gray Red Tail
 
-Initial release of nf-core/rnavar, created with the [nf-core](https://nf-co.re/) template.
+### Added
+
+### Changed
+
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Back to dev
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Update MultiQC to 1.31
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Update Picard to 3.4.0
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Update Samtools to 1.22.1
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Downgrade snpeff db to at least 99 due to 105 not being available at the moment
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Update ensembl-vep to 115.2
+- [#244](https://github.com/nf-core/rnavar/pull/244) - Update snpeff to 5.3.0a
+- [#245](https://github.com/nf-core/rnavar/pull/245) - Update gatk4 to 4.6.2.0
+- [#245](https://github.com/nf-core/rnavar/pull/245) - Update htslib to 1.22.1
+- [#245](https://github.com/nf-core/rnavar/pull/245) - Update umi_tools to 1.1.6
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools to 1.22
+- [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools/annotate to pick up columns file input
+
+### Fixed
+
+- [#243](https://github.com/nf-core/rnavar/pull/243) - Fix issue with known_indels and dbsnp params that was not working as expected when passed along as known_sites to GATK BaseRecalibrator
+
+### Dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| bcftools    | 1.21        | 1.22        |
+| ensembl-vep | 115.1       | 115.2       |
+| gatk4       | 4.6.1.0     | 4.6.2.0     |
+| htslib      | 1.21        | 1.22.1      |
+| multiqc     | 1.30        | 1.32        |
+| picard      | 3.3.0       | 3.4.0       |
+| samtools    | 1.21        | 1.22.1      |
+| snpeff      | 5.1d        | 5.3.0a      |
+| umi_tools   | 1.1.5       | 1.1.6       |
+
+### Parameter
+
+| Old name | New name         |
+| -------- | ---------------- |
+|          | bcftools_columns |
+
+### Modules / Subworkflows
+
+| Dependency   | Old name                | New name |
+| ------------ | ----------------------- | -------- |
+| subworkflows | utils_nextflow_pipeline |          |
+| subworkflows | utils_nfcore_pipeline   |          |
+| subworkflows | utils_nfschema_plugin   |          |
+
+### Plugins
+
+| Dependency     | Old version | New version |
+| -------------- | ----------- | ----------- |
+| nf-core-schema | 2.4.2       | 2.5.1       |
+| nf-core-utils  |             | 0.4.0       |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#233](https://github.com/nf-core/rnavar/pull/233) - Start to use the nf-core-utils plugins and remove all utils subworfklows from nf-core/modules
+- [#234](https://github.com/nf-core/rnavar/pull/234) - Refactor local modules and subworkflows tests
+- [#234](https://github.com/nf-core/rnavar/pull/234) - Use topics for local modules
+- [#242](https://github.com/nf-core/rnavar/pull/242) - Template update for nf-core/tools v3.4.0
+- [#243](https://github.com/nf-core/rnavar/pull/243) - Template update for nf-core/tools v3.4.1
+- [#247](https://github.com/nf-core/rnavar/pull/247) - Prepare release 1.2.2
+- [#252](https://github.com/nf-core/rnavar/pull/252) - Upgrade nf-core-utils plugins to 0.3.1
+- [#252](https://github.com/nf-core/rnavar/pull/252) - Use `getGenomeAttribute()` and `softwareVersionsToYAML()` from nf-core-utils plugins
+- [#257](https://github.com/nf-core/rnavar/pull/257) - no need to define snpeff_cache and vep_cache in tests
+- [#259](https://github.com/nf-core/rnavar/pull/259) - Template update for nf-core/tools v3.5.0dev
+
+#### Fixed
+
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Fix conda environment for gtf2bed module to include r-base dependency
+- [#250](https://github.com/nf-core/rnavar/pull/250) - No name for conda environment for all local modules
+- [#251](https://github.com/nf-core/rnavar/pull/251) - Use the conda env, do not load the dependency in the gtf2bed module
+
+#### Removed
+
+- [#249](https://github.com/nf-core/rnavar/pull/249) - Remove default channels from remove_unknown_regions conda environment
+
+## [1.2.1](https://github.com/nf-core/rnavar/releases/tag/1.2.1) - Red Swordfish II
+
+### Added
+
+### Changed
+
+- [#235](https://github.com/nf-core/rnavar/pull/235) - Update ensemblvep to 115.0
+- [#237](https://github.com/nf-core/rnavar/pull/237) - Update ensemblvep to 115.1
+
+### Fixed
+
+- [#238](https://github.com/nf-core/rnavar/pull/238) - Fix issue with dbsnp and known_indels params that were both necessary while they should be optional
+
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| multiqc    | 1.29        | 1.30        |
+| ensemblvep | 114.2       | 115.1       |
+
+### Parameter
+
+| Old name | New name |
+| -------- | -------- |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#231](https://github.com/nf-core/rnavar/pull/231) - Back to dev
+- [#232](https://github.com/nf-core/rnavar/pull/232) - Update all modules
+- [#232](https://github.com/nf-core/rnavar/pull/232) - Simplify modules config file
+- [#239](https://github.com/nf-core/rnavar/pull/239) - Prepare release 1.2.1
+
+#### Fixed
+
+#### Removed
+
+## [1.2.0](https://github.com/nf-core/rnavar/releases/tag/1.2.0) - Black Bebop
+
+### Added
+
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Annotation is now possible with bcftools annotate (--tools bcfann)
+- [#225](https://github.com/nf-core/rnavar/pull/225) - Add Seq2HLA to enable Class I & Class II HLATyping
+- [#227](https://github.com/nf-core/rnavar/pull/227) - Update docs for `bcfann`
+
+### Changed
+
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Update ensemblvep modules to 114.2
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Update ensemblvep cache version to 114
+
+### Fixed
+
+- [#224](https://github.com/nf-core/rnavar/pull/224) - bcfann is now a valid tool to annotate vcf files with (BCFTOOLS_ANNOTATE)
+
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| ensemblvep | 113.0       | 114.2       |
+| seq2hla    |             | 2.3         |
+
+### Parameter
+
+| Old name                  | New name |
+| ------------------------- | -------- |
+| use_annotation_cache_keys |          |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Back to dev
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Minor refactor of prepare_genome subworkflow to handle similarly all reference vcf files
+- [#227](https://github.com/nf-core/rnavar/pull/227) - Prepare release 1.2.0
+
+#### Fixed
+
+- [#227](https://github.com/nf-core/rnavar/pull/227), [#229](https://github.com/nf-core/rnavar/pull/229) - Minor CHANGELOG fixes
+- [#229](https://github.com/nf-core/rnavar/pull/229) - Add skip_baserecalibration to test_full.config since no dbsnp or known_indels are provided
+- [#229](https://github.com/nf-core/rnavar/pull/229) - Fix typo for remove_unknown_regions modules folder
+- [#229](https://github.com/nf-core/rnavar/pull/229) - Fix schema for max_intron_size parameter
+
+#### Removed
+
+- [#224](https://github.com/nf-core/rnavar/pull/224) - Remove unused parameter `use_annotation_cache_keys`
+
+## [1.1.1](https://github.com/nf-core/rnavar/releases/tag/1.1.1) - Brave Benatar
+
+### Added
+
+### Changed
+
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Move non-informative information in the CHANGELOG for the end user to its own Developer section
+
+### Fixed
+
+- [#211](https://github.com/nf-core/rnavar/pull/211) - Fix issue with merging paired-end fastq files (cf [#210](https://github.com/nf-core/rnavar/issues/210))
+- [#212](https://github.com/nf-core/rnavar/pull/212) - Fix missing reports (cf [#208](https://github.com/nf-core/rnavar/issues/208))
+
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| multiqc    | 1.27        | 1.29        |
+| tabix      | 1.2         | 1.21        |
+
+### Parameter
+
+| Old name | New name |
+| -------- | -------- |
+|          |          |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#203](https://github.com/nf-core/rnavar/pull/203) - Back to dev
+- [#209](https://github.com/nf-core/rnavar/pull/209) - Template update for nf-core/tools v3.3.1
+- [#213](https://github.com/nf-core/rnavar/pull/213) - Update all modules
+- [#215](https://github.com/nf-core/rnavar/pull/215) - Template update for nf-core/tools v3.3.2
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Move multiqc handling to the root main.nf file
+- [#216](https://github.com/nf-core/rnavar/pull/216) - Remove all direct params calls from workflow
+- [#221](https://github.com/nf-core/rnavar/pull/221) - Prepare release 1.1.1
+- [#222](https://github.com/nf-core/rnavar/pull/222) - Remove unstable files from snapshots
+
+#### Fixed
+
+- [#209](https://github.com/nf-core/rnavar/pull/209) - Rescue versions from DOWNLOAD_CACHE and PREPARE_GENOME subworkflows
+
+## [1.1.0](https://github.com/nf-core/rnavar/releases/tag/1.1.0) - Mighty Milano
+
+### Added
+
+- [#116](https://github.com/nf-core/rnavar/pull/116) - Added `unzip` from nf-core modules for working with unzipped fasta and gtf files
+- [#157](https://github.com/nf-core/rnavar/pull/157) - Added support for `bam` and `cram` input files
+- [#169](https://github.com/nf-core/rnavar/pull/169) - Added the `--star_max_intron_size` parameter to set the `--alignIntronMax` argument in STAR
+- [#180](https://github.com/nf-core/rnavar/pull/180) - Added support for UMI extraction. Specify `--extract_umi` to enable this feature
+- [#187](https://github.com/nf-core/rnavar/pull/187) - Added unit tests for local subworkflows and processes
+- [#193](https://github.com/nf-core/rnavar/pull/193) - Added support for `vcf.gz` input files
+
+### Changed
+
+- [#78](https://github.com/nf-core/rnavar/pull/78) - Add a gvcf file generated by sample
+- [#78](https://github.com/nf-core/rnavar/pull/78) - Merge on exome.bed
+- [#78](https://github.com/nf-core/rnavar/pull/78) - Add option to choose the type exon/transcript/gene of studied feature in GTF
+- [#95](https://github.com/nf-core/rnavar/pull/95) - Template update for nf-core/tools v2.9
+- [#97](https://github.com/nf-core/rnavar/pull/97) - Template update for nf-core/tools v2.10
+- [#109](https://github.com/nf-core/rnavar/pull/109) - Update all modules
+- [#111](https://github.com/nf-core/rnavar/pull/111) - Template update for nf-core/tools v2.11
+- [#117](https://github.com/nf-core/rnavar/pull/117) - Template update for nf-core/tools v2.11.1
+- [#120](https://github.com/nf-core/rnavar/pull/120) - Template update for nf-core/tools v2.12
+- [#140](https://github.com/nf-core/rnavar/pull/140) - Template update for nf-core/tools v2.14.1
+- [#153](https://github.com/nf-core/rnavar/pull/153) - Template update for nf-core/tools v3.0.2
+- [#153](https://github.com/nf-core/rnavar/pull/153) - Converted pytest tests to nf-test tests
+- [#161](https://github.com/nf-core/rnavar/pull/161) - Template update for nf-core/tools v3.2.0
+- [#167](https://github.com/nf-core/rnavar/pull/167) - Removed the strandedness field from the samplesheet as it wasn't used in the pipeline.
+- [#172](https://github.com/nf-core/rnavar/pull/172) - Added support for TSV, JSON and YAML samplesheets
+- [#178](https://github.com/nf-core/rnavar/pull/178) - Implement automatic sharding for nf-test tests
+- [#182](https://github.com/nf-core/rnavar/pull/182) - Bumped all modules to the latest version (as of 03/03/2025)
+- [#185](https://github.com/nf-core/rnavar/pull/185) - Updated the documentation
+- [#193](https://github.com/nf-core/rnavar/pull/193) - Replaced param `annotate_tools` with `tools`
+- [#193](https://github.com/nf-core/rnavar/pull/193) - Parameter `snpeff_genome` value is now contained in the `snpeff_db` parameter
+
+### Fixed
+
+- [#97](https://github.com/nf-core/rnavar/pull/97) - Update all gatk4 modules to disable JVM hotspot
+- [#98](https://github.com/nf-core/rnavar/pull/98) - Restore annotation
+- [#102](https://github.com/nf-core/rnavar/pull/102) - Fix process name SNPEFF_SNPEFF
+- [#105](https://github.com/nf-core/rnavar/pull/105) - Fixing ch_dict
+- [#106](https://github.com/nf-core/rnavar/pull/106) - Fixing vep_cache
+- [#107](https://github.com/nf-core/rnavar/pull/107) - Fixing star index + single read files
+- [#124](https://github.com/nf-core/rnavar/pull/124) - Fixed s3 bucket path in conditional statement for SnpEff cache
+- [#127](https://github.com/nf-core/rnavar/pull/127) - Fixed s3 bucket path in conditional statement for VEP cache
+- [#130](https://github.com/nf-core/rnavar/pull/130) - Added missing "def" in local variables
+- [#132](https://github.com/nf-core/rnavar/pull/132) - Added missing variantcaller key to meta map, to fix null value in publishDir
+- [#136](https://github.com/nf-core/rnavar/pull/136) - Replaced unzip module with gunzip, removed unzip module
+- [#138](https://github.com/nf-core/rnavar/pull/138) - Proper usage of GVCF
+- [#142](https://github.com/nf-core/rnavar/pull/142) - Fix dbsnp channels
+- [#143](https://github.com/nf-core/rnavar/pull/143) - Use `DROP_MISSING_CONTIGS` by default in `GATK4_BEDTOINTERVALLIST`
+- [#144](https://github.com/nf-core/rnavar/pull/144) - Change gatk_vf params from integer to floats
+- [#145](https://github.com/nf-core/rnavar/issues/145) - Converted `star_index` and `gtf` emit channels from queue to value channels in `PREPARE_GENOME` subworkflow
+- [#149](https://github.com/nf-core/rnavar/pull/149) - Updated ch_gtf and ch_fasta_fai channels emitted by main.nf
+- [#158](https://github.com/nf-core/rnavar/pull/158) - Fixed language server errors and warnings
+- [#159](https://github.com/nf-core/rnavar/pull/159) - Fixed a couple of bottlenecks in the pipeline
+- [#168](https://github.com/nf-core/rnavar/pull/168) - Allow integer values for `--vep_cache_version` and `--snpeff_db`.
+- [#170](https://github.com/nf-core/rnavar/pull/170) - Fixed pipeline failure when running `--skip_intervallisttools`.
+- [#171](https://github.com/nf-core/rnavar/pull/171) - Fixed the `--dbnsp` and `--known_indels` handling. Uncompressed files are now allowed as inputs to the pipeline as the pipeline will automatically compress these.
+- [#172](https://github.com/nf-core/rnavar/pull/172) - Fixed the parameters JSON schema so the pipeline does better input validation.
+- [#173](https://github.com/nf-core/rnavar/pull/173) - Added STAR index version control, the pipeline will now automatically detect a wrong STAR index version an create the correct index instead.
+- [#175](https://github.com/nf-core/rnavar/pull/175) - Fixed the handling of GFF files so they are now correctly being used.
+- [#177](https://github.com/nf-core/rnavar/pull/177) - Added a check and filter step for unknown regions in the exon BED. You can disable this check with `--skip_exon_bed_check`.
+- [#184](https://github.com/nf-core/rnavar/pull/184) - Added an early error when --dbsnp and/or --known_indels were missing and base recalibration wasn't turned off.
+- [#194](https://github.com/nf-core/rnavar/pull/194) - Only create the STAR index when FASTQ files are used in the input.
+
+### Dependencies
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| bcftools   | 1.17        | 1.20        |
+| bedtools   | 2.31.0      | 2.31.1      |
+| fastqc     | 0.11.9      | 0.12.1      |
+| gatk       | 4.2.6.1     | 4.6.1.0     |
+| mosdepth   | 0.3.3       | 0.3.10      |
+| multiqc    | 1.15        | 1.18        |
+| picard     | 3.1.0       | 3.3.0       |
+| samtools   | 1.17        | 1.21        |
+| star       | 2.7.10a     | 2.7.11b     |
+| vep        | 111.0       | 113.4       |
+| r-base     | 3.5.0       | 3.5.1       |
+
+### Parameter
+
+| Old name         | New name |
+| ---------------- | -------- |
+| `annotate_tools` | `tools`  |
+| `snpeff_genome`  |          |
+
+## [1.0.0](https://github.com/nf-core/rnavar/releases/tag/1.0.0) - Tiny Firefly
+
+First production release of the pipeline with latest software versions.
+
+This version is based on GATK4 best-practices for RNAseq [Ref](https://github.com/gatk-workflows/gatk4-rnaseq-germline-snps-indels) and it includes:
 
 ### `Added`
 
-### `Fixed`
+- Added `FastQC v0.11.9` from nf-core modules for read-level QC and summary.
+- Added `STAR v2.7.9a` from nf-core modules for read alignment to reference genome.
+- Added `Samtools v1.15.1` from nf-core modules for alignment statistics and QC.
+- Added `GATK v4.2.6.1` from nf-core modules for alignment post-processing, variant calling and filtration.
+- Added `Tabix v1.11` from nf-core modules for indexing BAM ann VCF files.
+- Added `SnpEff v5.0` from nf-core modules for variant annotation.
+- Added `Ensembl VEP v104.3` from nf-core modules for variant annotation.
+- Added `MultiQC v1.12` from nf-core modules for QC summary report.
+- Added Scatter i.e., one interval-list into many interval-files to run multiple processes in parallel.
 
-### `Dependencies`
-
-### `Deprecated`
+Thanks to everyone that contributed to this release.
+Special thanks to @maxulysse and @FriederikeHanssen for your review and valuable suggestions.

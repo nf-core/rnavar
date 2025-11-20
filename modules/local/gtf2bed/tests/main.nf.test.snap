@@ -1,0 +1,54 @@
+{
+    "gtf": {
+        "content": [
+            {
+                "bed": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "exome.bed:md5,17192418c24c524881e7d970f94a4a26"
+                    ]
+                ],
+                "versions_rscript": [
+                    [
+                        "GTF2BED",
+                        "Rscript",
+                        "3.5.1 (2018-07-02)"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
+        },
+        "timestamp": "2025-10-16T15:25:07.682657227"
+    },
+    "gtf - stub": {
+        "content": [
+            {
+                "bed": [
+                    [
+                        {
+                            "id": "gtf"
+                        },
+                        "exome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_rscript": [
+                    [
+                        "GTF2BED",
+                        "Rscript",
+                        "3.5.1 (2018-07-02)"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
+        },
+        "timestamp": "2025-10-16T15:27:28.797666996"
+    }
+}

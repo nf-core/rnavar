@@ -1,0 +1,45 @@
+{
+    "default": {
+        "content": [
+            {
+                "reports": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.mosdepth.global.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53"
+                    ],
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.mosdepth.region.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53"
+                    ],
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.stats:md5,13ee764abb56671d40202f7a13141e2a"
+                    ]
+                ],
+                "versions": [
+                    {
+                        "CRAM_QC_MOSDEPTH_SAMTOOLS:MOSDEPTH": {
+                            "mosdepth": "0.3.11"
+                        }
+                    },
+                    {
+                        "CRAM_QC_MOSDEPTH_SAMTOOLS:SAMTOOLS_STATS": {
+                            "samtools": "1.22.1"
+                        }
+                    }
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
+        },
+        "timestamp": "2025-10-17T12:30:26.939874609"
+    }
+}
