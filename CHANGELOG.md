@@ -77,6 +77,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#252](https://github.com/nf-core/rnavar/pull/252) - Use `getGenomeAttribute()` and `softwareVersionsToYAML()` from nf-core-utils plugins
 - [#257](https://github.com/nf-core/rnavar/pull/257) - no need to define snpeff_cache and vep_cache in tests
 - [#259](https://github.com/nf-core/rnavar/pull/259) - Template update for nf-core/tools v3.5.0dev
+- [#260](https://github.com/nf-core/rnavar/pull/260) - Template update for nf-core/tools v3.5.1
+- [#261](https://github.com/nf-core/rnavar/pull/261) - Template update for nf-core/tools v3.5.1
 
 #### Fixed
 
