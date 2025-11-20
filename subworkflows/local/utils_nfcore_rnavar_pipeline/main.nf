@@ -72,11 +72,7 @@ workflow PIPELINE_INITIALISATION {
 \033[0;35m  nf-core/rnavar ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
-<<<<<<< HEAD
     after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
-=======
-    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { "    https://doi.org/${it.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
->>>>>>> dev
 * The nf-core framework
     https://doi.org/10.1038/s41587-020-0439-x
 
@@ -85,45 +81,6 @@ workflow PIPELINE_INITIALISATION {
 """
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
-<<<<<<< HEAD
-    UTILS_NFSCHEMA_PLUGIN (
-        workflow,
-        validate_params,
-        null,
-        help,
-        help_full,
-        show_hidden,
-        before_text,
-        after_text,
-        command
-    )
-
-    //
-    // Check config provided to the pipeline
-    //
-    UTILS_NFCORE_PIPELINE (
-        nextflow_cli_args
-    )
-
-    //
-    // Custom validation for pipeline parameters
-    //
-    validateInputParameters()
-
-    //
-    // Create channel from input file provided through params.input
-    //
-
-    channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
-=======
     if (help || help_full) {
         help_options = [
             beforeText: before_text,
@@ -134,7 +91,6 @@ workflow PIPELINE_INITIALISATION {
         ]
         if (null) {
             help_options << [parametersSchema: null]
->>>>>>> dev
         }
         log.info(
             paramsHelp(
@@ -169,6 +125,11 @@ workflow PIPELINE_INITIALISATION {
         }
         validateParameters(validateOptions)
     }
+
+    //
+    // Custom validation for pipeline parameters
+    //
+    validateInputParameters()
 
     // Create channel from input file provided through input
     def samplesheetList = samplesheetToList(input, "${projectDir}/assets/schema_input.json")
