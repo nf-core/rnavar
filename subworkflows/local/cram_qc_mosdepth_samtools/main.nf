@@ -9,13 +9,13 @@ include { SAMTOOLS_STATS } from '../../../modules/nf-core/samtools/stats'
 
 workflow CRAM_QC_MOSDEPTH_SAMTOOLS {
     take:
-    cram      // channel: [mandatory] [ meta, cram, crai ]
-    fasta     // channel: [mandatory] [ fasta ]
+    cram // channel: [mandatory] [ meta, cram, crai ]
+    fasta // channel: [mandatory] [ fasta ]
     intervals
 
     main:
-    versions = Channel.empty()
-    reports = Channel.empty()
+    versions = channel.empty()
+    reports = channel.empty()
 
     // Reports run on cram
     SAMTOOLS_STATS(cram, fasta)

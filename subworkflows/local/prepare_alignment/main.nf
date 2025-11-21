@@ -7,10 +7,10 @@ include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index'
 workflow PREPARE_ALIGNMENT {
     take:
     cram // [ val(meta), path(cram), path(crai) ]
-    bam  // [ val(meta), path(bam), path(bai) ]
+    bam // [ val(meta), path(bam), path(bai) ]
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     def alignment_branch = bam
         .mix(cram)

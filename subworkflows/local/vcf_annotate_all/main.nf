@@ -9,9 +9,9 @@ include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vc
 
 workflow VCF_ANNOTATE_ALL {
     take:
-    vcf                        // channel: [ val(meta), vcf ] (mandatory)
-    fasta                      // channel: [ val(meta), fasta ] (optional)
-    tools                      // array: list of tools to apply (mandatory)
+    vcf // channel: [ val(meta), vcf ] (mandatory)
+    fasta // channel: [ val(meta), fasta ] (optional)
+    tools // array: list of tools to apply (mandatory)
     snpeff_db
     snpeff_cache
     vep_genome
@@ -25,11 +25,11 @@ workflow VCF_ANNOTATE_ALL {
     bcftools_header_lines
 
     main:
-    json_ann = Channel.empty()
-    reports = Channel.empty()
-    tab_ann = Channel.empty()
-    vcf_ann = Channel.empty()
-    versions = Channel.empty()
+    json_ann = channel.empty()
+    reports = channel.empty()
+    tab_ann = channel.empty()
+    vcf_ann = channel.empty()
+    versions = channel.empty()
 
     if (tools.split(',').contains('bcfann')) {
         BCFTOOLS_ANNOTATE(
@@ -73,9 +73,9 @@ workflow VCF_ANNOTATE_ALL {
     }
 
     emit:
-    vcf_ann  // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
+    vcf_ann // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
     tab_ann
     json_ann
-    reports  //    path: *.html
+    reports //    path: *.html
     versions //    path: versions.yml
 }

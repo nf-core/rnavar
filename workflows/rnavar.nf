@@ -180,8 +180,8 @@ workflow RNAVAR {
         def genome_bam = FASTQ_ALIGN_STAR.out.bam
 
         // Gather QC reports
-        reports = reports.mix(FASTQ_ALIGN_STAR.out.log_out.collect { _meta, log_out -> log_out })
-        reports = reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect { it[1] }.ifEmpty([]))
+        reports = reports.mix(FASTQ_ALIGN_STAR.out.log_out.collect { _meta, log -> log })
+        reports = reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect { _meta, log -> log }.ifEmpty([]))
         versions = versions.mix(FASTQ_ALIGN_STAR.out.versions)
 
         // SUBWORKFLOW: Mark duplicates with GATK4
@@ -200,10 +200,10 @@ workflow RNAVAR {
             .mix(PREPARE_ALIGNMENT.out.bam)
 
         //Gather QC reports
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.metrics.collect { it[1] }.ifEmpty([]))
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.stats.collect { it[1] }.ifEmpty([]))
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.flagstat.collect { it[1] }.ifEmpty([]))
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.idxstats.collect { it[1] }.ifEmpty([]))
+        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.metrics.collect { _meta, log -> log }.ifEmpty([]))
+        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.stats.collect { _meta, log -> log }.ifEmpty([]))
+        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.flagstat.collect { _meta, log -> log }.ifEmpty([]))
+        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.idxstats.collect { _meta, log -> log }.ifEmpty([]))
         versions = versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions)
 
         // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
@@ -262,7 +262,7 @@ workflow RNAVAR {
             bam_variant_calling = RECALIBRATE.out.bam
 
             // Gather QC reports
-            reports = reports.mix(RECALIBRATE.out.qc.collect { it[1] }.ifEmpty([]))
+            reports = reports.mix(RECALIBRATE.out.qc.collect { _meta, log_out -> log_out }.ifEmpty([]))
             versions = versions.mix(RECALIBRATE.out.versions)
         }
         else {

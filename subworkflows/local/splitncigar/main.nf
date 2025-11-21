@@ -8,14 +8,14 @@ include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index
 
 workflow SPLITNCIGAR {
     take:
-    bam       // channel: [ val(meta), [ bam ], [bai] ]
-    fasta     // channel: [ val(meta), fasta ]
-    fai       // channel: [ val(meta), fai ]
-    dict      // channel: [ val(meta), dict ]
+    bam // channel: [ val(meta), [ bam ], [bai] ]
+    fasta // channel: [ val(meta), fasta ]
+    fai // channel: [ val(meta), fai ]
+    dict // channel: [ val(meta), dict ]
     intervals // channel: [ interval_list]
 
     main:
-    def ch_versions = Channel.empty()
+    def ch_versions = channel.empty()
 
     def bam_interval = bam
         .combine(intervals)

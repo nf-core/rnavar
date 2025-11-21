@@ -11,15 +11,15 @@ include { SAMTOOLS_STATS  } from '../../../modules/nf-core/samtools/stats'
 workflow RECALIBRATE {
     take:
     skip_samtools // boolean: true/false
-    bam           // channel: [mandatory] bam
-    dict          // channel: [mandatory] dict
-    fai           // channel: [mandatory] fai
-    fasta         // channel: [mandatory] fasta
+    bam // channel: [mandatory] bam
+    dict // channel: [mandatory] dict
+    fai // channel: [mandatory] fai
+    fasta // channel: [mandatory] fasta
 
     main:
 
-    def ch_reports = Channel.empty()
-    def ch_versions = Channel.empty()
+    def ch_reports = channel.empty()
+    def ch_versions = channel.empty()
 
     GATK4_APPLYBQSR(
         bam,

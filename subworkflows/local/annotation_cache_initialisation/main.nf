@@ -34,7 +34,7 @@ workflow ANNOTATION_CACHE_INITIALISATION {
                 error("Path provided with SnpEff cache is invalid.\nMake sure there is a directory named ${snpeff_cache_dir} in ${snpeff_cache}.\n${help_message}")
             }
         }
-        snpeff_cache = Channel.fromPath(file("${snpeff_cache}/${snpeff_annotation_cache_key}"), checkIfExists: true)
+        snpeff_cache = channel.fromPath(file("${snpeff_cache}/${snpeff_annotation_cache_key}"), checkIfExists: true)
             .collect()
             .map { cache -> [[id: "${snpeff_db}"], cache] }
     }
@@ -55,7 +55,7 @@ workflow ANNOTATION_CACHE_INITIALISATION {
                 error("Path provided with VEP cache is invalid.\nMake sure there is a directory named ${vep_cache_dir} in ${vep_cache}.\n${help_message}")
             }
         }
-        ensemblvep_cache = Channel.fromPath(file("${vep_cache}/${vep_annotation_cache_key}"), checkIfExists: true).collect()
+        ensemblvep_cache = channel.fromPath(file("${vep_cache}/${vep_annotation_cache_key}"), checkIfExists: true).collect()
     }
     else {
         ensemblvep_cache = []
@@ -63,7 +63,7 @@ workflow ANNOTATION_CACHE_INITIALISATION {
 
     emit:
     ensemblvep_cache // channel: [ meta, cache ]
-    snpeff_cache     // channel: [ meta, cache ]
+    snpeff_cache // channel: [ meta, cache ]
 }
 
 // Helper function to check if cache path is from any cloud provider

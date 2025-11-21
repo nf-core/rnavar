@@ -79,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#259](https://github.com/nf-core/rnavar/pull/259) - Template update for nf-core/tools v3.5.0dev
 - [#260](https://github.com/nf-core/rnavar/pull/260) - Template update for nf-core/tools v3.5.1
 - [#261](https://github.com/nf-core/rnavar/pull/261) - Template update for nf-core/tools v3.5.1
+- [#262](https://github.com/nf-core/rnavar/pull/262) - Syntax fixes for Nextflow 25.10.0
 
 #### Fixed
 

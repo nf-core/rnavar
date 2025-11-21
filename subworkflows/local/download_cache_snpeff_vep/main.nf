@@ -17,7 +17,7 @@ workflow DOWNLOAD_CACHE_SNPEFF_VEP {
     snpeff_info
 
     main:
-    versions = Channel.empty()
+    versions = channel.empty()
 
     ENSEMBLVEP_DOWNLOAD(ensemblvep_info)
     SNPEFF_DOWNLOAD(snpeff_info)
@@ -29,5 +29,5 @@ workflow DOWNLOAD_CACHE_SNPEFF_VEP {
     emit:
     ensemblvep_cache = ENSEMBLVEP_DOWNLOAD.out.cache.collect() // channel: [ meta, cache ]
     snpeff_cache     = SNPEFF_DOWNLOAD.out.cache.collect() // channel: [ meta, cache ]
-    versions         // channel: [ versions.yml ]
+    versions // channel: [ versions.yml ]
 }

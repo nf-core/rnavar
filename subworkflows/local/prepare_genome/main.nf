@@ -21,58 +21,58 @@ include { UNTAR                                               } from '../../../m
 
 workflow PREPARE_GENOME {
     take:
-    bcftools_annotations     // params[path]: params.bcftools_annotations
+    bcftools_annotations // params[path]: params.bcftools_annotations
     bcftools_annotations_tbi // params[path]: params.bcftools_annotations_tbi
-    dbsnp                    // params[path]: params.dbsnp
-    dbsnp_tbi                // params[path]: params.dbsnp_tbi
-    dict                     // params[path]: params.dict
-    exon_bed                 // params[path]: params.exon_bed
-    fasta                    // params[path]: params.fasta
-    fasta_fai                // params[path]: params.fasta_fai
-    gff                      // params[path]: params.gff
-    gtf                      // params[path]: params.gtf
-    known_indels             // params[path]: params.known_indels
-    known_indels_tbi         // params[path]: params.known_indels_tbi
-    star_index               // params[path]: params.star_index
-    feature_type             // params[string]: params.feature_type
-    skip_exon_bed_check      // params[boolean]: params.skip_exon_bed_check
-    align                    // boolean: The pipeline needs aligner indices or not
+    dbsnp // params[path]: params.dbsnp
+    dbsnp_tbi // params[path]: params.dbsnp_tbi
+    dict // params[path]: params.dict
+    exon_bed // params[path]: params.exon_bed
+    fasta // params[path]: params.fasta
+    fasta_fai // params[path]: params.fasta_fai
+    gff // params[path]: params.gff
+    gtf // params[path]: params.gtf
+    known_indels // params[path]: params.known_indels
+    known_indels_tbi // params[path]: params.known_indels_tbi
+    star_index // params[path]: params.star_index
+    feature_type // params[string]: params.feature_type
+    skip_exon_bed_check // params[boolean]: params.skip_exon_bed_check
+    align // boolean: The pipeline needs aligner indices or not
 
     main:
-    def ch_versions = Channel.empty()
+    def ch_versions = channel.empty()
 
     // Unzip reference genome files if needed
     def ch_gunzip_fasta_input = fasta.toString().endsWith('.gz')
-        ? Channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
-        : Channel.empty()
+        ? channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
+        : channel.empty()
 
     GUNZIP_FASTA(ch_gunzip_fasta_input)
 
     def ch_fasta = fasta.toString().endsWith('.gz')
         ? GUNZIP_FASTA.out.gunzip.collect()
-        : Channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
+        : channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
 
     ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
 
-    def dict_input = dict ? Channel.empty() : ch_fasta
+    def dict_input = dict ? channel.empty() : ch_fasta
 
     GATK4_CREATESEQUENCEDICTIONARY(dict_input)
     ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
 
     def ch_dict = dict
-        ? Channel.fromPath(dict).map { dict_ -> [[id: dict_.baseName], dict_] }.collect()
+        ? channel.fromPath(dict).map { dict_ -> [[id: dict_.baseName], dict_] }.collect()
         : GATK4_CREATESEQUENCEDICTIONARY.out.dict.collect()
 
     def gtf_input = gtf.toString().endsWith('.gz')
-        ? Channel.fromPath(gtf).map { gtf_ -> [[id: gtf_.baseName], gtf_] }
-        : Channel.empty()
+        ? channel.fromPath(gtf).map { gtf_ -> [[id: gtf_.baseName], gtf_] }
+        : channel.empty()
 
     GUNZIP_GTF(gtf_input)
     ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
     def ch_gffread_input = gff
-        ? Channel.fromPath(gff).map { gff_ -> [[id: gff_.baseName], gff_] }
-        : Channel.empty()
+        ? channel.fromPath(gff).map { gff_ -> [[id: gff_.baseName], gff_] }
+        : channel.empty()
 
     GFFREAD(ch_gffread_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
     ch_versions = ch_versions.mix(GFFREAD.out.versions)
@@ -81,28 +81,28 @@ workflow PREPARE_GENOME {
         ? GUNZIP_GTF.out.gunzip.collect()
         : gff
             ? GFFREAD.out.gtf.collect()
-            : Channel.fromPath(gtf).map { gtf_ -> [[id: gtf_.baseName], gtf_] }.collect()
+            : channel.fromPath(gtf).map { gtf_ -> [[id: gtf_.baseName], gtf_] }.collect()
 
-    def ch_gtf2bed_input = !exon_bed ? ch_gtf : Channel.empty()
+    def ch_gtf2bed_input = !exon_bed ? ch_gtf : channel.empty()
 
     GTF2BED(ch_gtf2bed_input, feature_type)
 
     def ch_exon_bed_input = exon_bed
-        ? Channel.fromPath(exon_bed).map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }.collect()
+        ? channel.fromPath(exon_bed).map { exon_bed_ -> [[id: exon_bed_.baseName], exon_bed_] }.collect()
         : GTF2BED.out.bed.collect()
 
-    def ch_remove_unknown_regions_input = !skip_exon_bed_check ? ch_exon_bed_input : Channel.empty()
+    def ch_remove_unknown_regions_input = !skip_exon_bed_check ? ch_exon_bed_input : channel.empty()
 
     REMOVE_UNKNOWN_REGIONS(ch_remove_unknown_regions_input, ch_dict)
 
     def ch_exon_bed = skip_exon_bed_check ? REMOVE_UNKNOWN_REGIONS.out.bed.flatten() : ch_exon_bed_input
 
     def ch_bcftools_annotations = bcftools_annotations
-        ? Channel.fromPath(bcftools_annotations).collect()
-        : Channel.value([])
+        ? channel.fromPath(bcftools_annotations).collect()
+        : channel.value([])
     def ch_bcftools_annotations_tbi = bcftools_annotations_tbi
-        ? Channel.fromPath(bcftools_annotations_tbi).collect()
-        : Channel.value([])
+        ? channel.fromPath(bcftools_annotations_tbi).collect()
+        : channel.value([])
 
     if (!bcftools_annotations_tbi && bcftools_annotations && bcftools_annotations.toString().endsWith(".gz")) {
         TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: vcf.baseName], vcf] })
@@ -117,11 +117,11 @@ workflow PREPARE_GENOME {
     }
 
     def ch_dbsnp = dbsnp
-        ? Channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
-        : Channel.value([[id: null], []])
+        ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
+        : channel.value([[id: null], []])
     def ch_dbsnp_tbi = dbsnp_tbi
-        ? Channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
-        : Channel.value([[id: null], []])
+        ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
+        : channel.value([[id: null], []])
 
     if (!dbsnp_tbi && dbsnp && (dbsnp.toString().endsWith(".gz") || dbsnp[0].toString().endsWith(".gz"))) {
         TABIX_DBSNP(ch_dbsnp)
@@ -136,11 +136,11 @@ workflow PREPARE_GENOME {
     }
 
     def ch_known_indels = known_indels
-        ? Channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
-        : Channel.value([[id: null], []])
+        ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
+        : channel.value([[id: null], []])
     def ch_known_indels_tbi = known_indels_tbi
-        ? Channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
-        : Channel.value([[id: null], []])
+        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
+        : channel.value([[id: null], []])
 
     if (!known_indels_tbi && known_indels && (known_indels.toString().endsWith(".gz") || known_indels[0].toString().endsWith(".gz"))) {
         TABIX_KNOWN_INDELS(ch_known_indels)
@@ -167,14 +167,14 @@ workflow PREPARE_GENOME {
         .map { file -> [[id: 'known_sites'], file] }
 
     def fai_input = fasta_fai
-        ? Channel.empty()
+        ? channel.empty()
         : ch_fasta
 
     SAMTOOLS_FAIDX(fai_input, [[id: 'no_fai'], []], false)
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
     def ch_fai = fasta_fai
-        ? Channel.fromPath(fasta_fai).map { fai_ -> [[id: fai_.baseName], fai_] }.collect()
+        ? channel.fromPath(fasta_fai).map { fai_ -> [[id: fai_.baseName], fai_] }.collect()
         : SAMTOOLS_FAIDX.out.fai.collect()
 
     //
@@ -182,8 +182,8 @@ workflow PREPARE_GENOME {
     //
 
     def star_index_input = star_index
-        ? Channel.fromPath(star_index).map { index -> [[id: 'star'], index] }
-        : Channel.of([[], []])
+        ? channel.fromPath(star_index).map { index -> [[id: 'star'], index] }
+        : channel.of([[], []])
 
     ch_star_index_input = star_index_input
         .map { _meta, index -> [[id: 'star'], index] }
