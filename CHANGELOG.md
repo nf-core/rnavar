@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#245](https://github.com/nf-core/rnavar/pull/245) - Update umi_tools to 1.1.6
 - [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools to 1.22
 - [#246](https://github.com/nf-core/rnavar/pull/246) - Update bcftools/annotate to pick up columns file input
+- [#263](https://github.com/nf-core/rnavar/pull/263) - Bump minimal Nextflow version to 25.10.2
 
 ### Fixed
 
