@@ -68,7 +68,7 @@
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow.Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
 First, prepare a samplesheet with your input data that looks as follows:
 
@@ -101,9 +101,9 @@ For more details about the output files and reports, please refer to the
 ## Credits
 
 rnavar was originally written by Praveen Raj and Maxime U Garcia at [The Swedish Childhood Tumor Biobank (Barntumörbanken), Karolinska Institutet](https://ki.se/forskning/barntumorbanken).
-Nicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) later joined and helped with further development (v 1.1.0 and forward).
+Nicolas Vannieuwkerke at [CMGG](https://www.cmgg.be/en/) later joined and helped with further development (1.1.0 and forward).
 
-Maintenance is now lead by Maxime U Garcia (now at [Seqera](https://seqera.io))
+Maintenance is now lead by Maxime U Garcia (before at [Seqera](https://seqera.io), now at [NGI](https://ngisweden.scilifelab.se/))
 
 Main developers:
 
