@@ -87,6 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#249](https://github.com/nf-core/rnavar/pull/249) - Fix conda environment for gtf2bed module to include r-base dependency
 - [#250](https://github.com/nf-core/rnavar/pull/250) - No name for conda environment for all local modules
 - [#251](https://github.com/nf-core/rnavar/pull/251) - Use the conda env, do not load the dependency in the gtf2bed module
+- [#264](https://github.com/nf-core/rnavar/pull/264) - Use NXF 25.10.2 for the megatests GHA
 
 #### Removed
 
