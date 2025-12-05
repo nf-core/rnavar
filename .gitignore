@@ -8,3 +8,5 @@ testing*
 *.pyc
 null/
 .nf-test*
+modules/nf-core/**/tests/
+subworkflows/nf-core/**/tests/

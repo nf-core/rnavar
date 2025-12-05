@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ensembl-vep | 115.1       | 115.2       |
 | gatk4       | 4.6.1.0     | 4.6.2.0     |
 | htslib      | 1.21        | 1.22.1      |
-| multiqc     | 1.30        | 1.32        |
+| multiqc     | 1.30        | 1.31        |
 | picard      | 3.3.0       | 3.4.0       |
 | samtools    | 1.21        | 1.22.1      |
 | snpeff      | 5.1d        | 5.3.0a      |
@@ -88,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#250](https://github.com/nf-core/rnavar/pull/250) - No name for conda environment for all local modules
 - [#251](https://github.com/nf-core/rnavar/pull/251) - Use the conda env, do not load the dependency in the gtf2bed module
 - [#264](https://github.com/nf-core/rnavar/pull/264) - Use NXF 25.10.2 for the megatests GHA
+- [#264](https://github.com/nf-core/rnavar/pull/264) - Keep MultiQC 1.31 due to Python issues cf [nf-core/modules/#9500](https://github.com/nf-core/modules/issues/9500)
 
 #### Removed
 
