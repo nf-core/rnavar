@@ -218,6 +218,7 @@ To use these, supply the parameters `--vep_cache` and/or `--snpeff_cache` with t
 ## What happened with snpeff db 105
 
 At the time of writing, the SnpEff db 105 is not available to download from the SnpEff website, or to use with snpeff 5.3a, even with an already downloaded cache.
+Current default version is 99.
 If you wish to continue using cache 105, we would recommend to overwrite with a custom config the container for the snpeff process and use a prior version of the tool.
 ie:
 
