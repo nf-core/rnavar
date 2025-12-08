@@ -1,6 +1,7 @@
 {
     "-profile test --input cram.csv": {
         "content": [
+            27,
             {
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -105,7 +106,9 @@
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
                 "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9"
             ],
-            "No BAM files",
+            [
+                "GM12878.recal.bam:md5,e747417968334d5b32dda69b59e84096"
+            ],
             "No CRAM files",
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
@@ -116,6 +119,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T12:22:45.102177133"
+        "timestamp": "2025-12-08T15:58:07.840014499"
     }
 }

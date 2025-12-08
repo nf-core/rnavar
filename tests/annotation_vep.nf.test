@@ -1,3 +1,5 @@
+def projectDir = new File('.').absolutePath
+
 nextflow_pipeline {
 
     name "Test pipeline"
@@ -5,25 +7,21 @@ nextflow_pipeline {
     tag "pipeline"
     tag "pipeline_rnavar"
 
-    test("-profile test --tools vep --vep_cache_version 1") {
-        when {
-            params {
-                input             = "${projectDir}/tests/csv/1.0/vcf.csv"
-                outdir            = "$outputDir"
-                vep_cache_version = 1
-                tools             = 'vep'
-            }
-        }
+    def test_scenario = [
+        [
+            name: "-profile test --tools vep --vep_cache_version 1",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                vep_cache_version: 1,
+                tools: 'vep'
+            ],
+            failure: true,
+            stdout: "This path is not available within annotation-cache"
+        ]
+    ]
 
-        then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assert workflow.failed
-            assertAll(
-                { assert workflow.stdout.toString().contains("This path is not available within annotation-cache") }
-            )
-        }
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.get_test(scenario))
     }
 }

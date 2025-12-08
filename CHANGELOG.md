@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#266](https://github.com/nf-core/rnavar/pull/266) - Back to dev
 - [#267](https://github.com/nf-core/rnavar/pull/267) - Update modules (some topics update) and versions in all docs
+- [#268](https://github.com/nf-core/rnavar/pull/268) - Refactor nf-test pipeline tests suite using custom lib
 
 #### Fixed
 

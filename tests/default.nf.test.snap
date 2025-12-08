@@ -1,6 +1,7 @@
 {
     "-profile test": {
         "content": [
+            41,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -204,6 +205,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",
@@ -216,10 +218,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T12:26:05.137701509"
+        "timestamp": "2025-12-08T15:03:46.127684272"
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
+            42,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -428,6 +431,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",
@@ -440,10 +444,11 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T13:00:33.780615189"
+        "timestamp": "2025-12-08T15:08:59.551874179"
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
+            42,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -652,6 +657,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",
@@ -664,6 +670,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T12:57:45.856644873"
+        "timestamp": "2025-12-08T15:06:26.932721437"
     }
 }

@@ -1,6 +1,7 @@
 {
-    "Run with profile test --extract_umi": {
+    "-profile test --extract_umi": {
         "content": [
+            41,
             {
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -211,6 +212,7 @@
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825",
+                "GM12878.recal.bam:md5,824dec9ba1361939ac852b9077be3fe",
                 "GM12878.bam:md5,4191926f68523d8d8dd156194d83e825"
             ],
             "No CRAM files",
@@ -223,6 +225,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T12:30:06.446403599"
+        "timestamp": "2025-12-08T16:08:55.604608267"
     }
 }

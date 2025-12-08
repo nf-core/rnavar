@@ -1,6 +1,7 @@
 {
-    "-profile test --run_hlatyping": {
+    "-profile test --tools seq2hla": {
         "content": [
+            42,
             {
                 "CAT_FASTQ": {
                     "cat": 9.5
@@ -233,6 +234,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No CRAM files",
@@ -245,6 +247,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T12:33:33.398240298"
+        "timestamp": "2025-12-08T16:11:55.251657649"
     }
 }
