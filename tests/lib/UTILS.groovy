@@ -14,8 +14,10 @@ class UTILS {
         def stable_name = getAllFilesFromDir(outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
         // stable_content: All files in ${outdir}/ with stable content
         def stable_content = getAllFilesFromDir(outdir, ignoreFile: 'tests/.nftignore')
-        // bam_files: All bam files
-        def bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'])
+        // bam_files: All bam files but recal
+        def bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'], ignore: ['**/*.recal.bam'])
+        // recal_bam_files: All recal.bam files, as they are unstable in this pipeline
+        def recal_bam_files = getAllFilesFromDir(outdir, include: ['**/*.recal.bam'])
         // cram_files: All cram files
         def cram_files = getAllFilesFromDir(outdir, include: ['**/*.cram'])
         // Fasta file for cram verification with nft-bam
@@ -32,6 +34,7 @@ class UTILS {
         if (!stub) {
             assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
             assertion.add(bam_files.isEmpty() ? 'No BAM files' : bam_files.collect { file -> file.getName() + ":md5," + bam(file.toString()).readsMD5 })
+            assertion.add(recal_bam_files.isEmpty() ? 'No recal BAM files' : recal_bam_files.collect { file -> file.getName() + ":stats" + bam(file.toString()).getStatistics() })
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.getName() + ":md5," + cram(file.toString(), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
         }

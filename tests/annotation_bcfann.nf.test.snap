@@ -51,6 +51,7 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             "No BAM files",
+            "No recal BAM files",
             "No CRAM files",
             [
                 "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
@@ -60,7 +61,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:48:22.701617239"
+        "timestamp": "2025-12-09T09:27:16.438942182"
     },
     "-profile test --tools bcfann --bcftools_columns": {
         "content": [
@@ -114,6 +115,7 @@
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
             ],
             "No BAM files",
+            "No recal BAM files",
             "No CRAM files",
             [
                 "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
@@ -123,6 +125,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:48:59.187625734"
+        "timestamp": "2025-12-09T09:27:58.348894678"
     }
 }

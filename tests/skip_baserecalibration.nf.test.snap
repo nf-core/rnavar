@@ -184,6 +184,7 @@
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
+            "No recal BAM files",
             "No CRAM files",
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,67f7f698de6cc6f2434980d50512314a",
@@ -194,6 +195,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T16:26:00.296670736"
+        "timestamp": "2025-12-09T10:10:22.655292561"
     }
 }

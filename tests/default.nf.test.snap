@@ -205,8 +205,10 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            [
+                "GM12878.recal.bam"
             ],
             "No CRAM files",
             [
@@ -218,7 +220,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:03:46.127684272"
+        "timestamp": "2025-12-09T10:58:38.095069294"
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -431,8 +433,10 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            [
+                "GM12878.recal.bam"
             ],
             "No CRAM files",
             [
@@ -444,7 +448,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:08:59.551874179"
+        "timestamp": "2025-12-09T11:05:08.228797077"
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -657,8 +661,10 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            [
+                "GM12878.recal.bam"
             ],
             "No CRAM files",
             [
@@ -670,6 +676,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:06:26.932721437"
+        "timestamp": "2025-12-09T11:01:53.392468212"
     }
 }

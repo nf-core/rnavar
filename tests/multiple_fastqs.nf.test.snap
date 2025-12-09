@@ -172,8 +172,10 @@
             ],
             [
                 "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "test.recal.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+            ],
+            [
+                "test.recal.bam"
             ],
             "No CRAM files",
             [
@@ -185,7 +187,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T16:18:20.301157354"
+        "timestamp": "2025-12-09T11:17:42.218099025"
     },
     "-profile test --input fastq_multiple.csv": {
         "content": [
@@ -414,11 +416,13 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12879.md.bam:md5,2690897603f3c9bc4c1deda3e216197c",
-                "GM12879.recal.bam:md5,f62c37c5bbd7525aa90f590ca0cc59db",
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
                 "GM12879.bam:md5,2690897603f3c9bc4c1deda3e216197c"
+            ],
+            [
+                "GM12878.recal.bam",
+                "GM12879.recal.bam"
             ],
             "No CRAM files",
             [
@@ -432,6 +436,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T16:15:31.526835114"
+        "timestamp": "2025-12-09T11:14:33.96057287"
     }
 }

@@ -118,6 +118,7 @@
                 "test_snpEff.genes.txt:md5,130536bf0237d7f3f746d32aaa32840a"
             ],
             "No BAM files",
+            "No recal BAM files",
             "No CRAM files",
             [
                 "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -129,7 +130,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:50:32.57149211"
+        "timestamp": "2025-12-09T09:29:45.55576465"
     },
     "-profile test --tools merge": {
         "content": [
@@ -241,6 +242,7 @@
                 "vep.txt:md5,bf54f689bb0ccab5e1566e48373f768c"
             ],
             "No BAM files",
+            "No recal BAM files",
             "No CRAM files",
             [
                 "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -250,6 +252,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-08T15:49:48.419901318"
+        "timestamp": "2025-12-09T09:28:53.257632848"
     }
 }
