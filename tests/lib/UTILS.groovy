@@ -128,7 +128,16 @@ class UTILS {
                 }
             }
             cleanup {
-                new File("${launchDir}").deleteDir()
+                if (System.getenv('NFT_CLEANUP')) {
+                    println ""
+                    println "CLEANUP"
+                    println "Set NFT_CLEANUP to false to disable."
+                    println "The following folders will be deleted:"
+                    println "- ${outputDir}"
+                    new File("${outputDir}").deleteDir()
+                    println "- ${workDir}"
+                    new File("${workDir}").deleteDir()
+                }
             }
         }
     }

@@ -421,8 +421,8 @@
                 "GM12879.bam:md5,2690897603f3c9bc4c1deda3e216197c"
             ],
             [
-                "GM12878.recal.bam",
-                "GM12879.recal.bam"
+                "GM12878.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:55, readCount:188]",
+                "GM12879.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:141, maxQuality:60, minQuality:3, meanQuality:57, readCount:117]"
             ],
             "No CRAM files",
             [
@@ -436,6 +436,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-09T11:14:33.96057287"
+        "timestamp": "2025-12-10T12:27:08.866423976"
     }
 }
