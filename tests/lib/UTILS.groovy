@@ -127,6 +127,9 @@ class UTILS {
                     }
                 }
             }
+            cleanup {
+                new File("${launchDir}").deleteDir()
+            }
         }
     }
 }

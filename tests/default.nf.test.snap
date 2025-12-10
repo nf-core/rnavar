@@ -208,7 +208,7 @@
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             [
-                "GM12878.recal.bam"
+                "GM12878.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:55, readCount:188]"
             ],
             "No CRAM files",
             [
@@ -220,7 +220,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-09T10:58:38.095069294"
+        "timestamp": "2025-12-09T12:22:20.622947329"
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -436,7 +436,7 @@
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             [
-                "GM12878.recal.bam"
+                "GM12878.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:55, readCount:188]"
             ],
             "No CRAM files",
             [
@@ -448,7 +448,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-09T11:05:08.228797077"
+        "timestamp": "2025-12-09T12:27:44.565883217"
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -664,7 +664,7 @@
                 "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             [
-                "GM12878.recal.bam"
+                "GM12878.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:55, readCount:188]"
             ],
             "No CRAM files",
             [
@@ -676,6 +676,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-09T11:01:53.392468212"
+        "timestamp": "2025-12-09T12:25:10.224163598"
     }
 }
