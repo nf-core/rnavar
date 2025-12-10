@@ -212,11 +212,10 @@
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825",
+                "GM12878.recal.bam:md5,d22b76de32b498249a24bb3239ef1a55",
                 "GM12878.bam:md5,4191926f68523d8d8dd156194d83e825"
             ],
-            [
-                "GM12878.recal.bam:stats[maxReadLength:147, minReadLength:89, meanReadLength:137, maxQuality:60, minQuality:1, meanQuality:54, readCount:117]"
-            ],
+            "No unstable recal BAM files",
             "No CRAM files",
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,a2b29ff70c4e1590e6ad3c98d27c86e0",
@@ -227,6 +226,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-10T10:14:54.667205943"
+        "timestamp": "2025-12-10T17:55:56.283129567"
     }
 }

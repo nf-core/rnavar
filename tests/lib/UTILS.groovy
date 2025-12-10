@@ -10,14 +10,29 @@ class UTILS {
         // It will disable all assertions but versions and stable_name
         def stub = args.stub
 
+        // Use this args to exclude recal bams from snapshot
+        // Some of them are unstable, so we use stats instead
+        def exclude_recal_bam = args.exclude_recal_bam
+
         // stable_name: All files + folders in ${outdir}/ with a stable name
         def stable_name = getAllFilesFromDir(outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
         // stable_content: All files in ${outdir}/ with stable content
         def stable_content = getAllFilesFromDir(outdir, ignoreFile: 'tests/.nftignore')
-        // bam_files: All bam files but recal
-        def bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'], ignore: ['**/*.recal.bam'])
-        // recal_bam_files: All recal.bam files, as they are unstable in this pipeline
-        def recal_bam_files = getAllFilesFromDir(outdir, include: ['**/*.recal.bam'])
+
+        def bam_files = ''
+        def recal_bam_files = ''
+
+        if (exclude_recal_bam) {
+            // bam_files: All bam files but recal
+            bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'], ignore: ['**/*.recal.bam'])
+            // recal_bam_files: All recal.bam files, that are unstable
+            recal_bam_files = getAllFilesFromDir(outdir, include: ['**/*.recal.bam'])
+        } else {
+            // bam_files: All bam files
+            bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'])
+            // recal_bam_files: No unstable recal bam files here, so empty list
+        }
+
         // cram_files: All cram files
         def cram_files = getAllFilesFromDir(outdir, include: ['**/*.cram'])
         // Fasta file for cram verification with nft-bam
@@ -34,7 +49,7 @@ class UTILS {
         if (!stub) {
             assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
             assertion.add(bam_files.isEmpty() ? 'No BAM files' : bam_files.collect { file -> file.getName() + ":md5," + bam(file.toString()).readsMD5 })
-            assertion.add(recal_bam_files.isEmpty() ? 'No recal BAM files' : recal_bam_files.collect { file -> file.getName() + ":stats" + bam(file.toString()).getStatistics() })
+            assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.getName() + ":stats" + bam(file.toString()).getStatistics() })
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.getName() + ":md5," + cram(file.toString(), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
         }
@@ -133,10 +148,18 @@ class UTILS {
                     println "CLEANUP"
                     println "Set NFT_CLEANUP to false to disable."
                     println "The following folders will be deleted:"
-                    println "- ${outputDir}"
-                    new File("${outputDir}").deleteDir()
                     println "- ${workDir}"
-                    new File("${workDir}").deleteDir()
+
+                    // Give nf-test time to complete file operations
+                    Thread.sleep(5000)
+
+                    try {
+                        new File("${workDir}").deleteDir()
+                    } catch (Exception e) {
+                    }
+
+                    // Give nf-test time to complete file operations
+                    Thread.sleep(5000)
                 }
             }
         }
