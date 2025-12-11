@@ -12,7 +12,8 @@ nextflow_pipeline {
             name: "-profile test --input bam.csv",
             params: [
                 input: "${projectDir}/tests/csv/1.0/bam.csv"
-            ]
+            ],
+            exclude_recal_bam: true
         ]
     ]
 
