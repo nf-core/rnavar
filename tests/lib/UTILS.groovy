@@ -6,26 +6,28 @@ class UTILS {
         // Mandatory, as we always need an outdir
         def outdir = args.outdir
 
-        // Use this args to run the test with stub
-        // It will disable all assertions but versions and stable_name
-        def stub = args.stub
+        // Get scenario and extract all properties dynamically
+        def scenario = args.scenario ?: [:]
 
-        // Use this args to exclude recal bams from snapshot
-        // Some of them are unstable, so we use stats instead
-        def exclude_recal_bam = args.exclude_recal_bam
+        // Pass down workflow for std capture
+        def workflow = args.workflow
 
         // stable_name: All files + folders in ${outdir}/ with a stable name
         def stable_name = getAllFilesFromDir(outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+
         // stable_content: All files in ${outdir}/ with stable content
         def stable_content = getAllFilesFromDir(outdir, ignoreFile: 'tests/.nftignore')
 
+        // Somehow some recal bam files are unstable
+        // So only capturing stats in snapshots
+        // By using the exclude_recal_bam scenario
         def bam_files = ''
         def recal_bam_files = ''
 
-        if (exclude_recal_bam) {
+        if (scenario.exclude_recal_bam) {
             // bam_files: All bam files but recal
             bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'], ignore: ['**/*.recal.bam'])
-            // recal_bam_files: All recal.bam files, that are unstable
+            // recal_bam_files: All unstable recal.bam files
             recal_bam_files = getAllFilesFromDir(outdir, include: ['**/*.recal.bam'])
         } else {
             // bam_files: All bam files
@@ -43,15 +45,23 @@ class UTILS {
 
         def assertion = []
 
-        assertion.add(removeFromYamlMap("${outdir}/pipeline_info/nf_core_rnavar_software_mqc_versions.yml", "Workflow"))
+        if (!scenario.failure) {
+            assertion.add(workflow.trace.succeeded().size()),
+            assertion.add(removeFromYamlMap("${outdir}/pipeline_info/nf_core_rnavar_software_mqc_versions.yml", "Workflow"))
+        }
+
         assertion.add(stable_name)
 
-        if (!stub) {
+        if (!scenario.stub) {
             assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
             assertion.add(bam_files.isEmpty() ? 'No BAM files' : bam_files.collect { file -> file.getName() + ":md5," + bam(file.toString()).readsMD5 })
             assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.getName() + ":stats" + bam(file.toString()).getStatistics() })
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.getName() + ":md5," + cram(file.toString(), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
+        }
+
+        if (scenario.capture_stderr_stdout) {
+            assertion.add(filterNextflowOutput(workflow.stdout + workflow.stderr))
         }
 
         return assertion
@@ -108,39 +118,22 @@ class UTILS {
             }
 
             then {
-                // Assert failure
+                // Assert failure/success, and fails early so we don't pollute console with massive diffs
                 if (scenario.failure) {
-                    // Early failure, so we don't pollute console with massive diffs
                     assert workflow.failed
-                    // Check stdout if specified
-                    if (scenario.stdout) {
-                        assertAll(
-                            { assert workflow.stdout.toString().contains(scenario.stdout) }
-                        )
-                    }
-                    // Check stderr if specified
-                    if (scenario.stderr) {
-                        { assert snapshot(
-                            workflow.stderr.toString().replaceAll(/\x1B\[[0-9;]*m/, '').replaceAll(/^\[/, '').replaceAll(/\]$/, '').replaceAll(/, /, ',').split(",").findAll { !it.matches(/.*Nextflow [0-9]+\.[0-9]+\.[0-9]+ is available.*/) }[scenario.stderr]
-                        ).match() }
-                    }
-                // Assert success
                 } else {
-                    // Early failure, so we don't pollute console with massive diffs
                     assert workflow.success
-                    assertAll(
-                        { assert snapshot(
-                            // Number of successful tasks
-                            workflow.trace.succeeded().size(),
-                            // All assertions based on the scenario
-                            *UTILS.get_assertion(exclude_recal_bam: scenario.exclude_recal_bam, outdir: params.outdir, stub: scenario.stub)
-                        ).match() }
-                    )
-                    // Check stdout if specified
-                    if (scenario.stdout) {
-                        assert workflow.stdout.toString().contains(scenario.stdout)
-                    }
                 }
+                assertAll(
+                    { assert snapshot(
+                        // All assertions based on the scenario
+                        *UTILS.get_assertion(
+                            outdir: params.outdir,
+                            scenario: scenario,
+                            workflow: workflow
+                        )
+                    ).match() }
+                )
             }
             cleanup {
                 if (System.getenv('NFT_CLEANUP')) {
@@ -150,16 +143,7 @@ class UTILS {
                     println "The following folders will be deleted:"
                     println "- ${workDir}"
 
-                    // Give nf-test time to complete file operations
-                    Thread.sleep(5000)
-
-                    try {
-                        new File("${workDir}").deleteDir()
-                    } catch (Exception e) {
-                    }
-
-                    // Give nf-test time to complete file operations
-                    Thread.sleep(5000)
+                    new File("${workDir}").deleteDir()
                 }
             }
         }

@@ -15,8 +15,8 @@ nextflow_pipeline {
                 vep_cache_version: 1,
                 tools: 'vep'
             ],
-            failure: true,
-            stdout: "This path is not available within annotation-cache"
+            capture_stderr_stdout: true,
+            failure: true
         ]
     ]
 
