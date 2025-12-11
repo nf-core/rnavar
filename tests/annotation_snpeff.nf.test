@@ -16,7 +16,9 @@ nextflow_pipeline {
                 tools: 'snpeff'
             ],
             failure: true,
-            snapshot_stdout: true
+            snapshot: 'stdout',
+            snapshot_ignore: 'Downloading plugin',
+            snapshot_include: 'annotation-cache'
         ]
     ]
 

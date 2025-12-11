@@ -9,7 +9,8 @@ nextflow_pipeline {
         [
             name: "-profile test",
             params: [],
-            snapshot_stderr_stdout: true
+            snapshot: 'stderr,stdout',
+            snapshot_ignore: 'Downloading plugin',
         ],
         [
             name: "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false",

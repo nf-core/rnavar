@@ -62,16 +62,21 @@ class UTILS {
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
         }
 
-        if (scenario.snapshot_stderr_stdout) {
-            assertion.add(filterNextflowOutput(workflow.stderr + workflow.stdout, ignore: ['Downloading plugin']))
-        }
+        // Capture std for snapshot
+        // Allow to capture either stderr, stdout or both
+        // Additional possibilities to include and/or ignore some string
+        if (scenario.snapshot) {
+            def workflow_std = []
 
-        if (scenario.snapshot_stderr) {
-            assertion.add(filterNextflowOutput(workflow.stderr, ignore: ['Downloading plugin']))
-        }
+            scenario.snapshot.split(',').each { std ->
+                if (std in ['stderr', 'stdout']) { workflow_std.add(workflow."$std") }
+            }
 
-        if (scenario.snapshot_stdout) {
-            assertion.add(filterNextflowOutput(workflow.stdout, ignore: ['Downloading plugin']))
+            if (scenario.snapshot_include) {
+                assertion.add(filterNextflowOutput(workflow_std.flatten(), ignore: [scenario.snapshot_ignore], include:[scenario.snapshot_include]))
+            } else {
+                assertion.add(filterNextflowOutput(workflow_std.flatten(), ignore: [scenario.snapshot_ignore]))
+            }
         }
 
         return assertion
