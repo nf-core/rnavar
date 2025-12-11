@@ -133,7 +133,7 @@ class UTILS {
                             // Number of successful tasks
                             workflow.trace.succeeded().size(),
                             // All assertions based on the scenario
-                            *UTILS.get_assertion(outdir: params.outdir, stub: scenario.stub)
+                            *UTILS.get_assertion(exclude_recal_bam: scenario.exclude_recal_bam, outdir: params.outdir, stub: scenario.stub)
                         ).match() }
                     )
                     // Check stdout if specified
