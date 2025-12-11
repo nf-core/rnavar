@@ -62,8 +62,8 @@ class UTILS {
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
         }
 
-        if (!scenario.exclude_stderr_stdout) {
-            assertion.add(filterNextflowOutput(workflow.stdout + workflow.stderr, ignore["Downloading plugin"]))
+        if (scenario.snapshot_stderr_stdout) {
+            assertion.add(filterNextflowOutput(workflow.stdout + workflow.stderr, ignore: ['Downloading plugin']))
         }
 
         return assertion

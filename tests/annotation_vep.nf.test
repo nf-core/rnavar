@@ -15,8 +15,8 @@ nextflow_pipeline {
                 vep_cache_version: 1,
                 tools: 'vep'
             ],
-            capture_stderr_stdout: true,
-            failure: true
+            failure: true,
+            snapshot_stderr_stdout: true
         ]
     ]
 
