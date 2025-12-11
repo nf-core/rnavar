@@ -37,20 +37,22 @@ class UTILS {
 
         // cram_files: All cram files
         def cram_files = getAllFilesFromDir(outdir, include: ['**/*.cram'])
+
         // Fasta file for cram verification with nft-bam
         def fasta_base = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
         def fasta = fasta_base + 'genomics/homo_sapiens/genome/genome.fasta'
+
         // vcf_files: All vcf files
         def vcf_files = getAllFilesFromDir(outdir, include: ['**/*.vcf{,.gz}'])
 
         def assertion = []
 
         if (!scenario.failure) {
-            assertion.add(workflow.trace.succeeded().size()),
+            assertion.add(workflow.trace.succeeded().size())
             assertion.add(removeFromYamlMap("${outdir}/pipeline_info/nf_core_rnavar_software_mqc_versions.yml", "Workflow"))
         }
 
-        assertion.add(stable_name)
+        assertion.add(stable_name) // At least always pipeline_info/ is created and stable
 
         if (!scenario.stub) {
             assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
@@ -60,8 +62,8 @@ class UTILS {
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
         }
 
-        if (scenario.capture_stderr_stdout) {
-            assertion.add(filterNextflowOutput(workflow.stdout + workflow.stderr))
+        if (!scenario.exclude_stderr_stdout) {
+            assertion.add(filterNextflowOutput(workflow.stdout + workflow.stderr, ignore["Downloading plugin"]))
         }
 
         return assertion
