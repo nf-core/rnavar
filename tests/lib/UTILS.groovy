@@ -63,7 +63,15 @@ class UTILS {
         }
 
         if (scenario.snapshot_stderr_stdout) {
-            assertion.add(filterNextflowOutput(workflow.stdout + workflow.stderr, ignore: ['Downloading plugin']))
+            assertion.add(filterNextflowOutput(workflow.stderr + workflow.stdout, ignore: ['Downloading plugin']))
+        }
+
+        if (scenario.snapshot_stderr) {
+            assertion.add(filterNextflowOutput(workflow.stderr, ignore: ['Downloading plugin']))
+        }
+
+        if (scenario.snapshot_stdout) {
+            assertion.add(filterNextflowOutput(workflow.stdout, ignore: ['Downloading plugin']))
         }
 
         return assertion

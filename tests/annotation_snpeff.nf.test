@@ -16,7 +16,7 @@ nextflow_pipeline {
                 tools: 'snpeff'
             ],
             failure: true,
-            snapshot_stderr_stdout: true
+            snapshot_stdout: true
         ]
     ]
 
