@@ -89,7 +89,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set NFT_WORKDIR dynamically
-        run: echo "NFT_WORKDIR=~" >> $GITHUB_ENV
+        run: echo "NFT_WORKDIR=$HOME" >> $GITHUB_ENV
 
       - name: Run nf-test
         id: run_nf_test
