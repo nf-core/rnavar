@@ -118,8 +118,6 @@ workflow RNAVAR {
 
     def cat_fastq = CAT_FASTQ.out.reads.mix(parsed_input.single)
 
-    versions = versions.mix(CAT_FASTQ.out.versions)
-
     // MODULE: Generate QC summary using FastQC
     FASTQC(cat_fastq)
     reports = reports.mix(FASTQC.out.zip.collect { _meta, logs -> logs })
@@ -314,9 +312,7 @@ workflow RNAVAR {
             // MODULE: Index the VCF using TABIX
             TABIX(haplotypecaller_vcf)
 
-            def haplotypecaller_indices = TABIX.out.index
-
-            def haplotypecaller_vcf_tbi = haplotypecaller_vcf.join(haplotypecaller_indices, failOnDuplicate: true, failOnMismatch: true)
+            def haplotypecaller_vcf_tbi = haplotypecaller_vcf.join(TABIX.out.index, failOnDuplicate: true, failOnMismatch: true)
 
             def final_vcf = channel.empty()
 

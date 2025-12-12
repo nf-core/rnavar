@@ -4,7 +4,7 @@
             41,
             {
                 "CAT_FASTQ": {
-                    "cat": 9.5
+                    "cat": "9.5"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -320,14 +320,14 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-11T12:52:43.446772062"
+        "timestamp": "2025-12-12T14:50:00.082024639"
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
             42,
             {
                 "CAT_FASTQ": {
-                    "cat": 9.5
+                    "cat": "9.5"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -547,14 +547,14 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-11T13:49:05.439373543"
+        "timestamp": "2025-12-12T14:56:12.570848079"
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
             42,
             {
                 "CAT_FASTQ": {
-                    "cat": 9.5
+                    "cat": "9.5"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -774,6 +774,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-11T13:46:15.403717094"
+        "timestamp": "2025-12-12T14:52:36.700388077"
     }
 }

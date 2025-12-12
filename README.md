@@ -52,13 +52,14 @@
 | ---------- | ------- |
 | BCFTools   | 1.22    |
 | BEDTools   | 2.31.1  |
+| cat        | 9.5     |
 | EnsemblVEP | 115.2   |
 | FastQC     | 0.12.1  |
 | GATK       | 4.6.2.0 |
 | GffRead    | 0.12.7  |
 | HTSlib     | 1.21    |
 | Mosdepth   | 0.3.10  |
-| MultiQC    | 1.31    |
+| MultiQC    | 1.33    |
 | Picard     | 3.4.0   |
 | SAMtools   | 1.22.1  |
 | Seq2HLA    | 2.3     |

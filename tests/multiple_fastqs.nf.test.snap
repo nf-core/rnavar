@@ -4,7 +4,7 @@
             41,
             {
                 "CAT_FASTQ": {
-                    "cat": 9.5
+                    "cat": "9.5"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -186,14 +186,14 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-10T18:04:27.721147117"
+        "timestamp": "2025-12-12T15:06:50.649053763"
     },
     "-profile test --input fastq_multiple.csv": {
         "content": [
             72,
             {
                 "CAT_FASTQ": {
-                    "cat": 9.5
+                    "cat": "9.5"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -434,6 +434,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-10T18:01:51.362121371"
+        "timestamp": "2025-12-12T15:04:06.807735832"
     }
 }

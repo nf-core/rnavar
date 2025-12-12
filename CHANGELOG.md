@@ -9,12 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [#269](https://github.com/nf-core/rnavar/pull/269) - Update MultiQC to 1.33
+
 ### Fixed
 
 ### Dependencies
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
+| multiqc    | 1.31        | 1.33        |
 
 ### Parameter
 
@@ -40,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#266](https://github.com/nf-core/rnavar/pull/266) - Back to dev
 - [#267](https://github.com/nf-core/rnavar/pull/267) - Update modules (some topics update) and versions in all docs
 - [#268](https://github.com/nf-core/rnavar/pull/268) - Refactor nf-test pipeline tests suite using custom lib
+- [#269](https://github.com/nf-core/rnavar/pull/269) - More topics updates
 
 #### Fixed
 
