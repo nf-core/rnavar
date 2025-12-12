@@ -14,7 +14,8 @@ nextflow_pipeline {
                 extract_umi: true,
                 input: "${projectDir}/tests/csv/1.0/fastq_single_end.csv",
                 umitools_bc_pattern: "NNNXC"
-            ]
+            ],
+            exclude_recal_bam: true
         ]
     ]
 
