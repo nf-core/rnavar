@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#267](https://github.com/nf-core/rnavar/pull/267) - Update modules (some topics update) and versions in all docs
 - [#268](https://github.com/nf-core/rnavar/pull/268) - Refactor nf-test pipeline tests suite using custom lib
 - [#269](https://github.com/nf-core/rnavar/pull/269) - More topics updates
+- [#270](https://github.com/nf-core/rnavar/pull/270) - Always capture warnings in snapshots
 
 #### Fixed
 

@@ -214,6 +214,7 @@
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
                 "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
             ],
+            "No warnings",
             [
                 "N E X T F L O W  ~  version [VERSION]",
                 "Launching `[PATH]/tests/../main.nf` [RUN_NAME] DSL2 - revision: [REVISION]",
@@ -320,7 +321,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-12T14:50:00.082024639"
+        "timestamp": "2025-12-16T12:56:07.314547938"
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -541,13 +542,14 @@
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
                 "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-12T14:56:12.570848079"
+        "timestamp": "2025-12-16T13:01:05.371434575"
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -768,12 +770,13 @@
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,e07e47b682fcfc37b72c7979ba927bb4",
                 "GM12878.haplotypecaller.vcf.gz:md5,9e7855f2382cb9fa20cda4e16fa603b3"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-12T14:52:36.700388077"
+        "timestamp": "2025-12-16T12:58:36.147585986"
     }
 }

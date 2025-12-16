@@ -180,13 +180,14 @@
             [
                 "test.haplotypecaller.filtered.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "test.haplotypecaller.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-12T15:06:50.649053763"
+        "timestamp": "2025-12-16T13:13:13.317812779"
     },
     "-profile test --input fastq_multiple.csv": {
         "content": [
@@ -428,12 +429,13 @@
                 "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48",
                 "GM12879.haplotypecaller.filtered.vcf.gz:md5,4dea749242a5e53787b805b82c813c1e",
                 "GM12879.haplotypecaller.vcf.gz:md5,46f85ad9632e760add202f9affcf04d8"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-12T15:04:06.807735832"
+        "timestamp": "2025-12-16T13:10:31.169912004"
     }
 }

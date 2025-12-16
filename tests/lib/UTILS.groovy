@@ -52,7 +52,8 @@ class UTILS {
             assertion.add(removeFromYamlMap("${outdir}/pipeline_info/nf_core_rnavar_software_mqc_versions.yml", "Workflow"))
         }
 
-        assertion.add(stable_name) // At least always pipeline_info/ is created and stable
+        // At least always pipeline_info/ is created and stable
+        assertion.add(stable_name)
 
         if (!scenario.stub) {
             assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
@@ -61,6 +62,9 @@ class UTILS {
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.getName() + ":md5," + cram(file.toString(), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
         }
+
+        // Always capture stdout and stderr for any WARN message
+        assertion.add(filterNextflowOutput(workflow.stderr + workflow.stdout, include: ["WARN"] ) ?: "No warnings")
 
         // Capture std for snapshot
         // Allow to capture either stderr, stdout or both

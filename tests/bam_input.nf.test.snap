@@ -114,12 +114,13 @@
             [
                 "GM12878.haplotypecaller.filtered.vcf.gz:md5,91b7a35bf1cf66f4cd8ec164bed11152",
                 "GM12878.haplotypecaller.vcf.gz:md5,b6d5469d5992faa78d365aa1df5459c0"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-11T10:26:10.321000287"
+        "timestamp": "2025-12-16T12:51:51.887572023"
     }
 }

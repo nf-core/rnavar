@@ -55,13 +55,14 @@
             "No CRAM files",
             [
                 "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-11T13:23:20.185337394"
+        "timestamp": "2025-12-16T12:44:29.801440791"
     },
     "-profile test --tools bcfann --bcftools_columns": {
         "content": [
@@ -119,12 +120,13 @@
             "No CRAM files",
             [
                 "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
-            ]
+            ],
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-11T13:24:03.013814545"
+        "timestamp": "2025-12-16T12:45:08.988841683"
     }
 }
