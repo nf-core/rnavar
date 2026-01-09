@@ -1,7 +1,7 @@
 {
     "-profile test --input all.csv": {
         "content": [
-            81,
+            80,
             {
                 "CAT_FASTQ": {
                     "cat": "9.5"
@@ -259,6 +259,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-09T17:11:30.932008413"
+        "timestamp": "2026-01-09T17:27:38.834130211"
     }
 }

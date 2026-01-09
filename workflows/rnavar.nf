@@ -114,7 +114,7 @@ workflow RNAVAR {
     )
     versions = versions.mix(PREPARE_ALIGNMENT.out.versions)
 
-    MOSDEPTH(parsed_input.cram.combine([]), fasta)
+    MOSDEPTH(parsed_input.cram.map { meta, cram, crai -> [meta, cram, crai, []] }, fasta)
 
     // Gather all reports generated
     reports = reports.mix(MOSDEPTH.out.global_txt.map { _meta, reports_ -> [reports_] })
