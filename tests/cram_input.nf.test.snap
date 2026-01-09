@@ -1,7 +1,7 @@
 {
     "-profile test --input cram.csv": {
         "content": [
-            27,
+            29,
             {
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -33,6 +33,9 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
+                "MOSDEPTH": {
+                    "mosdepth": "0.3.11"
+                },
                 "REMOVE_UNKNOWN_REGIONS": {
                     "python": "3.8.3"
                 },
@@ -58,6 +61,11 @@
                 }
             },
             [
+                "mosdepth",
+                "mosdepth/GM12878.mosdepth.global.dist.txt",
+                "mosdepth/GM12878.mosdepth.summary.txt",
+                "mosdepth/GM12878.per-base.bed.gz",
+                "mosdepth/GM12878.per-base.bed.gz.csi",
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing",
@@ -102,6 +110,10 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
+                "GM12878.mosdepth.global.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53",
+                "GM12878.mosdepth.summary.txt:md5,e43226c64ea74f81b9d97bed4e9ebbd5",
+                "GM12878.per-base.bed.gz:md5,8ab2c5f06c12b6f8699ccf6fb5f8b619",
+                "GM12878.per-base.bed.gz.csi:md5,204238f12bb527a43eb17271ca4095fd",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
                 "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9"
@@ -121,6 +133,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:53:34.602819658"
+        "timestamp": "2026-01-09T17:13:20.013301173"
     }
 }
