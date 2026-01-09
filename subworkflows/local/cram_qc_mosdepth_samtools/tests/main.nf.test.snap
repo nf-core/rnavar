@@ -21,13 +21,6 @@
                         },
                         "test.stats:md5,13ee764abb56671d40202f7a13141e2a"
                     ]
-                ],
-                "versions": [
-                    {
-                        "CRAM_QC_MOSDEPTH_SAMTOOLS:MOSDEPTH": {
-                            "mosdepth": "0.3.11"
-                        }
-                    }
                 ]
             }
         ],
@@ -35,6 +28,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T13:33:41.215137567"
+        "timestamp": "2026-01-09T14:01:59.558585361"
     }
 }

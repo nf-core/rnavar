@@ -49,7 +49,6 @@ workflow VCF_ANNOTATE_ALL {
 
         reports = reports.mix(VCF_ANNOTATE_SNPEFF.out.reports.map { _meta, reports_ -> [reports_] })
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_SNPEFF.out.vcf_tbi)
-        versions = versions.mix(VCF_ANNOTATE_SNPEFF.out.versions)
     }
 
     if (tools.split(',').contains('merge')) {
@@ -58,7 +57,8 @@ workflow VCF_ANNOTATE_ALL {
 
         reports = reports.mix(VCF_ANNOTATE_MERGE.out.reports)
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
-        versions = versions.mix(VCF_ANNOTATE_MERGE.out.versions)
+        tab_ann = tab_ann.mix(VCF_ANNOTATE_MERGE.out.tab)
+        json_ann = json_ann.mix(VCF_ANNOTATE_MERGE.out.json)
     }
 
     if (tools.split(',').contains('vep')) {
@@ -69,7 +69,6 @@ workflow VCF_ANNOTATE_ALL {
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
         tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
         json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
-        versions = versions.mix(VCF_ANNOTATE_ENSEMBLVEP.out.versions)
     }
 
     emit:

@@ -53,7 +53,6 @@ workflow SPLITNCIGAR {
     )
 
     def splitncigar_bam = SAMTOOLS_MERGE.out.bam
-    ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
 
     SAMTOOLS_INDEX(splitncigar_bam)
     ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)

@@ -4,8 +4,8 @@
             14,
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": 115.2,
-                    "tabix": 1.21
+                    "ensemblvep": "115.2",
+                    "tabix": "1.21"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -26,16 +26,12 @@
                     "samtools": "1.22.1"
                 },
                 "SNPEFF_SNPEFF": {
-                    "snpeff": "5.3a"
+                    "snpeff": "5.4a"
                 },
                 "STAR_INDEXVERSION": {
                     "gawk": "5.1.0",
                     "samtools": 1.21,
                     "star": "2.7.11b"
-                },
-                "TABIX_BGZIPTABIX": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 },
                 "TABIX_TABIX": {
                     "tabix": "1.21"
@@ -131,15 +127,15 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:46:54.038713147"
+        "timestamp": "2026-01-09T13:18:28.929315763"
     },
     "-profile test --tools merge": {
         "content": [
             12,
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": 115.2,
-                    "tabix": 1.21
+                    "ensemblvep": "115.2",
+                    "tabix": "1.21"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -160,16 +156,12 @@
                     "samtools": "1.22.1"
                 },
                 "SNPEFF_SNPEFF": {
-                    "snpeff": "5.3a"
+                    "snpeff": "5.4a"
                 },
                 "STAR_INDEXVERSION": {
                     "gawk": "5.1.0",
                     "samtools": 1.21,
                     "star": "2.7.11b"
-                },
-                "TABIX_BGZIPTABIX": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 },
                 "TABIX_TABIX": {
                     "tabix": "1.21"
@@ -254,6 +246,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:46:02.575715878"
+        "timestamp": "2026-01-09T13:17:31.866687201"
     }
 }

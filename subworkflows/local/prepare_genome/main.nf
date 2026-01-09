@@ -168,7 +168,6 @@ workflow PREPARE_GENOME {
         : ch_fasta
 
     SAMTOOLS_FAIDX(fai_input, [[id: 'no_fai'], []], false)
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
     def ch_fai = fasta_fai
         ? channel.fromPath(fasta_fai).map { fai_ -> [[id: fai_.baseName], fai_] }.collect()

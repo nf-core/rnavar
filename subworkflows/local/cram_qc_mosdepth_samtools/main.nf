@@ -14,7 +14,6 @@ workflow CRAM_QC_MOSDEPTH_SAMTOOLS {
     intervals
 
     main:
-    versions = channel.empty()
     reports = channel.empty()
 
     // Reports run on cram
@@ -27,10 +26,6 @@ workflow CRAM_QC_MOSDEPTH_SAMTOOLS {
     reports = reports.mix(MOSDEPTH.out.regions_txt)
     reports = reports.mix(SAMTOOLS_STATS.out.stats)
 
-    // Gather versions of all tools used
-    versions = versions.mix(MOSDEPTH.out.versions)
-
     emit:
     reports
-    versions // channel: [ versions.yml ]
 }

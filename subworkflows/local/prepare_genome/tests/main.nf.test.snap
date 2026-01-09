@@ -179,11 +179,6 @@
                 ],
                 "versions": [
                     {
-                        "PREPARE_GENOME:SAMTOOLS_FAIDX": {
-                            "samtools": "1.22.1"
-                        }
-                    },
-                    {
                         "PREPARE_GENOME:STAR_INDEXVERSION": {
                             "star": "2.7.11b",
                             "samtools": 1.21,
@@ -200,8 +195,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-10-17T12:32:14.396004376"
+        "timestamp": "2026-01-09T13:57:32.981413771"
     }
 }
