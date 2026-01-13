@@ -87,11 +87,6 @@
                 }
             },
             [
-                "mosdepth",
-                "mosdepth/GM12878_cram.mosdepth.global.dist.txt",
-                "mosdepth/GM12878_cram.mosdepth.summary.txt",
-                "mosdepth/GM12878_cram.per-base.bed.gz",
-                "mosdepth/GM12878_cram.per-base.bed.gz.csi",
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing",
@@ -107,6 +102,12 @@
                 "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam",
                 "preprocessing/GM12878_fastq/GM12878_fastq.recal.bam.bai",
                 "reports",
+                "reports/mosdepth",
+                "reports/mosdepth/GM12878",
+                "reports/mosdepth/GM12878/GM12878_cram.mosdepth.global.dist.txt",
+                "reports/mosdepth/GM12878/GM12878_cram.mosdepth.summary.txt",
+                "reports/mosdepth/GM12878/GM12878_cram.per-base.bed.gz",
+                "reports/mosdepth/GM12878/GM12878_cram.per-base.bed.gz.csi",
                 "reports/multiqc_data",
                 "reports/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
                 "reports/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt",
@@ -259,6 +260,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-09T17:27:38.834130211"
+        "timestamp": "2026-01-13T10:49:53.347042001"
     }
 }
