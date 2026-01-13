@@ -4,9 +4,6 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// local
-include { GTF2BED                   } from '../modules/local/gtf2bed'
-
 // nf-core
 include { CAT_FASTQ                 } from '../modules/nf-core/cat/fastq'
 include { FASTQC                    } from '../modules/nf-core/fastqc'
@@ -14,13 +11,11 @@ include { GATK4_BASERECALIBRATOR    } from '../modules/nf-core/gatk4/baserecalib
 include { GATK4_BEDTOINTERVALLIST   } from '../modules/nf-core/gatk4/bedtointervallist'
 include { GATK4_COMBINEGVCFS        } from '../modules/nf-core/gatk4/combinegvcfs'
 include { GATK4_HAPLOTYPECALLER     } from '../modules/nf-core/gatk4/haplotypecaller'
-include { GATK4_INDEXFEATUREFILE    } from '../modules/nf-core/gatk4/indexfeaturefile'
 include { GATK4_INTERVALLISTTOOLS   } from '../modules/nf-core/gatk4/intervallisttools'
 include { GATK4_MERGEVCFS           } from '../modules/nf-core/gatk4/mergevcfs'
 include { GATK4_VARIANTFILTRATION   } from '../modules/nf-core/gatk4/variantfiltration'
 include { MOSDEPTH                  } from '../modules/nf-core/mosdepth'
 include { MULTIQC                   } from '../modules/nf-core/multiqc'
-include { SAMTOOLS_INDEX            } from '../modules/nf-core/samtools/index'
 include { SEQ2HLA                   } from '../modules/nf-core/seq2hla/main'
 include { TABIX_TABIX as TABIX      } from '../modules/nf-core/tabix/tabix'
 include { TABIX_TABIX as TABIXGVCF  } from '../modules/nf-core/tabix/tabix'

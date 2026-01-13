@@ -93,7 +93,8 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.stats",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -121,6 +122,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:51:51.887572023"
+        "timestamp": "2026-01-13T13:28:35.086302449"
     }
 }

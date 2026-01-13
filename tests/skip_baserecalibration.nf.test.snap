@@ -147,16 +147,20 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.flagstat",
-                "reports/stats/GM12878/GM12878.stats",
                 "reports/stats/GM12878/STAR_log",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "samtools",
-                "samtools/GM12878.bam",
-                "samtools/GM12878.bam.bai",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -181,8 +185,7 @@
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
             ],
             [
-                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             "No unstable recal BAM files",
             "No CRAM files",
@@ -196,6 +199,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T13:18:15.443730017"
+        "timestamp": "2026-01-13T14:05:14.898813136"
     }
 }

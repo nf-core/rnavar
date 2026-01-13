@@ -171,19 +171,20 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.flagstat",
-                "reports/stats/GM12878/GM12878.stats",
                 "reports/stats/GM12878/STAR_log",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/umitools",
-                "reports/stats/umitools/GM12878",
-                "reports/stats/umitools/GM12878/GM12878.umi_extract.log",
-                "samtools",
-                "samtools/GM12878.bam",
-                "samtools/GM12878.bam.bai",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/stats/GM12878/umitools",
+                "reports/stats/GM12878/umitools/GM12878.umi_extract.log",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -208,11 +209,11 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,dde3fdb0b856dcf586106ae2f7505ae2",
                 "star_alignment_plot.txt:md5,6e8b7bbfd65f4d3e60a800f448054f8e",
                 "star_summary_table.txt:md5,c754e1fa8ead5914c70dad1fd9e98683",
-                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71"
+                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
+                "GM12878.umi_extract.log:md5,857a96743d4418f4f3252b32919fee40"
             ],
             [
-                "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825",
-                "GM12878.bam:md5,4191926f68523d8d8dd156194d83e825"
+                "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825"
             ],
             [
                 "GM12878.recal.bam:stats[maxReadLength:147, minReadLength:89, meanReadLength:137, maxQuality:60, minQuality:1, meanQuality:54, readCount:117]"
@@ -228,6 +229,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T13:20:20.398275903"
+        "timestamp": "2026-01-13T13:47:19.724747739"
     }
 }

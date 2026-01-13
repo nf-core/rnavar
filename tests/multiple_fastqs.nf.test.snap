@@ -144,11 +144,15 @@
                 "reports/stats/test/STAR_log/test.Log.out",
                 "reports/stats/test/STAR_log/test.Log.progress.out",
                 "reports/stats/test/STAR_log/test.SJ.out.tab",
-                "reports/stats/test/test.flagstat",
-                "reports/stats/test/test.stats",
-                "samtools",
-                "samtools/test.bam",
-                "samtools/test.bam.bai",
+                "reports/stats/test/fastqc",
+                "reports/stats/test/fastqc/test_1_fastqc.html",
+                "reports/stats/test/fastqc/test_1_fastqc.zip",
+                "reports/stats/test/fastqc/test_2_fastqc.html",
+                "reports/stats/test/fastqc/test_2_fastqc.zip",
+                "reports/stats/test/markduplicates",
+                "reports/stats/test/samtools",
+                "reports/stats/test/samtools/test.flagstat",
+                "reports/stats/test/samtools/test.stats",
                 "variant_calling",
                 "variant_calling/test",
                 "variant_calling/test/test.haplotypecaller.filtered.vcf.gz",
@@ -172,8 +176,7 @@
             ],
             [
                 "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "test.recal.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "test.recal.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             "No unstable recal BAM files",
             "No CRAM files",
@@ -187,7 +190,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T13:13:13.317812779"
+        "timestamp": "2026-01-13T13:53:01.910273988"
     },
     "-profile test --input fastq_multiple.csv": {
         "content": [
@@ -363,26 +366,33 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.flagstat",
-                "reports/stats/GM12878/GM12878.stats",
                 "reports/stats/GM12878/STAR_log",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
                 "reports/stats/GM12879",
-                "reports/stats/GM12879/GM12879.flagstat",
-                "reports/stats/GM12879/GM12879.stats",
                 "reports/stats/GM12879/STAR_log",
                 "reports/stats/GM12879/STAR_log/GM12879.Log.final.out",
                 "reports/stats/GM12879/STAR_log/GM12879.Log.out",
                 "reports/stats/GM12879/STAR_log/GM12879.Log.progress.out",
                 "reports/stats/GM12879/STAR_log/GM12879.SJ.out.tab",
-                "samtools",
-                "samtools/GM12878.bam",
-                "samtools/GM12878.bam.bai",
-                "samtools/GM12879.bam",
-                "samtools/GM12879.bam.bai",
+                "reports/stats/GM12879/fastqc",
+                "reports/stats/GM12879/fastqc/GM12879_fastqc.html",
+                "reports/stats/GM12879/fastqc/GM12879_fastqc.zip",
+                "reports/stats/GM12879/markduplicates",
+                "reports/stats/GM12879/samtools",
+                "reports/stats/GM12879/samtools/GM12879.flagstat",
+                "reports/stats/GM12879/samtools/GM12879.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -418,9 +428,7 @@
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
                 "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
                 "GM12879.md.bam:md5,2690897603f3c9bc4c1deda3e216197c",
-                "GM12879.recal.bam:md5,f62c37c5bbd7525aa90f590ca0cc59db",
-                "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12879.bam:md5,2690897603f3c9bc4c1deda3e216197c"
+                "GM12879.recal.bam:md5,f62c37c5bbd7525aa90f590ca0cc59db"
             ],
             "No unstable recal BAM files",
             "No CRAM files",
@@ -436,6 +444,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T13:10:31.169912004"
+        "timestamp": "2026-01-13T13:51:12.881977717"
     }
 }

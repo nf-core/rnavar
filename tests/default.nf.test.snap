@@ -168,16 +168,20 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.flagstat",
-                "reports/stats/GM12878/GM12878.stats",
                 "reports/stats/GM12878/STAR_log",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "samtools",
-                "samtools/GM12878.bam",
-                "samtools/GM12878.bam.bai",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -205,8 +209,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
-                "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44"
             ],
             "No unstable recal BAM files",
             "No CRAM files",
@@ -228,7 +231,7 @@
                 "------------------------------------------------------",
                 "Input/output options",
                 "  input                     : [PATH]/tests/csv/1.0/fastq_single.csv",
-                "  outdir                    : [PATH]/tests/[NFT_HASH]/output",
+                "  outdir                    : [PATH]/.nf-test/tests/[NFT_HASH]/output",
                 "Alignment options",
                 "  star_index                : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/index/star/star.tar.gz",
                 "Variant filtering",
@@ -260,8 +263,8 @@
                 "  trace_report_suffix       : [TIMESTAMP]",
                 "Core Nextflow options",
                 "  runName                   : [RUN_NAME]",
-                "  launchDir                 : [PATH]/tests/[NFT_HASH]",
-                "  workDir                   : [PATH]/tests/[NFT_HASH]/work",
+                "  launchDir                 : [PATH]/.nf-test/tests/[NFT_HASH]",
+                "  workDir                   : [PATH]/.nf-test/tests/[NFT_HASH]/work",
                 "  projectDir                : [PATH]",
                 "  userName                  : [USER]",
                 "  profile                   : test,[CONTAINER]",
@@ -321,7 +324,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:56:07.314547938"
+        "timestamp": "2026-01-13T13:31:48.227147877"
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -495,16 +498,20 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.flagstat",
-                "reports/stats/GM12878/GM12878.stats",
                 "reports/stats/GM12878/STAR_log",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "samtools",
-                "samtools/GM12878.bam",
-                "samtools/GM12878.bam.bai",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -534,8 +541,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
-                "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44"
             ],
             "No unstable recal BAM files",
             "No CRAM files",
@@ -549,7 +555,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T13:01:05.371434575"
+        "timestamp": "2026-01-13T13:45:55.253976579"
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -723,16 +729,20 @@
                 "reports/multiqc_report.html",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/GM12878.flagstat",
-                "reports/stats/GM12878/GM12878.stats",
                 "reports/stats/GM12878/STAR_log",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.out",
                 "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
                 "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "samtools",
-                "samtools/GM12878.bam",
-                "samtools/GM12878.bam.bai",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -762,8 +772,7 @@
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44",
-                "GM12878.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44"
             ],
             "No unstable recal BAM files",
             "No CRAM files",
@@ -777,6 +786,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:58:36.147585986"
+        "timestamp": "2026-01-13T13:43:50.490426772"
     }
 }
