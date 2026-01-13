@@ -210,7 +210,7 @@
                 "star_alignment_plot.txt:md5,6e8b7bbfd65f4d3e60a800f448054f8e",
                 "star_summary_table.txt:md5,c754e1fa8ead5914c70dad1fd9e98683",
                 "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
-                "GM12878.umi_extract.log:md5,857a96743d4418f4f3252b32919fee40"
+                "GM12878.umi_extract.log:md5,26f13f44b5c6c596d177342f8c194fbf"
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825"
@@ -229,6 +229,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-13T13:47:19.724747739"
+        "timestamp": "2026-01-13T16:32:11.041209421"
     }
 }
