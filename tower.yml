@@ -1,5 +1,11 @@
 reports:
   multiqc_report.html:
     display: "MultiQC HTML report"
-  samplesheet.csv:
-    display: "Auto-created samplesheet with collated metadata and FASTQ paths"
+  "**/mosdepth/*/*.mosdepth.summary.txt":
+    display: "All samples summary of mean depths per chromosome and within specified regions per chromosome"
+  "**/reports/snpeff/*/*/*_snpEff.html":
+    display: "Statistics and plots for the SnpEff run"
+  "**/reports/snpeff/*/*/*_snpEff.genes.txt":
+    display: "TXT (tab separated) summary counts for variants affecting each transcript and gene"
+  "**/reports/EnsemblVEP/*/*/*_VEP.summary.html":
+    display: "Summary of the VEP run"
