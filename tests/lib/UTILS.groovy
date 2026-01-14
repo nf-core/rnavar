@@ -119,6 +119,8 @@ class UTILS {
                 options "-stub"
             }
 
+            options "-output-dir $outputDir"
+
             if (scenario.gpu) {
                 tag "gpu${!scenario.no_conda ? '_conda' : ''}${scenario.stub ? '_stub' : ''}"
             }

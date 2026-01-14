@@ -4,7 +4,8 @@
 
 This document describes the output produced by the pipeline based on a public dataset.
 
-The directories listed below are created in the `results/` directory after the pipeline has finished. All paths are relative to the top-level results directory.
+The directories listed below are created in the directory defined by `params.outdir` after the pipeline has finished.
+All paths are relative to this top-level results directory.
 
 ### Dataset
 
@@ -87,11 +88,12 @@ If multiple libraries/runs have been provided for the same sample in the input s
 <details markdown="1">
 <summary>Output files</summary>
 
-- `umitools`
-  - `*.umi_extract.fastq.gz`: For single-end data
-  - `*.umi_extract_1.fastq.gz`: For paired-end data
-  - `*.umi_extract_2.fastq.gz`: For paired-end data
-  - `*.umi_extract.log`: The log of the UMI extraction
+- `preprocessing/umitools/[SAMPLE]//`
+  - `[SAMPLE]/.umi_extract.fastq.gz`: For single-end data
+  - `[SAMPLE]/.umi_extract_1.fastq.gz`: For paired-end data
+  - `[SAMPLE]/.umi_extract_2.fastq.gz`: For paired-end data
+- `reports/stats/[SAMPLE]//umitools/`,
+  - `[SAMPLE]/.umi_extract.log`: The log of the UMI extraction
 
 </details>
 
@@ -110,14 +112,14 @@ This output directory will only be made when `--extract_umi` has been specified.
 
 - `preprocessing/[SAMPLE]/`
   - `[SAMPLE].aligned.bam`: If `--save_align_intermeds` is specified the original BAM file containing read alignments to the reference genome will be placed in this directory.
-  - `[SAMPLE].aligned.bam.bai`: This is the index of the above \*.aligned.bam
-- `preprocessing/[SAMPLE]/log`
+  - `[SAMPLE].aligned.bam.bai`: This is the index of the above `[SAMPLE].aligned.bam`
+- `reports/stats/[SAMPLE]/STAR_log`
   - `[SAMPLE].Log.final.out`: STAR alignment report containing the mapping results summary.
   - `[SAMPLE].Log.out` and `[SAMPLE].Log.progress.out`: STAR log files containing detailed information about the run. Typically only useful for debugging purposes.
   - `[SAMPLE].SJ.out.tab`: File containing filtered splice junctions detected after mapping the reads.
 - `preprocessing/[SAMPLE]/unmapped`
   - `[SAMPLE].unmapped_*.fastq.gz`: If `--save_unaligned` is specified, FastQ files containing unmapped reads will be placed in this directory.
-- `reports/stats/[SAMPLE]/`
+- `reports/stats/[SAMPLE]/samtools/`
   - `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat summary of the alignment
   - `[SAMPLE].aligned.bam.stats`: Samtools stat output
 
@@ -137,8 +139,8 @@ If desired, duplicates can be removed using the `--remove_duplicates true` optio
 <summary>Output files</summary>
 
 - `preprocessing/[SAMPLE]/`
-  - `[SAMPLE].markdup.sorted.bam`: Picard Markduplicate bam file.
-  - `[SAMPLE].markdup.sorted.bam.bai`: This is the index of the above \*.aligned.bam
+  - `[SAMPLE].md.bam`: Picard Markduplicate bam file.
+  - `[SAMPLE].md.bam.bai`: This is the index of the above `[SAMPLE].md.bam`
 
 </details>
 
@@ -167,7 +169,7 @@ Currently, the pipeline does not produce the recalibration table file in the out
 
 - `preprocessing/[SAMPLE]/`
   - `[SAMPLE].recal.bam`: Recalibrated bam file.
-  - `[SAMPLE].recal.bam.bai`: This is the index of the above recalibrated bam.
+  - `[SAMPLE].recal.bam.bai`: This is the index of the above `[SAMPLE].recal.bam`
 
 </details>
 
@@ -204,7 +206,7 @@ HLA typing is performed when the parameter `--tools seq2hla` is set. The 2-digit
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/variant_calling/[SAMPLE]/`
+- `variant_calling/[SAMPLE]/`
   - `[SAMPLE].haplotypecaller.vcf.gz`: Variant calls in VCF format.
   - `[SAMPLE].haplotypecaller.vcf.gz.tbi`: This is the index of the above VCF file.
 
@@ -217,7 +219,7 @@ HLA typing is performed when the parameter `--tools seq2hla` is set. The 2-digit
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/variant_calling/[SAMPLE]/`
+- `variant_calling/[SAMPLE]/`
   - `[SAMPLE].haplotypecaller.filtered.vcf.gz`: Variant VCF with updated FILTER field.
   - `[SAMPLE].haplotypecaller.filtered.vcf.gz.tbi`: This is the index of the above VCF file.
 
@@ -234,7 +236,7 @@ It annotates and predicts the effects of variants on genes (such as amino acid c
 The generated `VCF` header contains the software version and the used command line.
 
 To annotate variants using `snpeff`, you can use `--tools snpeff` or `--tools merge`.
-The annotated variant files in VCF format can be found in `results/variant_annotation` folder.
+The annotated variant files in VCF format can be found in `annotation` folder.
 
 ![MultiQC - snpEff variant by region](images/snpeff_variants_by_region.png)
 ![MultiQC - snpEff variant by impact](images/snpeff_variants_by_impact.png)
@@ -244,7 +246,7 @@ The annotated variant files in VCF format can be found in `results/variant_annot
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/variant_annotation/[SAMPLE]/`
+- `annotation/[SAMPLE]/`
   - `[SAMPLE]_snpEff.ann.vcf.gz`: Annotated VCF from snpEff process.
   - `[SAMPLE]_snpEff.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
@@ -272,7 +274,7 @@ Currently, it contains:
 - `BIOTYPE`: Biotype of transcript or regulatory feature
 
 To annotate variants using `vep`, you can use `--tools vep`.
-The annotated variant files in VCF format can be found in `results/variant_annotation` folder.
+The annotated variant files in VCF format can be found in `annotation` folder.
 
 ![MultiQC - VEP general statistics](images/vep_general_stats.png)
 ![MultiQC - VEP SIFT summary](images/vep_sift_summary.png)
@@ -281,7 +283,7 @@ The annotated variant files in VCF format can be found in `results/variant_annot
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/variant_annotation/[SAMPLE]/`
+- `annotation/[SAMPLE]/`
   - `[SAMPLE]_VEP.ann.vcf.gz`: Annotated VCF from VEP process.
   - `[SAMPLE]_VEP.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
@@ -292,7 +294,7 @@ When `--tools merge` option is used, the annotation from both `snpeff` and `vep`
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/variant_annotation/[SAMPLE]/`
+- `annotation/[SAMPLE]/`
   - `[SAMPLE]_snpEff_VEP.ann.vcf.gz`: Combined annotation from both snpEff and VEP.
   - `[SAMPLE]_snpEff_VEP.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
@@ -307,8 +309,9 @@ For further reading and documentation see the [VEP manual](https://www.ensembl.o
 <details markdown="1">
 <summary>Output files</summary>
 
-- `sample._BCF.ann.vcf.gz` and `sample._BCF.ann.vcf.gz.tbi`
-  - VCF with tabix index
+- `annotation/[SAMPLE]/`
+  - `[SAMPLE]_BCF.ann.vcf.gz`: Annotated VCF from BCF process.
+  - `[SAMPLE]_BCF.ann.vcf.gz.tbi`: This is the index of the above VCF file.
 
 </details>
 
@@ -339,6 +342,13 @@ Plots will show:
 ![MultiQC - FASTQC Read Length Distribution](images/fastqc_length_dist.png)
 ![MultiQC - FASTQC Overall summary](images/fastqc_overall_status.png)
 
+<details markdown="1">
+<summary>Output files</summary>
+
+- `reports/stats/[SAMPLE]/fastqc/`
+  - `[SAMPLE]_fastqc.html`: HTML report containing quality metrics for your untrimmed raw FastQ files.
+  - `[SAMPLE]_fastqc.zip`: Zip archive containing the HTML report, tab-delimited data file and plot images.
+
 :::note
 The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
 :::
@@ -353,8 +363,8 @@ Duplicate reads can also result from a single amplification cluster, incorrectly
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/stats/[SAMPLE]/`
-  - `[SAMPLE].markdup.sorted.metrics`: Information about the number of duplicate reads in the sample.
+- `reports/stats/[SAMPLE]/markduplicates/`
+  - `[SAMPLE].bam.md.MarkDuplicates.metrics.txt`: Information about the number of duplicate reads in the sample.
 
 </details>
 
@@ -371,11 +381,11 @@ Plots will show:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/reports/stats/[SAMPLE]/`
+- `reports/stats/[SAMPLE]/samtools/`
   - `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat output on raw alignment BAM.
   - `[SAMPLE].aligned.bam.stats`: Samtools stats on raw alignment BAM.
-  - `[SAMPLE].markdup.sorted.bam.flagstat`: Samtools flagstat output on markduplicated BAM.
-  - `[SAMPLE].markdup.sorted.bam.stats`: Samtools flagstat output on markduplicated BAM.
+  - `[SAMPLE].md.bam.flagstat`: Samtools flagstat output on markduplicated BAM.
+  - `[SAMPLE].md.bam.stats`: Samtools flagstat output on markduplicated BAM.
   - `[SAMPLE].recal.bam.stats`: Samtools flagstat output on recalibrated BAM.
 
 </details>
@@ -397,7 +407,7 @@ Plots will shows :
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/reports/SnpEff/[SAMPLE]/`
+- `reports/SnpEff/[SAMPLE]/`
   - `[SAMPLE].csv`: Summary of variants by chromosome, region, effect, impact, functional class, type, etc.
   - `[SAMPLE].genes.txt`: TXT (tab separated) summary counts for variants affecting each transcript and gene.
   - `snpEff_summary.html`: Statistics with graphs to be viewed with a web browser
@@ -411,7 +421,7 @@ Plots will shows :
 <details markdown="1">
 <summary>Output files</summary>
 
-- `results/reports/EnsemblVEP/[SAMPLE]/`
+- `reports/EnsemblVEP/[SAMPLE]/`
   - `[SAMPLE].summary.html`: Statistics with graphs to be viewed with a web browser
 
 </details>
@@ -434,7 +444,7 @@ For more information about how to use `MultiQC` reports, see [https://multiqc.in
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/`
+- `reports/multiqc/`
   - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
   - `multiqc_data/`: directory containing parsed statistics from different tools used in the pipeline.
   - `multiqc_plots/`: directory containing static images from the report in various formats.

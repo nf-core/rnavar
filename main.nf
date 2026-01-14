@@ -201,6 +201,7 @@ workflow NFCORE_RNAVAR {
     reports // channel: qc reports for multiQC
     versions // channel: [ path(versions.yml) ]
 }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -208,6 +209,8 @@ workflow NFCORE_RNAVAR {
 */
 
 workflow {
+
+    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
@@ -285,6 +288,15 @@ workflow {
         params.hook_url,
         multiqc_report,
     )
+
+    publish:
+    multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
+}
+
+output {
+    multiqc {
+        path "reports/multiqc"
+    }
 }
 
 /*

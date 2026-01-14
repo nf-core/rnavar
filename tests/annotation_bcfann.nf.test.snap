@@ -37,15 +37,16 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
-                "reports/multiqc_data",
-                "reports/multiqc_data/llms-full.txt",
-                "reports/multiqc_data/multiqc.log",
-                "reports/multiqc_data/multiqc.parquet",
-                "reports/multiqc_data/multiqc_citations.txt",
-                "reports/multiqc_data/multiqc_data.json",
-                "reports/multiqc_data/multiqc_software_versions.txt",
-                "reports/multiqc_data/multiqc_sources.txt",
-                "reports/multiqc_report.html"
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
@@ -62,7 +63,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:44:29.801440791"
+        "timestamp": "2026-01-14T14:43:17.06187894"
     },
     "-profile test --tools bcfann --bcftools_columns": {
         "content": [
@@ -102,15 +103,16 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
-                "reports/multiqc_data",
-                "reports/multiqc_data/llms-full.txt",
-                "reports/multiqc_data/multiqc.log",
-                "reports/multiqc_data/multiqc.parquet",
-                "reports/multiqc_data/multiqc_citations.txt",
-                "reports/multiqc_data/multiqc_data.json",
-                "reports/multiqc_data/multiqc_software_versions.txt",
-                "reports/multiqc_data/multiqc_sources.txt",
-                "reports/multiqc_report.html"
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
@@ -127,6 +129,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T12:45:08.988841683"
+        "timestamp": "2026-01-14T14:43:55.475413075"
     }
 }
