@@ -34,7 +34,7 @@ jobs:
         uses: nf-core/setup-nextflow@v2
 
       - name: Run nextflow lint
-        run: nextflow lint
+        run: nextflow lint ${GITHUB_WORKSPACE}
 
   nf-core:
     runs-on: ubuntu-latest
