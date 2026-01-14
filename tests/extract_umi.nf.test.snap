@@ -211,8 +211,7 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,dde3fdb0b856dcf586106ae2f7505ae2",
                 "star_alignment_plot.txt:md5,6e8b7bbfd65f4d3e60a800f448054f8e",
                 "star_summary_table.txt:md5,c754e1fa8ead5914c70dad1fd9e98683",
-                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
-                "GM12878.md.MarkDuplicates.metrics.txt:md5,677af3a1cbd086a06947c4fd38bc30e1"
+                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71"
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825"

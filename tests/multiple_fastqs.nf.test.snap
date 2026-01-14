@@ -174,8 +174,7 @@
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "star_alignment_plot.txt:md5,c06d6572355da3f2bc3418d56fc2b4e9",
                 "star_summary_table.txt:md5,e05b9c5b2ef4347744de72b79b27b7a6",
-                "test.SJ.out.tab:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "test.md.MarkDuplicates.metrics.txt:md5,6b2ca3e445d44a3f603d800ec83294c8"
+                "test.SJ.out.tab:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             [
                 "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -428,9 +427,7 @@
                 "star_alignment_plot.txt:md5,cc231d33ca6537f3f62f9c14fed9b75d",
                 "star_summary_table.txt:md5,07f02b433c41ff49ed19968beff03de3",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12878.md.MarkDuplicates.metrics.txt:md5,b91200d20cf89cfcd8329b9d16930104",
-                "GM12879.SJ.out.tab:md5,37bfb1926b12f3585db23a2b86e6f59e",
-                "GM12879.md.MarkDuplicates.metrics.txt:md5,68d52f0d267fa4a495684d425480a3f8"
+                "GM12879.SJ.out.tab:md5,37bfb1926b12f3585db23a2b86e6f59e"
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",

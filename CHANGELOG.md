@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [#275](https://github.com/nf-core/rnavar/pull/275) - Update docs for pipeline output files
+- [#275](https://github.com/nf-core/rnavar/pull/275) - Rescue markduplicates metrics file publication
+
 ### Dependencies
 
 | Dependency | Old version | New version |

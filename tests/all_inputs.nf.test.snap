@@ -241,8 +241,7 @@
                 "GM12878_cram.mosdepth.summary.txt:md5,e43226c64ea74f81b9d97bed4e9ebbd5",
                 "GM12878_cram.per-base.bed.gz:md5,8ab2c5f06c12b6f8699ccf6fb5f8b619",
                 "GM12878_cram.per-base.bed.gz.csi:md5,204238f12bb527a43eb17271ca4095fd",
-                "GM12878_fastq.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12878_fastq.md.MarkDuplicates.metrics.txt:md5,537a6f8eccd285268f80604a2793de0f"
+                "GM12878_fastq.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
             ],
             [
                 "GM12878_fastq.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923"

@@ -207,8 +207,7 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12878.md.MarkDuplicates.metrics.txt:md5,bb20a503726b9368f1fd225d0a90dc4f"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
@@ -542,8 +541,7 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12878.md.MarkDuplicates.metrics.txt:md5,e2321d940ea971a214a235a5b77c67bf"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
@@ -776,8 +774,7 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
-                "GM12878.md.MarkDuplicates.metrics.txt:md5,bb4c764b311d4614174ee29b1fef0af8"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
             ],
             [
                 "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
