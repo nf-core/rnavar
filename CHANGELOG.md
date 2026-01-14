@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Added
 
+- [#274](https://github.com/nf-core/rnavar/pull/274) - Add Nextflow lint test to GHA
+
 #### Changed
 
 - [#266](https://github.com/nf-core/rnavar/pull/266) - Back to dev
