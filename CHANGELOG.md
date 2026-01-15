@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#269](https://github.com/nf-core/rnavar/pull/269) - More topics updates
 - [#270](https://github.com/nf-core/rnavar/pull/270) - Always capture warnings in snapshots
 - [#272](https://github.com/nf-core/rnavar/pull/272) - Continue topics migration
+- [#275](https://github.com/nf-core/rnavar/pull/275) - Starting workflow output migration with multiqc
+- [#276](https://github.com/nf-core/rnavar/pull/276) - Continue workflow output migration with reports from snpeff and vep
 
 #### Fixed
 
