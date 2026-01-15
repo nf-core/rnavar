@@ -128,7 +128,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-14T14:45:36.193117259"
+        "timestamp": "2026-01-15T10:47:19.008701634"
     },
     "-profile test --tools merge": {
         "content": [
@@ -223,9 +223,7 @@
                 "reports/multiqc/multiqc_plots/svg/snpeff_variant_effects_region-pct-log.svg",
                 "reports/multiqc/multiqc_plots/svg/snpeff_variant_effects_region-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/vep-general-stats.svg",
-                "reports/multiqc/multiqc_report.html",
-                "reports/snpeff",
-                "reports/snpeff/test"
+                "reports/multiqc/multiqc_report.html"
             ],
             [
                 "multiqc_citations.txt:md5,ebf9f49bc020eeb38546ddab3a98171e",
@@ -248,6 +246,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-14T14:44:47.281129385"
+        "timestamp": "2026-01-15T10:51:18.882776112"
     }
 }

@@ -27,6 +27,7 @@ workflow VCF_ANNOTATE_ALL {
     main:
     json_ann = channel.empty()
     reports = channel.empty()
+    reports_meta = channel.empty()
     tab_ann = channel.empty()
     vcf_ann = channel.empty()
     versions = channel.empty()
@@ -49,13 +50,21 @@ workflow VCF_ANNOTATE_ALL {
 
         reports = reports.mix(VCF_ANNOTATE_SNPEFF.out.reports.map { _meta, reports_ -> [reports_] })
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_SNPEFF.out.vcf_tbi)
+
+        if (tools.split(',').contains('snpeff')) {
+
+            reports_meta = reports_meta.mix(VCF_ANNOTATE_SNPEFF.out.reports.map { meta, reports_ -> [meta + [tool: "snpeff"], reports_] })
+            reports_meta = reports_meta.mix(VCF_ANNOTATE_SNPEFF.out.summary.map { meta, reports_ -> [meta + [tool: "snpeff"], reports_] })
+            reports_meta = reports_meta.mix(VCF_ANNOTATE_SNPEFF.out.genes_txt.map { meta, reports_ -> [meta + [tool: "snpeff"], reports_] })
+        }
     }
 
     if (tools.split(',').contains('merge')) {
         vcf_ann_for_merge = VCF_ANNOTATE_SNPEFF.out.vcf_tbi.map { meta, vcf_, _tbi -> [meta, vcf_, []] }
         VCF_ANNOTATE_MERGE(vcf_ann_for_merge, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
 
-        reports = reports.mix(VCF_ANNOTATE_MERGE.out.reports)
+        reports = reports.mix(VCF_ANNOTATE_MERGE.out.reports.map { _meta, reports_ -> [reports_] })
+        reports_meta = reports_meta.mix(VCF_ANNOTATE_MERGE.out.reports.map { meta, reports_ -> [meta + [tool: "EnsemblVEP"], reports_] })
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
         tab_ann = tab_ann.mix(VCF_ANNOTATE_MERGE.out.tab)
         json_ann = json_ann.mix(VCF_ANNOTATE_MERGE.out.json)
@@ -65,7 +74,8 @@ workflow VCF_ANNOTATE_ALL {
         vcf_for_vep = vcf.map { meta, vcf_ -> [meta, vcf_, []] }
         VCF_ANNOTATE_ENSEMBLVEP(vcf_for_vep, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
 
-        reports = reports.mix(VCF_ANNOTATE_ENSEMBLVEP.out.reports)
+        reports = reports.mix(VCF_ANNOTATE_ENSEMBLVEP.out.reports.map { _meta, reports_ -> [reports_] })
+        reports_meta = reports_meta.mix(VCF_ANNOTATE_ENSEMBLVEP.out.reports.map { meta, reports_ -> [meta + [tool: "EnsemblVEP"], reports_] })
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
         tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
         json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
@@ -76,5 +86,6 @@ workflow VCF_ANNOTATE_ALL {
     tab_ann
     json_ann
     reports //    path: *.html
+    reports_meta // channel: [val(meta), path: *.html]
     versions //    path: versions.yml
 }
