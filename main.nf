@@ -302,7 +302,12 @@ output {
     }
     reports {
         path { meta, tool, file ->
-            file >> "reports/${tool}/${meta.id}/"
+            if (tool == 'vep') {
+                file >> "reports/EnsemblVEP/${meta.id}/"
+            }
+            else {
+                file >> "reports/${tool}/${meta.id}/"
+            }
         }
     }
 }
