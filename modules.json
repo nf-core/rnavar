@@ -33,7 +33,8 @@
                     "ensemblvep/vep": {
                         "branch": "master",
                         "git_sha": "5e8a1c5a510faf591d0473aa2a4b009d7cdee36c",
-                        "installed_by": ["modules", "vcf_annotate_ensemblvep"]
+                        "installed_by": ["modules", "vcf_annotate_ensemblvep"],
+                        "patch": "modules/nf-core/ensemblvep/vep/ensemblvep-vep.diff"
                     },
                     "fastqc": {
                         "branch": "master",
@@ -173,7 +174,8 @@
                     "snpeff/snpeff": {
                         "branch": "master",
                         "git_sha": "ab50ae0a7c0714bf8b13918c1b7af732002c244d",
-                        "installed_by": ["modules", "vcf_annotate_snpeff"]
+                        "installed_by": ["modules", "vcf_annotate_snpeff"],
+                        "patch": "modules/nf-core/snpeff/snpeff/snpeff-snpeff.diff"
                     },
                     "star/align": {
                         "branch": "master",
