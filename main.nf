@@ -199,7 +199,6 @@ workflow NFCORE_RNAVAR {
 
     emit:
     reports // channel: qc reports for multiQC
-    reports_meta = RNAVAR.out.reports_meta // channel: qc reports for publishing
     versions // channel: [ path(versions.yml) ]
 }
 
@@ -291,15 +290,15 @@ workflow {
     )
 
     publish:
-    multiqc      = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
-    reports_meta = NFCORE_RNAVAR.out.reports_meta.map { meta, file -> [meta + [path: "reports/${meta.tool}/${meta.id}/"], file] }
+    multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
+    reports = channel.topic("reports").map { meta, tool, file -> [meta + [path: "reports/${tool}/${meta.id}/"], file] }
 }
 
 output {
     multiqc {
         path "reports/multiqc"
     }
-    reports_meta {
+    reports {
         path { meta, path -> path >> meta.path }
     }
 }

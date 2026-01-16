@@ -49,10 +49,10 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
-                "reports/EnsemblVEP",
-                "reports/EnsemblVEP/test",
-                "reports/EnsemblVEP/test/test_VEP.ann.summary.html",
-                "reports/EnsemblVEP/test/test_snpEff_VEP.ann.summary.html",
+                "reports/ensemblvep",
+                "reports/ensemblvep/test",
+                "reports/ensemblvep/test/test_VEP.ann.summary.html",
+                "reports/ensemblvep/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/llms-full.txt",
@@ -105,6 +105,8 @@
                 "reports/snpeff/test/test_snpEff.genes.txt"
             ],
             [
+                "test_VEP.ann.summary.html:md5,a8596b8804d1f97f9ce0f2bc149c20e3",
+                "test_snpEff_VEP.ann.summary.html:md5,1e266fc0ebf3b46e0ca0b782cc167a18",
                 "multiqc_citations.txt:md5,ebf9f49bc020eeb38546ddab3a98171e",
                 "multiqc_snpeff.txt:md5,03a2b1c461cb6e5cccac64033a2f6526",
                 "snpeff_effects.txt:md5,3c5e9a1c191b77c781dc4d033b1dd1f7",
@@ -128,7 +130,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-15T10:47:19.008701634"
+        "timestamp": "2026-01-16T10:56:21.279714884"
     },
     "-profile test --tools merge": {
         "content": [
@@ -176,9 +178,9 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
-                "reports/EnsemblVEP",
-                "reports/EnsemblVEP/test",
-                "reports/EnsemblVEP/test/test_snpEff_VEP.ann.summary.html",
+                "reports/ensemblvep",
+                "reports/ensemblvep/test",
+                "reports/ensemblvep/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/llms-full.txt",
@@ -223,16 +225,23 @@
                 "reports/multiqc/multiqc_plots/svg/snpeff_variant_effects_region-pct-log.svg",
                 "reports/multiqc/multiqc_plots/svg/snpeff_variant_effects_region-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/vep-general-stats.svg",
-                "reports/multiqc/multiqc_report.html"
+                "reports/multiqc/multiqc_report.html",
+                "reports/snpeff",
+                "reports/snpeff/test",
+                "reports/snpeff/test/snpEff_summary.html",
+                "reports/snpeff/test/test_snpEff.csv",
+                "reports/snpeff/test/test_snpEff.genes.txt"
             ],
             [
+                "test_snpEff_VEP.ann.summary.html:md5,6b0637b366cfc074ddb4f70a9b74f4b2",
                 "multiqc_citations.txt:md5,ebf9f49bc020eeb38546ddab3a98171e",
                 "multiqc_snpeff.txt:md5,03a2b1c461cb6e5cccac64033a2f6526",
                 "snpeff_effects.txt:md5,3c5e9a1c191b77c781dc4d033b1dd1f7",
                 "snpeff_qualities.txt:md5,4c059b4e8bf0a64940ad1d6e30efd3a6",
                 "snpeff_variant_effects_region.txt:md5,05efd324edadced17ba3cd2b7714af57",
                 "vep-general-stats.txt:md5,57563be109a57f6edfa427b2b2c310ba",
-                "vep.txt:md5,bf54f689bb0ccab5e1566e48373f768c"
+                "vep.txt:md5,bf54f689bb0ccab5e1566e48373f768c",
+                "test_snpEff.genes.txt:md5,130536bf0237d7f3f746d32aaa32840a"
             ],
             "No BAM files",
             "No unstable recal BAM files",
@@ -246,6 +255,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-15T10:51:18.882776112"
+        "timestamp": "2026-01-16T10:55:25.152423431"
     }
 }

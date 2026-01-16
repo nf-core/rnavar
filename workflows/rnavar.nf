@@ -83,7 +83,6 @@ workflow RNAVAR {
 
     // To gather all QC reports and versions for MultiQC
     reports = channel.empty()
-    reports_meta = channel.empty()
     versions = channel.empty()
 
     // Parse the input data
@@ -364,8 +363,6 @@ workflow RNAVAR {
                 // Gather used softwares versions
                 versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)
                 reports = reports.mix(VCF_ANNOTATE_ALL.out.reports)
-
-                reports_meta = reports_meta.mix(VCF_ANNOTATE_ALL.out.reports_meta)
             }
         }
         else {
@@ -390,6 +387,5 @@ workflow RNAVAR {
 
     emit:
     reports // channel: qc reports for multiQC
-    reports_meta // channel: qc reports for publishing
     versions // channel: [ path(versions.yml) ]
 }
