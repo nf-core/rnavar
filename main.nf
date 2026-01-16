@@ -291,7 +291,9 @@ workflow {
 
     publish:
     multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
-    reports = channel.topic("reports").map { meta, tool, file -> [meta + [path: "reports/${tool}/${meta.id}/"], file] }
+    reports = channel.topic("reports").filter { _meta, tool, _file ->
+        return !(tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
+    }
 }
 
 output {
@@ -299,7 +301,9 @@ output {
         path "reports/multiqc"
     }
     reports {
-        path { meta, path -> path >> meta.path }
+        path { meta, tool, file ->
+            file >> "reports/${tool}/${meta.id}/"
+        }
     }
 }
 
