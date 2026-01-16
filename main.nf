@@ -259,7 +259,10 @@ workflow {
         def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
         def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
 
-        multiqc_files = multiqc_files.mix(NFCORE_RNAVAR.out.reports)
+        multiqc_files = multiqc_files.mix(
+            channel.topic("reports").map { _meta, _tool, reports -> reports },
+            NFCORE_RNAVAR.out.reports,
+        )
         multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         multiqc_files = multiqc_files.mix(collated_versions)
         multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
@@ -302,7 +305,7 @@ output {
     }
     reports {
         path { meta, tool, file ->
-            if (tool == 'vep') {
+            if (tool == 'ensemblvep') {
                 file >> "reports/EnsemblVEP/${meta.id}/"
             }
             else {

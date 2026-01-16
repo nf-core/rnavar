@@ -362,7 +362,6 @@ workflow RNAVAR {
 
                 // Gather used softwares versions
                 versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)
-                reports = reports.mix(VCF_ANNOTATE_ALL.out.reports)
             }
         }
         else {
