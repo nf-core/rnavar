@@ -95,7 +95,7 @@ workflow PIPELINE_INITIALISATION {
         log.info(
             paramsHelp(
                 help_options,
-                params.help instanceof String ? params.help : "",
+                (params.help instanceof String && params.help != "true") ? params.help : "",
             )
         )
         exit(0)
