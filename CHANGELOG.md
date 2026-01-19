@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Added
 
 - [#274](https://github.com/nf-core/rnavar/pull/274) - Add Nextflow lint test to GHA
+- [#279](https://github.com/nf-core/rnavar/pull/279) - Add test for Nextflow strict syntax v2 mode
 
 #### Changed
 
@@ -53,6 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#272](https://github.com/nf-core/rnavar/pull/272) - Continue topics migration
 
 #### Fixed
+
+- [#278](https://github.com/nf-core/rnavar/pull/278) - Fix --help with Nextflow strict syntax v2 mode
 
 #### Removed
 
