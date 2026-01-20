@@ -359,9 +359,6 @@ workflow RNAVAR {
                     bcftools_columns,
                     bcftools_header_lines,
                 )
-
-                // Gather used softwares versions
-                versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)
             }
         }
         else {

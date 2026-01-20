@@ -28,7 +28,6 @@ workflow VCF_ANNOTATE_ALL {
     json_ann = channel.empty()
     tab_ann = channel.empty()
     vcf_ann = channel.empty()
-    versions = channel.empty()
 
     if (tools.split(',').contains('bcfann')) {
         BCFTOOLS_ANNOTATE(
@@ -39,7 +38,6 @@ workflow VCF_ANNOTATE_ALL {
         )
 
         vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
-        versions = versions.mix(BCFTOOLS_ANNOTATE.out.versions)
     }
 
 
@@ -71,5 +69,4 @@ workflow VCF_ANNOTATE_ALL {
     vcf_ann // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
     tab_ann
     json_ann
-    versions //    path: versions.yml
 }
