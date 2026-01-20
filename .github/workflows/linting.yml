@@ -32,9 +32,14 @@ jobs:
 
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@v2
+        with:
+          version: latest-everything
 
       - name: Run nextflow lint
         run: nextflow lint ${GITHUB_WORKSPACE}
+
+      - name: Run pipeline help
+        run: NXF_SYNTAX_PARSER=v2 nextflow run . --help
 
   nf-core:
     runs-on: ubuntu-latest
