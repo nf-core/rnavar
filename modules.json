@@ -32,9 +32,8 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "5e8a1c5a510faf591d0473aa2a4b009d7cdee36c",
-                        "installed_by": ["modules", "vcf_annotate_ensemblvep"],
-                        "patch": "modules/nf-core/ensemblvep/vep/ensemblvep-vep.diff"
+                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
+                        "installed_by": ["modules", "vcf_annotate_ensemblvep"]
                     },
                     "fastqc": {
                         "branch": "master",
@@ -173,9 +172,8 @@
                     },
                     "snpeff/snpeff": {
                         "branch": "master",
-                        "git_sha": "ab50ae0a7c0714bf8b13918c1b7af732002c244d",
-                        "installed_by": ["modules", "vcf_annotate_snpeff"],
-                        "patch": "modules/nf-core/snpeff/snpeff/snpeff-snpeff.diff"
+                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
+                        "installed_by": ["modules", "vcf_annotate_snpeff"]
                     },
                     "star/align": {
                         "branch": "master",
@@ -238,12 +236,12 @@
                     },
                     "vcf_annotate_ensemblvep": {
                         "branch": "master",
-                        "git_sha": "5e8a1c5a510faf591d0473aa2a4b009d7cdee36c",
+                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
                         "installed_by": ["subworkflows"]
                     },
                     "vcf_annotate_snpeff": {
                         "branch": "master",
-                        "git_sha": "ab50ae0a7c0714bf8b13918c1b7af732002c244d",
+                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
                         "installed_by": ["subworkflows"]
                     }
                 }

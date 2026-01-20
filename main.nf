@@ -260,7 +260,7 @@ workflow {
         def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
 
         multiqc_files = multiqc_files.mix(
-            channel.topic("reports").map { _meta, _tool, reports -> reports },
+            channel.topic("reports").map { _meta, _process, _tool, reports -> reports },
             NFCORE_RNAVAR.out.reports,
         )
         multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
@@ -294,7 +294,7 @@ workflow {
 
     publish:
     multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
-    reports = channel.topic("reports").filter { _meta, tool, _file ->
+    reports = channel.topic("reports").filter { _meta, _process, tool, _file ->
         return !(tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
     }
 }
@@ -304,7 +304,7 @@ output {
         path "reports/multiqc"
     }
     reports {
-        path { meta, tool, file ->
+        path { meta, _process, tool, file ->
             if (tool == 'ensemblvep') {
                 file >> "reports/EnsemblVEP/${meta.id}/"
             }
