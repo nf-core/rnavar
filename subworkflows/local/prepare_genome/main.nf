@@ -52,8 +52,6 @@ workflow PREPARE_GENOME {
         ? GUNZIP_FASTA.out.gunzip.collect()
         : channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
 
-    ch_versions = ch_versions.mix(GUNZIP_FASTA.out.versions)
-
     def dict_input = dict ? channel.empty() : ch_fasta
 
     GATK4_CREATESEQUENCEDICTIONARY(dict_input)
@@ -68,14 +66,12 @@ workflow PREPARE_GENOME {
         : channel.empty()
 
     GUNZIP_GTF(gtf_input)
-    ch_versions = ch_versions.mix(GUNZIP_GTF.out.versions)
 
     def ch_gffread_input = gff
         ? channel.fromPath(gff).map { gff_ -> [[id: gff_.baseName], gff_] }
         : channel.empty()
 
     GFFREAD(ch_gffread_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
-    ch_versions = ch_versions.mix(GFFREAD.out.versions)
 
     def ch_gtf = gtf.toString().endsWith('.gz')
         ? GUNZIP_GTF.out.gunzip.collect()
