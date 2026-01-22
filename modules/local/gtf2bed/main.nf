@@ -1,3 +1,15 @@
+/**
+ * Convert GTF annotation file to BED format.
+ *
+ * Extracts genomic features (exons, transcripts, or genes) from a GTF file
+ * and outputs them in BED format for use with interval-based tools.
+ *
+ * The output BED file uses 0-based coordinates (BED standard) converted
+ * from the 1-based GTF coordinates.
+ *
+ * @param gtf Input GTF annotation file
+ * @param feature_type Type of feature to extract: "exon", "transcript", or "gene"
+ */
 process GTF2BED {
     tag "${gtf}"
     label 'process_low'

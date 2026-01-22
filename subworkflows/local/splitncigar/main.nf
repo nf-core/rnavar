@@ -6,6 +6,22 @@ include { GATK4_SPLITNCIGARREADS } from '../../../modules/nf-core/gatk4/splitnci
 include { SAMTOOLS_MERGE         } from '../../../modules/nf-core/samtools/merge'
 include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index'
 
+/**
+ * Split reads that contain N CIGAR operations for RNA-seq variant calling.
+ *
+ * This subworkflow handles the GATK SplitNCigarReads step which is essential
+ * for RNA-seq variant calling. It splits reads that span introns (N in CIGAR)
+ * and reassigns mapping qualities to meet GATK requirements.
+ *
+ * The workflow processes BAM files in parallel across genomic intervals,
+ * then merges and indexes the results for efficient downstream processing.
+ *
+ * @param bam Input BAM file with alignment index
+ * @param fasta Reference genome FASTA file
+ * @param fai Reference genome FASTA index
+ * @param dict Reference genome sequence dictionary
+ * @param intervals Genomic intervals for parallel processing
+ */
 workflow SPLITNCIGAR {
     take:
     bam // channel: [ val(meta), [ bam ], [bai] ]

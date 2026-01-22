@@ -1,3 +1,27 @@
+/**
+ * Call germline SNPs and indels using GATK HaplotypeCaller.
+ *
+ * HaplotypeCaller is GATK's flagship variant caller, performing local
+ * de-novo assembly of haplotypes in regions showing variation. It can
+ * produce either standard VCF output or GVCF output for joint calling.
+ *
+ * Key features:
+ * - Local re-assembly for accurate indel calling
+ * - Population-aware calling using dbSNP
+ * - Support for GVCF output mode for cohort analysis
+ * - DRAGstr model support for improved STR calling
+ *
+ * For RNA-seq data, this should be run after SplitNCigarReads processing.
+ *
+ * @param input Aligned BAM/CRAM file with index
+ * @param intervals Genomic intervals to call variants in
+ * @param dragstr_model DRAGstr model file for STR calling (optional)
+ * @param fasta Reference genome FASTA file
+ * @param fai Reference genome FASTA index
+ * @param dict Reference genome sequence dictionary
+ * @param dbsnp dbSNP VCF file for variant annotation
+ * @param dbsnp_tbi dbSNP VCF index
+ */
 process GATK4_HAPLOTYPECALLER {
     tag "${meta.id}"
     label 'process_low'

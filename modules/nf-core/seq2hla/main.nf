@@ -1,3 +1,22 @@
+/**
+ * Perform HLA typing from RNA-seq data using seq2HLA.
+ *
+ * seq2HLA determines HLA class I and class II genotypes from RNA-seq reads
+ * by mapping to a reference database of HLA alleles. It provides:
+ *
+ * - 2-digit resolution typing (e.g., HLA-A*02)
+ * - 4-digit resolution typing (e.g., HLA-A*02:01)
+ * - Expression levels of HLA alleles
+ * - Ambiguity reports when alleles cannot be distinguished
+ *
+ * Supports both classical HLA genes (HLA-A, -B, -C, -DRB1, -DQB1, -DQA1)
+ * and non-classical genes.
+ *
+ * Requires paired-end RNA-seq reads as input.
+ *
+ * @param meta Sample metadata map containing sample ID
+ * @param reads Paired-end FASTQ files (must be paired-end)
+ */
 process SEQ2HLA {
     tag "${meta.id}"
     label 'process_medium'

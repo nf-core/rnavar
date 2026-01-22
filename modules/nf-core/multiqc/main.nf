@@ -1,3 +1,23 @@
+/**
+ * Aggregate results from multiple analysis tools into a single report.
+ *
+ * MultiQC searches a given directory for analysis logs and compiles them
+ * into a single HTML report. It supports output from many common
+ * bioinformatics tools including FastQC, STAR, Picard, GATK, and more.
+ *
+ * The report provides:
+ * - Summary statistics across all samples
+ * - Interactive plots for QC metrics
+ * - Data tables for detailed metrics
+ * - Export functionality for plots and data
+ *
+ * @param multiqc_files Input files/directories to search for tool outputs
+ * @param multiqc_config Custom MultiQC configuration file (optional)
+ * @param extra_multiqc_config Additional MultiQC config to merge (optional)
+ * @param multiqc_logo Custom logo for the report header (optional)
+ * @param replace_names File with sample name replacements (optional)
+ * @param sample_names File with sample name mappings (optional)
+ */
 process MULTIQC {
     label 'process_single'
 

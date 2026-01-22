@@ -40,6 +40,46 @@ include { checkSamplesAfterGrouping } from '../subworkflows/local/utils_nfcore_r
 ========================================================================================
 */
 
+/**
+ * Main workflow for RNA variant calling analysis.
+ *
+ * This workflow performs end-to-end RNA-seq variant calling including:
+ * - Quality control with FastQC
+ * - Read alignment with STAR
+ * - Duplicate marking with Picard
+ * - Split N CIGAR reads for RNA-seq data
+ * - Base quality score recalibration (BQSR)
+ * - Variant calling with GATK HaplotypeCaller
+ * - Variant filtering
+ * - Variant annotation with SnpEff and VEP
+ * - HLA typing with seq2HLA (optional)
+ *
+ * The workflow supports multiple input types including FASTQ, BAM, CRAM, and VCF files.
+ *
+ * @param input Samplesheet with sample metadata and file paths
+ * @param bcftools_annotations BCFtools annotation file for variant annotation
+ * @param bcftools_annotations_tbi Index for BCFtools annotation file
+ * @param bcftools_columns Columns to use from BCFtools annotation
+ * @param bcftools_header_lines Header lines for BCFtools annotation
+ * @param dbsnp dbSNP VCF file for known variants
+ * @param dbsnp_tbi Index for dbSNP VCF
+ * @param dict Sequence dictionary for the reference genome
+ * @param exon_bed BED file with exon coordinates
+ * @param fasta Reference genome FASTA file
+ * @param fasta_fai Index for reference FASTA
+ * @param gtf Gene annotation GTF file
+ * @param known_sites Known variant sites for BQSR
+ * @param known_sites_tbi Index for known sites VCF
+ * @param star_index STAR genome index directory
+ * @param snpeff_cache SnpEff cache directory
+ * @param snpeff_db SnpEff database name
+ * @param vep_genome VEP genome assembly name
+ * @param vep_species VEP species name
+ * @param vep_cache_version VEP cache version
+ * @param vep_include_fasta Whether to include FASTA in VEP annotation
+ * @param vep_cache VEP cache directory
+ * @param vep_extra_files Additional VEP plugin files
+ */
 workflow RNAVAR {
     take:
     input

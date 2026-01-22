@@ -7,6 +7,33 @@ include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vc
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff'
 
+/**
+ * Annotate variants using multiple annotation tools.
+ *
+ * This subworkflow provides flexible variant annotation using one or more tools:
+ * - <b>SnpEff</b>: Functional annotation and effect prediction
+ * - <b>VEP (Ensembl Variant Effect Predictor)</b>: Comprehensive variant annotation
+ * - <b>BCFtools annotate</b>: Add custom annotations from external files
+ * - <b>Merge</b>: Combined SnpEff + VEP annotation
+ *
+ * The tools to use are specified via the <code>tools</code> parameter as a
+ * comma-separated list (e.g., "snpeff,vep" or "merge").
+ *
+ * @param vcf Input VCF file to annotate
+ * @param fasta Reference genome FASTA (optional, used by VEP)
+ * @param tools Comma-separated list of annotation tools to apply
+ * @param snpeff_db SnpEff database name (e.g., "GRCh38.105")
+ * @param snpeff_cache Path to SnpEff cache directory
+ * @param vep_genome VEP genome assembly (e.g., "GRCh38")
+ * @param vep_species VEP species name (e.g., "homo_sapiens")
+ * @param vep_cache_version VEP cache version number
+ * @param vep_cache Path to VEP cache directory
+ * @param vep_extra_files Additional VEP plugin files
+ * @param bcftools_annotations BCFtools annotation file
+ * @param bcftools_annotations_index Index for BCFtools annotation file
+ * @param bcftools_columns Columns to extract from annotation file
+ * @param bcftools_header_lines Header lines to add to VCF
+ */
 workflow VCF_ANNOTATE_ALL {
     take:
     vcf // channel: [ val(meta), vcf ] (mandatory)

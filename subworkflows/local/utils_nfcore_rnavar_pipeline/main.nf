@@ -29,6 +29,25 @@ include { validateParameters   } from 'plugin/nf-schema'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+/**
+ * Initialize the nf-core/rnavar pipeline.
+ *
+ * Performs all setup tasks required before running the main workflow:
+ * - Display version information if requested
+ * - Validate parameters against the schema
+ * - Check Conda channel configuration
+ * - Parse and validate the input samplesheet
+ * - Generate parameter summary for logging
+ *
+ * @param version Whether to display version and exit
+ * @param validate_params Whether to validate parameters against schema
+ * @param nextflow_cli_args Positional CLI arguments
+ * @param outdir Output directory path
+ * @param input Path to input samplesheet
+ * @param help Whether to display help and exit
+ * @param help_full Whether to show full help message
+ * @param show_hidden Whether to show hidden parameters
+ */
 workflow PIPELINE_INITIALISATION {
     take:
     version // boolean: Display version and exit
@@ -159,6 +178,23 @@ workflow PIPELINE_INITIALISATION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+/**
+ * Handle pipeline completion tasks.
+ *
+ * Executes cleanup and notification tasks when the pipeline finishes:
+ * - Send completion email with run summary
+ * - Generate completion summary to stdout
+ * - Send notifications to messaging platforms (Slack, Teams, etc.)
+ * - Log error messages for failed runs
+ *
+ * @param email Email address for completion notification
+ * @param email_on_fail Email address for failure notification only
+ * @param plaintext_email Whether to send plain-text instead of HTML email
+ * @param outdir Output directory path
+ * @param monochrome_logs Whether to disable colored log output
+ * @param hook_url Webhook URL for messaging platform notifications
+ * @param multiqc_report Path to the MultiQC report
+ */
 workflow PIPELINE_COMPLETION {
     take:
     email //  string: email address
@@ -205,16 +241,26 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-//
-// Check and validate pipeline parameters
-//
+
+/**
+ * Validate pipeline input parameters.
+ *
+ * Checks that all required parameters are provided and valid.
+ * Currently validates that the specified genome exists in the config.
+ */
 def validateInputParameters() {
     genomeExistsError()
 }
 
-//
-// Validate channels from input samplesheet
-//
+/**
+ * Validate and parse input samplesheet entries.
+ *
+ * Ensures that multiple runs of the same sample have consistent
+ * sequencing type (all single-end or all paired-end).
+ *
+ * @param input Tuple containing sample metadata and FASTQ paths
+ * @return Tuple of merged metadata and FASTQ files
+ */
 def validateInputSamplesheet(input) {
     def (metas, fastqs) = input[1..2]
 
@@ -227,9 +273,18 @@ def validateInputSamplesheet(input) {
     return [metas[0], fastqs]
 }
 
-//
-// Function to check samples are internally consistent after being grouped
-//
+/**
+ * Validate samples after grouping by sample ID.
+ *
+ * Performs consistency checks on grouped sample data:
+ * - Ensures only one BAM/CRAM file per sample
+ * - Prevents mixing of FASTQ and BAM/CRAM inputs
+ * - Validates consistent single-end/paired-end status
+ * - Properly interleaves paired-end FASTQ files
+ *
+ * @param input Grouped tuple containing sample ID, metadata, and file paths
+ * @return Validated tuple with merged metadata and file paths
+ */
 def checkSamplesAfterGrouping(input) {
     def (_ids, metas, fastqs_1, fastqs_2, bams, bais, crams, crais, vcfs, tbis) = input
 
@@ -279,9 +334,12 @@ def checkSamplesAfterGrouping(input) {
     return [metas[0], fastqs, bam_list[0] ?: [], bai_list[0] ?: [], cram_list[0] ?: [], crai_list[0] ?: [], vcf_list[0] ?: [], tbi_list[0] ?: []]
 }
 
-//
-// Exit pipeline if incorrect --genome key provided
-//
+/**
+ * Check if the specified genome exists in the configuration.
+ *
+ * Throws an error with a helpful message listing available genomes
+ * if the specified genome key is not found in the config.
+ */
 def genomeExistsError() {
     if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
         def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" + "  Currently, the available genome keys are:\n" + "  ${params.genomes.keySet().join(", ")}\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

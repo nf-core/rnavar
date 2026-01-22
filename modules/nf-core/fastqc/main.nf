@@ -1,3 +1,21 @@
+/**
+ * Run FastQC quality control on sequencing reads.
+ *
+ * FastQC provides a comprehensive quality control report for high-throughput
+ * sequencing data. It generates an HTML report and a ZIP archive containing
+ * detailed metrics including:
+ *
+ * - Basic statistics (total sequences, sequence length, GC content)
+ * - Per-base sequence quality scores
+ * - Per-sequence quality scores
+ * - Per-base sequence content
+ * - Sequence duplication levels
+ * - Overrepresented sequences
+ * - Adapter content
+ *
+ * @param meta Sample metadata map containing sample ID
+ * @param reads Input FASTQ file(s) - can be single-end or paired-end
+ */
 process FASTQC {
     tag "${meta.id}"
     label 'process_medium'

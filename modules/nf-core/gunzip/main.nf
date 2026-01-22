@@ -1,3 +1,18 @@
+/*
+* This profcess is AWESOME
+*
+* @input:
+*   - - meta:
+*         type: map
+*         description: |
+*           Optional groovy Map containing meta information
+*           e.g. [ id:'test', single_end:false ]
+*     - archive:
+*         type: file
+*         description: File to be compressed/uncompressed
+*         pattern: "*.*"
+*         ontologies: []
+*/
 process GUNZIP {
     tag "${archive}"
     label 'process_single'
