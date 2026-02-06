@@ -15,8 +15,6 @@ workflow SPLITNCIGAR {
     intervals // channel: [ interval_list]
 
     main:
-    def ch_versions = channel.empty()
-
     def bam_interval = bam
         .combine(intervals)
         .map { meta, bam_, bai, intervals_ ->
@@ -36,7 +34,6 @@ workflow SPLITNCIGAR {
     )
 
     def bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
-    ch_versions = ch_versions.mix(GATK4_SPLITNCIGARREADS.out.versions)
 
     def bam_splitncigar_interval = bam_splitncigar
         .map { meta, bam_ ->
@@ -55,7 +52,6 @@ workflow SPLITNCIGAR {
     def splitncigar_bam = SAMTOOLS_MERGE.out.bam
 
     SAMTOOLS_INDEX(splitncigar_bam)
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
 
     def splitncigar_bam_indices = SAMTOOLS_INDEX.out.bai
         .mix(SAMTOOLS_INDEX.out.csi)
@@ -64,6 +60,5 @@ workflow SPLITNCIGAR {
     def splitncigar_bam_bai = splitncigar_bam.join(splitncigar_bam_indices, failOnDuplicate: true, failOnMismatch: true)
 
     emit:
-    bam_bai  = splitncigar_bam_bai
-    versions = ch_versions
+    bam_bai = splitncigar_bam_bai
 }

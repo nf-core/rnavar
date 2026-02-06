@@ -5,6 +5,7 @@
             {
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": "115.2",
+                    "perl-math-cdf": "",
                     "tabix": "1.21"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
@@ -32,6 +33,10 @@
                     "gawk": "5.1.0",
                     "samtools": 1.21,
                     "star": "2.7.11b"
+                },
+                "TABIX_BGZIPTABIX": {
+                    "bgzip": "1.21",
+                    "tabix": "1.21"
                 },
                 "TABIX_TABIX": {
                     "tabix": "1.21"
@@ -126,9 +131,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-14T14:45:36.193117259"
+        "timestamp": "2026-02-06T10:58:50.103780572"
     },
     "-profile test --tools merge": {
         "content": [
@@ -136,6 +141,7 @@
             {
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": "115.2",
+                    "perl-math-cdf": "",
                     "tabix": "1.21"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
@@ -163,6 +169,10 @@
                     "gawk": "5.1.0",
                     "samtools": 1.21,
                     "star": "2.7.11b"
+                },
+                "TABIX_BGZIPTABIX": {
+                    "bgzip": "1.21",
+                    "tabix": "1.21"
                 },
                 "TABIX_TABIX": {
                     "tabix": "1.21"
@@ -244,8 +254,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-16T11:54:31.808173243"
+        "timestamp": "2026-02-06T10:57:49.976442476"
     }
 }

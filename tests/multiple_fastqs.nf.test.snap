@@ -68,7 +68,7 @@
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
-                    "samtools": 1.21,
+                    "samtools": "1.21",
                     "star": "2.7.11b"
                 },
                 "STAR_INDEXVERSION": {
@@ -80,7 +80,7 @@
                     "tabix": "1.21"
                 },
                 "UNTAR": {
-                    "untar": 1.34
+                    "untar": "1.34"
                 }
             },
             [
@@ -190,9 +190,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-14T15:51:24.162009394"
+        "timestamp": "2026-02-06T11:28:50.106966082"
     },
     "-profile test --input fastq_multiple.csv": {
         "content": [
@@ -263,7 +263,7 @@
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
-                    "samtools": 1.21,
+                    "samtools": "1.21",
                     "star": "2.7.11b"
                 },
                 "STAR_INDEXVERSION": {
@@ -275,7 +275,7 @@
                     "tabix": "1.21"
                 },
                 "UNTAR": {
-                    "untar": 1.34
+                    "untar": "1.34"
                 }
             },
             [
@@ -443,12 +443,14 @@
                 "GM12879.haplotypecaller.filtered.vcf.gz:md5,4dea749242a5e53787b805b82c813c1e",
                 "GM12879.haplotypecaller.vcf.gz:md5,46f85ad9632e760add202f9affcf04d8"
             ],
-            "No warnings"
+            [
+                "WARN: Unable to stage foreign file: https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/index/star/star.tar.gz (try 1 of 3) -- Cause: Read data length does not match expected size - bytes read: 0; expected: 299444"
+            ]
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-14T15:49:07.203940336"
+        "timestamp": "2026-02-06T11:25:17.935544621"
     }
 }

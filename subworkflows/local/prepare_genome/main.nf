@@ -55,7 +55,6 @@ workflow PREPARE_GENOME {
     def dict_input = dict ? channel.empty() : ch_fasta
 
     GATK4_CREATESEQUENCEDICTIONARY(dict_input)
-    ch_versions = ch_versions.mix(GATK4_CREATESEQUENCEDICTIONARY.out.versions)
 
     def ch_dict = dict
         ? channel.fromPath(dict).map { dict_ -> [[id: dict_.baseName], dict_] }.collect()
@@ -108,7 +107,6 @@ workflow PREPARE_GENOME {
         BGZIPTABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: vcf.baseName], vcf] })
         ch_bcftools_annotations = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_index.map { _meta, file, _index -> [file] }.collect()
         ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_index.map { _meta, _file, tbi -> [tbi] }.collect()
-        ch_versions = ch_versions.mix(BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.versions)
     }
 
     def ch_dbsnp = dbsnp
@@ -126,7 +124,6 @@ workflow PREPARE_GENOME {
         BGZIPTABIX_DBSNP(ch_dbsnp)
         ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_index.map { meta, file, _index -> [meta, file] }
         ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_index.map { meta, _file, tbi -> [meta, tbi] }
-        ch_versions = ch_versions.mix(BGZIPTABIX_DBSNP.out.versions)
     }
 
     def ch_known_indels = known_indels
@@ -144,7 +141,6 @@ workflow PREPARE_GENOME {
         BGZIPTABIX_KNOWN_INDELS(ch_known_indels)
         ch_known_indels = BGZIPTABIX_KNOWN_INDELS.out.gz_index.map { meta, file, _index -> [meta, file] }
         ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.gz_index.map { meta, _file, tbi -> [meta, tbi] }
-        ch_versions = ch_versions.mix(BGZIPTABIX_KNOWN_INDELS.out.versions)
     }
 
     // known_sites is made by grouping both the dbsnp and the known indels resources
@@ -193,7 +189,6 @@ workflow PREPARE_GENOME {
         }
 
     UNTAR(ch_star_index_input.tarzipped)
-    ch_versions = ch_versions.mix(UNTAR.out.versions)
 
     STAR_INDEXVERSION()
     ch_versions = ch_versions.mix(STAR_INDEXVERSION.out.versions)
@@ -225,7 +220,6 @@ workflow PREPARE_GENOME {
         }
 
     STAR_GENOMEGENERATE(genomegenerate_input, ch_gtf)
-    ch_versions = ch_versions.mix(STAR_GENOMEGENERATE.out.versions)
 
     star_index_output = STAR_GENOMEGENERATE.out.index
         .mix(star_index_check.compatible)

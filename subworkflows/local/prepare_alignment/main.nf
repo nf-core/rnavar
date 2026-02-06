@@ -10,8 +10,6 @@ workflow PREPARE_ALIGNMENT {
     bam // [ val(meta), path(bam), path(bai) ]
 
     main:
-    ch_versions = channel.empty()
-
     def alignment_branch = bam
         .mix(cram)
         .branch { meta, bam_, bai ->
@@ -36,9 +34,6 @@ workflow PREPARE_ALIGNMENT {
         .mix(cram_indexed)
         .mix(alignment_branch.indexed)
 
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
-
     emit:
-    bam      = alignment_out // [ val(meta), path(bam), path(bai) ]
-    versions = ch_versions
+    bam = alignment_out // [ val(meta), path(bam), path(bai) ]
 }

@@ -71,7 +71,7 @@
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
-                    "samtools": 1.21,
+                    "samtools": "1.21",
                     "star": "2.7.11b"
                 },
                 "STAR_INDEXVERSION": {
@@ -83,7 +83,7 @@
                     "tabix": "1.21"
                 },
                 "UNTAR": {
-                    "untar": 1.34
+                    "untar": "1.34"
                 }
             },
             [
@@ -264,8 +264,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-14T15:26:38.815885945"
+        "timestamp": "2026-02-06T10:53:02.352989427"
     }
 }

@@ -107,7 +107,6 @@ workflow RNAVAR {
         parsed_input.cram,
         parsed_input.bam,
     )
-    versions = versions.mix(PREPARE_ALIGNMENT.out.versions)
 
     MOSDEPTH(parsed_input.cram.map { meta, cram, crai -> [meta, cram, crai, []] }, fasta)
 
@@ -131,7 +130,6 @@ workflow RNAVAR {
         UMITOOLS_EXTRACT(
             cat_fastq
         )
-        versions = versions.mix(UMITOOLS_EXTRACT.out.versions)
         umi_extracted_reads = UMITOOLS_EXTRACT.out.reads
     }
     else {
@@ -142,14 +140,12 @@ workflow RNAVAR {
 
     GATK4_BEDTOINTERVALLIST(exon_bed, dict)
     def interval_list = GATK4_BEDTOINTERVALLIST.out.interval_list
-    versions = versions.mix(GATK4_BEDTOINTERVALLIST.out.versions)
 
     // MODULE: Scatter one interval-list into many interval-files using GATK4 IntervalListTools
     def interval_list_split = channel.empty()
     if (!skip_intervallisttools) {
         GATK4_INTERVALLISTTOOLS(interval_list)
         interval_list_split = GATK4_INTERVALLISTTOOLS.out.interval_list.map { _meta, bed -> [bed] }.collect()
-        versions = versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
     }
     else {
         interval_list_split = interval_list.map { _meta, bed -> bed }
@@ -181,7 +177,6 @@ workflow RNAVAR {
         // Gather QC reports
         reports = reports.mix(FASTQ_ALIGN_STAR.out.log_out.collect { _meta, log -> log })
         reports = reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect { _meta, log -> log }.ifEmpty([]))
-        versions = versions.mix(FASTQ_ALIGN_STAR.out.versions)
 
         // SUBWORKFLOW: Mark duplicates with GATK4
         BAM_MARKDUPLICATES_PICARD(
@@ -203,7 +198,6 @@ workflow RNAVAR {
         reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.stats.collect { _meta, log -> log }.ifEmpty([]))
         reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.flagstat.collect { _meta, log -> log }.ifEmpty([]))
         reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.idxstats.collect { _meta, log -> log }.ifEmpty([]))
-        versions = versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions)
 
         // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
@@ -217,7 +211,6 @@ workflow RNAVAR {
         )
 
         def splitncigar_bam_bai = SPLITNCIGAR.out.bam_bai
-        versions = versions.mix(SPLITNCIGAR.out.versions)
 
         // MODULE: BaseRecalibrator from GATK4
         // Generates a recalibration table based on various co-variates
@@ -239,7 +232,6 @@ workflow RNAVAR {
 
             // Gather QC reports
             reports = reports.mix(bqsr_table.map { _meta, table -> table })
-            versions = versions.mix(GATK4_BASERECALIBRATOR.out.versions)
 
             def bam_applybqsr = splitncigar_bam_bai.join(bqsr_table)
 
@@ -262,7 +254,6 @@ workflow RNAVAR {
 
             // Gather QC reports
             reports = reports.mix(RECALIBRATE.out.qc.collect { _meta, log_out -> log_out }.ifEmpty([]))
-            versions = versions.mix(RECALIBRATE.out.versions)
         }
         else {
             bam_variant_calling = splitncigar_bam_bai
@@ -297,7 +288,6 @@ workflow RNAVAR {
             }
             .groupTuple()
 
-        versions = versions.mix(GATK4_HAPLOTYPECALLER.out.versions)
 
         def haplotypecaller_vcf = channel.empty()
         if (!generate_gvcf) {
@@ -309,7 +299,6 @@ workflow RNAVAR {
                 dict,
             )
             haplotypecaller_vcf = GATK4_MERGEVCFS.out.vcf
-            versions = versions.mix(GATK4_MERGEVCFS.out.versions)
 
             // MODULE: Index the VCF using TABIX
             TABIX(haplotypecaller_vcf)
@@ -332,7 +321,6 @@ workflow RNAVAR {
 
                 def filtered_vcf = GATK4_VARIANTFILTRATION.out.vcf
                 final_vcf = filtered_vcf
-                versions = versions.mix(GATK4_VARIANTFILTRATION.out.versions)
             }
             else {
                 final_vcf = haplotypecaller_vcf
@@ -372,12 +360,9 @@ workflow RNAVAR {
                 dict.map { _meta, dict_ -> dict_ },
             )
             def haplotypecaller_gvcf = GATK4_COMBINEGVCFS.out.combined_gvcf
-            versions = versions.mix(GATK4_COMBINEGVCFS.out.versions)
 
             // MODULE: Index the VCF using TABIX
             TABIXGVCF(haplotypecaller_gvcf)
-
-            versions = versions.mix(TABIXGVCF.out.versions)
         }
     }
 

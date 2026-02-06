@@ -17,9 +17,7 @@ workflow RECALIBRATE {
     fasta // channel: [mandatory] fasta
 
     main:
-
     def ch_reports = channel.empty()
-    def ch_versions = channel.empty()
 
     GATK4_APPLYBQSR(
         bam,
@@ -36,16 +34,12 @@ workflow RECALIBRATE {
 
     def bam_recalibrated_index = GATK4_APPLYBQSR.out.bam.join(bam_indices, failOnMismatch: true, failOnDuplicate: true)
 
-    ch_versions = ch_versions.mix(GATK4_APPLYBQSR.out.versions)
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
-
     if (!skip_samtools) {
         SAMTOOLS_STATS(bam_recalibrated_index, [[], []])
         ch_reports = SAMTOOLS_STATS.out.stats
     }
 
     emit:
-    bam      = bam_recalibrated_index
-    qc       = ch_reports
-    versions = ch_versions
+    bam = bam_recalibrated_index
+    qc  = ch_reports
 }
