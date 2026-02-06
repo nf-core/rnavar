@@ -25,8 +25,6 @@
                     "samtools": "1.22.1"
                 },
                 "STAR_INDEXVERSION": {
-                    "gawk": "5.1.0",
-                    "samtools": 1.21,
                     "star": "2.7.11b"
                 }
             },
@@ -91,8 +89,6 @@
                     "samtools": "1.22.1"
                 },
                 "STAR_INDEXVERSION": {
-                    "gawk": "5.1.0",
-                    "samtools": 1.21,
                     "star": "2.7.11b"
                 }
             },

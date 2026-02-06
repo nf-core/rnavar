@@ -72,8 +72,6 @@
                     "star": "2.7.11b"
                 },
                 "STAR_INDEXVERSION": {
-                    "gawk": "5.1.0",
-                    "samtools": 1.21,
                     "star": "2.7.11b"
                 },
                 "TABIX": {
@@ -267,8 +265,6 @@
                     "star": "2.7.11b"
                 },
                 "STAR_INDEXVERSION": {
-                    "gawk": "5.1.0",
-                    "samtools": 1.21,
                     "star": "2.7.11b"
                 },
                 "TABIX": {
