@@ -7,31 +7,14 @@
                         "test.bam:md5sum,67daadcc078bb45be360e1f2af46a8e5",
                         "test.bam.bai"
                     ]
-                ],
-                "versions": [
-                    {
-                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
-                            "gatk4": "4.6.2.0"
-                        }
-                    },
-                    {
-                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
-                            "gatk4": "4.6.2.0"
-                        }
-                    },
-                    {
-                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
-                            "samtools": "1.22.1"
-                        }
-                    }
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-09T13:59:25.673811733"
+        "timestamp": "2026-02-06T12:43:34.214430422"
     },
     "no_intervals": {
         "content": [
@@ -41,26 +24,14 @@
                         "test.bam:md5sum,7ebc60b3ccddb8489781f46522bc5da1",
                         "test.bam.bai"
                     ]
-                ],
-                "versions": [
-                    {
-                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
-                            "gatk4": "4.6.2.0"
-                        }
-                    },
-                    {
-                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
-                            "samtools": "1.22.1"
-                        }
-                    }
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-09T13:59:44.033225989"
+        "timestamp": "2026-02-06T12:43:54.063339805"
     },
     "bam": {
         "content": [
@@ -70,30 +41,13 @@
                         "test.bam:md5sum,67daadcc078bb45be360e1f2af46a8e5",
                         "test.bam.bai"
                     ]
-                ],
-                "versions": [
-                    {
-                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
-                            "gatk4": "4.6.2.0"
-                        }
-                    },
-                    {
-                        "SPLITNCIGAR:GATK4_SPLITNCIGARREADS": {
-                            "gatk4": "4.6.2.0"
-                        }
-                    },
-                    {
-                        "SPLITNCIGAR:SAMTOOLS_INDEX": {
-                            "samtools": "1.22.1"
-                        }
-                    }
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-09T13:59:03.705811377"
+        "timestamp": "2026-02-06T12:43:08.927612687"
     }
 }
