@@ -105,15 +105,6 @@
                             "transcriptInfo.tab"
                         ]
                     ]
-                ],
-                "versions": [
-                    {
-                        "PREPARE_GENOME:STAR_INDEXVERSION": {
-                            "star": "2.7.11b",
-                            "samtools": 1.21,
-                            "gawk": "5.1.0"
-                        }
-                    }
                 ]
             }
         ],
@@ -121,7 +112,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-06T12:42:03.476716696"
+        "timestamp": "2026-02-06T14:25:40.343474784"
     },
     "only essentials": {
         "content": [
@@ -165,15 +156,6 @@
                         },
                         "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.gtf"
                     ]
-                ],
-                "versions": [
-                    {
-                        "PREPARE_GENOME:STAR_INDEXVERSION": {
-                            "star": "2.7.11b",
-                            "samtools": 1.21,
-                            "gawk": "5.1.0"
-                        }
-                    }
                 ]
             }
         ],
@@ -181,6 +163,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-06T12:41:50.226321713"
+        "timestamp": "2026-02-06T14:25:19.474716148"
     }
 }

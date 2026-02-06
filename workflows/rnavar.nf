@@ -83,7 +83,6 @@ workflow RNAVAR {
 
     // To gather all QC reports and versions for MultiQC
     reports = channel.empty()
-    versions = channel.empty()
 
     // Parse the input data
     parsed_input = input
@@ -154,7 +153,6 @@ workflow RNAVAR {
     // MODULE: HLATyping with Seq2HLA
     if (tools.contains('seq2hla')) {
         SEQ2HLA(umi_extracted_reads)
-        versions = versions.mix(SEQ2HLA.out.versions)
     }
 
     // SUBWORKFLOW: Perform read alignment using STAR aligner
@@ -368,5 +366,4 @@ workflow RNAVAR {
 
     emit:
     reports // channel: qc reports for multiQC
-    versions // channel: [ path(versions.yml) ]
 }

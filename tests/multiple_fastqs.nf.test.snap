@@ -443,9 +443,7 @@
                 "GM12879.haplotypecaller.filtered.vcf.gz:md5,4dea749242a5e53787b805b82c813c1e",
                 "GM12879.haplotypecaller.vcf.gz:md5,46f85ad9632e760add202f9affcf04d8"
             ],
-            [
-                "WARN: Unable to stage foreign file: https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/index/star/star.tar.gz (try 1 of 3) -- Cause: Read data length does not match expected size - bytes read: 0; expected: 299444"
-            ]
+            "No warnings"
         ],
         "meta": {
             "nf-test": "0.9.3",

@@ -39,8 +39,6 @@ workflow PREPARE_GENOME {
     align // boolean: The pipeline needs aligner indices or not
 
     main:
-    def ch_versions = channel.empty()
-
     // Unzip reference genome files if needed
     def ch_gunzip_fasta_input = fasta.toString().endsWith('.gz')
         ? channel.fromPath(fasta).map { fasta_ -> [[id: fasta_.baseName], fasta_] }.collect()
@@ -191,7 +189,6 @@ workflow PREPARE_GENOME {
     UNTAR(ch_star_index_input.tarzipped)
 
     STAR_INDEXVERSION()
-    ch_versions = ch_versions.mix(STAR_INDEXVERSION.out.versions)
 
     def star_index_check = ch_star_index_input.index
         .mix(UNTAR.out.untar)
@@ -240,7 +237,6 @@ workflow PREPARE_GENOME {
     known_sites      = ch_known_sites // path: {known_sites*}.vcf.gz
     known_sites_tbi  = ch_known_sites_tbi // path: {known_sites*}.vcf.gz.tbi
     star_index       = star_index_output // path: star/index/
-    versions         = ch_versions // channel: [ versions.yml ]
 }
 
 /*

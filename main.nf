@@ -67,7 +67,6 @@ workflow NFCORE_RNAVAR {
 
     main:
     reports = channel.empty()
-    versions = channel.empty()
 
     if (params.gtf && params.gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
@@ -102,8 +101,6 @@ workflow NFCORE_RNAVAR {
         params.skip_exon_bed_check,
         align,
     )
-
-    versions = versions.mix(PREPARE_GENOME.out.versions)
 
     // Download cache
     if (params.download_cache) {
@@ -195,11 +192,9 @@ workflow NFCORE_RNAVAR {
     )
 
     reports = reports.mix(RNAVAR.out.reports)
-    versions = versions.mix(RNAVAR.out.versions)
 
     emit:
     reports // channel: qc reports for multiQC
-    versions // channel: [ path(versions.yml) ]
 }
 
 /*
@@ -234,7 +229,7 @@ workflow {
     )
 
     def collated_versions = softwareVersionsToYAML(
-        softwareVersions: NFCORE_RNAVAR.out.versions.mix(channel.topic("versions")),
+        softwareVersions: channel.topic("versions"),
         nextflowVersion: workflow.nextflow.version,
     ).collectFile(
         storeDir: "${params.outdir}/pipeline_info",

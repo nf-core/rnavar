@@ -37,9 +37,6 @@ nextflow_workflow {
                         if (key in ["bcfann", "bcfann_tbi", "dbsnp", "dbsnp_tbi", "known_indels", "known_indels_tbi", "known_sites", "known_sites_tbi", "star_index"]) {
                             return null
                         }
-                        else if (key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
-                        }
                         return [key, val]
                     }
             ).match()
@@ -87,9 +84,6 @@ nextflow_workflow {
                         else if (key in ["known_sites", "known_sites_tbi"]) {
                             def array = val[0][1].collect{ file(it.toString()).name }
                             return [key, array.sort().unique() ]
-                        }
-                        else if (key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
                         }
                         return [key, val]
                     }

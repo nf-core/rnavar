@@ -32,7 +32,7 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "09ea5d9fcd6eda714f148e0f3b6a4920b2091f41",
+                        "git_sha": "691bb6956ec56154b81ba5771641ca24443c4d17",
                         "installed_by": ["modules", "vcf_annotate_ensemblvep"]
                     },
                     "fastqc": {
@@ -162,7 +162,7 @@
                     },
                     "seq2hla": {
                         "branch": "master",
-                        "git_sha": "4dd9d8439a429c7ee566e0e2347f76ddeef27e66",
+                        "git_sha": "d7b2b9cb11648a783a827ed64ad490af9fca3eb5",
                         "installed_by": ["modules"]
                     },
                     "snpeff/download": {
@@ -187,7 +187,7 @@
                     },
                     "star/indexversion": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "fedd97a5206cca84e1b3fbffe070fb7e0349c9e9",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgziptabix": {
