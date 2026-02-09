@@ -60,7 +60,19 @@ params.vep_species       = getGenomeAttribute('vep_species')
 workflow {
 
     main:
-    // Fails early
+    // SUBWORKFLOW: Run initialisation tasks
+    PIPELINE_INITIALISATION(
+        params.version,
+        params.validate_params,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
+    )
+
+    // Fails for missing params
     if (params.gtf && params.gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
     }
@@ -75,18 +87,6 @@ workflow {
     if (!params.skip_baserecalibration && !params.dbsnp && !params.known_indels) {
         error("Known sites are required for performing base recalibration. Supply them with either --dbsnp and/or --known_indels or disable base recalibration with --skip_baserecalibration")
     }
-
-    // SUBWORKFLOW: Run initialisation tasks
-    PIPELINE_INITIALISATION(
-        params.version,
-        params.validate_params,
-        args,
-        params.outdir,
-        params.input,
-        params.help,
-        params.help_full,
-        params.show_hidden,
-    )
 
     // Download cache
     if (params.download_cache) {
