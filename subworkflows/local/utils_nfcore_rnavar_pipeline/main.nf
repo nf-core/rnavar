@@ -60,6 +60,8 @@ workflow PIPELINE_INITIALISATION {
         checkCondaChannels()
     }
 
+    checkConfigProvided()
+
     // Validate parameters and generate parameter summary to stdout
     //
     before_text = """
@@ -95,7 +97,7 @@ workflow PIPELINE_INITIALISATION {
         log.info(
             paramsHelp(
                 help_options,
-                (params.help instanceof String && params.help != "true") ? params.help : "",
+                params.help instanceof String && params.help != "true" ? params.help : "",
             )
         )
         exit(0)
