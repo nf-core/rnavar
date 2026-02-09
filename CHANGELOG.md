@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#275](https://github.com/nf-core/rnavar/pull/275) - Starting workflow output migration with multiqc
 - [#277](https://github.com/nf-core/rnavar/pull/277) - Continue workflow output migration with reports from snpeff and vep
 - [#280](https://github.com/nf-core/rnavar/pull/280) - Continue topics migration with all remaining modules and subworkflows
+- [#281](https://github.com/nf-core/rnavar/pull/281) - Minor code refactor, and medium usage of Nextflow autoformatting
 
 #### Fixed
 
