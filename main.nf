@@ -53,6 +53,114 @@ params.vep_species       = getGenomeAttribute('vep_species')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RUN MAIN WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+workflow {
+
+    main:
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION(
+        params.version,
+        params.validate_params,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
+    )
+
+    //
+    // WORKFLOW: Run main workflow
+    //
+    NFCORE_RNAVAR(
+        PIPELINE_INITIALISATION.out.samplesheet,
+        PIPELINE_INITIALISATION.out.align,
+    )
+
+    def collated_versions = softwareVersionsToYAML(
+        softwareVersions: channel.topic("versions"),
+        nextflowVersion: workflow.nextflow.version,
+    ).collectFile(
+        storeDir: "${params.outdir}/pipeline_info",
+        name: 'nf_core_' + 'rnavar_software_' + 'mqc_' + 'versions.yml',
+        sort: true,
+        newLine: true,
+    )
+
+    // MODULE: MultiQC
+    // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
+    def multiqc_report = channel.empty()
+
+    // MULTIQC
+    if (!params.skip_multiqc) {
+        def multiqc_files = channel.empty()
+
+        def multiqc_config = channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
+        def multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config, checkIfExists: true) : channel.empty()
+        def multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo, checkIfExists: true) : channel.empty()
+        def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+        def workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
+        def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
+        def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
+
+        multiqc_files = multiqc_files.mix(
+            channel.topic("multiqc_files").map { _meta, _process, _tool, reports -> reports },
+            NFCORE_RNAVAR.out.reports,
+        )
+        multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+        multiqc_files = multiqc_files.mix(collated_versions)
+        multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
+
+        MULTIQC(
+            multiqc_files.collect(),
+            multiqc_config.toList(),
+            multiqc_custom_config.toList(),
+            multiqc_logo.toList(),
+            [],
+            [],
+        )
+        multiqc_report = MULTIQC.out.report.toList()
+    }
+
+
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION(
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        multiqc_report,
+    )
+
+    publish:
+    multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
+    reports = channel.topic("multiqc_files").filter { _meta, _process, tool, _file ->
+        return !(tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
+    }
+}
+
+output {
+    multiqc {
+        path "reports/multiqc"
+    }
+    reports {
+        path { meta, _process, tool, file ->
+            file >> "reports/${tool}/${meta.id}/"
+        }
+    }
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -195,114 +303,6 @@ workflow NFCORE_RNAVAR {
 
     emit:
     reports // channel: qc reports for multiQC
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-workflow {
-
-    main:
-    //
-    // SUBWORKFLOW: Run initialisation tasks
-    //
-    PIPELINE_INITIALISATION(
-        params.version,
-        params.validate_params,
-        args,
-        params.outdir,
-        params.input,
-        params.help,
-        params.help_full,
-        params.show_hidden,
-    )
-
-    //
-    // WORKFLOW: Run main workflow
-    //
-    NFCORE_RNAVAR(
-        PIPELINE_INITIALISATION.out.samplesheet,
-        PIPELINE_INITIALISATION.out.align,
-    )
-
-    def collated_versions = softwareVersionsToYAML(
-        softwareVersions: channel.topic("versions"),
-        nextflowVersion: workflow.nextflow.version,
-    ).collectFile(
-        storeDir: "${params.outdir}/pipeline_info",
-        name: 'nf_core_' + 'rnavar_software_' + 'mqc_' + 'versions.yml',
-        sort: true,
-        newLine: true,
-    )
-
-    // MODULE: MultiQC
-    // Present summary of reads, alignment, duplicates, BSQR stats for all samples as well as workflow summary/parameters as single report
-    def multiqc_report = channel.empty()
-
-    // MULTIQC
-    if (!params.skip_multiqc) {
-        def multiqc_files = channel.empty()
-
-        def multiqc_config = channel.fromPath("${projectDir}/assets/multiqc_config.yml", checkIfExists: true)
-        def multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config, checkIfExists: true) : channel.empty()
-        def multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo, checkIfExists: true) : channel.empty()
-        def summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
-        def workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
-        def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
-        def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
-
-        multiqc_files = multiqc_files.mix(
-            channel.topic("multiqc_files").map { _meta, _process, _tool, reports -> reports },
-            NFCORE_RNAVAR.out.reports,
-        )
-        multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-        multiqc_files = multiqc_files.mix(collated_versions)
-        multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
-
-        MULTIQC(
-            multiqc_files.collect(),
-            multiqc_config.toList(),
-            multiqc_custom_config.toList(),
-            multiqc_logo.toList(),
-            [],
-            [],
-        )
-        multiqc_report = MULTIQC.out.report.toList()
-    }
-
-
-    //
-    // SUBWORKFLOW: Run completion tasks
-    //
-    PIPELINE_COMPLETION(
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url,
-        multiqc_report,
-    )
-
-    publish:
-    multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
-    reports = channel.topic("multiqc_files").filter { _meta, _process, tool, _file ->
-        return !(tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
-    }
-}
-
-output {
-    multiqc {
-        path "reports/multiqc"
-    }
-    reports {
-        path { meta, _process, tool, file ->
-            file >> "reports/${tool}/${meta.id}/"
-        }
-    }
 }
 
 /*
