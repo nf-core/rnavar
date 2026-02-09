@@ -300,12 +300,7 @@ output {
     }
     reports {
         path { meta, _process, tool, file ->
-            if (tool == 'ensemblvep') {
-                file >> "reports/EnsemblVEP/${meta.id}/"
-            }
-            else {
-                file >> "reports/${tool}/${meta.id}/"
-            }
+            file >> "reports/${tool}/${meta.id}/"
         }
     }
 }

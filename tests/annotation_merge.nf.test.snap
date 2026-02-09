@@ -49,10 +49,10 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
-                "reports/EnsemblVEP",
-                "reports/EnsemblVEP/test",
-                "reports/EnsemblVEP/test/test_VEP.ann.summary.html",
-                "reports/EnsemblVEP/test/test_snpEff_VEP.ann.summary.html",
+                "reports/ensemblvep",
+                "reports/ensemblvep/test",
+                "reports/ensemblvep/test/test_VEP.ann.summary.html",
+                "reports/ensemblvep/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/llms-full.txt",
@@ -128,7 +128,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-09T10:50:16.158605127"
+        "timestamp": "2026-02-09T11:47:46.898860143"
     },
     "-profile test --tools merge": {
         "content": [
@@ -176,9 +176,9 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
-                "reports/EnsemblVEP",
-                "reports/EnsemblVEP/test",
-                "reports/EnsemblVEP/test/test_snpEff_VEP.ann.summary.html",
+                "reports/ensemblvep",
+                "reports/ensemblvep/test",
+                "reports/ensemblvep/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/llms-full.txt",
@@ -246,6 +246,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-09T10:49:32.090075141"
+        "timestamp": "2026-02-09T11:47:04.670461053"
     }
 }
