@@ -421,7 +421,7 @@ Plots will shows :
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/EnsemblVEP/[SAMPLE]/`
+- `reports/ensemblvep/[SAMPLE]/`
   - `[SAMPLE].summary.html`: Statistics with graphs to be viewed with a web browser
 
 </details>

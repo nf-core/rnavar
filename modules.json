@@ -32,7 +32,7 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "691bb6956ec56154b81ba5771641ca24443c4d17",
+                        "git_sha": "34505e1fc5e9f4fd641210ca440acff6bd33b842",
                         "installed_by": ["modules", "vcf_annotate_ensemblvep"]
                     },
                     "fastqc": {
@@ -236,7 +236,7 @@
                     },
                     "vcf_annotate_ensemblvep": {
                         "branch": "master",
-                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
+                        "git_sha": "b0bd00e83b18957bd409cd9e31e98b965ebc593b",
                         "installed_by": ["subworkflows"]
                     },
                     "vcf_annotate_snpeff": {

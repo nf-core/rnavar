@@ -2,7 +2,7 @@
 annotation/**/*.vcf.{gz,gz.tbi}
 pipeline_info/*.{html,json,txt,yml}
 preprocessing/**/*.{bam,bam.bai,bam.csi,cram,cram.crai}
-reports/EnsemblVEP/*/*.ann.summary.html
+reports/ensemblvep/*/*.ann.summary.html
 reports/multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
 reports/multiqc/multiqc_data/gatk-base-recalibrator-reported-empirical-plot.txt
 reports/multiqc/multiqc_data/gatk_base_recalibrator.txt

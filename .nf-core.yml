@@ -3,7 +3,7 @@ lint:
   schema_params: false
   files_unchanged:
     - .github/workflows/linting.yml
-nf_core_version: 3.5.1
+nf_core_version: 3.5.2
 repository_type: pipeline
 template:
   author: Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke

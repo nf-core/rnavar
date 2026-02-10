@@ -53,21 +53,26 @@ params.vep_species       = getGenomeAttribute('vep_species')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
+    RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//
-// WORKFLOW: Run main analysis pipeline depending on type of input
-//
-workflow NFCORE_RNAVAR {
-    take:
-    samplesheet
-    align
+workflow {
 
     main:
-    reports = channel.empty()
+    // SUBWORKFLOW: Run initialisation tasks
+    PIPELINE_INITIALISATION(
+        params.version,
+        params.validate_params,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
+    )
 
+    // Fails for missing params
     if (params.gtf && params.gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
     }
@@ -82,25 +87,6 @@ workflow NFCORE_RNAVAR {
     if (!params.skip_baserecalibration && !params.dbsnp && !params.known_indels) {
         error("Known sites are required for performing base recalibration. Supply them with either --dbsnp and/or --known_indels or disable base recalibration with --skip_baserecalibration")
     }
-
-    PREPARE_GENOME(
-        params.bcftools_annotations,
-        params.bcftools_annotations_tbi,
-        params.dbsnp,
-        params.dbsnp_tbi,
-        params.dict,
-        params.exon_bed,
-        params.fasta,
-        params.fasta_fai,
-        params.gff,
-        params.gtf,
-        params.known_indels,
-        params.known_indels_tbi,
-        params.star_index,
-        params.feature_type,
-        params.skip_exon_bed_check,
-        align,
-    )
 
     // Download cache
     if (params.download_cache) {
@@ -149,83 +135,13 @@ workflow NFCORE_RNAVAR {
         vep_extra_files.add(file(params.spliceai_snv_tbi, checkIfExists: true))
     }
 
-    //
-    // WORKFLOW: Run pipeline
-    //
-    RNAVAR(
-        samplesheet,
-        PREPARE_GENOME.out.bcfann,
-        PREPARE_GENOME.out.bcfann_tbi,
-        params.bcftools_columns ? channel.fromPath(params.bcftools_columns).collect() : channel.value([]),
-        params.bcftools_header_lines ? channel.fromPath(params.bcftools_header_lines).collect() : channel.empty(),
-        PREPARE_GENOME.out.dbsnp,
-        PREPARE_GENOME.out.dbsnp_tbi,
-        PREPARE_GENOME.out.dict,
-        PREPARE_GENOME.out.exon_bed,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fasta_fai,
-        PREPARE_GENOME.out.gtf,
-        PREPARE_GENOME.out.known_sites,
-        PREPARE_GENOME.out.known_sites_tbi,
-        PREPARE_GENOME.out.star_index,
-        snpeff_cache,
-        params.snpeff_db,
-        params.vep_genome,
-        params.vep_species,
-        params.vep_cache_version,
-        params.vep_include_fasta,
-        vep_cache,
-        vep_extra_files,
-        params.seq_center ?: [],
-        params.seq_platform ?: [],
-        params.aligner,
-        params.bam_csi_index,
-        params.extract_umi,
-        params.generate_gvcf,
-        params.skip_multiqc,
-        params.skip_baserecalibration,
-        params.skip_intervallisttools,
-        params.skip_variantannotation,
-        params.skip_variantfiltration,
-        params.star_ignore_sjdbgtf,
-        params.tools ?: "no_tools",
-    )
-
-    reports = reports.mix(RNAVAR.out.reports)
-
-    emit:
-    reports // channel: qc reports for multiQC
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-workflow {
-
-    main:
-    //
-    // SUBWORKFLOW: Run initialisation tasks
-    //
-    PIPELINE_INITIALISATION(
-        params.version,
-        params.validate_params,
-        args,
-        params.outdir,
-        params.input,
-        params.help,
-        params.help_full,
-        params.show_hidden,
-    )
-
-    //
     // WORKFLOW: Run main workflow
-    //
     NFCORE_RNAVAR(
         PIPELINE_INITIALISATION.out.samplesheet,
         PIPELINE_INITIALISATION.out.align,
+        snpeff_cache,
+        vep_cache,
+        vep_extra_files,
     )
 
     def collated_versions = softwareVersionsToYAML(
@@ -273,10 +189,7 @@ workflow {
         multiqc_report = MULTIQC.out.report.toList()
     }
 
-
-    //
     // SUBWORKFLOW: Run completion tasks
-    //
     PIPELINE_COMPLETION(
         params.email,
         params.email_on_fail,
@@ -300,14 +213,94 @@ output {
     }
     reports {
         path { meta, _process, tool, file ->
-            if (tool == 'ensemblvep') {
-                file >> "reports/EnsemblVEP/${meta.id}/"
-            }
-            else {
-                file >> "reports/${tool}/${meta.id}/"
-            }
+            file >> "reports/${tool}/${meta.id}/"
         }
     }
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    NAMED WORKFLOWS FOR PIPELINE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// WORKFLOW: Run main analysis pipeline depending on type of input
+//
+workflow NFCORE_RNAVAR {
+    take:
+    samplesheet
+    align
+    snpeff_cache
+    vep_cache
+    vep_extra_files
+
+    main:
+    reports = channel.empty()
+
+    PREPARE_GENOME(
+        params.bcftools_annotations,
+        params.bcftools_annotations_tbi,
+        params.dbsnp,
+        params.dbsnp_tbi,
+        params.dict,
+        params.exon_bed,
+        params.fasta,
+        params.fasta_fai,
+        params.gff,
+        params.gtf,
+        params.known_indels,
+        params.known_indels_tbi,
+        params.star_index,
+        params.feature_type,
+        params.skip_exon_bed_check,
+        align,
+    )
+
+    // WORKFLOW: Run pipeline
+    RNAVAR(
+        samplesheet,
+        PREPARE_GENOME.out.bcfann,
+        PREPARE_GENOME.out.bcfann_tbi,
+        params.bcftools_columns ? channel.fromPath(params.bcftools_columns).collect() : channel.value([]),
+        params.bcftools_header_lines ? channel.fromPath(params.bcftools_header_lines).collect() : channel.empty(),
+        PREPARE_GENOME.out.dbsnp,
+        PREPARE_GENOME.out.dbsnp_tbi,
+        PREPARE_GENOME.out.dict,
+        PREPARE_GENOME.out.exon_bed,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fasta_fai,
+        PREPARE_GENOME.out.gtf,
+        PREPARE_GENOME.out.known_sites,
+        PREPARE_GENOME.out.known_sites_tbi,
+        PREPARE_GENOME.out.star_index,
+        snpeff_cache,
+        params.snpeff_db,
+        params.vep_genome,
+        params.vep_species,
+        params.vep_cache_version,
+        params.vep_include_fasta,
+        vep_cache,
+        vep_extra_files,
+        params.seq_center ?: [],
+        params.seq_platform ?: [],
+        params.aligner,
+        params.bam_csi_index,
+        params.extract_umi,
+        params.generate_gvcf,
+        params.skip_multiqc,
+        params.skip_baserecalibration,
+        params.skip_intervallisttools,
+        params.skip_variantannotation,
+        params.skip_variantfiltration,
+        params.star_ignore_sjdbgtf,
+        params.tools ?: "no_tools",
+    )
+
+    reports = reports.mix(RNAVAR.out.reports)
+
+    emit:
+    reports // channel: qc reports for multiQC
 }
 
 /*
