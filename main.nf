@@ -170,10 +170,7 @@ workflow {
         def multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
         def methods_description = channel.value(methodsDescriptionText(multiqc_custom_methods_description))
 
-        multiqc_files = multiqc_files.mix(
-            channel.topic("multiqc_files").map { _meta, _process, _tool, reports -> reports },
-            NFCORE_RNAVAR.out.reports,
-        )
+        multiqc_files = multiqc_files.mix(channel.topic("multiqc_files").map { _meta, _process, _tool, reports -> reports })
         multiqc_files = multiqc_files.mix(workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         multiqc_files = multiqc_files.mix(collated_versions)
         multiqc_files = multiqc_files.mix(methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: true))
@@ -203,7 +200,7 @@ workflow {
     publish:
     multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
     reports = channel.topic("multiqc_files").filter { _meta, _process, tool, _file ->
-        return !(tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
+        return !(tool == 'gatk4' || tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
     }
 }
 
@@ -236,8 +233,6 @@ workflow NFCORE_RNAVAR {
     vep_extra_files
 
     main:
-    reports = channel.empty()
-
     PREPARE_GENOME(
         params.bcftools_annotations,
         params.bcftools_annotations_tbi,
@@ -296,11 +291,6 @@ workflow NFCORE_RNAVAR {
         params.star_ignore_sjdbgtf,
         params.tools ?: "no_tools",
     )
-
-    reports = reports.mix(RNAVAR.out.reports)
-
-    emit:
-    reports // channel: qc reports for multiQC
 }
 
 /*
