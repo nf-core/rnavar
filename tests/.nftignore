@@ -22,6 +22,6 @@ reports/samtools/*/*.{flagstat,idxstats,stats}
 reports/snpeff/*/*_snpEff.csv
 reports/snpeff/*/snpEff_summary.html
 reports/star/*/*.Log{.final,.progress,}.out
-reports/umitools/*.umi_extract.log
+reports/umitools/*/*.umi_extract.log
 variant_calling/**/*.vcf
 variant_calling/**/*.vcf.{gz,gz.tbi,gz.csi}
