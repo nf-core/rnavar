@@ -66,6 +66,10 @@
                 "preprocessing/GM12878/GM12878.recal.bam",
                 "preprocessing/GM12878/GM12878.recal.bam.bai",
                 "reports",
+                "reports/mosdepth",
+                "reports/mosdepth/GM12878",
+                "reports/mosdepth/GM12878/GM12878.mosdepth.global.dist.txt",
+                "reports/mosdepth/GM12878/GM12878.mosdepth.summary.txt",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
@@ -93,15 +97,9 @@
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.svg",
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-reported-empirical-plot.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/mosdepth",
-                "reports/stats/GM12878/mosdepth/GM12878.mosdepth.global.dist.txt",
-                "reports/stats/GM12878/mosdepth/GM12878.mosdepth.summary.txt",
-                "reports/stats/GM12878/mosdepth/GM12878.per-base.bed.gz",
-                "reports/stats/GM12878/mosdepth/GM12878.per-base.bed.gz.csi",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -110,13 +108,11 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
-                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
-                "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9",
                 "GM12878.mosdepth.global.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53",
                 "GM12878.mosdepth.summary.txt:md5,e43226c64ea74f81b9d97bed4e9ebbd5",
-                "GM12878.per-base.bed.gz:md5,8ab2c5f06c12b6f8699ccf6fb5f8b619",
-                "GM12878.per-base.bed.gz.csi:md5,204238f12bb527a43eb17271ca4095fd"
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
+                "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
+                "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9"
             ],
             "No BAM files",
             [
@@ -131,8 +127,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-14T14:51:32.18175558"
+        "timestamp": "2026-02-10T16:43:26.637561494"
     }
 }

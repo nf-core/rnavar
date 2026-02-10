@@ -94,6 +94,10 @@
                 "preprocessing/umitools/GM12878",
                 "preprocessing/umitools/GM12878/GM12878.umi_extract.fastq.gz",
                 "reports",
+                "reports/fastqc",
+                "reports/fastqc/GM12878",
+                "reports/fastqc/GM12878/GM12878_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_fastqc.zip",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
@@ -168,21 +172,22 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
+                "reports/picard",
+                "reports/picard/GM12878",
+                "reports/picard/GM12878/GM12878.md.metrics.txt",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.flagstat",
+                "reports/samtools/GM12878/GM12878.idxstats",
+                "reports/samtools/GM12878/GM12878.stats",
+                "reports/star",
+                "reports/star/GM12878",
+                "reports/star/GM12878/GM12878.Log.final.out",
+                "reports/star/GM12878/GM12878.Log.out",
+                "reports/star/GM12878/GM12878.Log.progress.out",
+                "reports/star/GM12878/GM12878.SJ.out.tab",
                 "reports/stats",
                 "reports/stats/GM12878",
-                "reports/stats/GM12878/STAR_log",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
-                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/GM12878/fastqc",
-                "reports/stats/GM12878/fastqc/GM12878_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_fastqc.zip",
-                "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.MarkDuplicates.metrics.txt",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.stats",
                 "reports/stats/GM12878/umitools",
                 "reports/stats/GM12878/umitools/GM12878.umi_extract.log",
                 "variant_calling",
@@ -209,7 +214,8 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,dde3fdb0b856dcf586106ae2f7505ae2",
                 "star_alignment_plot.txt:md5,6e8b7bbfd65f4d3e60a800f448054f8e",
                 "star_summary_table.txt:md5,c754e1fa8ead5914c70dad1fd9e98683",
-                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71"
+                "GM12878.SJ.out.tab:md5,e24fe8bd0e957caca2fd9c5591a28e71",
+                "GM12878.umi_extract.log:md5,43dbee50cbbf5d5852e061acf111484e"
             ],
             [
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825"
@@ -228,6 +234,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-06T11:17:17.79752443"
+        "timestamp": "2026-02-10T16:53:48.502529187"
     }
 }

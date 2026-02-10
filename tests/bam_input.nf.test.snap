@@ -90,10 +90,9 @@
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.svg",
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-reported-empirical-plot.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -119,8 +118,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-01-14T14:50:04.440792936"
+        "timestamp": "2026-02-10T16:41:35.182979857"
     }
 }
