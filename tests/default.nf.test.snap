@@ -219,8 +219,8 @@
             ],
             "No warnings",
             [
-                "N E X T F L O W  ~  version [VERSION]",
-                "Launching `[PATH]/tests/../main.nf` [RUN_NAME] DSL2 - revision: [REVISION]",
+                "N E X T F L O W  ~  version [VERSION]-edge",
+                "Launching `[PATH]/tests/../main.nf` [RUN_NAME] - revision: [REVISION]",
                 "------------------------------------------------------",
                 "                                        ,--./,-.",
                 "        ___     __   __   __   ___     /,-._.--~'",
@@ -320,11 +320,11 @@
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:TABIX (GM12878)"
             ]
         ],
+        "timestamp": "2026-02-12T15:28:42.22021614",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T11:09:12.066059889"
+            "nf-test": "0.9.4",
+            "nextflow": "26.01.1"
+        }
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -551,11 +551,11 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-02-06T11:15:00.015690344",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T11:15:00.015690344"
+        }
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -782,10 +782,10 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-02-06T11:12:06.086917818",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T11:12:06.086917818"
+        }
     }
 }

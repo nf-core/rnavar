@@ -18,7 +18,8 @@ concurrency:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  NFT_VER: "0.9.3"
+  NXF_SYNTAX_PARSER: v2
+  NFT_VER: "0.9.4"
   NXF_ANSI_LOG: false
   NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
   NXF_SINGULARITY_LIBRARYDIR: ${{ github.workspace }}/.singularity
@@ -77,7 +78,7 @@ jobs:
           - isMain: false
             profile: "singularity"
         NXF_VER:
-          - 25.10.2
+          - 26.01.1-edge
           - latest-everything
     env:
       NXF_ANSI_LOG: false
