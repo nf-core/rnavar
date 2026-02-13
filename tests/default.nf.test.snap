@@ -219,7 +219,7 @@
             ],
             "No warnings",
             [
-                "N E X T F L O W  ~  version [VERSION]-edge",
+                "N E X T F L O W  ~  version [VERSION]",
                 "Launching `[PATH]/tests/../main.nf` [RUN_NAME] - revision: [REVISION]",
                 "------------------------------------------------------",
                 "                                        ,--./,-.",
