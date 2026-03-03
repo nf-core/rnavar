@@ -149,7 +149,7 @@
                 "reports/stats/test/fastqc/test_2_fastqc.html",
                 "reports/stats/test/fastqc/test_2_fastqc.zip",
                 "reports/stats/test/markduplicates",
-                "reports/stats/test/markduplicates/test.md.MarkDuplicates.metrics.txt",
+                "reports/stats/test/markduplicates/test.md.metrics.txt",
                 "reports/stats/test/samtools",
                 "reports/stats/test/samtools/test.flagstat",
                 "reports/stats/test/samtools/test.stats",
@@ -186,11 +186,11 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-02-06T11:28:50.106966082",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T11:28:50.106966082"
+        }
     },
     "-profile test --input fastq_multiple.csv": {
         "content": [
@@ -376,7 +376,7 @@
                 "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
                 "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
                 "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.MarkDuplicates.metrics.txt",
+                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
                 "reports/stats/GM12878/samtools",
                 "reports/stats/GM12878/samtools/GM12878.flagstat",
                 "reports/stats/GM12878/samtools/GM12878.stats",
@@ -390,7 +390,7 @@
                 "reports/stats/GM12879/fastqc/GM12879_fastqc.html",
                 "reports/stats/GM12879/fastqc/GM12879_fastqc.zip",
                 "reports/stats/GM12879/markduplicates",
-                "reports/stats/GM12879/markduplicates/GM12879.md.MarkDuplicates.metrics.txt",
+                "reports/stats/GM12879/markduplicates/GM12879.md.metrics.txt",
                 "reports/stats/GM12879/samtools",
                 "reports/stats/GM12879/samtools/GM12879.flagstat",
                 "reports/stats/GM12879/samtools/GM12879.stats",
@@ -441,10 +441,10 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-03-03T14:03:47.834268968",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T11:25:17.935544621"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

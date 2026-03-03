@@ -65,8 +65,6 @@ workflow RNAVAR {
     vep_include_fasta
     vep_cache
     vep_extra_files
-    seq_center
-    seq_platform
     aligner
     bam_csi_index
     extract_umi
@@ -163,8 +161,6 @@ workflow RNAVAR {
             star_index,
             gtf,
             star_ignore_sjdbgtf,
-            seq_platform,
-            seq_center,
             fasta,
             [[:], []],
         )

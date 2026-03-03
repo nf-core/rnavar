@@ -181,7 +181,7 @@
                 "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
                 "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
                 "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.MarkDuplicates.metrics.txt",
+                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
                 "reports/stats/GM12878/samtools",
                 "reports/stats/GM12878/samtools/GM12878.flagstat",
                 "reports/stats/GM12878/samtools/GM12878.stats",

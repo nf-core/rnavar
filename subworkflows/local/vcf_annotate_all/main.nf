@@ -30,12 +30,23 @@ workflow VCF_ANNOTATE_ALL {
     vcf_ann = channel.empty()
 
     if (tools.split(',').contains('bcfann')) {
-        BCFTOOLS_ANNOTATE(
-            vcf.map { meta, vcf_ -> [meta, vcf_, []] }.combine(bcftools_annotations).combine(bcftools_annotations_index),
-            bcftools_columns,
-            bcftools_header_lines,
-            [],
-        )
+        if (bcftools_columns) {
+            bcftools_in = vcf
+                .combine(bcftools_annotations)
+                .combine(bcftools_annotations_index)
+                .combine(bcftools_header_lines)
+                .map { meta, vcf_, annotation, annotation_index, header_file -> [meta, vcf_, [], annotation, annotation_index, [], header_file, []] }
+        }
+        else {
+            bcftools_in = vcf
+                .combine(bcftools_annotations)
+                .combine(bcftools_annotations_index)
+                .combine(bcftools_columns)
+                .combine(bcftools_header_lines)
+                .map { meta, vcf_, annotation, annotation_index, columns, header_file -> [meta, vcf_, [], annotation, annotation_index, columns, header_file, []] }
+        }
+
+        BCFTOOLS_ANNOTATE(bcftools_in)
 
         vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
     }

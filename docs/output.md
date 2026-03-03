@@ -364,7 +364,7 @@ Duplicate reads can also result from a single amplification cluster, incorrectly
 <summary>Output files</summary>
 
 - `reports/stats/[SAMPLE]/markduplicates/`
-  - `[SAMPLE].bam.md.MarkDuplicates.metrics.txt`: Information about the number of duplicate reads in the sample.
+  - `[SAMPLE].bam.md.metrics.txt`: Information about the number of duplicate reads in the sample.
 
 </details>
 

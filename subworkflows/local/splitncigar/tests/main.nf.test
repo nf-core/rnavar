@@ -21,15 +21,15 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
                 ])
                 input[1] = Channel.value([
-                    [id:"fasta"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
                 input[2] = Channel.value([
-                    [id:"fai"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 input[3] = Channel.value([
-                    [id:"dict"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 input[4] = Channel.of([[
@@ -66,15 +66,15 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
                 ])
                 input[1] = Channel.value([
-                    [id:"fasta"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
                 input[2] = Channel.value([
-                    [id:"fai"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 input[3] = Channel.value([
-                    [id:"dict"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 input[4] = Channel.of([[
@@ -111,15 +111,15 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
                 ])
                 input[1] = Channel.value([
-                    [id:"fasta"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
                 input[2] = Channel.value([
-                    [id:"fai"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 input[3] = Channel.value([
-                    [id:"dict"],
+                    [id:"genome"],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 input[4] = Channel.of([[]])

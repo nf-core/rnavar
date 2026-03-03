@@ -11,12 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Removed
+
+- [#287](https://github.com/nf-core/rnavar/pull/287) - Removed hook_url params, cf [tools#4051](https://github.com/nf-core/tools/pull/4051)
+
 ### Dependencies
 
 ### Parameter
 
 | Old name | New name |
 | -------- | -------- |
+| hook_url |          |
+
+### Schema input
+
+| Old name | New name     |
+| -------- | ------------ |
+|          | seq_center   |
+|          | seq_platform |
 
 ### Modules / Subworkflows
 
@@ -27,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
+| nft-utils  | 0.0.7       | 0.0.9       |
 
 ### Developer section
 
@@ -35,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Changed
 
 - [#284](https://github.com/nf-core/rnavar/pull/284) - Back to dev
+- [#287](https://github.com/nf-core/rnavar/pull/287) - Update all modules and subworkflows
 
 #### Fixed
 
