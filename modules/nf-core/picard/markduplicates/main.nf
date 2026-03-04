@@ -17,7 +17,7 @@ process PICARD_MARKDUPLICATES {
     tuple val(meta), path("*.bai"), emit: bai, optional: true
     tuple val(meta), path("*.cram"), emit: cram, optional: true
     tuple val(meta), val("${task.process}"), val('picard'), path("*.metrics.txt"), topic: multiqc_files, emit: metrics
-    tuple val("${task.process}"), val('picard'), eval("picard MarkDuplicates --version 2>&1 | sed -n 's/^Version:*//p'"), topic: versions, emit: versions_picard
+    tuple val("${task.process}"), val('picard'), eval("picard MarkDuplicates --version 2>&1 | sed -n 's/.*Version://p'"), topic: versions, emit: versions_picard
 
     when:
     task.ext.when == null || task.ext.when
@@ -38,7 +38,6 @@ process PICARD_MARKDUPLICATES {
     if ("${reads}" == "${prefix}.${suffix}") {
         error("Input and output names are the same, use \"task.ext.prefix\" to disambiguate!")
     }
-
     """
     picard \\
         -Xmx${avail_mem}M \\

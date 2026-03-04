@@ -11,8 +11,8 @@ process FASTQC {
     tuple val(meta), path(reads)
 
     output:
-    tuple val(meta), val("${task.process}"), val('fastqc'), path("*.html"), topic: multiqc_files, emit: html
-    tuple val(meta), val("${task.process}"), val('fastqc'), path("*.zip"), topic: multiqc_files, emit: zip
+    tuple val(meta), val("${task.process}"), val('fastqc'), path("*.html"), emit: html, topic: multiqc_files
+    tuple val(meta), val("${task.process}"), val('fastqc'), path("*.zip"), emit: zip, topic: multiqc_files
     tuple val("${task.process}"), val('fastqc'), eval('fastqc --version | sed "/FastQC v/!d; s/.*v//"'), emit: versions_fastqc, topic: versions
 
     when:

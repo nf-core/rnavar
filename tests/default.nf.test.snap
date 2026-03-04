@@ -280,13 +280,13 @@
                 "    https://doi.org/10.1038/s41587-020-0439-x",
                 "* Software dependencies",
                 "    https://github.com/nf-core/rnavar/blob/master/CITATIONS.md",
-                "[NXF_HASH] Submitted process > MULTIQC",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GFFREAD (genome)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GTF2BED (genome.gtf)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:REMOVE_UNKNOWN_REGIONS (genome)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:SAMTOOLS_FAIDX (genome.fasta)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:STAR_INDEXVERSION",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:UNTAR (star.tar.gz)",
+                "[NXF_HASH] Submitted process > MULTIQC (rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GFFREAD (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GTF2BED (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:REMOVE_UNKNOWN_REGIONS (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:SAMTOOLS_FAIDX (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:STAR_INDEXVERSION (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:UNTAR (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:BAM_MARKDUPLICATES_PICARD:BAM_STATS_SAMTOOLS:SAMTOOLS_FLAGSTAT (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:BAM_MARKDUPLICATES_PICARD:BAM_STATS_SAMTOOLS:SAMTOOLS_IDXSTATS (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:BAM_MARKDUPLICATES_PICARD:BAM_STATS_SAMTOOLS:SAMTOOLS_STATS (GM12878)",
@@ -301,13 +301,13 @@
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:FASTQ_ALIGN_STAR:BAM_SORT_STATS_SAMTOOLS_GENOME:SAMTOOLS_SORT (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:FASTQ_ALIGN_STAR:STAR_ALIGN (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_BASERECALIBRATOR (GM12878)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_BEDTOINTERVALLIST (genome)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_BEDTOINTERVALLIST (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_HAPLOTYPECALLER (GM12878_1scattered)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_HAPLOTYPECALLER (GM12878_2scattered)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_HAPLOTYPECALLER (GM12878_3scattered)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_HAPLOTYPECALLER (GM12878_4scattered)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_HAPLOTYPECALLER (GM12878_5scattered)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_INTERVALLISTTOOLS (genome)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_INTERVALLISTTOOLS (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_MERGEVCFS (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_VARIANTFILTRATION (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:GATK4_APPLYBQSR (GM12878)",
@@ -323,11 +323,18 @@
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:TABIX (GM12878)"
             ]
         ],
+        "timestamp": "2026-03-03T11:45:24.448909113",
         "meta": {
+<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T16:03:07.735826051"
+=======
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+>>>>>>> dev
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -504,6 +511,7 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
+<<<<<<< HEAD
                 "reports/picard",
                 "reports/picard/GM12878",
                 "reports/picard/GM12878/GM12878.md.metrics.txt",
@@ -518,14 +526,33 @@
                 "reports/star/GM12878/GM12878.Log.out",
                 "reports/star/GM12878/GM12878.Log.progress.out",
                 "reports/star/GM12878/GM12878.SJ.out.tab",
+=======
+                "reports/stats",
+                "reports/stats/GM12878",
+                "reports/stats/GM12878/STAR_log",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
+                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
+>>>>>>> dev
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/dbsnp_146.hg38.vcf",
-                "variant_calling/dbsnp_146.hg38.vcf/dbsnp_146.hg38.vcf.gz.tbi"
+                "variant_calling/testdata.nf-core.rnavar",
+                "variant_calling/testdata.nf-core.rnavar/dbsnp_146.hg38.vcf.gz.tbi"
             ],
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
@@ -557,11 +584,18 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-03-03T11:17:44.321180368",
         "meta": {
+<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T16:08:42.808694405"
+=======
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+>>>>>>> dev
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -738,6 +772,7 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
+<<<<<<< HEAD
                 "reports/picard",
                 "reports/picard/GM12878",
                 "reports/picard/GM12878/GM12878.md.metrics.txt",
@@ -752,14 +787,33 @@
                 "reports/star/GM12878/GM12878.Log.out",
                 "reports/star/GM12878/GM12878.Log.progress.out",
                 "reports/star/GM12878/GM12878.SJ.out.tab",
+=======
+                "reports/stats",
+                "reports/stats/GM12878",
+                "reports/stats/GM12878/STAR_log",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
+                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
+                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
+                "reports/stats/GM12878/fastqc",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
+                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
+                "reports/stats/GM12878/markduplicates",
+                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
+                "reports/stats/GM12878/samtools",
+                "reports/stats/GM12878/samtools/GM12878.flagstat",
+                "reports/stats/GM12878/samtools/GM12878.stats",
+>>>>>>> dev
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/mills_and_1000G.indels.vcf",
-                "variant_calling/mills_and_1000G.indels.vcf/mills_and_1000G.indels.vcf.gz.tbi"
+                "variant_calling/testdata.nf-core.rnavar",
+                "variant_calling/testdata.nf-core.rnavar/mills_and_1000G.indels.vcf.gz.tbi"
             ],
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,489af228231ffe43ecbc5877d9bb5b6a",
@@ -791,10 +845,17 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-03-03T11:15:20.485040747",
         "meta": {
+<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T16:05:57.531112253"
+=======
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+>>>>>>> dev
     }
 }

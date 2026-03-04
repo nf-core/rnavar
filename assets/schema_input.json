@@ -68,6 +68,18 @@
                 "exists": true,
                 "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
                 "errorMessage": "TBI file should end with `.vcf.gz.tbi`, should not contains spaces and should exist."
+            },
+            "seq_platform": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "meta": ["seq_platform"],
+                "errorMessage": "Sequencing platform must not contain spaces (e.g. 'ILLUMINA', 'ONT', 'PACBIO')"
+            },
+            "seq_center": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "meta": ["seq_center"],
+                "errorMessage": "Sequencing center must not contain spaces. Use underscores instead (e.g. 'My_Center')"
             }
         },
         "oneOf": [

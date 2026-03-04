@@ -15,17 +15,17 @@
                 "dbsnp": [
                     [
                         {
-                            "id": "test.rnaseq"
+                            "id": "genome"
                         },
-                        "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
+                        "genome.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
                     ]
                 ],
                 "dbsnp_tbi": [
                     [
                         {
-                            "id": "test.rnaseq"
+                            "id": "genome"
                         },
-                        "test.rnaseq.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
+                        "genome.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
                     ]
                 ],
                 "dict": [
@@ -55,7 +55,7 @@
                 "fasta_fai": [
                     [
                         {
-                            "id": "genome.fasta"
+                            "id": "genome"
                         },
                         "/nf-core/test-datasets/rnavar/data/genomics/homo_sapiens/genome/genome.fasta.fai"
                     ]
@@ -77,10 +77,12 @@
                     "test2.vcf.gz.tbi"
                 ],
                 "known_sites": [
+                    "genome.vcf.gz",
                     "test.rnaseq.vcf.gz",
                     "test2.vcf.gz"
                 ],
                 "known_sites_tbi": [
+                    "genome.vcf.gz.tbi",
                     "test.rnaseq.vcf.gz.tbi",
                     "test2.vcf.gz.tbi"
                 ],
@@ -108,11 +110,11 @@
                 ]
             }
         ],
+        "timestamp": "2026-02-26T11:26:57.642655447",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T14:25:40.343474784"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "only essentials": {
         "content": [
@@ -159,10 +161,10 @@
                 ]
             }
         ],
+        "timestamp": "2026-02-06T14:25:19.474716148",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-06T14:25:19.474716148"
+        }
     }
 }
