@@ -33,8 +33,8 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 input[4] = Channel.of([[
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true),
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.interval_list', checkIfExists: true)
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.interval_list', checkIfExists: true)
                 ]])
                 """
             }
@@ -78,8 +78,8 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 input[4] = Channel.of([[
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true),
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.interval_list', checkIfExists: true)
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.interval_list', checkIfExists: true)
                 ]])
                 """
             }

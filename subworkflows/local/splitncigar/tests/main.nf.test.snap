@@ -20,17 +20,14 @@
         "content": [
             {
                 "bam_bai": [
-                    [
-                        "test.bam:md5sum,7ebc60b3ccddb8489781f46522bc5da1",
-                        "test.bam.bai"
-                    ]
+                    
                 ]
             }
         ],
-        "timestamp": "2026-02-06T12:43:54.063339805",
+        "timestamp": "2026-03-04T14:24:40.791083825",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     },
     "bam": {
