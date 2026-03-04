@@ -325,16 +325,10 @@
         ],
         "timestamp": "2026-03-03T11:45:24.448909113",
         "meta": {
-<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T16:03:07.735826051"
-=======
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
-        }
->>>>>>> dev
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -511,7 +505,6 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
-<<<<<<< HEAD
                 "reports/picard",
                 "reports/picard/GM12878",
                 "reports/picard/GM12878/GM12878.md.metrics.txt",
@@ -526,25 +519,6 @@
                 "reports/star/GM12878/GM12878.Log.out",
                 "reports/star/GM12878/GM12878.Log.progress.out",
                 "reports/star/GM12878/GM12878.SJ.out.tab",
-=======
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/STAR_log",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
-                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/GM12878/fastqc",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
-                "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.stats",
->>>>>>> dev
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -586,16 +560,10 @@
         ],
         "timestamp": "2026-03-03T11:17:44.321180368",
         "meta": {
-<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T16:08:42.808694405"
-=======
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
-        }
->>>>>>> dev
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -772,7 +740,6 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
-<<<<<<< HEAD
                 "reports/picard",
                 "reports/picard/GM12878",
                 "reports/picard/GM12878/GM12878.md.metrics.txt",
@@ -787,25 +754,6 @@
                 "reports/star/GM12878/GM12878.Log.out",
                 "reports/star/GM12878/GM12878.Log.progress.out",
                 "reports/star/GM12878/GM12878.SJ.out.tab",
-=======
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/STAR_log",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
-                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/GM12878/fastqc",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
-                "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.stats",
->>>>>>> dev
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -847,15 +795,9 @@
         ],
         "timestamp": "2026-03-03T11:15:20.485040747",
         "meta": {
-<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T16:05:57.531112253"
-=======
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
-        }
->>>>>>> dev
     }
 }

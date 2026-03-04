@@ -142,7 +142,6 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
-<<<<<<< HEAD
                 "reports/picard",
                 "reports/picard/test",
                 "reports/picard/test/test.md.metrics.txt",
@@ -157,25 +156,6 @@
                 "reports/star/test/test.Log.out",
                 "reports/star/test/test.Log.progress.out",
                 "reports/star/test/test.SJ.out.tab",
-=======
-                "reports/stats",
-                "reports/stats/test",
-                "reports/stats/test/STAR_log",
-                "reports/stats/test/STAR_log/test.Log.final.out",
-                "reports/stats/test/STAR_log/test.Log.out",
-                "reports/stats/test/STAR_log/test.Log.progress.out",
-                "reports/stats/test/STAR_log/test.SJ.out.tab",
-                "reports/stats/test/fastqc",
-                "reports/stats/test/fastqc/test_1_fastqc.html",
-                "reports/stats/test/fastqc/test_1_fastqc.zip",
-                "reports/stats/test/fastqc/test_2_fastqc.html",
-                "reports/stats/test/fastqc/test_2_fastqc.zip",
-                "reports/stats/test/markduplicates",
-                "reports/stats/test/markduplicates/test.md.metrics.txt",
-                "reports/stats/test/samtools",
-                "reports/stats/test/samtools/test.flagstat",
-                "reports/stats/test/samtools/test.stats",
->>>>>>> dev
                 "variant_calling",
                 "variant_calling/test",
                 "variant_calling/test/test.haplotypecaller.filtered.vcf.gz",
@@ -475,15 +455,9 @@
         ],
         "timestamp": "2026-03-03T14:03:47.834268968",
         "meta": {
-<<<<<<< HEAD
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T17:00:48.900154843"
-=======
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
-        }
->>>>>>> dev
     }
 }
