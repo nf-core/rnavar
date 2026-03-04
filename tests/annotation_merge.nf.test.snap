@@ -124,11 +124,11 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-02-09T11:47:46.898860143",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-09T11:47:46.898860143"
+        }
     },
     "-profile test --tools merge": {
         "content": [
@@ -242,10 +242,10 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-02-09T11:47:04.670461053",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-09T11:47:04.670461053"
+        }
     }
 }

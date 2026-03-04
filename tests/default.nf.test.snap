@@ -323,12 +323,11 @@
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:TABIX (GM12878)"
             ]
         ],
-        "timestamp": "2026-03-03T11:45:24.448909113",
+        "timestamp": "2026-02-10T16:03:07.735826051",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-10T16:03:07.735826051"
+        }
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
@@ -558,12 +557,11 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-03T11:17:44.321180368",
+        "timestamp": "2026-02-10T16:08:42.808694405",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-10T16:08:42.808694405"
+        }
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
@@ -793,11 +791,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-03T11:15:20.485040747",
+        "timestamp": "2026-02-10T16:05:57.531112253",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-10T16:05:57.531112253"
+        }
     }
 }

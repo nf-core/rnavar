@@ -57,11 +57,11 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-01-20T11:58:12.653954081",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-01-20T11:58:12.653954081"
+        }
     },
     "-profile test --tools bcfann --bcftools_columns": {
         "content": [
@@ -121,10 +121,10 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-01-20T11:59:11.736947674",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-01-20T11:59:11.736947674"
+        }
     }
 }
