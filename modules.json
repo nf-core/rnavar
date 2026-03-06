@@ -167,12 +167,12 @@
                     },
                     "snpeff/download": {
                         "branch": "master",
-                        "git_sha": "ab50ae0a7c0714bf8b13918c1b7af732002c244d",
+                        "git_sha": "b9d6ae8d65f33e04068aa5fe86dcc87c43ee81b0",
                         "installed_by": ["modules"]
                     },
                     "snpeff/snpeff": {
                         "branch": "master",
-                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
+                        "git_sha": "b9d6ae8d65f33e04068aa5fe86dcc87c43ee81b0",
                         "installed_by": ["modules", "vcf_annotate_snpeff"]
                     },
                     "star/align": {

@@ -33,7 +33,7 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {

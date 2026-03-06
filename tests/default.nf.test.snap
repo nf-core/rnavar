@@ -42,7 +42,7 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
@@ -283,7 +283,7 @@
                 "[NXF_HASH] Submitted process > MULTIQC (rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GFFREAD (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GTF2BED (testdata.nf-core.rnavar)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:REMOVE_UNKNOWN_REGIONS (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:REMOVEUNKNOWNREGIONS (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:SAMTOOLS_FAIDX (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:STAR_INDEXVERSION (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:UNTAR (testdata.nf-core.rnavar)",
@@ -372,7 +372,7 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
@@ -606,7 +606,7 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {

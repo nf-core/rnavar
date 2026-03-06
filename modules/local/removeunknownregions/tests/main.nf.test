@@ -1,20 +1,17 @@
 nextflow_process {
 
-    name "Test Process REMOVE_UNKNOWN_REGIONS"
+    name "Test Process REMOVEUNKNOWNREGIONS"
     script "../main.nf"
-    process "REMOVE_UNKNOWN_REGIONS"
+    process "REMOVEUNKNOWNREGIONS"
 
     test("bed+dict") {
 
         when {
             process {
                 """
-                input[0] = Channel.value([
-                    [id:'exon_bed'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
-                ])
-                input[1] = Channel.value([
-                    [id:'dict'],
+                input[0] = channel.value([
+                    [id:'genome'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 """
@@ -34,12 +31,9 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = Channel.value([
-                    [id:'exon_bed'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
-                ])
-                input[1] = Channel.value([
-                    [id:'dict'],
+                input[0] = channel.value([
+                    [id:'genome'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 """

@@ -7,7 +7,7 @@ include { GFFREAD                                             } from '../../../m
 include { GTF2BED                                             } from '../../../modules/local/gtf2bed'
 include { GUNZIP as GUNZIP_FASTA                              } from '../../../modules/nf-core/gunzip'
 include { GUNZIP as GUNZIP_GTF                                } from '../../../modules/nf-core/gunzip'
-include { REMOVE_UNKNOWN_REGIONS                              } from '../../../modules/local/remove_unknown_regions'
+include { REMOVEUNKNOWNREGIONS                                } from '../../../modules/local/removeunknownregions'
 include { SAMTOOLS_FAIDX                                      } from '../../../modules/nf-core/samtools/faidx'
 include { STAR_GENOMEGENERATE                                 } from '../../../modules/nf-core/star/genomegenerate'
 include { STAR_INDEXVERSION                                   } from '../../../modules/nf-core/star/indexversion'
@@ -34,10 +34,10 @@ workflow PREPARE_GENOME {
     known_indels // params[path]: params.known_indels
     known_indels_tbi // params[path]: params.known_indels_tbi
     star_index // params[path]: params.star_index
-    feature_type // params[string]: params.feature_type
+    feature_type // params[val]: params.feature_type
     skip_exon_bed_check // params[boolean]: params.skip_exon_bed_check
     align // boolean: The pipeline needs aligner indices or not
-    genome
+    genome // params[val]: params.genome
 
     main:
     // Unzip reference genome files if needed
@@ -87,9 +87,9 @@ workflow PREPARE_GENOME {
 
     def ch_remove_unknown_regions_input = !skip_exon_bed_check ? ch_exon_bed_input : channel.empty()
 
-    REMOVE_UNKNOWN_REGIONS(ch_remove_unknown_regions_input, ch_dict)
+    REMOVEUNKNOWNREGIONS(ch_remove_unknown_regions_input.join(ch_dict))
 
-    def ch_exon_bed = skip_exon_bed_check ? REMOVE_UNKNOWN_REGIONS.out.bed.flatten() : ch_exon_bed_input
+    def ch_exon_bed = skip_exon_bed_check ? REMOVEUNKNOWNREGIONS.out.bed.flatten() : ch_exon_bed_input
 
     def ch_bcftools_annotations = bcftools_annotations
         ? channel.fromPath(bcftools_annotations).collect()

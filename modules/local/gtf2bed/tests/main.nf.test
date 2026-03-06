@@ -9,7 +9,7 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = Channel.value([
+                input[0] = channel.value([
                     [id:'gtf'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
                 ])
@@ -31,7 +31,7 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = Channel.value([
+                input[0] = channel.value([
                     [id:'gtf'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf', checkIfExists: true)
                 ])

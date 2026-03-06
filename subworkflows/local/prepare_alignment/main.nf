@@ -6,34 +6,27 @@ include { SAMTOOLS_INDEX } from '../../../modules/nf-core/samtools/index'
 
 workflow PREPARE_ALIGNMENT {
     take:
-    cram // [ val(meta), path(cram), path(crai) ]
     bam // [ val(meta), path(bam), path(bai) ]
+    cram // [ val(meta), path(cram), path(crai) ]
 
     main:
     def alignment_branch = bam
         .mix(cram)
-        .branch { meta, bam_, bai ->
-            indexed: bai
-            return [meta, bam_, bai]
-            not_indexed_bam: !bai && bam_.extension == "bam"
-            return [meta, bam_]
-            not_indexed_cram: !bai && bam_.extension == "cram"
-            return [meta, bam_]
+        .branch { meta, reads, index ->
+            indexed: index
+            return [meta, reads, index]
+            not_indexed_bam: !index && reads.extension == "bam"
+            return [meta, reads]
+            not_indexed_cram: !index && reads.extension == "cram"
+            return [meta, reads]
         }
 
-    def bam_no_index = alignment_branch.not_indexed_bam.mix(alignment_branch.not_indexed_cram)
+    SAMTOOLS_INDEX(alignment_branch.not_indexed_bam.mix(alignment_branch.not_indexed_cram))
 
-    SAMTOOLS_INDEX(
-        bam_no_index
-    )
-
-    def bam_indexed = alignment_branch.not_indexed_bam.join(SAMTOOLS_INDEX.out.bai, failOnMismatch: true, failOnDuplicate: true)
-    def cram_indexed = alignment_branch.not_indexed_cram.join(SAMTOOLS_INDEX.out.crai, failOnMismatch: true, failOnDuplicate: true)
-
-    def alignment_out = bam_indexed
-        .mix(cram_indexed)
-        .mix(alignment_branch.indexed)
+    def alignment_out = alignment_branch.indexed
+        .mix(alignment_branch.not_indexed_bam.join(SAMTOOLS_INDEX.out.bai, failOnMismatch: true, failOnDuplicate: true))
+        .mix(alignment_branch.not_indexed_cram.join(SAMTOOLS_INDEX.out.crai, failOnMismatch: true, failOnDuplicate: true))
 
     emit:
-    bam = alignment_out // [ val(meta), path(bam), path(bai) ]
+    reads_index = alignment_out // [ val(meta), path(bam|cram), path(bai|crai) ]
 }

@@ -39,7 +39,7 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {

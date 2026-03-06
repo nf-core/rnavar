@@ -36,7 +36,7 @@
                 "MOSDEPTH": {
                     "mosdepth": "0.3.11"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {

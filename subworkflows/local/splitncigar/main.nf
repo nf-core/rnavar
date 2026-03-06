@@ -3,8 +3,8 @@
 //
 
 include { GATK4_SPLITNCIGARREADS } from '../../../modules/nf-core/gatk4/splitncigarreads'
-include { SAMTOOLS_MERGE         } from '../../../modules/nf-core/samtools/merge'
 include { SAMTOOLS_INDEX         } from '../../../modules/nf-core/samtools/index'
+include { SAMTOOLS_MERGE         } from '../../../modules/nf-core/samtools/merge'
 
 workflow SPLITNCIGAR {
     take:
@@ -15,40 +15,32 @@ workflow SPLITNCIGAR {
     intervals // channel: [ interval_list]
 
     main:
-    def bam_interval = bam
-        .combine(intervals)
-        .map { meta, bam_, bai, intervals_ ->
-            [
-                meta + [interval_count: intervals_ instanceof List ? intervals_.size() : 1],
-                bam_,
-                bai,
-                intervals_ instanceof List ? intervals_ : [intervals_],
-            ]
-        }
-        .transpose(by: 3)
-        .map { meta, bam_, bai, interval ->
-            [meta + [id: "${meta.id}_${interval.baseName}", sample: meta.id], bam_, bai, interval]
-        }
+    def bam_interval = channel.empty()
 
-    GATK4_SPLITNCIGARREADS(
-        bam_interval,
-        fasta,
-        fai,
-        dict,
-    )
+    if (intervals) {
+        bam_interval = bam
+            .combine(intervals)
+            .map { meta, bam_, bai, intervals_ ->
+                [
+                    meta + [interval_count: intervals_ instanceof List ? intervals_.size() : 1],
+                    bam_,
+                    bai,
+                    intervals_ instanceof List ? intervals_ : [intervals_],
+                ]
+            }
+            .transpose(by: 3)
+            .map { meta, bam_, bai, interval -> [meta + [id: "${meta.id}_${interval.baseName}", sample: meta.id], bam_, bai, interval] }
+    }
+    else {
+        bam_interval = bam.map { meta, bam_, bai -> [meta + [interval_count: 1, sample: meta.id], bam_, bai, []] }
+    }
+
+    GATK4_SPLITNCIGARREADS(bam_interval, fasta, fai, dict)
 
     def bam_splitncigar = GATK4_SPLITNCIGARREADS.out.bam
 
     def bam_splitncigar_interval = bam_splitncigar
-        .map { meta, bam_ ->
-            [
-                groupKey(
-                    meta + [id: meta.sample] - meta.subMap('sample') - meta.subMap('interval_count'),
-                    meta.interval_count,
-                ),
-                bam_,
-            ]
-        }
+        .map { meta, bam_ -> [groupKey(meta + [id: meta.sample] - meta.subMap('sample') - meta.subMap('interval_count'), meta.interval_count), bam_] }
         .groupTuple()
         .map { meta, bam_ -> [meta, bam_, []] }
 

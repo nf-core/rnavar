@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| snpeff     | 5.4.0a      | 5.0.4c      |
+
 ### Parameter
 
 | Old name | New name |
@@ -32,8 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Modules / Subworkflows
 
-| Dependency | Old name | New name |
-| ---------- | -------- | -------- |
+| Dependency | Old name               | New name             |
+| ---------- | ---------------------- | -------------------- |
+| Modules    | REMOVE_UNKNOWN_REGIONS | REMOVEUNKNOWNREGIONS |
 
 ### Plugins
 
@@ -49,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#284](https://github.com/nf-core/rnavar/pull/284) - Back to dev
 - [#287](https://github.com/nf-core/rnavar/pull/287) - Update all modules and subworkflows
+- [#288](https://github.com/nf-core/rnavar/pull/288) - Add meta.yml for most local modules and subworkflows
 
 #### Fixed
 
