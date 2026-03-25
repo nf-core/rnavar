@@ -3,6 +3,7 @@ annotation/**/*.vcf.{gz,gz.tbi}
 pipeline_info/*.{html,json,txt,yml}
 preprocessing/**/*.{bam,bam.bai,bam.csi,cram,cram.crai}
 reports/ensemblvep/*/*.ann.summary.html
+reports/fastqc/*/*_fastqc.{html,zip}
 reports/multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
 reports/multiqc/multiqc_data/gatk-base-recalibrator-reported-empirical-plot.txt
 reports/multiqc/multiqc_data/gatk_base_recalibrator.txt
@@ -16,14 +17,11 @@ reports/multiqc/multiqc_data/multiqc_sources.txt
 reports/multiqc/multiqc_data/picard_deduplication.txt
 reports/multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 reports/multiqc/multiqc_report.html
+reports/picard/*/*.metrics.txt
+reports/samtools/*/*.{flagstat,idxstats,stats}
 reports/snpeff/*/*_snpEff.csv
 reports/snpeff/*/snpEff_summary.html
-reports/stats/**/*.{flagstat,idxstats,stats}
-reports/stats/*/STAR_log/*.Log.final.out
-reports/stats/*/STAR_log/*.Log.out
-reports/stats/*/STAR_log/*.Log.progress.out
-reports/stats/*/fastqc/*_fastqc.{html,zip}
-reports/stats/*/markduplicates/*.metrics.txt
-reports/stats/*/umitools/*.umi_extract.log
+reports/star/*/*.Log{.final,.progress,}.out
+reports/umitools/*/*.umi_extract.log
 variant_calling/**/*.vcf
 variant_calling/**/*.vcf.{gz,gz.tbi,gz.csi}

@@ -11,7 +11,7 @@ process SAMTOOLS_IDXSTATS {
     tuple val(meta), path(bam), path(bai)
 
     output:
-    tuple val(meta), path("*.idxstats"), emit: idxstats
+    tuple val(meta), val("${task.process}"), val('samtools'), path("*.idxstats"), topic: multiqc_files, emit: idxstats
     tuple val("${task.process}"), val('samtools'), eval("samtools version | sed '1!d;s/.* //'"), emit: versions_samtools, topic: versions
 
     when:

@@ -1,0 +1,20 @@
+Changes in component 'nf-core/umitools/extract'
+'modules/nf-core/umitools/extract/meta.yml' is unchanged
+'modules/nf-core/umitools/extract/environment.yml' is unchanged
+Changes in 'umitools/extract/main.nf':
+--- modules/nf-core/umitools/extract/main.nf
++++ modules/nf-core/umitools/extract/main.nf
+@@ -13,7 +13,7 @@
+ 
+     output:
+     tuple val(meta), path("*.fastq.gz"), emit: reads
+-    tuple val(meta), path("*.log")     , emit: log
++    tuple val(meta), val("${task.process}"), val('umitools'), path("*.log"), topic: multiqc_files, emit: log
+     tuple val("${task.process}"), val('umitools'), eval("umi_tools --version | sed -n '/version:/s/.*: //p'"), emit: versions_umitools, topic: versions
+ 
+     when:
+
+'modules/nf-core/umitools/extract/tests/main.nf.test' is unchanged
+'modules/nf-core/umitools/extract/tests/nextflow.config' is unchanged
+'modules/nf-core/umitools/extract/tests/main.nf.test.snap' is unchanged
+************************************************************

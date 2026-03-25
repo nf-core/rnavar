@@ -7,34 +7,44 @@
                         "test.recal.bam:md5sum,22e22cd4b7da6967236f1c83277ea7e3",
                         "test.recal.bam.bai"
                     ]
-                ],
-                "flagstat": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.flagstat:md5,e6043ceb76066d54b76b4826b123aee4"
-                    ]
-                ],
-                "idxstats": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.idxstats:md5,8e5968e48b5b9d524cbbc03922fea431"
-                    ]
-                ],
-                "stats": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.stats:md5,f9edb58a16396d0ef2a145ca83284f4f"
-                    ]
                 ]
-            }
+            },
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "GATK4_BASERECALIBRATOR",
+                    "gatk4",
+                    "test.table:md5,899ce64f93ad553251905d58412564d0"
+                ],
+                [
+                    {
+                        "id": "test"
+                    },
+                    "RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_FLAGSTAT",
+                    "samtools",
+                    "test.flagstat:md5,e6043ceb76066d54b76b4826b123aee4"
+                ],
+                [
+                    {
+                        "id": "test"
+                    },
+                    "RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_IDXSTATS",
+                    "samtools",
+                    "test.idxstats:md5,8e5968e48b5b9d524cbbc03922fea431"
+                ],
+                [
+                    {
+                        "id": "test"
+                    },
+                    "RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_STATS",
+                    "samtools",
+                    "test.stats:md5,f9edb58a16396d0ef2a145ca83284f4f"
+                ]
+            ]
         ],
-        "timestamp": "2026-03-24T19:07:32.532705801",
+        "timestamp": "2026-03-25T12:09:05.580866499",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.0"

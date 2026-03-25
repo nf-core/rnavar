@@ -14,9 +14,9 @@ process STAR_ALIGN {
     val star_ignore_sjdbgtf
 
     output:
-    tuple val(meta), path('*Log.final.out')   , emit: log_final
-    tuple val(meta), path('*Log.out')         , emit: log_out
-    tuple val(meta), path('*Log.progress.out'), emit: log_progress
+    tuple val(meta), val("${task.process}"), val('star'), path("*Log.final.out"), topic: multiqc_files, emit: log_final
+    tuple val(meta), val("${task.process}"), val('star'), path("*Log.out"), topic: multiqc_files, emit: log_out
+    tuple val(meta), val("${task.process}"), val('star'), path("*Log.progress.out"), topic: multiqc_files, emit: log_progress
     tuple val("${task.process}"), val('star'), eval('STAR --version | sed "s/STAR_//"'), emit: versions_star, topic: versions
     tuple val("${task.process}"), val('samtools'), eval("samtools --version | sed -n '1s/samtools //p'"), emit: versions_samtools, topic: versions
     tuple val("${task.process}"), val('gawk'), eval("gawk --version | sed -n '1s/GNU Awk \\([0-9.]*\\).*/\\1/p'"), emit: versions_gawk, topic: versions
@@ -27,9 +27,9 @@ process STAR_ALIGN {
     tuple val(meta), path('*toTranscriptome.out.bam')                , optional:true, emit: bam_transcript
     tuple val(meta), path('*Aligned.unsort.out.bam')                 , optional:true, emit: bam_unsorted
     tuple val(meta), path('*fastq.gz')                               , optional:true, emit: fastq
-    tuple val(meta), path('*.tab')                                   , optional:true, emit: tab
-    tuple val(meta), path('*.SJ.out.tab')                            , optional:true, emit: spl_junc_tab
-    tuple val(meta), path('*.ReadsPerGene.out.tab')                  , optional:true, emit: read_per_gene_tab
+    tuple val(meta), val("${task.process}"), val('star'), path("*.tab"), topic: multiqc_files, emit: tab, optional: true
+    tuple val(meta), val("${task.process}"), val('star'), path("*.SJ.out.tab"), topic: multiqc_files, emit: spl_junc_tab, optional: true
+    tuple val(meta), val("${task.process}"), val('star'), path("*.ReadsPerGene.out.tab"), topic: multiqc_files, emit: read_per_gene_tab, optional: true
     tuple val(meta), path('*.out.junction')                          , optional:true, emit: junction
     tuple val(meta), path('*.out.sam')                               , optional:true, emit: sam
     tuple val(meta), path('*.wig')                                   , optional:true, emit: wig

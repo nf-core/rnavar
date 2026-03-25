@@ -118,12 +118,11 @@
                 "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.svg",
                 "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.recal.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.recal.idxstats",
-                "reports/stats/GM12878/samtools/GM12878.recal.stats",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.recal.flagstat",
+                "reports/samtools/GM12878/GM12878.recal.idxstats",
+                "reports/samtools/GM12878/GM12878.recal.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -151,7 +150,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T18:31:46.363632529",
+        "timestamp": "2026-03-25T12:27:32.093651907",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.0"

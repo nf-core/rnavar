@@ -54,6 +54,7 @@ nextflow_workflow {
     }
 
     test("bam - stats") {
+    topics "multiqc_files"
         when {
             workflow {
                 """
@@ -97,8 +98,8 @@ nextflow_workflow {
                         else if (key == "versions") {
                             return [key, val.collect { path(it).yaml }]
                         }
-                        return [key, val]
-                    }
+                    },
+                topics.multiqc_files
             ).match()
         }
     }

@@ -30,8 +30,5 @@ workflow RECALIBRATE {
     BAM_STATS_SAMTOOLS(bam_recalibrated_index, fasta.join(fai).collect())
 
     emit:
-    bam      = bam_recalibrated_index
-    flagstat = BAM_STATS_SAMTOOLS.out.flagstat
-    idxstats = BAM_STATS_SAMTOOLS.out.idxstats
-    stats    = BAM_STATS_SAMTOOLS.out.stats
+    bam = bam_recalibrated_index
 }
