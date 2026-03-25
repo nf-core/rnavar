@@ -7,7 +7,7 @@
                 "nf-core": {
                     "bcftools/annotate": {
                         "branch": "master",
-                        "git_sha": "3d9c2f4beaa4f62b3f006928fd9095a496d1e5a8",
+                        "git_sha": "4b21e2cd1a9ea70e22b502cb45ee147410824760",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
