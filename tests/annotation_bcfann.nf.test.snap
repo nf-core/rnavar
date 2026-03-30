@@ -4,7 +4,7 @@
             9,
             {
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": "1.22"
+                    "bcftools": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -57,7 +57,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T16:30:36.601063919",
+        "timestamp": "2026-03-25T15:15:10.920014756",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.0"
@@ -68,7 +68,7 @@
             9,
             {
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": "1.22"
+                    "bcftools": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -121,7 +121,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T16:31:18.76495039",
+        "timestamp": "2026-03-25T15:15:49.575544351",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.0"

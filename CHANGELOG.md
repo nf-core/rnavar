@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
+| bcftools   | 1.22        | 1.23.1      |
 | samtools   | 1.22.1      | 1.23.1      |
 | snpeff     | 5.4.0a      | 5.0.4c      |
 
@@ -62,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | nft-utils  | 0.0.7       | 0.0.9       |
+| nf-test    | 0.9.4       | 0.9.5       |
 
 ### Developer section
 
@@ -78,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#290](https://github.com/nf-core/rnavar/pull/290) - Remove unused modules
 - [#292](https://github.com/nf-core/rnavar/pull/292) - Reorder config files
 - [#294](https://github.com/nf-core/rnavar/pull/294) - All tools to run now follow an internal list of tools defined in the root main.nf
+- [#294](https://github.com/nf-core/rnavar/pull/294) - Workflow outputs for multiqc_files via topic
 
 #### Fixed
 

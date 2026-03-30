@@ -7,7 +7,7 @@
                 "nf-core": {
                     "bcftools/annotate": {
                         "branch": "master",
-                        "git_sha": "3d9c2f4beaa4f62b3f006928fd9095a496d1e5a8",
+                        "git_sha": "4b21e2cd1a9ea70e22b502cb45ee147410824760",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
@@ -28,7 +28,8 @@
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "4f6c351f7bbc62173b30f5a430e21ec907720676",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/fastqc/fastqc.diff"
                     },
                     "gatk4/applybqsr": {
                         "branch": "master",
@@ -38,7 +39,8 @@
                     "gatk4/baserecalibrator": {
                         "branch": "master",
                         "git_sha": "86308d628760125908c5c77540517effe0f8880f",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/baserecalibrator/gatk4-baserecalibrator.diff"
                     },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
@@ -93,7 +95,8 @@
                     "mosdepth": {
                         "branch": "master",
                         "git_sha": "6832b69ef7f98c54876d6436360b6b945370c615",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/mosdepth/mosdepth.diff"
                     },
                     "multiqc": {
                         "branch": "master",
@@ -103,7 +106,8 @@
                     "picard/markduplicates": {
                         "branch": "master",
                         "git_sha": "4e3e10e502ec6ab6b1c4b4fecd923ff1fa287338",
-                        "installed_by": ["bam_markduplicates_picard"]
+                        "installed_by": ["bam_markduplicates_picard"],
+                        "patch": "modules/nf-core/picard/markduplicates/picard-markduplicates.diff"
                     },
                     "samtools/faidx": {
                         "branch": "master",
@@ -113,12 +117,14 @@
                     "samtools/flagstat": {
                         "branch": "master",
                         "git_sha": "156feda0cb6589cd29c04902004fa3b53bc00205",
-                        "installed_by": ["bam_stats_samtools"]
+                        "installed_by": ["bam_stats_samtools"],
+                        "patch": "modules/nf-core/samtools/flagstat/samtools-flagstat.diff"
                     },
                     "samtools/idxstats": {
                         "branch": "master",
                         "git_sha": "156feda0cb6589cd29c04902004fa3b53bc00205",
-                        "installed_by": ["bam_stats_samtools"]
+                        "installed_by": ["bam_stats_samtools"],
+                        "patch": "modules/nf-core/samtools/idxstats/samtools-idxstats.diff"
                     },
                     "samtools/index": {
                         "branch": "master",
@@ -138,7 +144,8 @@
                     "samtools/stats": {
                         "branch": "master",
                         "git_sha": "156feda0cb6589cd29c04902004fa3b53bc00205",
-                        "installed_by": ["bam_stats_samtools", "modules"]
+                        "installed_by": ["bam_stats_samtools", "modules"],
+                        "patch": "modules/nf-core/samtools/stats/samtools-stats.diff"
                     },
                     "seq2hla": {
                         "branch": "master",
@@ -158,7 +165,8 @@
                     "star/align": {
                         "branch": "master",
                         "git_sha": "cebe21bbd158c15c8fab172e37cfe97a239f4b77",
-                        "installed_by": ["fastq_align_star"]
+                        "installed_by": ["fastq_align_star"],
+                        "patch": "modules/nf-core/star/align/star-align.diff"
                     },
                     "star/genomegenerate": {
                         "branch": "master",
@@ -183,7 +191,8 @@
                     "umitools/extract": {
                         "branch": "master",
                         "git_sha": "bd6d730b3f32742f402189113ba9480006a3350f",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/umitools/extract/umitools-extract.diff"
                     },
                     "untar": {
                         "branch": "master",

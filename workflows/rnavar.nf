@@ -69,9 +69,6 @@ workflow RNAVAR {
     tools
 
     main:
-    // To gather all QC reports and versions for MultiQC
-    reports = channel.empty()
-
     // Parse the input data
     parsed_input = input
         .groupTuple()
@@ -94,10 +91,6 @@ workflow RNAVAR {
 
     MOSDEPTH(parsed_input.cram.map { meta, cram, crai -> [meta, cram, crai, []] }, fasta)
 
-    // Gather all reports generated
-    reports = reports.mix(MOSDEPTH.out.global_txt.map { _meta, reports_ -> [reports_] })
-    reports = reports.mix(MOSDEPTH.out.regions_txt.map { _meta, reports_ -> [reports_] })
-
     // MODULE: Concatenate FastQ files from same sample if required
     CAT_FASTQ(parsed_input.multiple)
 
@@ -105,7 +98,6 @@ workflow RNAVAR {
 
     // MODULE: Generate QC summary using FastQC
     FASTQC(reads_input_all)
-    reports = reports.mix(FASTQC.out.zip.collect { _meta, logs -> logs })
 
     // MODULE: Extract UMIs from reads
     UMITOOLS_EXTRACT(reads_input_all.filter { 'umitools' in tools })
@@ -137,22 +129,12 @@ workflow RNAVAR {
             [[:], []],
         )
 
-        // Gather QC reports
-        reports = reports.mix(FASTQ_ALIGN_STAR.out.log_out.collect { _meta, log -> log })
-        reports = reports.mix(FASTQ_ALIGN_STAR.out.log_final.collect { _meta, log -> log }.ifEmpty([]))
-
         // SUBWORKFLOW: Mark duplicates with GATK4
         BAM_MARKDUPLICATES_PICARD(FASTQ_ALIGN_STAR.out.bam, fasta.join(fasta_fai).collect())
 
         def genome_bam_bai = BAM_MARKDUPLICATES_PICARD.out.bam
             .join(BAM_MARKDUPLICATES_PICARD.out.index, failOnDuplicate: true, failOnMismatch: true)
             .mix(PREPARE_ALIGNMENT.out.reads_index)
-
-        //Gather QC reports
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.flagstat.collect { _meta, log -> log }.ifEmpty([]))
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.idxstats.collect { _meta, log -> log }.ifEmpty([]))
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.metrics.collect { _meta, log -> log }.ifEmpty([]))
-        reports = reports.mix(BAM_MARKDUPLICATES_PICARD.out.stats.collect { _meta, log -> log }.ifEmpty([]))
 
         // SUBWORKFLOW: SplitNCigarReads from GATK4 over the intervals
         // Splits reads that contain Ns in their cigar string(e.g. spanning splicing events in RNAseq data).
@@ -181,9 +163,6 @@ workflow RNAVAR {
                 known_sites_tbi,
             )
 
-            // Gather QC reports
-            reports = reports.mix(GATK4_BASERECALIBRATOR.out.table.map { _meta, table -> table })
-
             def bam_applybqsr = SPLITNCIGAR.out.bam_bai.join(GATK4_BASERECALIBRATOR.out.table)
 
             def applybqsr_bam_bai_interval = bam_applybqsr
@@ -200,11 +179,6 @@ workflow RNAVAR {
             )
 
             bam_variant_calling = RECALIBRATE.out.bam
-
-            // Gather QC reports
-            reports = reports.mix(RECALIBRATE.out.flagstat.collect { _meta, log -> log }.ifEmpty([]))
-            reports = reports.mix(RECALIBRATE.out.idxstats.collect { _meta, log -> log }.ifEmpty([]))
-            reports = reports.mix(RECALIBRATE.out.stats.collect { _meta, log -> log }.ifEmpty([]))
         }
         else {
             bam_variant_calling = SPLITNCIGAR.out.bam_bai
@@ -305,7 +279,4 @@ workflow RNAVAR {
             }
         }
     }
-
-    emit:
-    reports // channel: qc reports for multiQC
 }

@@ -12,7 +12,7 @@ process SAMTOOLS_STATS {
     tuple val(meta2), path(fasta), path(fai)
 
     output:
-    tuple val(meta), path("*.stats"), emit: stats
+    tuple val(meta), val("${task.process}"), val('samtools'), path("*.stats"), topic: multiqc_files, emit: stats
     tuple val("${task.process}"), val('samtools'), eval('samtools version | sed "1!d;s/.* //"'), emit: versions_samtools, topic: versions
 
     when:
