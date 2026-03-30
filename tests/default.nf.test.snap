@@ -229,7 +229,7 @@
             "No warnings",
             [
                 "N E X T F L O W  ~  version [VERSION]",
-                "Launching `[PATH]/tests/../main.nf` [RUN_NAME] - revision: [REVISION]",
+                "Launching `[PATH]/tests/../main.nf` [RUN_NAME] DSL2 - revision: [REVISION]",
                 "------------------------------------------------------",
                 "                                        ,--./,-.",
                 "        ___     __   __   __   ___     /,-._.--~'",
