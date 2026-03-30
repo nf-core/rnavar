@@ -92,7 +92,7 @@ If multiple libraries/runs have been provided for the same sample in the input s
   - `[SAMPLE]/.umi_extract.fastq.gz`: For single-end data
   - `[SAMPLE]/.umi_extract_1.fastq.gz`: For paired-end data
   - `[SAMPLE]/.umi_extract_2.fastq.gz`: For paired-end data
-- `reports/stats/[SAMPLE]//umitools/`,
+- `reports/umitools/[SAMPLE]/`,
   - `[SAMPLE]/.umi_extract.log`: The log of the UMI extraction
 
 </details>
@@ -113,15 +113,12 @@ This output directory will only be made when `--extract_umi` has been specified.
 - `preprocessing/[SAMPLE]/`
   - `[SAMPLE].aligned.bam`: If `--save_align_intermeds` is specified the original BAM file containing read alignments to the reference genome will be placed in this directory.
   - `[SAMPLE].aligned.bam.bai`: This is the index of the above `[SAMPLE].aligned.bam`
-- `reports/stats/[SAMPLE]/STAR_log`
+- `reports/star/[SAMPLE]/`
   - `[SAMPLE].Log.final.out`: STAR alignment report containing the mapping results summary.
   - `[SAMPLE].Log.out` and `[SAMPLE].Log.progress.out`: STAR log files containing detailed information about the run. Typically only useful for debugging purposes.
   - `[SAMPLE].SJ.out.tab`: File containing filtered splice junctions detected after mapping the reads.
 - `preprocessing/[SAMPLE]/unmapped`
   - `[SAMPLE].unmapped_*.fastq.gz`: If `--save_unaligned` is specified, FastQ files containing unmapped reads will be placed in this directory.
-- `reports/stats/[SAMPLE]/samtools/`
-  - `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat summary of the alignment
-  - `[SAMPLE].aligned.bam.stats`: Samtools stat output
 
 </details>
 
@@ -345,7 +342,7 @@ Plots will show:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/stats/[SAMPLE]/fastqc/`
+- `reports/fastqc/[SAMPLE]/`
   - `[SAMPLE]_fastqc.html`: HTML report containing quality metrics for your untrimmed raw FastQ files.
   - `[SAMPLE]_fastqc.zip`: Zip archive containing the HTML report, tab-delimited data file and plot images.
 
@@ -363,7 +360,7 @@ Duplicate reads can also result from a single amplification cluster, incorrectly
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/stats/[SAMPLE]/markduplicates/`
+- `reports/picard/[SAMPLE]/`
   - `[SAMPLE].bam.md.metrics.txt`: Information about the number of duplicate reads in the sample.
 
 </details>
@@ -381,12 +378,16 @@ Plots will show:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/stats/[SAMPLE]/samtools/`
-  - `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat output on raw alignment BAM.
-  - `[SAMPLE].aligned.bam.stats`: Samtools stats on raw alignment BAM.
-  - `[SAMPLE].md.bam.flagstat`: Samtools flagstat output on markduplicated BAM.
-  - `[SAMPLE].md.bam.stats`: Samtools flagstat output on markduplicated BAM.
-  - `[SAMPLE].recal.bam.stats`: Samtools flagstat output on recalibrated BAM.
+- `reports/samtools/[SAMPLE]/`
+  - `[SAMPLE].aligned.bam.flagstat`: Samtools flagstat counts the number of alignments for each FLAG type
+  - `[SAMPLE].aligned.bam.idxstats`: Samtools idxstats reports alignment summary statistics
+  - `[SAMPLE].aligned.bam.stats`: Samtools stats produces comprehensive statistics from alignment file
+  - `[SAMPLE].md.bam.flagstat`: Samtools flagstat counts the number of alignments for each FLAG type
+  - `[SAMPLE].md.bam.idxstats`: Samtools idxstats reports alignment summary statistics
+  - `[SAMPLE].md.bam.stats`: Samtools stats produces comprehensive statistics from alignment file
+  - `[SAMPLE].recal.bam.flagstat`: Samtools flagstat counts the number of alignments for each FLAG type
+  - `[SAMPLE].recal.bam.idxstats`: Samtools idxstats reports alignment summary statistics
+  - `[SAMPLE].recal.bam.stats`: Samtools stats produces comprehensive statistics from alignment file
 
 </details>
 
@@ -407,7 +408,7 @@ Plots will shows :
 <details markdown="1">
 <summary>Output files</summary>
 
-- `reports/SnpEff/[SAMPLE]/`
+- `reports/snpeff/[SAMPLE]/`
   - `[SAMPLE].csv`: Summary of variants by chromosome, region, effect, impact, functional class, type, etc.
   - `[SAMPLE].genes.txt`: TXT (tab separated) summary counts for variants affecting each transcript and gene.
   - `snpEff_summary.html`: Statistics with graphs to be viewed with a web browser

@@ -12,14 +12,14 @@ process MOSDEPTH {
     tuple val(meta2), path(fasta)
 
     output:
-    tuple val(meta), path('*.global.dist.txt')      , emit: global_txt
-    tuple val(meta), path('*.summary.txt')          , emit: summary_txt
-    tuple val(meta), path('*.region.dist.txt')      , optional:true, emit: regions_txt
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.global.dist.txt"), topic: multiqc_files, emit: global_txt
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.summary.txt"), topic: multiqc_files, emit: summary_txt
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.region.dist.txt"), topic: multiqc_files, emit: regions_txt, optional: true
     tuple val(meta), path('*.per-base.d4')          , optional:true, emit: per_base_d4
-    tuple val(meta), path('*.per-base.bed.gz')      , optional:true, emit: per_base_bed
-    tuple val(meta), path('*.per-base.bed.gz.csi')  , optional:true, emit: per_base_csi
-    tuple val(meta), path('*.regions.bed.gz')       , optional:true, emit: regions_bed
-    tuple val(meta), path('*.regions.bed.gz.csi')   , optional:true, emit: regions_csi
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.per-base.bed.gz"), topic: multiqc_files, emit: per_base_bed, optional: true
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.per-base.bed.gz.csi"), topic: multiqc_files, emit: per_base_csi, optional: true
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.regions.bed.gz"), topic: multiqc_files, emit: regions_bed, optional: true
+    tuple val(meta), val("${task.process}"), val('mosdepth'), path("*.regions.bed.gz.csi"), topic: multiqc_files, emit: regions_csi, optional: true
     tuple val(meta), path('*.quantized.bed.gz')     , optional:true, emit: quantized_bed
     tuple val(meta), path('*.quantized.bed.gz.csi') , optional:true, emit: quantized_csi
     tuple val(meta), path('*.thresholds.bed.gz')    , optional:true, emit: thresholds_bed

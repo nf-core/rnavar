@@ -13,7 +13,7 @@ process UMITOOLS_EXTRACT {
 
     output:
     tuple val(meta), path("*.fastq.gz"), emit: reads
-    tuple val(meta), path("*.log")     , emit: log
+    tuple val(meta), val("${task.process}"), val('umitools'), path("*.log"), topic: multiqc_files, emit: log
     tuple val("${task.process}"), val('umitools'), eval("umi_tools --version | sed -n '/version:/s/.*: //p'"), emit: versions_umitools, topic: versions
 
     when:

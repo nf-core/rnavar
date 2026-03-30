@@ -11,10 +11,10 @@ nextflow_pipeline {
         [
             name: "-profile test --input all.csv",
             params: [
-                input: "${projectDir}/tests/csv/1.0/all.csv"
+                input: "${projectDir}/tests/csv/1.0/all.csv",
             ],
-            exclude_recal_bam: true
-        ]
+            exclude_recal_bam: true,
+        ],
     ]
 
     // Generate tests for each scenario

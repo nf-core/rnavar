@@ -9,14 +9,13 @@ process PICARD_MARKDUPLICATES {
 
     input:
     tuple val(meta), path(reads)
-    tuple val(meta2), path(fasta)
-    tuple val(meta3), path(fai)
+    tuple val(meta2), path(fasta), path(fai)
 
     output:
     tuple val(meta), path("*.bam"), emit: bam, optional: true
     tuple val(meta), path("*.bai"), emit: bai, optional: true
     tuple val(meta), path("*.cram"), emit: cram, optional: true
-    tuple val(meta), path("*.metrics.txt"), emit: metrics
+    tuple val(meta), val("${task.process}"), val('picard'), path("*.metrics.txt"), topic: multiqc_files, emit: metrics
     tuple val("${task.process}"), val('picard'), eval("picard MarkDuplicates --version 2>&1 | sed -n 's/.*Version://p'"), topic: versions, emit: versions_picard
 
     when:

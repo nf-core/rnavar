@@ -9,9 +9,9 @@ nextflow_pipeline {
         [
             name: "-profile test --bam_csi_index",
             params: [
-                bam_csi_index: true
-            ]
-        ]
+                bam_csi_index: true,
+            ],
+        ],
     ]
 
     // Generate tests for each scenario

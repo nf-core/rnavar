@@ -1,7 +1,7 @@
 {
     "-profile test --input bam.csv": {
         "content": [
-            27,
+            29,
             {
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -33,20 +33,26 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
@@ -74,26 +80,49 @@
                 "reports/multiqc/multiqc_data/multiqc.parquet",
                 "reports/multiqc/multiqc_data/multiqc_citations.txt",
                 "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_samtools_idxstats.txt",
                 "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
                 "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
                 "reports/multiqc/multiqc_plots",
                 "reports/multiqc/multiqc_plots/pdf",
                 "reports/multiqc/multiqc_plots/pdf/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.pdf",
                 "reports/multiqc/multiqc_plots/pdf/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.pdf",
                 "reports/multiqc/multiqc_plots/pdf/gatk-base-recalibrator-reported-empirical-plot.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.pdf",
                 "reports/multiqc/multiqc_plots/png",
                 "reports/multiqc/multiqc_plots/png/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.png",
                 "reports/multiqc/multiqc_plots/png/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.png",
                 "reports/multiqc/multiqc_plots/png/gatk-base-recalibrator-reported-empirical-plot.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.png",
                 "reports/multiqc/multiqc_plots/svg",
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.svg",
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.svg",
                 "reports/multiqc/multiqc_plots/svg/gatk-base-recalibrator-reported-empirical-plot.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.recal.flagstat",
+                "reports/samtools/GM12878/GM12878.recal.idxstats",
+                "reports/samtools/GM12878/GM12878.recal.stats",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -104,7 +133,11 @@
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
-                "multiqc_citations.txt:md5,3815a9f79e41890653a0e0d602c92ac9"
+                "multiqc_citations.txt:md5,8f6a7bfcd3e3398ea4b40d2733a238ae",
+                "multiqc_samtools_idxstats.txt:md5,9414ae3cf93eacb3c3fec909567ea127",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,d2521dc605c9bf8ee31b4fbde62fc529",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,d2521dc605c9bf8ee31b4fbde62fc529",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,7963300faeaf6791e7e13a6cc8e05639"
             ],
             "No BAM files",
             [
@@ -117,10 +150,10 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-03-25T12:27:32.093651907",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-01-14T14:50:04.440792936"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
+        }
     }
 }

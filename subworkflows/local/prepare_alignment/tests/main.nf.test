@@ -10,17 +10,17 @@ nextflow_workflow {
     tag "samtools/convert"
     tag "samtools/index"
 
-    test("only bam") {
+    test("[bam, bai]") {
         when {
 
             workflow {
                 """
-                input[0] = Channel.of([
+                input[0] = channel.of([
                     [id:'test'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
                 ])
-                input[1] = Channel.empty()
+                input[1] = channel.empty()
                 """
             }
         }
@@ -29,7 +29,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "bam") {
+                        if (key == "reads_index") {
                             return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                         }
                         else if (key == "versions") {
@@ -41,13 +41,13 @@ nextflow_workflow {
         }
     }
 
-    test("only cram - no index") {
+    test("[cram, []]") {
         when {
 
             workflow {
                 """
-                input[0] = Channel.empty()
-                input[1] = Channel.of([
+                input[0] = channel.empty()
+                input[1] = channel.of([
                     [id:'test'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
                     []
@@ -60,7 +60,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "bam") {
+                        if (key == "reads_index") {
                             return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                         }
                         else if (key == "versions") {
@@ -72,17 +72,17 @@ nextflow_workflow {
         }
     }
 
-    test("bam, cram - no index, index") {
+    test("[bam, []], [cram, crai]") {
         when {
 
             workflow {
                 """
-                input[0] = Channel.of([
+                input[0] = channel.of([
                     [id:'test'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
                     []
                 ])
-                input[1] = Channel.of([
+                input[1] = channel.of([
                     [id:'test'],
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
@@ -95,7 +95,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "bam") {
+                        if (key == "reads_index") {
                             return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                         }
                         else if (key == "versions") {

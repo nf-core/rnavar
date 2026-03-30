@@ -13,10 +13,10 @@ nextflow_pipeline {
             params: [
                 extract_umi: true,
                 input: "${projectDir}/tests/csv/1.0/fastq_single_end.csv",
-                umitools_bc_pattern: "NNNXC"
+                umitools_bc_pattern: "NNNXC",
             ],
-            exclude_recal_bam: true
-        ]
+            exclude_recal_bam: true,
+        ],
     ]
 
     // Generate tests for each scenario

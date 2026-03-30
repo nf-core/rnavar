@@ -4,7 +4,7 @@
             9,
             {
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": "1.22"
+                    "bcftools": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -18,11 +18,11 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
@@ -57,18 +57,18 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-03-25T15:15:10.920014756",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-01-20T11:58:12.653954081"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
+        }
     },
     "-profile test --tools bcfann --bcftools_columns": {
         "content": [
             9,
             {
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": "1.22"
+                    "bcftools": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -82,11 +82,11 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
@@ -121,10 +121,10 @@
             ],
             "No warnings"
         ],
+        "timestamp": "2026-03-25T15:15:49.575544351",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-01-20T11:59:11.736947674"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
+        }
     }
 }

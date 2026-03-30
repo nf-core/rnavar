@@ -193,7 +193,7 @@ Variant filtering is an optional step. You can skip it using `--skip_variantfilt
 
 The annotation of variants is performed using snpEff, VEP and BCFtools annotate. The parameter to use is `--tools snpeff`, `--tools vep` or `--tools bcfann`. You can even run both snpEff and VEP using `--tools merge`, in this case the output VCF file will have both snpEff and VEP annotations combined.
 
-You can skip the variant annotation step using `--skip_variantannotation` parameter or without passing `--tools` options.
+You can skip the variant annotation step by not passing via the `--tools` options any annotation tools (ie. `bcfann`, `snpeff`, `vep` or `merge`).
 
 ### Annotation cache
 

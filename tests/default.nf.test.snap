@@ -1,7 +1,7 @@
 {
     "-profile test": {
         "content": [
-            41,
+            43,
             {
                 "CAT_FASTQ": {
                     "cat": "9.5"
@@ -42,29 +42,29 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -91,6 +91,12 @@
                 "preprocessing/GM12878/GM12878.recal.bam",
                 "preprocessing/GM12878/GM12878.recal.bam.bai",
                 "reports",
+                "reports/fastqc",
+                "reports/fastqc/GM12878",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.zip",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.zip",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
@@ -165,23 +171,26 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/STAR_log",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
-                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/GM12878/fastqc",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
-                "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/picard",
+                "reports/picard/GM12878",
+                "reports/picard/GM12878/GM12878.md.metrics.txt",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.aligned.flagstat",
+                "reports/samtools/GM12878/GM12878.aligned.idxstats",
+                "reports/samtools/GM12878/GM12878.aligned.stats",
+                "reports/samtools/GM12878/GM12878.md.flagstat",
+                "reports/samtools/GM12878/GM12878.md.idxstats",
+                "reports/samtools/GM12878/GM12878.md.stats",
+                "reports/samtools/GM12878/GM12878.recal.flagstat",
+                "reports/samtools/GM12878/GM12878.recal.idxstats",
+                "reports/samtools/GM12878/GM12878.recal.stats",
+                "reports/star",
+                "reports/star/GM12878",
+                "reports/star/GM12878/GM12878.Log.final.out",
+                "reports/star/GM12878/GM12878.Log.out",
+                "reports/star/GM12878/GM12878.Log.progress.out",
+                "reports/star/GM12878/GM12878.SJ.out.tab",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -194,15 +203,15 @@
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,c1e12cf18f996c0729fa37b0ca17ca24",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
-                "multiqc_samtools_idxstats.txt:md5,776a2525b1f9482ef584682efe5241c1",
+                "multiqc_samtools_idxstats.txt:md5,244cd977a42595929ef61448eb7c86b8",
                 "multiqc_star.txt:md5,7e6521313553e98304f39d749df30dc6",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,0f26224af07ef7c66b94a804c9afd29b",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,0f26224af07ef7c66b94a804c9afd29b",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,2c00bf09584c6eef7d052c8ed14f3948",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
@@ -232,8 +241,6 @@
                 "Input/output options",
                 "  input                     : [PATH]/tests/csv/1.0/fastq_single.csv",
                 "  outdir                    : [PATH]/tests/[NFT_HASH]/output",
-                "Alignment options",
-                "  star_index                : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/index/star/star.tar.gz",
                 "Variant filtering",
                 "  gatk_vf_qd_filter         : 2.0",
                 "  gatk_vf_fs_filter         : 30.0",
@@ -248,6 +255,7 @@
                 "  fasta                     : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/genome.fasta",
                 "  dict                      : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/genome.dict",
                 "  gff                       : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/genome.gff3",
+                "  star_index                : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/index/star/star.tar.gz",
                 "  known_indels              : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/vcf/mills_and_1000G.indels.vcf.gz",
                 "  known_indels_tbi          : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/vcf/mills_and_1000G.indels.vcf.gz.tbi",
                 "  dbsnp                     : https://raw.githubusercontent.com/nf-core/test-datasets/rnavar/data//genomics/homo_sapiens/genome/vcf/dbsnp_146.hg38.vcf.gz",
@@ -271,6 +279,9 @@
                 "  configFiles               : [PATH]/nextflow.config, [PATH]/nextflow.config, [PATH]/tests/nextflow.config",
                 "!! Only displaying parameters that differ from the pipeline defaults !!",
                 "------------------------------------------------------",
+                "Extra informations",
+                "  Tools selected to be run  : baserecalibrator,intervallisttools,multiqc,removeunknownregions,variantfiltration",
+                "------------------------------------------------------",
                 "* The pipeline",
                 "    https://doi.org/10.5281/zenodo.6669636",
                 "* The nf-core framework",
@@ -280,7 +291,7 @@
                 "[NXF_HASH] Submitted process > MULTIQC (rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GFFREAD (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:GTF2BED (testdata.nf-core.rnavar)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:REMOVE_UNKNOWN_REGIONS (testdata.nf-core.rnavar)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:REMOVEUNKNOWNREGIONS (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:SAMTOOLS_FAIDX (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:STAR_INDEXVERSION (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:PREPARE_GENOME:UNTAR (testdata.nf-core.rnavar)",
@@ -307,9 +318,11 @@
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_INTERVALLISTTOOLS (testdata.nf-core.rnavar)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_MERGEVCFS (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:GATK4_VARIANTFILTRATION (GM12878)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_FLAGSTAT (GM12878)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_IDXSTATS (GM12878)",
+                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_STATS (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:GATK4_APPLYBQSR (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:SAMTOOLS_INDEX (GM12878)",
-                "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:RECALIBRATE:SAMTOOLS_STATS (GM12878)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:SPLITNCIGAR:GATK4_SPLITNCIGARREADS (GM12878_1scattered)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:SPLITNCIGAR:GATK4_SPLITNCIGARREADS (GM12878_2scattered)",
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:SPLITNCIGAR:GATK4_SPLITNCIGARREADS (GM12878_3scattered)",
@@ -320,15 +333,15 @@
                 "[NXF_HASH] Submitted process > NFCORE_RNAVAR:RNAVAR:TABIX (GM12878)"
             ]
         ],
-        "timestamp": "2026-03-03T11:45:24.448909113",
+        "timestamp": "2026-03-25T14:16:30.288649452",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
         }
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
-            42,
+            44,
             {
                 "CAT_FASTQ": {
                     "cat": "9.5"
@@ -369,29 +382,29 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -421,6 +434,12 @@
                 "preprocessing/GM12878/GM12878.recal.bam",
                 "preprocessing/GM12878/GM12878.recal.bam.bai",
                 "reports",
+                "reports/fastqc",
+                "reports/fastqc/GM12878",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.zip",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.zip",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
@@ -495,23 +514,26 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/STAR_log",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
-                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/GM12878/fastqc",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
-                "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/picard",
+                "reports/picard/GM12878",
+                "reports/picard/GM12878/GM12878.md.metrics.txt",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.aligned.flagstat",
+                "reports/samtools/GM12878/GM12878.aligned.idxstats",
+                "reports/samtools/GM12878/GM12878.aligned.stats",
+                "reports/samtools/GM12878/GM12878.md.flagstat",
+                "reports/samtools/GM12878/GM12878.md.idxstats",
+                "reports/samtools/GM12878/GM12878.md.stats",
+                "reports/samtools/GM12878/GM12878.recal.flagstat",
+                "reports/samtools/GM12878/GM12878.recal.idxstats",
+                "reports/samtools/GM12878/GM12878.recal.stats",
+                "reports/star",
+                "reports/star/GM12878",
+                "reports/star/GM12878/GM12878.Log.final.out",
+                "reports/star/GM12878/GM12878.Log.out",
+                "reports/star/GM12878/GM12878.Log.progress.out",
+                "reports/star/GM12878/GM12878.SJ.out.tab",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -526,15 +548,15 @@
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,c1e12cf18f996c0729fa37b0ca17ca24",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
-                "multiqc_samtools_idxstats.txt:md5,776a2525b1f9482ef584682efe5241c1",
+                "multiqc_samtools_idxstats.txt:md5,244cd977a42595929ef61448eb7c86b8",
                 "multiqc_star.txt:md5,7e6521313553e98304f39d749df30dc6",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,0f26224af07ef7c66b94a804c9afd29b",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,0f26224af07ef7c66b94a804c9afd29b",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,2c00bf09584c6eef7d052c8ed14f3948",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
@@ -551,15 +573,15 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-03T11:17:44.321180368",
+        "timestamp": "2026-03-25T14:21:01.146610634",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
         }
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
-            42,
+            44,
             {
                 "CAT_FASTQ": {
                     "cat": "9.5"
@@ -600,29 +622,29 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
-                "REMOVE_UNKNOWN_REGIONS": {
+                "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -652,6 +674,12 @@
                 "preprocessing/GM12878/GM12878.recal.bam",
                 "preprocessing/GM12878/GM12878.recal.bam.bai",
                 "reports",
+                "reports/fastqc",
+                "reports/fastqc/GM12878",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.zip",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.zip",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt",
@@ -726,23 +754,26 @@
                 "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
                 "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
                 "reports/multiqc/multiqc_report.html",
-                "reports/stats",
-                "reports/stats/GM12878",
-                "reports/stats/GM12878/STAR_log",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.final.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.out",
-                "reports/stats/GM12878/STAR_log/GM12878.Log.progress.out",
-                "reports/stats/GM12878/STAR_log/GM12878.SJ.out.tab",
-                "reports/stats/GM12878/fastqc",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_1_fastqc.zip",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.html",
-                "reports/stats/GM12878/fastqc/GM12878_2_fastqc.zip",
-                "reports/stats/GM12878/markduplicates",
-                "reports/stats/GM12878/markduplicates/GM12878.md.metrics.txt",
-                "reports/stats/GM12878/samtools",
-                "reports/stats/GM12878/samtools/GM12878.flagstat",
-                "reports/stats/GM12878/samtools/GM12878.stats",
+                "reports/picard",
+                "reports/picard/GM12878",
+                "reports/picard/GM12878/GM12878.md.metrics.txt",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.aligned.flagstat",
+                "reports/samtools/GM12878/GM12878.aligned.idxstats",
+                "reports/samtools/GM12878/GM12878.aligned.stats",
+                "reports/samtools/GM12878/GM12878.md.flagstat",
+                "reports/samtools/GM12878/GM12878.md.idxstats",
+                "reports/samtools/GM12878/GM12878.md.stats",
+                "reports/samtools/GM12878/GM12878.recal.flagstat",
+                "reports/samtools/GM12878/GM12878.recal.idxstats",
+                "reports/samtools/GM12878/GM12878.recal.stats",
+                "reports/star",
+                "reports/star/GM12878",
+                "reports/star/GM12878/GM12878.Log.final.out",
+                "reports/star/GM12878/GM12878.Log.out",
+                "reports/star/GM12878/GM12878.Log.progress.out",
+                "reports/star/GM12878/GM12878.SJ.out.tab",
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
@@ -757,15 +788,15 @@
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,ee7391c5c8bc1ade5190367c818a7108",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
                 "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
-                "multiqc_samtools_idxstats.txt:md5,776a2525b1f9482ef584682efe5241c1",
+                "multiqc_samtools_idxstats.txt:md5,244cd977a42595929ef61448eb7c86b8",
                 "multiqc_star.txt:md5,7e6521313553e98304f39d749df30dc6",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,c889fc29548ffb38c05964526820b8b6",
-                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,c3f2cf9e3aed7d33c686f1908d198ac1",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,0f26224af07ef7c66b94a804c9afd29b",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,0f26224af07ef7c66b94a804c9afd29b",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,2c00bf09584c6eef7d052c8ed14f3948",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
                 "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
@@ -782,10 +813,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-03T11:15:20.485040747",
+        "timestamp": "2026-03-25T14:18:46.941805965",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
         }
     }
 }

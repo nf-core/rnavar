@@ -9,9 +9,9 @@ nextflow_pipeline {
         [
             name: "-profile test --tools seq2hla",
             params: [
-                tools: "seq2hla"
-            ]
-        ]
+                tools: "seq2hla",
+            ],
+        ],
     ]
 
     // Generate tests for each scenario

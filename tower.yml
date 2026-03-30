@@ -3,6 +3,12 @@ reports:
     display: "MultiQC HTML report"
   "**/mosdepth/*/*.mosdepth.summary.txt":
     display: "All samples summary of mean depths per chromosome and within specified regions per chromosome"
+  "**/samtools/*/*.idxstat":
+    display: "All samples metrics of bam files at different steps"
+  "**/samtools/*/*.flagstat":
+    display: "All samples metrics of bam files at different steps"
+  "**/samtools/*/*.stats":
+    display: "All samples metrics of bam files at different steps"
   "**/reports/snpeff/*/*/*_snpEff.html":
     display: "Statistics and plots for the SnpEff run"
   "**/reports/snpeff/*/*/*_snpEff.genes.txt":

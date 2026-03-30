@@ -31,29 +31,62 @@
                 "tools": {
                     "type": "string",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'bcfann', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
-                    "help_text": "List of tools to be used in addition to variant calling: currently hlatyping with Seq2HLA and a choice of annotation tools.",
-                    "pattern": "^((bcfann|seq2hla|snpeff|vep|merge)*(,)*)*$",
+                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'umitools', 'bcfann', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "help_text": "List of opt-in tools to be used in addition to variant calling: currently umitools to remove UMIs from the reads with UMI-tools, hlatyping with Seq2HLA, and a choice of annotation tools.",
+                    "pattern": "^((umitools|seq2hla|bcfann|snpeff|vep|merge)*(,)*)*$",
+                    "hidden": true
+                },
+                "skip_tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-hammer",
+                    "description": "Specify which tools RNAvar should skip. Values can be 'baserecalibrator', 'intervallisttools', 'multiqc', 'removeunknownregions' and 'variantfiltration'",
+                    "help_text": "List of opt-out tools to be skipped: 'baserecalibrator', 'intervallisttools', 'multiqc', 'removeunknownregions' and 'variantfiltration'",
+                    "pattern": "^((baserecalibrator|intervallisttools|multiqc|removeunknownregions|variantfiltration)*(,)*)*$",
                     "hidden": true
                 },
                 "save_merged_fastq": {
                     "type": "boolean",
                     "description": "Save FastQ files after merging re-sequenced libraries in the results directory.",
                     "fa_icon": "fas fa-file-download"
-                }
-            }
-        },
-        "preprocessing": {
-            "title": "Preprocessing of alignment",
-            "type": "object",
-            "description": "Parameters for preprocessing FASTQ files before alignment.",
-            "fa_icon": "fas fa-toolbox",
-            "properties": {
+                },
+                "skip_baserecalibration": {
+                    "type": "boolean",
+                    "description": "Skip the process of base recalibration steps i.e., GATK BaseRecalibrator and GATK ApplyBQSR.",
+                    "help_text": "This parameter disable the base recalibration step, thus using a un-calibrated BAM file for variant calling. This parameter will be replaced with `--skip_tools baserecalibrator` in future release."
+                },
+                "skip_exon_bed_check": {
+                    "type": "boolean",
+                    "description": "Skip the check of the exon bed",
+                    "help_text": "Set this parameter if you don't want to the pipeline to check and filter unknown regions in the exon bed file. This parameter will be replaced with `--skip_tools removeunknownregions` in future release."
+                },
+                "skip_intervallisttools": {
+                    "type": "boolean",
+                    "description": "Skip the process of preparing interval lists for the GATK variant calling step",
+                    "help_text": "This parameter disable preparing multiple interval lists to use with HaplotypeCaller module of GATK. It is recommended not to disable the step as it is required to run the variant calling correctly. This parameter will be replaced with `--skip_tools intervallisttools` in future release."
+                },
+                "skip_multiqc": {
+                    "type": "boolean",
+                    "description": "Skip MultiQC reports",
+                    "help_text": "This parameter disable all QC reports. This parameter will be replaced with `--skip_tools multiqc` in future release."
+                },
+                "skip_variantfiltration": {
+                    "type": "boolean",
+                    "description": "Skip variant filtering of GATK",
+                    "help_text": "Set this parameter if you don't want to filter any variants. This parameter will be replaced with `--skip_tools variantfiltration` in future release."
+                },
                 "extract_umi": {
                     "type": "boolean",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify whether to remove UMIs from the reads with UMI-tools extract."
-                },
+                    "description": "Specify whether to remove UMIs from the reads with UMI-tools extract. This parameter will be replaced with `--tools umitools` in future release."
+                }
+            }
+        },
+        "umitools_options": {
+            "title": "Parameters for preprocessing FASTQ files before alignment using UMI-tools",
+            "type": "object",
+            "description": "umitools options",
+            "fa_icon": "fas fa-toolbox",
+            "properties": {
                 "umitools_extract_method": {
                     "type": "string",
                     "default": "string",
@@ -94,13 +127,6 @@
                     "enum": ["star"],
                     "description": "Specifies the alignment algorithm to use.",
                     "help_text": "This parameter define which aligner is to be used for aligning the RNA reads to the reference genome."
-                },
-                "star_index": {
-                    "type": "string",
-                    "format": "path",
-                    "exists": true,
-                    "description": "Path to STAR index folder or compressed file (tar.gz)",
-                    "help_text": "This parameter can be used if there is an pre-defined STAR index available. You can either give the full path to the index directory or a compressed file in tar.gz format."
                 },
                 "star_twopass": {
                     "type": "boolean",
@@ -268,6 +294,11 @@
                     "description": "Path to VEP cache.",
                     "help_text": "Path to VEP cache which should contain the relevant species, genome and build directories at the path ${vep_species}/${vep_genome}_${vep_cache_version}"
                 },
+                "vep_cache_preflight_check": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-database",
+                    "description": "Force preflight check for local VEP cache download"
+                },
                 "snpeff_cache": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
@@ -426,44 +457,6 @@
                 }
             }
         },
-        "pipeline_stage_options": {
-            "title": "Pipeline stage options",
-            "type": "object",
-            "fa_icon": "fas fa-terminal",
-            "description": "Define parameters that control the stages in the pipeline",
-            "properties": {
-                "skip_baserecalibration": {
-                    "type": "boolean",
-                    "description": "Skip the process of base recalibration steps i.e., GATK BaseRecalibrator and GATK ApplyBQSR.",
-                    "help_text": "This parameter disable the base recalibration step, thus using a un-calibrated BAM file for variant calling."
-                },
-                "skip_intervallisttools": {
-                    "type": "boolean",
-                    "description": "Skip the process of preparing interval lists for the GATK variant calling step",
-                    "help_text": "This parameter disable preparing multiple interval lists to use with HaplotypeCaller module of GATK. It is recommended not to disable the step as it is required to run the variant calling correctly."
-                },
-                "skip_variantfiltration": {
-                    "type": "boolean",
-                    "description": "Skip variant filtering of GATK",
-                    "help_text": "Set this parameter if you don't want to filter any variants."
-                },
-                "skip_variantannotation": {
-                    "type": "boolean",
-                    "description": "Skip variant annotation",
-                    "help_text": "Set this parameter if you don't want to run variant annotation."
-                },
-                "skip_multiqc": {
-                    "type": "boolean",
-                    "description": "Skip MultiQC reports",
-                    "help_text": "This parameter disable all QC reports"
-                },
-                "skip_exon_bed_check": {
-                    "type": "boolean",
-                    "description": "Skip the check of the exon bed",
-                    "help_text": "Set this parameter if you don't want to the pipeline to check and filter unknown regions in the exon bed file."
-                }
-            }
-        },
         "general_reference_genome_options": {
             "title": "General reference genome options",
             "type": "object",
@@ -556,6 +549,13 @@
                     "pattern": "^\\S+\\.gff\\d?$",
                     "description": "Path to GFF3 annotation file.",
                     "help_text": "This parameter must be specified if `--genome` or `--gtf` are not specified."
+                },
+                "star_index": {
+                    "type": "string",
+                    "format": "path",
+                    "exists": true,
+                    "description": "Path to STAR index folder or compressed file (tar.gz)",
+                    "help_text": "This parameter can be used if there is an pre-defined STAR index available. You can either give the full path to the index directory or a compressed file in tar.gz format."
                 },
                 "exon_bed": {
                     "type": "string",
@@ -816,7 +816,7 @@
             "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/$defs/preprocessing"
+            "$ref": "#/$defs/umitools_options"
         },
         {
             "$ref": "#/$defs/alignment_options"
@@ -832,9 +832,6 @@
         },
         {
             "$ref": "#/$defs/variant_annotation"
-        },
-        {
-            "$ref": "#/$defs/pipeline_stage_options"
         },
         {
             "$ref": "#/$defs/general_reference_genome_options"

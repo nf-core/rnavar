@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: prepare_alignment
+description: Check if input BAM|CRAM files have indexes and if not index them
+keywords:
+  - bam
+  - cram
+  - index
+  - samtools
+components:
+  - samtools/index
+input:
+  - bam:
+      description: |
+        bam to splitncigarreads (mandatory)
+        Structure: [ val(meta), path(bam), path(bai?) ]
+  - bam:
+      description: |
+        bam to splitncigarreads (mandatory)
+        Structure: [ val(meta), path(cram), path(crai?) ]
+output:
+  - reads_index:
+      description: |
+        Compressed bam|cram + bam|cram index
+        Structure: [ val(meta), path(bam|cram), path(bai|crai) ]
+  - qc_reports:
+      description: |
+        Samtools stats reports
+        Structure: [ val(meta), path(stats) ]
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"

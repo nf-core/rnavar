@@ -11,15 +11,15 @@ nextflow_pipeline {
         [
             name: "-profile test --input fastq_multiple.csv",
             params: [
-                input: "${projectDir}/tests/csv/1.0/fastq_multiple.csv"
-            ]
+                input: "${projectDir}/tests/csv/1.0/fastq_multiple.csv",
+            ],
         ],
         [
             name: "-profile test --input fastq_multiple_pair_end.csv",
             params: [
-                input: "${projectDir}/tests/csv/1.0/fastq_multiple_pair_end.csv"
-            ]
-        ]
+                input: "${projectDir}/tests/csv/1.0/fastq_multiple_pair_end.csv",
+            ],
+        ],
     ]
 
     // Generate tests for each scenario

@@ -17,17 +17,17 @@ nextflow_pipeline {
             params: [
                 dbsnp: false,
                 dbsnp_tbi: false,
-                known_indels_tbi: false
-            ]
+                known_indels_tbi: false,
+            ],
         ],
         [
             name: "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false",
             params: [
                 dbsnp_tbi: false,
                 known_indels: false,
-                known_indels_tbi: false
-            ]
-        ]
+                known_indels_tbi: false,
+            ],
+        ],
     ]
 
     // Generate tests for each scenario

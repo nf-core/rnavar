@@ -7,21 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [#293](https://github.com/nf-core/rnavar/pull/293) - Adding `idxstats` and `flagstat` to recalibrated bam files
+- [#293](https://github.com/nf-core/rnavar/pull/293) - Added prefix for the `samtools` statistics files (`idxstats`, `flagstat`, `stats`)
+
 ### Changed
 
 ### Fixed
 
+- [#293](https://github.com/nf-core/rnavar/pull/293) - Rescue `idxstats` files
+- [#293](https://github.com/nf-core/rnavar/pull/293) - No more overwrite of any of the `samtools` statistics files (`idxstats`, `flagstat`, `stats`)
+- [#295](https://github.com/nf-core/rnavar/pull/295) - All tools can be selected or skipped via `params.tools` or `params.skip_tools`
+
 ### Removed
 
-- [#287](https://github.com/nf-core/rnavar/pull/287) - Removed hook_url params, cf [tools#4051](https://github.com/nf-core/tools/pull/4051)
+- [#287](https://github.com/nf-core/rnavar/pull/287) - Removed `hook_url` params, cf [tools#4051](https://github.com/nf-core/tools/pull/4051)
+- [#294](https://github.com/nf-core/rnavar/pull/294) - Removed `skip_variantannotation` params
+
+### Deprecated
+
+- [#295](https://github.com/nf-core/rnavar/pull/295) - Deprecating multiple params that are still supported but will be removed in future release: `skip_baserecalibration`, `skip_exon_bed_check`, `skip_intervallisttools`, `skip_multiqc`, `skip_variantfiltration`, `extract_umi`
 
 ### Dependencies
 
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| bcftools   | 1.22        | 1.23.1      |
+| samtools   | 1.22.1      | 1.23.1      |
+| snpeff     | 5.4.0a      | 5.0.4c      |
+
 ### Parameter
 
-| Old name | New name |
-| -------- | -------- |
-| hook_url |          |
+| Old name               | New name                  |
+| ---------------------- | ------------------------- |
+| hook_url               |                           |
+| skip_variantannotation |                           |
+|                        | vep_cache_preflight_check |
 
 ### Schema input
 
@@ -32,23 +52,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Modules / Subworkflows
 
-| Dependency | Old name | New name |
-| ---------- | -------- | -------- |
+| Dependency   | Old name                        | New name                         |
+| ------------ | ------------------------------- | -------------------------------- |
+| Modules      | REMOVE_UNKNOWN_REGIONS          | REMOVEUNKNOWNREGIONS             |
+| Subworkflows | ANNOTATION_CACHE_INITIALISATION | UTILS_ANNOTATION_CACHE           |
+| Subworkflows | DOWNLOAD_CACHE_SNPEFF_VEP       | CACHE_DOWNLOAD_ENSEMBLVEP_SNPEFF |
 
 ### Plugins
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | nft-utils  | 0.0.7       | 0.0.9       |
+| nf-test    | 0.9.4       | 0.9.5       |
 
 ### Developer section
 
 #### Added
 
+- [#291](https://github.com/nf-core/rnavar/pull/291) - Add tests for save_align_intermeds
+
 #### Changed
 
 - [#284](https://github.com/nf-core/rnavar/pull/284) - Back to dev
 - [#287](https://github.com/nf-core/rnavar/pull/287) - Update all modules and subworkflows
+- [#288](https://github.com/nf-core/rnavar/pull/288) - Add meta.yml for most local modules and subworkflows
+- [#289](https://github.com/nf-core/rnavar/pull/289) - Replace local modules for annotation by nf-core/modules versions
+- [#290](https://github.com/nf-core/rnavar/pull/290) - Remove unused modules
+- [#292](https://github.com/nf-core/rnavar/pull/292) - Reorder config files
+- [#294](https://github.com/nf-core/rnavar/pull/294) - All tools to run now follow an internal list of tools defined in the root main.nf
+- [#294](https://github.com/nf-core/rnavar/pull/294) - Workflow outputs for multiqc_files via topic
 
 #### Fixed
 

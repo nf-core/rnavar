@@ -37,12 +37,7 @@
                     ]
                 ],
                 "exon_bed": [
-                    [
-                        {
-                            "id": "genome"
-                        },
-                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.bed"
-                    ]
+                    
                 ],
                 "fasta": [
                     [
@@ -110,7 +105,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-02-26T11:26:57.642655447",
+        "timestamp": "2026-03-09T12:02:57.720693024",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

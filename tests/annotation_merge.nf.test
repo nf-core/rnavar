@@ -12,16 +12,16 @@ nextflow_pipeline {
             name: "-profile test --tools merge",
             params: [
                 input: "${projectDir}/tests/csv/1.0/vcf.csv",
-                tools: "merge"
-            ]
+                tools: "merge",
+            ],
         ],
             [
             name: "-profile test --tools merge,snpeff,vep",
             params: [
                 input: "${projectDir}/tests/csv/1.0/vcf.csv",
-                tools: "merge,snpeff,vep"
-            ]
-        ]
+                tools: "merge,snpeff,vep",
+            ],
+        ],
     ]
 
     // Generate tests for each scenario

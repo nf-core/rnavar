@@ -18,9 +18,10 @@ concurrency:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  NXF_SYNTAX_PARSER: v2
-  NFT_VER: "0.9.4"
   NXF_ANSI_LOG: false
+  NXF_ENABLE_STRICT: true
+  NXF_SYNTAX_PARSER: v2
+  NFT_VER: "0.9.5"
   NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
   NXF_SINGULARITY_LIBRARYDIR: ${{ github.workspace }}/.singularity
 

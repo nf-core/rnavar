@@ -29,52 +29,47 @@ workflow VCF_ANNOTATE_ALL {
     tab_ann = channel.empty()
     vcf_ann = channel.empty()
 
-    if (tools.split(',').contains('bcfann')) {
-        if (bcftools_columns) {
-            bcftools_in = vcf
-                .combine(bcftools_annotations)
-                .combine(bcftools_annotations_index)
-                .combine(bcftools_header_lines)
-                .map { meta, vcf_, annotation, annotation_index, header_file -> [meta, vcf_, [], annotation, annotation_index, [], header_file, []] }
-        }
-        else {
-            bcftools_in = vcf
-                .combine(bcftools_annotations)
-                .combine(bcftools_annotations_index)
-                .combine(bcftools_columns)
-                .combine(bcftools_header_lines)
-                .map { meta, vcf_, annotation, annotation_index, columns, header_file -> [meta, vcf_, [], annotation, annotation_index, columns, header_file, []] }
-        }
-
-        BCFTOOLS_ANNOTATE(bcftools_in)
-
-        vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
+    if (bcftools_columns) {
+        vcf_for_bcfann = vcf
+            .combine(bcftools_annotations)
+            .combine(bcftools_annotations_index)
+            .combine(bcftools_columns)
+            .combine(bcftools_header_lines)
+            .map { meta, vcf_, annotation, annotation_index, columns, header_file -> [meta, vcf_, [], annotation, annotation_index, columns, header_file, []] }
+    }
+    else {
+        vcf_for_bcfann = vcf
+            .combine(bcftools_annotations)
+            .combine(bcftools_annotations_index)
+            .combine(bcftools_header_lines)
+            .map { meta, vcf_, annotation, annotation_index, header_file -> [meta, vcf_, [], annotation, annotation_index, [], header_file, []] }
     }
 
+    BCFTOOLS_ANNOTATE(vcf_for_bcfann.filter { 'bcfann' in tools })
+    vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
 
-    if (tools.split(',').contains('merge') || tools.split(',').contains('snpeff')) {
-        VCF_ANNOTATE_SNPEFF(vcf, snpeff_db, snpeff_cache)
+    VCF_ANNOTATE_SNPEFF(vcf.filter { ('merge' in tools || 'snpeff' in tools) }, snpeff_db, snpeff_cache)
+    vcf_ann = vcf_ann.mix(VCF_ANNOTATE_SNPEFF.out.vcf_tbi)
 
-        vcf_ann = vcf_ann.mix(VCF_ANNOTATE_SNPEFF.out.vcf_tbi)
-    }
+    VCF_ANNOTATE_MERGE(
+        VCF_ANNOTATE_SNPEFF.out.vcf_tbi.map { meta, vcf_, _tbi -> [meta, vcf_, []] }.filter { 'merge' in tools },
+        fasta,
+        vep_genome,
+        vep_species,
+        vep_cache_version,
+        vep_cache,
+        vep_extra_files,
+    )
 
-    if (tools.split(',').contains('merge')) {
-        vcf_ann_for_merge = VCF_ANNOTATE_SNPEFF.out.vcf_tbi.map { meta, vcf_, _tbi -> [meta, vcf_, []] }
-        VCF_ANNOTATE_MERGE(vcf_ann_for_merge, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
+    vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
+    tab_ann = tab_ann.mix(VCF_ANNOTATE_MERGE.out.tab)
+    json_ann = json_ann.mix(VCF_ANNOTATE_MERGE.out.json)
 
-        vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
-        tab_ann = tab_ann.mix(VCF_ANNOTATE_MERGE.out.tab)
-        json_ann = json_ann.mix(VCF_ANNOTATE_MERGE.out.json)
-    }
+    VCF_ANNOTATE_ENSEMBLVEP(vcf.map { meta, vcf_ -> [meta, vcf_, []] }.filter { 'vep' in tools }, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
 
-    if (tools.split(',').contains('vep')) {
-        vcf_for_vep = vcf.map { meta, vcf_ -> [meta, vcf_, []] }
-        VCF_ANNOTATE_ENSEMBLVEP(vcf_for_vep, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
-
-        vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
-        tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
-        json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
-    }
+    vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
+    tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
+    json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
 
     emit:
     vcf_ann // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]

@@ -12,16 +12,16 @@ nextflow_pipeline {
             name: "-profile test --tools bcfann",
             params: [
                 input: "${projectDir}/tests/csv/1.0/vcf.csv",
-                tools: "bcfann"
-            ]
+                tools: "bcfann",
+            ],
         ],
             [
             name: "-profile test --tools bcfann --bcftools_columns",
             params: [
                 input: "${projectDir}/tests/csv/1.0/vcf.csv",
                 bcftools_columns: "${projectDir}/tests/config/bcfann_test_columns.txt",
-                tools: "bcfann"
-            ]
+                tools: "bcfann",
+            ],
         ]
     ]
 

@@ -25,9 +25,9 @@ nextflow_workflow {
                 input[11] = []
                 input[12] = []
                 input[13] = "exon"
-                input[14] = false
-                input[15] = channel.value(false)
-                input[16] = "genome"
+                input[14] = channel.value(false)
+                input[15] = "genome"
+                input[16] = ['removeunknownregions']
                 """
             }
         }
@@ -65,9 +65,9 @@ nextflow_workflow {
                 input[11] = []
                 input[12] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz'
                 input[13] = "exon"
-                input[14] = false
-                input[15] = channel.value(true)
-                input[16] = "genome"
+                input[14] = channel.value(true)
+                input[15] = "genome"
+                input[16] = []
                 """
             }
         }
