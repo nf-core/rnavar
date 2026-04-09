@@ -27,7 +27,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "4f6c351f7bbc62173b30f5a430e21ec907720676",
+                        "git_sha": "79b36b51048048374b642289bfe9e591ef56fe05",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/fastqc/fastqc.diff"
                     },
@@ -100,7 +100,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "cb9f4bec379866ca560f7f79d9a9a06bea8c9b51",
+                        "git_sha": "79b36b51048048374b642289bfe9e591ef56fe05",
                         "installed_by": ["modules"]
                     },
                     "picard/markduplicates": {

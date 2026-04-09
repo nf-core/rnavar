@@ -13,7 +13,7 @@ nextflow_pipeline {
             params: [
                 input: "${projectDir}/tests/csv/1.0/cram.csv"
             ],
-            exclude_recal_bam: true,
+            ignoreFiles: '**/*.recal.bam',
         ],
     ]
 
