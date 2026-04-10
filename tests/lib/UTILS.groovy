@@ -162,10 +162,10 @@ class UTILS {
                     println ""
                     println "CLEANUP"
                     println "Set NFT_CLEANUP to false to disable."
-                    println "The following folders will be deleted:"
-                    println "- ${workDir}"
+                    println "The following folder will be deleted:"
+                    println "- ${launchDir}"
 
-                    new File("${workDir}").deleteDir()
+                    new File("${launchDir}").deleteDir()
                 }
             }
         }
