@@ -31,7 +31,7 @@ class UTILS {
         // bam_files: All bam files
         def bam_files = getAllFilesFromDir(outdir, include: ['**/*.bam'], ignore: [scenario.ignoreFiles])
         // bam_files: All bam files
-        def recal_bam_files = getAllFilesFromDir(outdir, include: ['**/*.recal.bam'])
+        def recal_bam_files = getAllFilesFromDir(outdir, include: ['**/*.recal.bam']) - bam_files
         // cram_files: All cram files
         def cram_files = getAllFilesFromDir(outdir, include: ['**/*.cram'], ignore: [scenario.ignoreFiles])
         // Fasta file for cram verification with nft-bam
