@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [#298](https://github.com/nf-core/rnavar/pull/298) - Update all modules and subworkflows to the latest versions in nf-core/modules
+
 ### Fixed
 
 - [#293](https://github.com/nf-core/rnavar/pull/293) - Rescue `idxstats` files
