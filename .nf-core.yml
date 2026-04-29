@@ -3,7 +3,7 @@ lint:
     - .github/workflows/linting.yml
   nf_test_content: false
   schema_params: false
-nf_core_version: 4.0.0
+nf_core_version: 4.0.1
 repository_type: pipeline
 template:
   author: Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke
