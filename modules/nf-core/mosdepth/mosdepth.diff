@@ -4,8 +4,8 @@ Changes in component 'nf-core/mosdepth'
 Changes in 'mosdepth/main.nf':
 --- modules/nf-core/mosdepth/main.nf
 +++ modules/nf-core/mosdepth/main.nf
-@@ -12,14 +12,14 @@
-     tuple val(meta2), path(fasta)
+@@ -13,14 +13,14 @@
+     val(quantize_labels)
  
      output:
 -    tuple val(meta), path('*.global.dist.txt')      , emit: global_txt

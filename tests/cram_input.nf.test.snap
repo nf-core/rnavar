@@ -34,7 +34,8 @@
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
                 "MOSDEPTH": {
-                    "mosdepth": "0.3.11"
+                    "gzip": "1.14",
+                    "mosdepth": "0.3.14"
                 },
                 "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
@@ -143,7 +144,7 @@
                 "GM12878.mosdepth.global.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53",
                 "GM12878.mosdepth.summary.txt:md5,e43226c64ea74f81b9d97bed4e9ebbd5",
                 "GM12878.per-base.bed.gz:md5,8ab2c5f06c12b6f8699ccf6fb5f8b619",
-                "GM12878.per-base.bed.gz.csi:md5,204238f12bb527a43eb17271ca4095fd",
+                "GM12878.per-base.bed.gz.csi:md5,0e22f4bdc6ced2e5b997a2d3dfdc105a",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,6ef6a1220e5348c25b715fdad6eeb329",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,eb41fe8de03a0e78372f6ac1b9bfb8e4",
                 "multiqc_citations.txt:md5,8f6a7bfcd3e3398ea4b40d2733a238ae",
@@ -163,10 +164,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-09T15:41:39.687268577",
+        "timestamp": "2026-04-29T15:52:44.912267575",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.2"
+            "nextflow": "26.03.3"
         }
     }
 }
