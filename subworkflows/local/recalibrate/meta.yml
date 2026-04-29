@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: recalibrate
+description: Perform GATK4_APPLYBQSR, index the resulting BAM file, and optionally run SAMTOOLS
+keywords:
+  - bam
+  - gatk4
+  - applybqsr
+  - samtools_stats
+components:
+  - gatk4/applybqsr
+  - samtools/index
+  - samtools/stats
+input:
+  - skip_samtools:
+      description: |
+        Boolean to skip or not samtools stats
+        Structure: [ Boolean ]
+  - bam:
+      description: |
+        bam to splitncigarreads (mandatory)
+        Structure: [ val(meta), list[path(bam)], list[path(bai)] ]
+  - fasta:
+      description: |
+        Reference genome fasta file (mandatory)
+        Structure: [ val(meta2), path(fasta) ]
+  - fai:
+      description: |
+        Reference genome fasta index file (mandatory)
+        Structure: [ val(meta3), path(fai) ]
+  - dict:
+      description: |
+        Reference genome fasta dict file (mandatory)
+        Structure: [ val(meta4), path(dict) ]
+output:
+  - bam:
+      description: |
+        Compressed bam + bam index
+        Structure: [ val(meta), path(bam), path(bai|csi) ]
+  - qc_reports:
+      description: |
+        Samtools stats reports
+        Structure: [ val(meta), path(stats) ]
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"

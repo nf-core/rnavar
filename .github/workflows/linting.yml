@@ -19,6 +19,23 @@ jobs:
       - name: Run prek
         uses: j178/prek-action@6ad80277337ad479fe43bd70701c3f7f8aa74db3 # v2
 
+  nextflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pipeline code
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v2
+        with:
+          version: latest-everything
+
+      - name: Run nextflow lint
+        run: nextflow lint ${GITHUB_WORKSPACE}
+
+      - name: Run pipeline help
+        run: NXF_SYNTAX_PARSER=v2 nextflow run . --help
+
   nf-core:
     runs-on: ubuntu-latest
     steps:

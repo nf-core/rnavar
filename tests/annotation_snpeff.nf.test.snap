@@ -1,0 +1,24 @@
+{
+    "-profile test --tools snpeff --snpeff_db na": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No stable content",
+            "No BAM files",
+            "No unstable recal BAM files",
+            "No CRAM files",
+            "No VCF files",
+            "No warnings",
+            [
+                "This path is not available within annotation-cache.",
+                "Please check https://annotation-cache.github.io/ to create a request for it."
+            ]
+        ],
+        "timestamp": "2026-03-25T13:39:12.807034052",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
+        }
+    }
+}

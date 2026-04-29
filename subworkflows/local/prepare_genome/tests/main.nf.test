@@ -1,0 +1,95 @@
+nextflow_workflow {
+
+    name "Test Subworkflow PREPARE_GENOME"
+    script "../main.nf"
+    workflow "PREPARE_GENOME"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+
+    test("only essentials") {
+        when {
+            workflow {
+                """
+                input[0] = []
+                input[1] = []
+                input[2] = []
+                input[3] = []
+                input[4] = []
+                input[5] = []
+                input[6] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
+                input[7] = []
+                input[8] = []
+                input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
+                input[10] = []
+                input[11] = []
+                input[12] = []
+                input[13] = "exon"
+                input[14] = channel.value(false)
+                input[15] = "genome"
+                input[16] = ['removeunknownregions']
+                """
+            }
+        }
+        then {
+            assert workflow.success
+            assert snapshot(
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        if (key in ["bcfann", "bcfann_tbi", "dbsnp", "dbsnp_tbi", "known_indels", "known_indels_tbi", "known_sites", "known_sites_tbi", "star_index"]) {
+                            return null
+                        }
+                        return [key, val]
+                    }
+            ).match()
+        }
+    }
+
+    test("all") {
+        when {
+            workflow {
+                """
+                input[0] = params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz'
+                input[1] = []
+                input[2] = params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf'
+                input[3] = []
+                input[4] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict'
+                input[5] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed'
+                input[6] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
+                input[7] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai'
+                input[8] = []
+                input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
+                input[10] = [
+                    params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz',
+                    params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz'
+                ]
+                input[11] = []
+                input[12] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz'
+                input[13] = "exon"
+                input[14] = channel.value(true)
+                input[15] = "genome"
+                input[16] = []
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        if (key == "star_index") {
+                            return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
+                        }
+                        else if (key in ["known_indels", "known_indels_tbi"]) {
+                            def array = [file(val[0][1].toString()).name, file(val[0][3].toString()).name]
+                            return [key, array.sort().unique()]
+                        }
+                        else if (key in ["known_sites", "known_sites_tbi"]) {
+                            def array = val[0][1].collect{ file(it.toString()).name }
+                            return [key, array.sort().unique() ]
+                        }
+                        return [key, val]
+                    }
+            ).match()
+        }
+    }
+}
