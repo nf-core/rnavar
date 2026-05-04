@@ -218,7 +218,7 @@ workflow RNAVAR {
             )
 
             // MODULE: Index the VCF using TABIX
-            TABIXGVCF(GATK4_COMBINEGVCFS.out.combined_gvcf)
+            TABIXGVCF(GATK4_COMBINEGVCFS.out.combined_gvcf.map { meta, vcf -> [meta, vcf, [], []] })
         }
         else {
             // MODULE: MergeVCFS from GATK4
@@ -230,7 +230,7 @@ workflow RNAVAR {
             )
 
             // MODULE: Index the VCF using TABIX
-            TABIX(GATK4_MERGEVCFS.out.vcf)
+            TABIX(GATK4_MERGEVCFS.out.vcf.map { meta, vcf -> [meta, vcf, [], []] })
 
             def haplotypecaller_vcf_tbi = GATK4_MERGEVCFS.out.vcf.join(TABIX.out.index, failOnDuplicate: true, failOnMismatch: true)
 
@@ -239,7 +239,6 @@ workflow RNAVAR {
             // MODULE: VariantFiltration from GATK4
             // Filter variant calls based on certain criteria
             if ('variantfiltration' in tools) {
-
                 GATK4_VARIANTFILTRATION(
                     haplotypecaller_vcf_tbi,
                     fasta,
