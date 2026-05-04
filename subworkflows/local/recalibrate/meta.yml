@@ -10,6 +10,7 @@ components:
   - gatk4/applybqsr
   - samtools/index
   - samtools/stats
+  - bam_stats_samtools
 input:
   - skip_samtools:
       description: |
