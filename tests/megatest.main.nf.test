@@ -1,0 +1,30 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "./megatest.main.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-9db0282668a2c66d23f220bba2c720e0b8a78008/"
+
+    test("Get all files from megatest") {
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            def all_files = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            def version   = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/**'], ignore: ['pipeline_info/*.{html,json,txt}'])
+
+            assert snapshot(
+                version.collect { relPath ->
+                    path(downloadFromS3("${path_s3_bucket}${relPath}").toString())
+                },
+                all_files,
+            ).match()
+        }
+    }
+
+}
