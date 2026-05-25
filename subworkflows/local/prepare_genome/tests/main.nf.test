@@ -80,11 +80,11 @@ nextflow_workflow {
                             return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
                         }
                         else if (key in ["known_indels", "known_indels_tbi"]) {
-                            def array = [val[0][1].toString(), val[0][3].toString()]
+                            def array = [file(val[0][1].toString()).name, file(val[0][3].toString()).name]
                             return [key, array.sort().unique()]
                         }
                         else if (key in ["known_sites", "known_sites_tbi"]) {
-                            def array = val[0][1].collect{ it.toString() }
+                            def array = val[0][1].collect{ file(it.toString()).name }
                             return [key, array.sort().unique() ]
                         }
                         return [key, val]

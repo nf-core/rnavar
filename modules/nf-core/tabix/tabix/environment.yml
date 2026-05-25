@@ -3,5 +3,6 @@
 channels:
   - conda-forge
   - bioconda
+
 dependencies:
-  - bioconda::multiqc=1.34
+  - bioconda::htslib=1.21
