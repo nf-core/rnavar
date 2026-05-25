@@ -2,9 +2,6 @@
     "Get all files from megatest": {
         "content": [
             [
-                "nf_core_rnavar_software_mqc_versions.yml:md5,5199d66266e2eebb2083922dff018570"
-            ],
-            [
                 "multiqc_report.html",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing/GM12878_REP1/GM12878_REP1.md.bam",
@@ -30,9 +27,12 @@
                 "reports/stats/MCF7_REP1/STAR_log/MCF7_REP1.SJ.out.tab",
                 "reports/stats/MCF7_REP2/STAR_log/MCF7_REP2.Log.out",
                 "reports/stats/MCF7_REP2/STAR_log/MCF7_REP2.SJ.out.tab"
+            ],
+            [
+                "nf_core_rnavar_software_mqc_versions.yml:md5,5199d66266e2eebb2083922dff018570"
             ]
         ],
-        "timestamp": "2026-05-22T17:51:37.729750238",
+        "timestamp": "2026-05-25T10:31:36.999717502",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.2"

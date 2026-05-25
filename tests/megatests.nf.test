@@ -1,7 +1,7 @@
 nextflow_pipeline {
 
     name "Test pipeline"
-    script "./megatest.main.nf"
+    script "./megatests.nf"
     tag "pipeline"
     tag "pipeline_rnavar"
 
@@ -19,10 +19,10 @@ nextflow_pipeline {
             def version   = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/**'], ignore: ['pipeline_info/*.{html,json,txt}'])
 
             assert snapshot(
+                all_files,
                 version.collect { relPath ->
                     path(downloadFromS3("${path_s3_bucket}${relPath}").toString())
                 },
-                all_files,
             ).match()
         }
     }
