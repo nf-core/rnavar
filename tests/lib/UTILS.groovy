@@ -41,7 +41,7 @@ class UTILS {
         def vcf_files = getAllFilesFromPath(outdir, include: ['**/*.vcf{,.gz}'], ignore: [scenario.ignoreFiles])
 
         def assertion = []
-        // getAllFilesFromPath returns relative paths (strings), so this resolve to absolute
+        // getAllFilesFromPath returns relative paths (strings), so this resolves to an absolute path
         def absolutePath = { file -> file.toString().startsWith('/') ? file.toString() : "${outdir}/${file}" }
 
         if (!scenario.failure) {
