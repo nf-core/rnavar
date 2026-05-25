@@ -14,26 +14,15 @@ nextflow_pipeline {
     def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-9db0282668a2c66d23f220bba2c720e0b8a78008/" // 1.2.3
 
     test("Megatests - 1.2.3") {
-        when {
-            params {
-                outdir = "$outputDir"
-            }
-        }
-
         then {
-            def all_files = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            def version   = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/**'], ignore: ['pipeline_info/*.{html,json,txt}'])
-
+            def all_files     = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            def versions      = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/**'], ignore: ['pipeline_info/*.{html,json,txt}'])
+            def versions_file = downloadFromS3("${path_s3_bucket}${versions[0]}").toString()
             assert snapshot(
                 all_files,
-                version.collect { relPath ->
-                    path(downloadFromS3("${path_s3_bucket}${relPath}").toString())
-                },
-                version.collect { relPath ->
-                    downloadFromS3("${path_s3_bucket}${relPath}").yaml
-                },
+                path(versions_file),
+                path(versions_file).yaml,
             ).match()
         }
     }
-
 }
