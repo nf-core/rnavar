@@ -41,6 +41,8 @@ class UTILS {
         def vcf_files = getAllFilesFromPath(outdir, include: ['**/*.vcf{,.gz}'], ignore: [scenario.ignoreFiles])
 
         def assertion = []
+        // getAllFilesFromPath returns relative paths (strings), so this resolve to absolute
+        def absolutePath = { file -> file.toString().startsWith('/') ? file.toString() : "${outdir}/${file}" }
 
         if (!scenario.failure) {
             assertion.add(workflow.trace.succeeded().size())
@@ -51,11 +53,11 @@ class UTILS {
         assertion.add(stable_name)
 
         if (!scenario.stub) {
-            assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content)
-            assertion.add(bam_files.isEmpty() ? 'No BAM files' : bam_files.collect { file -> file.getName() + ":md5," + bam(file.toString()).readsMD5 })
-            assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.getName() + ":stats" + bam(file.toString()).getStatistics() })
-            assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.getName() + ":md5," + cram(file.toString(), fasta).readsMD5 })
-            assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.getName() + ":md5," + path(file.toString()).vcf.variantsMD5 })
+            assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content.collect { file -> absolutePath(file) })
+            assertion.add(bam_files.isEmpty() ? 'No BAM files' : bam_files.collect { file -> file.tokenize('/').last() + ":md5," + bam(absolutePath(file)).readsMD5 })
+            assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.tokenize('/').last() + ":stats" + bam(absolutePath(file)).getStatistics() })
+            assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.tokenize('/').last() + ":md5," + cram(absolutePath(file), fasta).readsMD5 })
+            assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.tokenize('/').last() + ":md5," + path(absolutePath(file)).vcf.variantsMD5 })
         }
 
         // If we have a snapshot options in scenario then we allow to capture either stderr, stdout or both
