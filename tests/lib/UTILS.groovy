@@ -53,7 +53,7 @@ class UTILS {
         assertion.add(stable_name)
 
         if (!scenario.stub) {
-            assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content.collect { file -> absolutePath(file) })
+            assertion.add(stable_content.isEmpty() ? 'No stable content' : stable_content.collect { file -> path(absolutePath(file)) })
             assertion.add(bam_files.isEmpty() ? 'No BAM files' : bam_files.collect { file -> file.tokenize('/').last() + ":md5," + bam(absolutePath(file)).readsMD5 })
             assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.tokenize('/').last() + ":stats" + bam(absolutePath(file)).getStatistics() })
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.tokenize('/').last() + ":md5," + cram(absolutePath(file), fasta).readsMD5 })
