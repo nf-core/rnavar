@@ -16,7 +16,7 @@ nextflow_pipeline {
     test("Megatests - 1.2.3") {
         then {
             def all_files     = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            def versions      = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/**'], ignore: ['pipeline_info/*.{html,json,txt}'])
+            def versions      = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/nf_core_rnavar_software_mqc_versions.yml'])
             def versions_file = downloadFromS3("${path_s3_bucket}${versions[0]}").toString()
             assert snapshot(
                 all_files,
