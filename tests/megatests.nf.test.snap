@@ -1,8 +1,23 @@
 {
-    "Get all files from megatest": {
+    "Megatests - 1.2.2": {
         "content": [
             [
-                "multiqc_report.html",
+                "GM12878_REP1.bam",
+                "GM12878_REP1.bam.bai",
+                "GM12878_REP2.bam",
+                "GM12878_REP2.bam.bai",
+                "H1_REP1.bam",
+                "H1_REP1.bam.bai",
+                "H1_REP2.bam",
+                "H1_REP2.bam.bai",
+                "K562_REP1.bam",
+                "K562_REP1.bam.bai",
+                "K562_REP2.bam",
+                "K562_REP2.bam.bai",
+                "MCF7_REP1.bam",
+                "MCF7_REP1.bam.bai",
+                "MCF7_REP2.bam",
+                "MCF7_REP2.bam.bai",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "preprocessing/GM12878_REP1/GM12878_REP1.md.bam",
                 "preprocessing/GM12878_REP2/GM12878_REP2.md.bam",
@@ -29,10 +44,224 @@
                 "reports/stats/MCF7_REP2/STAR_log/MCF7_REP2.SJ.out.tab"
             ],
             [
-                "nf_core_rnavar_software_mqc_versions.yml:md5,5199d66266e2eebb2083922dff018570"
+                "nf_core_rnavar_software_mqc_versions.yml:md5,affb92bd8694737588fb6f0e7110bc20"
+            ],
+            [
+                {
+                    "GTF2BED": {
+                        "Rscript": "3.5.1 (2018-07-02)"
+                    },
+                    "REMOVE_UNKNOWN_REGIONS": {
+                        "python": "3.8.3"
+                    },
+                    "Workflow": {
+                        "nf-core/rnavar": "v1.2.2",
+                        "Nextflow": "25.10.2"
+                    }
+                }
             ]
         ],
-        "timestamp": "2026-05-25T10:31:36.999717502",
+        "timestamp": "2026-05-25T11:00:35.749772083",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
+        }
+    },
+    "Megatests - 1.2.1": {
+        "content": [
+            [
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "preprocessing/GM12878_REP1/GM12878_REP1.md.bam",
+                "preprocessing/GM12878_REP2/GM12878_REP2.md.bam",
+                "preprocessing/H1_REP1/H1_REP1.md.bam",
+                "preprocessing/H1_REP2/H1_REP2.md.bam",
+                "preprocessing/K562_REP1/K562_REP1.md.bam",
+                "preprocessing/K562_REP2/K562_REP2.md.bam",
+                "preprocessing/MCF7_REP1/MCF7_REP1.md.bam",
+                "preprocessing/MCF7_REP2/MCF7_REP2.md.bam",
+                "samtools/GM12878_REP1.bam",
+                "samtools/GM12878_REP2.bam",
+                "samtools/H1_REP1.bam",
+                "samtools/H1_REP2.bam",
+                "samtools/K562_REP1.bam",
+                "samtools/K562_REP2.bam",
+                "samtools/MCF7_REP1.bam",
+                "samtools/MCF7_REP2.bam"
+            ],
+            [
+                "nf_core_rnavar_software_mqc_versions.yml:md5,23e86903d70284600cae97489e115d58"
+            ],
+            [
+                {
+                    "CAT_FASTQ": {
+                        "cat": 9.5
+                    },
+                    "FASTQC": {
+                        "fastqc": "0.12.1"
+                    },
+                    "GATK4_BEDTOINTERVALLIST": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GATK4_CREATESEQUENCEDICTIONARY": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GATK4_HAPLOTYPECALLER": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GATK4_INTERVALLISTTOOLS": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GATK4_MERGEVCFS": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GATK4_SPLITNCIGARREADS": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GATK4_VARIANTFILTRATION": {
+                        "gatk4": "4.6.1.0"
+                    },
+                    "GTF2BED": {
+                        "Rscript": "3.5.1 (2018-07-02)"
+                    },
+                    "PICARD_MARKDUPLICATES": {
+                        "picard": "3.3.0"
+                    },
+                    "REMOVE_UNKNOWN_REGIONS": {
+                        "python": "3.8.3"
+                    },
+                    "SAMTOOLS_FAIDX": {
+                        "samtools": 1.21
+                    },
+                    "SAMTOOLS_FLAGSTAT": {
+                        "samtools": 1.21
+                    },
+                    "SAMTOOLS_IDXSTATS": {
+                        "samtools": 1.21
+                    },
+                    "SAMTOOLS_INDEX": {
+                        "samtools": 1.21
+                    },
+                    "SAMTOOLS_MERGE": {
+                        "samtools": 1.21
+                    },
+                    "SAMTOOLS_SORT": {
+                        "samtools": 1.21
+                    },
+                    "SAMTOOLS_STATS": {
+                        "samtools": 1.21
+                    },
+                    "STAR_ALIGN": {
+                        "star": "2.7.11b",
+                        "samtools": 1.21,
+                        "gawk": "5.1.0"
+                    },
+                    "STAR_GENOMEGENERATE": {
+                        "star": "2.7.11b",
+                        "samtools": 1.21,
+                        "gawk": "5.1.0"
+                    },
+                    "STAR_INDEXVERSION": {
+                        "star": "2.7.11b",
+                        "samtools": 1.21,
+                        "gawk": "5.1.0"
+                    },
+                    "TABIX": {
+                        "tabix": 1.21
+                    },
+                    "Workflow": {
+                        "nf-core/rnavar": "v1.2.1-g2cbf046",
+                        "Nextflow": "25.04.6"
+                    }
+                }
+            ]
+        ],
+        "timestamp": "2026-05-25T10:58:20.738853821",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
+        }
+    },
+    "Megatests - 1.2.3": {
+        "content": [
+            [
+                "GM12878_REP1.bam",
+                "GM12878_REP1.bam.bai",
+                "GM12878_REP2.bam",
+                "GM12878_REP2.bam.bai",
+                "H1_REP1.bam",
+                "H1_REP1.bam.bai",
+                "H1_REP2.bam",
+                "H1_REP2.bam.bai",
+                "K562_REP1.bam",
+                "K562_REP1.bam.bai",
+                "K562_REP2.bam",
+                "K562_REP2.bam.bai",
+                "MCF7_REP1.bam",
+                "MCF7_REP1.bam.bai",
+                "MCF7_REP2.bam",
+                "MCF7_REP2.bam.bai",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "preprocessing/GM12878_REP1/GM12878_REP1.md.bam",
+                "preprocessing/GM12878_REP2/GM12878_REP2.md.bam",
+                "preprocessing/H1_REP1/H1_REP1.md.bam",
+                "preprocessing/H1_REP2/H1_REP2.md.bam",
+                "preprocessing/K562_REP1/K562_REP1.md.bam",
+                "preprocessing/K562_REP2/K562_REP2.md.bam",
+                "preprocessing/MCF7_REP1/MCF7_REP1.md.bam",
+                "preprocessing/MCF7_REP2/MCF7_REP2.md.bam",
+                "reports/stats/GM12878_REP1/STAR_log/GM12878_REP1.Log.out",
+                "reports/stats/GM12878_REP1/STAR_log/GM12878_REP1.SJ.out.tab",
+                "reports/stats/GM12878_REP2/STAR_log/GM12878_REP2.Log.out",
+                "reports/stats/GM12878_REP2/STAR_log/GM12878_REP2.SJ.out.tab",
+                "reports/stats/H1_REP1/STAR_log/H1_REP1.Log.out",
+                "reports/stats/H1_REP1/STAR_log/H1_REP1.SJ.out.tab",
+                "reports/stats/H1_REP2/STAR_log/H1_REP2.Log.out",
+                "reports/stats/H1_REP2/STAR_log/H1_REP2.SJ.out.tab",
+                "reports/stats/K562_REP1/STAR_log/K562_REP1.Log.out",
+                "reports/stats/K562_REP2/STAR_log/K562_REP2.Log.out",
+                "reports/stats/K562_REP2/STAR_log/K562_REP2.SJ.out.tab",
+                "reports/stats/MCF7_REP1/STAR_log/MCF7_REP1.Log.out",
+                "reports/stats/MCF7_REP1/STAR_log/MCF7_REP1.SJ.out.tab",
+                "reports/stats/MCF7_REP2/STAR_log/MCF7_REP2.Log.out",
+                "reports/stats/MCF7_REP2/STAR_log/MCF7_REP2.SJ.out.tab"
+            ],
+            [
+                "nf_core_rnavar_software_mqc_versions.yml:md5,affb92bd8694737588fb6f0e7110bc20"
+            ],
+            [
+                {
+                    "GTF2BED": {
+                        "Rscript": "3.5.1 (2018-07-02)"
+                    },
+                    "REMOVE_UNKNOWN_REGIONS": {
+                        "python": "3.8.3"
+                    },
+                    "Workflow": {
+                        "nf-core/rnavar": "v1.2.2",
+                        "Nextflow": "25.10.2"
+                    }
+                }
+            ]
+        ],
+        "timestamp": "2026-05-25T11:01:34.071743993",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
+        }
+    },
+    "Megatests - 1.0.0": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-05-25T10:55:08.670474455",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.2"
