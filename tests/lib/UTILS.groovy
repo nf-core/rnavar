@@ -30,7 +30,7 @@ class UTILS {
 
         // bam_files: All bam files
         def bam_files = getAllFilesFromPath(outdir, include: ['**/*.bam'], ignore: [scenario.ignoreFiles])
-        // bam_files: All bam files
+        // recal_bam_files: All recalibrated bam files
         def recal_bam_files = getAllFilesFromPath(outdir, include: ['**/*.recal.bam']) - bam_files
         // cram_files: All cram files
         def cram_files = getAllFilesFromPath(outdir, include: ['**/*.cram'], ignore: [scenario.ignoreFiles])
