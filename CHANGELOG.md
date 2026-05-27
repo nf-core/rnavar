@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [#310](https://github.com/nf-core/rnavar/pull/310) - Increase nf-test runner disk volume to 60gb
 - [#300](https://github.com/nf-core/rnavar/pull/300) - Update all modules and subworkflows to the latest versions in nf-core/modules
 
 ### Fixed
