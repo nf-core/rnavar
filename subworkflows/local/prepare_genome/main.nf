@@ -89,7 +89,7 @@ workflow PREPARE_GENOME {
 
     REMOVEUNKNOWNREGIONS(ch_remove_unknown_regions_input.join(ch_dict))
 
-    def ch_exon_bed = !('removeunknownregions' in tools) ? REMOVEUNKNOWNREGIONS.out.bed.flatten() : ch_exon_bed_input
+    def ch_exon_bed = 'removeunknownregions' in tools ? REMOVEUNKNOWNREGIONS.out.bed : ch_exon_bed_input
 
     def ch_bcftools_annotations = bcftools_annotations
         ? channel.fromPath(bcftools_annotations).collect()
