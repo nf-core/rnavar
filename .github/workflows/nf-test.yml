@@ -18,7 +18,6 @@ concurrency:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - volume=60gb
   NXF_ANSI_LOG: false
   NXF_ENABLE_STRICT: true
   NXF_SYNTAX_PARSER: v2
