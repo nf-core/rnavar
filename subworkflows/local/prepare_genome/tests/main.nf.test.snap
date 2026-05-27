@@ -37,7 +37,12 @@
                     ]
                 ],
                 "exon_bed": [
-                    
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.bed"
+                    ]
                 ],
                 "fasta": [
                     [
@@ -105,10 +110,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-09T12:02:57.720693024",
+        "timestamp": "2026-05-27T13:05:33.258718691",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
         }
     },
     "only essentials": {
@@ -127,7 +132,7 @@
                         {
                             "id": "genome"
                         },
-                        "exome.bed:md5,17192418c24c524881e7d970f94a4a26"
+                        "genome.exon.bed:md5,17192418c24c524881e7d970f94a4a26"
                     ]
                 ],
                 "fasta": [
@@ -156,10 +161,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-02-06T14:25:19.474716148",
+        "timestamp": "2026-05-27T13:05:19.810958709",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
         }
     }
 }
