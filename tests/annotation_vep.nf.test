@@ -20,6 +20,32 @@ nextflow_pipeline {
             snapshot_ignore: 'Downloading plugin',
             snapshot_include: 'annotation-cache',
         ],
+        [
+            name: "-profile test --tools vep --vep_cache_version 1 --vep_loftee",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                vep_cache_version: 1,
+                tools: 'vep',
+                vep_loftee: true,
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_ignore: 'Downloading plugin',
+            snapshot_include: 'annotation-cache',
+        ],
+        [
+            name: "-profile test --tools vep --vep_cache_version 1 --vep_loftee",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                vep_cache_version: 1,
+                tools: 'vep',
+                vep_loftee: true,
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_ignore: 'Downloading plugin',
+            snapshot_include: 'annotation-cache',
+        ],
     ]
 
     // Generate tests for each scenario
