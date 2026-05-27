@@ -80,6 +80,27 @@
             "nextflow": "26.04.2"
         }
     },
+    "Fails with profile test --dbnsfp and no dbnsfp_tbi": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No stable content",
+            "No BAM files",
+            "No unstable recal BAM files",
+            "No CRAM files",
+            "No VCF files",
+            "No warnings",
+            [
+                "Execution halted due to dbnsfp inconsistency."
+            ]
+        ],
+        "timestamp": "2026-05-27T13:41:05.4340626",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
+        }
+    },
     "-profile test --tools vep --vep_cache_version 1": {
         "content": [
             [
