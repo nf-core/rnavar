@@ -75,7 +75,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 
-- [#310](https://github.com/nf-core/rnavar/pull/310) - Increase nf-test runner disk volume to 60gb
 - [#284](https://github.com/nf-core/rnavar/pull/284) - Back to dev
 - [#287](https://github.com/nf-core/rnavar/pull/287) - Update all modules and subworkflows
 - [#288](https://github.com/nf-core/rnavar/pull/288) - Add meta.yml for most local modules and subworkflows
@@ -86,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#294](https://github.com/nf-core/rnavar/pull/294) - Workflow outputs for multiqc_files via topic
 - [#297](https://github.com/nf-core/rnavar/pull/297) - Improve nf-test pipeline tests setup
 - [#302](https://github.com/nf-core/rnavar/pull/302) - Template update for nf-core/tools v4.0.1
+- [#310](https://github.com/nf-core/rnavar/pull/310) - Increase nf-test runner disk volume to 60gb
 
 #### Fixed
 
