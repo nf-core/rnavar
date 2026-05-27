@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#293](https://github.com/nf-core/rnavar/pull/293) - Rescue `idxstats` files
 - [#293](https://github.com/nf-core/rnavar/pull/293) - No more overwrite of any of the `samtools` statistics files (`idxstats`, `flagstat`, `stats`)
 - [#295](https://github.com/nf-core/rnavar/pull/295) - All tools can be selected or skipped via `params.tools` or `params.skip_tools`
-- [#307](https://github.com/nf-core/rnavar/pull/307) - Fix VEP LoFTEE plugin configuration by removing hardcoded path; VEP auto-discovers plugins from its installation directory
+- [#307](https://github.com/nf-core/rnavar/pull/307) - Add missing `vep_version` parameter and fix `loftee_path` for the VEP LoFTEE plugin
 
 ### Removed
 
