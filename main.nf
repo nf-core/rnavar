@@ -216,7 +216,7 @@ workflow {
     publish:
     multiqc = MULTIQC.out.data.mix(MULTIQC.out.plots, MULTIQC.out.report)
     reports = channel.topic("multiqc_files").filter { _meta, _process, tool, _file ->
-        return !(tool == 'gatk4' || tool == 'snpeff' && !params.tools.split(',').contains('snpeff'))
+        return !(tool == 'gatk4' || (tool == 'snpeff' && !('snpeff' in tools)))
     }
 }
 

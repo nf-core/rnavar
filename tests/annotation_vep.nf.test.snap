@@ -1,4 +1,106 @@
 {
+    "-profile test --tools vep --vep_loftee": {
+        "content": [
+            9,
+            {
+                "ENSEMBLVEP_VEP": {
+                    "ensemblvep": "115.2",
+                    "perl-math-cdf": "0.1",
+                    "tabix": "1.21"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "REMOVEUNKNOWNREGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.23.1"
+                },
+                "STAR_INDEXVERSION": {
+                    "star": "2.7.11b"
+                }
+            },
+            [
+                "annotation",
+                "annotation/test",
+                "annotation/test/test_VEP.ann.vcf.gz",
+                "annotation/test/test_VEP.ann.vcf.gz.tbi",
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "reports",
+                "reports/ensemblvep",
+                "reports/ensemblvep/test",
+                "reports/ensemblvep/test/test_VEP.ann.summary.html",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_data/vep-general-stats.txt",
+                "reports/multiqc/multiqc_data/vep.txt",
+                "reports/multiqc/multiqc_plots",
+                "reports/multiqc/multiqc_plots/pdf",
+                "reports/multiqc/multiqc_plots/pdf/vep-general-stats.pdf",
+                "reports/multiqc/multiqc_plots/png",
+                "reports/multiqc/multiqc_plots/png/vep-general-stats.png",
+                "reports/multiqc/multiqc_plots/svg",
+                "reports/multiqc/multiqc_plots/svg/vep-general-stats.svg",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            [
+                "multiqc_citations.txt:md5,afe6b13a9c0770828d9bc9515d6db802",
+                "vep-general-stats.txt:md5,2fca07ac5623e758cac3ce49d9f6e3b0",
+                "vep.txt:md5,60a5d57c60308aba2aa6206f903d27e9"
+            ],
+            "No BAM files",
+            "No unstable recal BAM files",
+            "No CRAM files",
+            [
+                "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-05-27T13:32:13.003578936",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
+        }
+    },
+    "Fails with profile test --dbnsfp and no dbnsfp_tbi": {
+        "content": [
+            [
+                "pipeline_info"
+            ],
+            "No stable content",
+            "No BAM files",
+            "No unstable recal BAM files",
+            "No CRAM files",
+            "No VCF files",
+            "No warnings",
+            [
+                "Execution halted due to dbnsfp inconsistency."
+            ]
+        ],
+        "timestamp": "2026-05-27T13:41:05.4340626",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.2"
+        }
+    },
     "-profile test --tools vep --vep_cache_version 1": {
         "content": [
             [

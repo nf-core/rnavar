@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#293](https://github.com/nf-core/rnavar/pull/293) - Rescue `idxstats` files
 - [#293](https://github.com/nf-core/rnavar/pull/293) - No more overwrite of any of the `samtools` statistics files (`idxstats`, `flagstat`, `stats`)
 - [#295](https://github.com/nf-core/rnavar/pull/295) - All tools can be selected or skipped via `params.tools` or `params.skip_tools`
+- [#307](https://github.com/nf-core/rnavar/pull/307) - Add missing `vep_version` parameter and fix `loftee_path` for the VEP LoFTEE plugin
+- [#308](https://github.com/nf-core/rnavar/pull/308) - Fix inverted condition in `prepare_genome` that discarded cleaned BED and deadlocked when `removeunknownregions` was skipped
+- [#309](https://github.com/nf-core/rnavar/pull/309) - Fix implicit operator precedence and missing null guard in reports filter expression
 
 ### Removed
 
