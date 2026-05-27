@@ -225,7 +225,7 @@
                 "GM12878.md.bam:md5,4191926f68523d8d8dd156194d83e825"
             ],
             [
-                "GM12878.recal.bam:stats[maxReadLength:147, minReadLength:89, meanReadLength:137, maxQuality:60, minQuality:1, meanQuality:54, readCount:117]"
+                "GM12878.recal.bam:stats[maxReadLength:147, minReadLength:89, meanReadLength:137, maxQuality:60, minQuality:1, meanQuality:54, readCount:117, duplicateReadCount:33, sorted:true]"
             ],
             "No CRAM files",
             [
@@ -234,10 +234,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T14:25:15.850345719",
+        "timestamp": "2026-04-09T15:33:57.214058752",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.03.2"
         }
     }
 }

@@ -40,7 +40,8 @@
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
                 "MOSDEPTH": {
-                    "mosdepth": "0.3.11"
+                    "gzip": "1.14",
+                    "mosdepth": "0.3.14"
                 },
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.4.0"
@@ -235,7 +236,7 @@
                 "GM12878_cram.mosdepth.global.dist.txt:md5,da4f2a9da24de7763247444ed9fc6d53",
                 "GM12878_cram.mosdepth.summary.txt:md5,e43226c64ea74f81b9d97bed4e9ebbd5",
                 "GM12878_cram.per-base.bed.gz:md5,8ab2c5f06c12b6f8699ccf6fb5f8b619",
-                "GM12878_cram.per-base.bed.gz.csi:md5,204238f12bb527a43eb17271ca4095fd",
+                "GM12878_cram.per-base.bed.gz.csi:md5,0e22f4bdc6ced2e5b997a2d3dfdc105a",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,1365ef874ba0e23b81b355e7172a8b65",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,b7c9321b4bb0acaab9dc2f0f25163f59",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
@@ -257,9 +258,9 @@
                 "GM12878_fastq.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
             ],
             [
-                "GM12878_bam.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:52, readCount:185]",
-                "GM12878_cram.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:52, readCount:185]",
-                "GM12878_fastq.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:55, readCount:188]"
+                "GM12878_bam.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:52, readCount:185, duplicateReadCount:0, sorted:true]",
+                "GM12878_cram.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:52, readCount:185, duplicateReadCount:0, sorted:true]",
+                "GM12878_fastq.recal.bam:stats[maxReadLength:151, minReadLength:93, meanReadLength:145, maxQuality:60, minQuality:1, meanQuality:55, readCount:188, duplicateReadCount:38, sorted:true]"
             ],
             "No CRAM files",
             [
@@ -272,10 +273,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T14:02:15.032021192",
+        "timestamp": "2026-04-29T15:51:20.293116271",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.03.3"
         }
     }
 }

@@ -16,6 +16,8 @@ Changes in 'fastqc/main.nf':
  
      when:
 
+'modules/nf-core/fastqc/.conda-lock/linux_amd64-bd-5cb1a2fa2f18c7c2_1.txt' is unchanged
+'modules/nf-core/fastqc/.conda-lock/linux_arm64-bd-e455e32f745abe68_1.txt' is unchanged
 'modules/nf-core/fastqc/tests/main.nf.test' is unchanged
 'modules/nf-core/fastqc/tests/main.nf.test.snap' is unchanged
 ************************************************************

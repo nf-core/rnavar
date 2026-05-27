@@ -99,7 +99,7 @@ workflow PREPARE_GENOME {
         : channel.value([])
 
     if (!bcftools_annotations_tbi && bcftools_annotations && bcftools_annotations.toString().endsWith(".gz")) {
-        TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: genome], vcf] })
+        TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: genome], vcf, [], []] })
         ch_bcftools_annotations_tbi = TABIX_BCFTOOLS_ANNOTATIONS.out.index.map { _meta, tbi -> [tbi] }.collect()
     }
     else if (!bcftools_annotations_tbi && bcftools_annotations) {
@@ -116,7 +116,7 @@ workflow PREPARE_GENOME {
         : channel.value([[id: genome], []])
 
     if (!dbsnp_tbi && dbsnp && (dbsnp.toString().endsWith(".gz") || dbsnp[0].toString().endsWith(".gz"))) {
-        TABIX_DBSNP(ch_dbsnp)
+        TABIX_DBSNP(ch_dbsnp.map { meta, vcf -> [meta, vcf, [], []] })
         ch_dbsnp_tbi = TABIX_DBSNP.out.index.map { meta, tbi -> [meta, tbi] }
     }
     else if (!dbsnp_tbi && dbsnp) {
@@ -133,7 +133,7 @@ workflow PREPARE_GENOME {
         : channel.value([[id: genome], []])
 
     if (!known_indels_tbi && known_indels && (known_indels.toString().endsWith(".gz") || known_indels[0].toString().endsWith(".gz"))) {
-        TABIX_KNOWN_INDELS(ch_known_indels)
+        TABIX_KNOWN_INDELS(ch_known_indels.map { meta, vcf -> [meta, vcf, [], []] })
         ch_known_indels_tbi = TABIX_KNOWN_INDELS.out.index.map { meta, tbi -> [meta, tbi] }
     }
     else if (!known_indels_tbi && known_indels) {
