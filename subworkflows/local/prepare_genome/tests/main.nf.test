@@ -81,7 +81,7 @@ nextflow_workflow {
                         }
                         else if (key.startsWith("dbsnp") || key.startsWith("known_")) {
                             def files = val.flatten().findAll { it instanceof CharSequence }
-                            return [key, files.collect { it }.sort()]
+                            return [key, files.sort()]
                         }
                         return [key, val]
                     }

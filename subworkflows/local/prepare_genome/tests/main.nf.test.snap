@@ -4,12 +4,12 @@
             {
                 "bcfann": [
                     [
-                        "genome.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
+                        "test2.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
                     ]
                 ],
                 "bcfann_tbi": [
                     [
-                        "genome.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                        "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
                     ]
                 ],
                 "dbsnp": [
@@ -59,22 +59,22 @@
                     ]
                 ],
                 "known_indels": [
-                    "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
-                    "test2.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
+                    "test2.vcf.gz:md5,b39a72f91458b94b346dd73690207649",
+                    "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
                 ],
                 "known_indels_tbi": [
-                    "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
-                    "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                    "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8",
+                    "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a"
                 ],
                 "known_sites": [
                     "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
-                    "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
-                    "test2.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
+                    "test2.vcf.gz:md5,b39a72f91458b94b346dd73690207649",
+                    "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
                 ],
                 "known_sites_tbi": [
-                    "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
                     "test.rnaseq.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63",
-                    "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                    "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8",
+                    "test.rnaseq.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a"
                 ],
                 "star_index": [
                     [
@@ -100,7 +100,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-06-01T14:24:54.632515488",
+        "timestamp": "2026-06-01T16:48:49.183974932",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

@@ -89,15 +89,16 @@ workflow PREPARE_GENOME {
     def ch_exon_bed = 'removeunknownregions' in tools ? REMOVEUNKNOWNREGIONS.out.bed : ch_exon_bed_input
 
     def ch_bcftools_annotations_in = bcftools_annotations
-        ? channel.fromPath(bcftools_annotations).collect()
+        ? channel.fromPath(bcftools_annotations)
         : channel.value([])
     def ch_bcftools_annotations_tbi = bcftools_annotations_tbi
         ? channel.fromPath(bcftools_annotations_tbi).collect()
         : channel.value([])
 
+    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     if (!bcftools_annotations_tbi && bcftools_annotations) {
         BGZIPTABIX_BCFTOOLS_ANNOTATIONS(
-            ch_bcftools_annotations_in.map { vcf -> [[id: genome], vcf, [], []] },
+            ch_bcftools_annotations_in.map { vcf -> [[id: vcf.baseName - '.vcf'], vcf, [], []] },
             'compress',
             true,
             'vcf',
@@ -106,7 +107,7 @@ workflow PREPARE_GENOME {
         ch_bcftools_annotations_vcf = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.output.map { _meta, vcf -> [vcf] }.collect()
     }
     else {
-        ch_bcftools_annotations_vcf = ch_bcftools_annotations_in
+        ch_bcftools_annotations_vcf = ch_bcftools_annotations_in.collect()
     }
 
     // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
