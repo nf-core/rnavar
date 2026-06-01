@@ -61,8 +61,9 @@
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
                 },
-                "TABIX": {
-                    "tabix": "1.21"
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
                 }
             },
             [
@@ -164,10 +165,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-29T15:52:44.912267575",
+        "timestamp": "2026-06-01T15:09:16.63754772",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.3"
+            "nextflow": "26.04.3"
         }
     }
 }

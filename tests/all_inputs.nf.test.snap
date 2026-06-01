@@ -78,8 +78,9 @@
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
                 },
-                "TABIX": {
-                    "tabix": "1.21"
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
                 },
                 "UNTAR": {
                     "untar": "1.34"
@@ -273,10 +274,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-04-29T15:51:20.293116271",
+        "timestamp": "2026-06-01T15:01:00.939111806",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.3"
+            "nextflow": "26.04.3"
         }
     }
 }

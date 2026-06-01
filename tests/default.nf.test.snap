@@ -74,8 +74,9 @@
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
                 },
-                "TABIX": {
-                    "tabix": "1.21"
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
                 },
                 "UNTAR": {
                     "untar": "1.34"
@@ -228,16 +229,20 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T14:16:30.288649452",
+        "timestamp": "2026-06-01T15:11:17.30142612",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
         "content": [
             44,
             {
+                "BGZIPTABIX_DBSNP": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
                 "CAT_FASTQ": {
                     "cat": "9.5"
                 },
@@ -309,11 +314,9 @@
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
                 },
-                "TABIX": {
-                    "tabix": "1.21"
-                },
-                "TABIX_DBSNP": {
-                    "tabix": "1.21"
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
                 },
                 "UNTAR": {
                     "untar": "1.34"
@@ -434,9 +437,7 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/testdata.nf-core.rnavar",
-                "variant_calling/testdata.nf-core.rnavar/dbsnp_146.hg38.vcf.gz.tbi"
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
@@ -468,16 +469,20 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T14:21:01.146610634",
+        "timestamp": "2026-06-01T15:16:24.785378337",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
         "content": [
             44,
             {
+                "BGZIPTABIX_KNOWN_INDELS": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
                 "CAT_FASTQ": {
                     "cat": "9.5"
                 },
@@ -549,11 +554,9 @@
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
                 },
-                "TABIX": {
-                    "tabix": "1.21"
-                },
-                "TABIX_KNOWN_INDELS": {
-                    "tabix": "1.21"
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
                 },
                 "UNTAR": {
                     "untar": "1.34"
@@ -674,9 +677,7 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
                 "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi",
-                "variant_calling/testdata.nf-core.rnavar",
-                "variant_calling/testdata.nf-core.rnavar/mills_and_1000G.indels.vcf.gz.tbi"
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,489af228231ffe43ecbc5877d9bb5b6a",
@@ -708,10 +709,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T14:18:46.941805965",
+        "timestamp": "2026-06-01T15:13:51.233835616",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     }
 }
