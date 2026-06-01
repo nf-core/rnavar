@@ -196,15 +196,15 @@
             "No unstable recal BAM files",
             "No CRAM files",
             [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,67f7f698de6cc6f2434980d50512314a",
-                "GM12878.haplotypecaller.vcf.gz:md5,788d0be7399c53d01a9c841729a1542"
+                "GM12878.haplotypecaller.filtered.vcf.gz:md5,432a68d6b71a1dd4e95408dbac84a9fb",
+                "GM12878.haplotypecaller.vcf.gz:md5,5e9e93f172b3d88abe560565c8dee5ce"
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T14:41:23.005879915",
+        "timestamp": "2026-06-01T11:31:42.895553041",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     }
 }
