@@ -109,11 +109,12 @@ workflow PREPARE_GENOME {
         ch_bcftools_annotations_vcf = ch_bcftools_annotations_in
     }
 
+    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     def ch_dbsnp_in = dbsnp
         ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
     def ch_dbsnp_tbi = dbsnp_tbi
-        ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: tbi.baseName - '.vcf'], tbi] }
+        ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: genome], tbi] }
         : channel.value([[id: genome], []])
 
     if (!dbsnp_tbi && dbsnp) {
@@ -123,18 +124,19 @@ workflow PREPARE_GENOME {
             true,
             'vcf',
         )
-        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.index.map { meta, file -> [meta + [id: genome], file] }
+        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.index
         ch_dbsnp_vcf = BGZIPTABIX_DBSNP.out.output.map { meta, file -> [meta + [id: genome], file] }
     }
     else {
         ch_dbsnp_vcf = ch_dbsnp_in.map { meta, file -> [meta + [id: genome], file] }
     }
 
+    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     def ch_known_indels_in = known_indels
         ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
     def ch_known_indels_tbi = known_indels_tbi
-        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: tbi.baseName - '.vcf'], tbi] }
+        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[genome], tbi] }
         : channel.value([[id: genome], []])
 
     if (!known_indels_tbi && known_indels) {
@@ -144,7 +146,7 @@ workflow PREPARE_GENOME {
             true,
             'vcf',
         )
-        ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.index.map { meta, file -> [meta + [id: genome], file] }
+        ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.index
         ch_known_indels_vcf = BGZIPTABIX_KNOWN_INDELS.out.output.map { meta, file -> [meta + [id: genome], file] }
     }
     else {
