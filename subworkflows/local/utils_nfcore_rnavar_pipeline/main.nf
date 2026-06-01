@@ -343,19 +343,19 @@ def defineToolsList(bam_csi_index, extract_umi, generate_gvcf, input_skip, input
 
     // opt out tools
     def skip_list = input_skip ? input_skip.tokenize(',') : []
-    if (!('baserecalibrator' in skip_list || skip_baserecalibration)) {
+    if (!('baserecalibrator' in skip_list) || skip_baserecalibration) {
         tools_list << 'baserecalibrator'
     }
-    if (!('intervallisttools' in skip_list || skip_intervallisttools)) {
+    if (!('intervallisttools' in skip_list) || skip_intervallisttools) {
         tools_list << 'intervallisttools'
     }
-    if (!('multiqc' in skip_list || skip_multiqc)) {
+    if (!('multiqc' in skip_list) || skip_multiqc) {
         tools_list << 'multiqc'
     }
-    if (!('removeunknownregions' in skip_list || skip_exon_bed_check)) {
+    if (!('removeunknownregions' in skip_list) || skip_exon_bed_check) {
         tools_list << 'removeunknownregions'
     }
-    if (!('variantfiltration' in skip_list || skip_variantfiltration)) {
+    if (!('variantfiltration' in skip_list) || skip_variantfiltration) {
         tools_list << 'variantfiltration'
     }
 
