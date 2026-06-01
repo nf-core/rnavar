@@ -9,6 +9,12 @@ nextflow_pipeline {
         [
             name: "-profile test --skip_baserecalibration",
             params: [
+                skip_baserecalibration: true,
+            ],
+        ],
+        [
+            name: "-profile test --skip_baserecalibration no known sites",
+            params: [
                 dbsnp: null,
                 dbsnp_tbi: null,
                 known_indels: null,
