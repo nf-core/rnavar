@@ -6,7 +6,7 @@
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": "115.2",
                     "perl-math-cdf": "0.1",
-                    "tabix": "1.21"
+                    "tabix": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -20,6 +20,10 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
+                "HTSLIB_BGZIPTABIX": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
                 "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
@@ -31,28 +35,22 @@
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
-                },
-                "TABIX_BGZIPTABIX": {
-                    "bgzip": "1.21",
-                    "tabix": "1.21"
                 }
             },
             [
                 "annotation",
                 "annotation/test",
+                "annotation/test/test.vcf_VEP.ann.vcf.gz",
+                "annotation/test/test.vcf_VEP.ann.vcf.gz.tbi",
                 "annotation/test/test_VEP.ann.vcf.gz",
                 "annotation/test/test_VEP.ann.vcf.gz.tbi",
-                "annotation/test/test_snpEff.ann.vcf.gz",
-                "annotation/test/test_snpEff.ann.vcf.gz.tbi",
-                "annotation/test/test_snpEff_VEP.ann.vcf.gz",
-                "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
                 "reports/ensemblvep",
                 "reports/ensemblvep/test",
+                "reports/ensemblvep/test/test.vcf_VEP.ann.summary.html",
                 "reports/ensemblvep/test/test_VEP.ann.summary.html",
-                "reports/ensemblvep/test/test_snpEff_VEP.ann.summary.html",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/llms-full.txt",
@@ -110,24 +108,23 @@
                 "snpeff_effects.txt:md5,3c5e9a1c191b77c781dc4d033b1dd1f7",
                 "snpeff_qualities.txt:md5,4c059b4e8bf0a64940ad1d6e30efd3a6",
                 "snpeff_variant_effects_region.txt:md5,05efd324edadced17ba3cd2b7714af57",
-                "vep-general-stats.txt:md5,71c994ae4221384f4e22459723d29cd0",
-                "vep.txt:md5,20570f3e4e51407b860a31d7e1d59de0",
+                "vep-general-stats.txt:md5,da382e5ce446c3adb23fa6cbed7dfa99",
+                "vep.txt:md5,a42eaca0cff80c045b8766da6178fea3",
                 "test_snpEff.genes.txt:md5,130536bf0237d7f3f746d32aaa32840a"
             ],
             "No BAM files",
             "No unstable recal BAM files",
             "No CRAM files",
             [
-                "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "test_snpEff.ann.vcf.gz:md5,fd266e623365c7d1837bc9eb088fe70c",
-                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "test.vcf_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T16:33:18.559643571",
+        "timestamp": "2026-06-01T12:48:29.321285625",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     },
     "-profile test --tools merge": {
@@ -137,7 +134,7 @@
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": "115.2",
                     "perl-math-cdf": "0.1",
-                    "tabix": "1.21"
+                    "tabix": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -151,6 +148,10 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
+                "HTSLIB_BGZIPTABIX": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
                 "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
@@ -162,23 +163,19 @@
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
-                },
-                "TABIX_BGZIPTABIX": {
-                    "bgzip": "1.21",
-                    "tabix": "1.21"
                 }
             },
             [
                 "annotation",
                 "annotation/test",
-                "annotation/test/test_snpEff_VEP.ann.vcf.gz",
-                "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
+                "annotation/test/test.vcf_VEP.ann.vcf.gz",
+                "annotation/test/test.vcf_VEP.ann.vcf.gz.tbi",
                 "pipeline_info",
                 "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
                 "reports",
                 "reports/ensemblvep",
                 "reports/ensemblvep/test",
-                "reports/ensemblvep/test/test_snpEff_VEP.ann.summary.html",
+                "reports/ensemblvep/test/test.vcf_VEP.ann.summary.html",
                 "reports/multiqc",
                 "reports/multiqc/multiqc_data",
                 "reports/multiqc/multiqc_data/llms-full.txt",
@@ -231,21 +228,21 @@
                 "snpeff_effects.txt:md5,3c5e9a1c191b77c781dc4d033b1dd1f7",
                 "snpeff_qualities.txt:md5,4c059b4e8bf0a64940ad1d6e30efd3a6",
                 "snpeff_variant_effects_region.txt:md5,05efd324edadced17ba3cd2b7714af57",
-                "vep-general-stats.txt:md5,57563be109a57f6edfa427b2b2c310ba",
-                "vep.txt:md5,bf54f689bb0ccab5e1566e48373f768c"
+                "vep-general-stats.txt:md5,78371d3a13e43e0dcb71df23fc2473ff",
+                "vep.txt:md5,3813216b7ab144fd531ba2fa62ff5646"
             ],
             "No BAM files",
             "No unstable recal BAM files",
             "No CRAM files",
             [
-                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "test.vcf_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T16:32:20.080379635",
+        "timestamp": "2026-06-01T12:47:34.268414133",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     }
 }

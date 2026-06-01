@@ -17,7 +17,7 @@
                         {
                             "id": "genome"
                         },
-                        "genome.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
+                        "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
                     ]
                 ],
                 "dbsnp_tbi": [
@@ -25,7 +25,7 @@
                         {
                             "id": "genome"
                         },
-                        "genome.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
+                        "test.rnaseq.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
                     ]
                 ],
                 "dict": [
@@ -69,22 +69,22 @@
                     ]
                 ],
                 "known_indels": [
-                    "genome.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
-                    "genome.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
+                    "test.rnaseq.vcf.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
+                    "test2.vcf.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
                 ],
                 "known_indels_tbi": [
-                    "genome.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
-                    "genome.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                    "test.rnaseq.vcf.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
+                    "test2.vcf.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
                 ],
                 "known_sites": [
-                    "genome.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
-                    "genome.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
-                    "genome.vcf.gz:md5,b39a72f91458b94b346dd73690207649"
+                    "test.rnaseq.vcf.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea",
+                    "test2.vcf.vcf.gz:md5,b39a72f91458b94b346dd73690207649",
+                    "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
                 ],
                 "known_sites_tbi": [
-                    "genome.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
-                    "genome.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63",
-                    "genome.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                    "test.rnaseq.vcf.vcf.gz.tbi:md5,94343174c18f22b10529fcb4d176fe0a",
+                    "test2.vcf.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8",
+                    "test.rnaseq.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
                 ],
                 "star_index": [
                     [
@@ -110,10 +110,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-05-27T13:05:33.258718691",
+        "timestamp": "2026-06-01T12:54:54.624770592",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.2"
+            "nextflow": "26.04.3"
         }
     },
     "only essentials": {
