@@ -79,13 +79,9 @@ nextflow_workflow {
                         if (key == "star_index") {
                             return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
                         }
-                        else if (key in ["known_indels", "known_indels_tbi"]) {
-                            def array = [val[0][1].toString(), val[0][3].toString()]
-                            return [key, array.sort().unique()]
-                        }
-                        else if (key in ["known_sites", "known_sites_tbi"]) {
-                            def array = val[0][1].collect{ it.toString() }
-                            return [key, array.sort().unique() ]
+                        else if (key.startsWith("dbsnp") || key.startsWith("known_")) {
+                            def files = val.flatten().findAll { it instanceof CharSequence }
+                            return [key, files.collect { it }.sort()]
                         }
                         return [key, val]
                     }

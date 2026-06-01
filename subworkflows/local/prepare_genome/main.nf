@@ -110,10 +110,10 @@ workflow PREPARE_GENOME {
     }
 
     def ch_dbsnp_in = dbsnp
-        ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
+        ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
     def ch_dbsnp_tbi = dbsnp_tbi
-        ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
+        ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: tbi.baseName - '.vcf'], tbi] }
         : channel.value([[id: genome], []])
 
     if (!dbsnp_tbi && dbsnp) {
@@ -131,10 +131,10 @@ workflow PREPARE_GENOME {
     }
 
     def ch_known_indels_in = known_indels
-        ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName], vcf] }
+        ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
     def ch_known_indels_tbi = known_indels_tbi
-        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: tbi.baseName], tbi] }
+        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: tbi.baseName - '.vcf'], tbi] }
         : channel.value([[id: genome], []])
 
     if (!known_indels_tbi && known_indels) {
