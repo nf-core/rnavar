@@ -38,19 +38,13 @@ workflow PREPARE_GENOME {
 
     main:
     // Unzip reference genome files if needed
-    def ch_gunzip_fasta_input = fasta.toString().endsWith('.gz')
-        ? channel.fromPath(fasta).map { fasta_ -> [[id: genome], fasta_] }.collect()
-        : channel.empty()
-
-    GUNZIP_FASTA(ch_gunzip_fasta_input)
+    GUNZIP_FASTA(channel.fromPath(fasta).map { fasta_ -> [[id: genome], fasta_] }.filter { fasta.toString().endsWith('.gz') })
 
     def ch_fasta = fasta.toString().endsWith('.gz')
         ? GUNZIP_FASTA.out.gunzip.collect()
         : channel.fromPath(fasta).map { fasta_ -> [[id: genome], fasta_] }.collect()
 
-    def dict_input = dict ? channel.empty() : ch_fasta
-
-    GATK4_CREATESEQUENCEDICTIONARY(dict_input)
+    GATK4_CREATESEQUENCEDICTIONARY(ch_fasta.filter { !dict })
 
     def ch_dict = dict
         ? channel.fromPath(dict).map { dict_ -> [[id: genome], dict_] }.collect()
@@ -74,17 +68,13 @@ workflow PREPARE_GENOME {
             ? GFFREAD.out.gtf.collect()
             : channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.collect()
 
-    def ch_gtf2bed_input = !exon_bed ? ch_gtf : channel.empty()
-
-    GTF2BED(ch_gtf2bed_input, feature_type)
+    GTF2BED(ch_gtf.filter { !exon_bed }, feature_type)
 
     def ch_exon_bed_input = exon_bed
         ? channel.fromPath(exon_bed).map { exon_bed_ -> [[id: genome], exon_bed_] }.collect()
         : GTF2BED.out.bed.collect()
 
-    def ch_remove_unknown_regions_input = 'removeunknownregions' in tools ? ch_exon_bed_input : channel.empty()
-
-    REMOVEUNKNOWNREGIONS(ch_remove_unknown_regions_input.join(ch_dict))
+    REMOVEUNKNOWNREGIONS(ch_exon_bed_input.join(ch_dict).filter { 'removeunknownregions' in tools })
 
     def ch_exon_bed = 'removeunknownregions' in tools ? REMOVEUNKNOWNREGIONS.out.bed : ch_exon_bed_input
 
@@ -166,11 +156,7 @@ workflow PREPARE_GENOME {
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
 
-    def fai_input = fasta_fai
-        ? channel.empty()
-        : ch_fasta.map { meta, _fasta -> [meta, _fasta, []] }
-
-    SAMTOOLS_FAIDX(fai_input, false)
+    SAMTOOLS_FAIDX(ch_fasta.map { meta, _fasta -> [meta, _fasta, []] }.filter { !fasta_fai }, false)
 
     def ch_fai = fasta_fai
         ? channel.fromPath(fasta_fai).map { fai_ -> [[id: genome], fai_] }.collect()
