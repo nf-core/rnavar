@@ -4,29 +4,19 @@
             {
                 "bcfann": [
                     [
-                        "/nf-core/test-datasets/modules/data/genomics/sarscov2/illumina/vcf/test2.vcf.gz"
+                        "test.rnaseq.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
                     ]
                 ],
                 "bcfann_tbi": [
                     [
-                        "test2.vcf.gz.tbi:md5,1c72e6c201bef5fc089011bd354d1df8"
+                        "test.rnaseq.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
                     ]
                 ],
                 "dbsnp": [
-                    [
-                        {
-                            "id": "genome"
-                        },
-                        "genome.vcf.gz:md5,1bb8724dcbe6fa3101a814c0be51d1ea"
-                    ]
+                    "dbsnp_146.hg38.vcf.gz:md5,fae4a5bacf0890222cf0b4489ddbe082"
                 ],
                 "dbsnp_tbi": [
-                    [
-                        {
-                            "id": "genome"
-                        },
-                        "genome.vcf.gz.tbi:md5,747c6529930c04120f367110a9ea5e63"
-                    ]
+                    "dbsnp_146.hg38.vcf.gz.tbi:md5,628232d0c870f2dbf73c3e81aff7b4b4"
                 ],
                 "dict": [
                     [
@@ -69,22 +59,22 @@
                     ]
                 ],
                 "known_indels": [
-                    "test.rnaseq.vcf.gz",
-                    "test2.vcf.gz"
+                    "gnomAD.r2.1.1.vcf.gz:md5,66e20be27a73e6b613e92efdf7f55760",
+                    "mills_and_1000G.indels.vcf.gz:md5,c927d0ea9874351adf9dceea48d6080e"
                 ],
                 "known_indels_tbi": [
-                    "test.rnaseq.vcf.gz.tbi",
-                    "test2.vcf.gz.tbi"
+                    "gnomAD.r2.1.1.vcf.gz.tbi:md5,d95bc4bd1eee441d13ed99f0f3d501f8",
+                    "mills_and_1000G.indels.vcf.gz.tbi:md5,1bb7ab8f22eb798efd796439d3b29b7a"
                 ],
                 "known_sites": [
-                    "genome.vcf.gz",
-                    "test.rnaseq.vcf.gz",
-                    "test2.vcf.gz"
+                    "dbsnp_146.hg38.vcf.gz:md5,fae4a5bacf0890222cf0b4489ddbe082",
+                    "gnomAD.r2.1.1.vcf.gz:md5,66e20be27a73e6b613e92efdf7f55760",
+                    "mills_and_1000G.indels.vcf.gz:md5,c927d0ea9874351adf9dceea48d6080e"
                 ],
                 "known_sites_tbi": [
-                    "genome.vcf.gz.tbi",
-                    "test.rnaseq.vcf.gz.tbi",
-                    "test2.vcf.gz.tbi"
+                    "dbsnp_146.hg38.vcf.gz.tbi:md5,628232d0c870f2dbf73c3e81aff7b4b4",
+                    "gnomAD.r2.1.1.vcf.gz.tbi:md5,d95bc4bd1eee441d13ed99f0f3d501f8",
+                    "mills_and_1000G.indels.vcf.gz.tbi:md5,1bb7ab8f22eb798efd796439d3b29b7a"
                 ],
                 "star_index": [
                     [
@@ -110,10 +100,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-05-27T13:05:33.258718691",
+        "timestamp": "2026-06-02T11:58:33.111038848",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.2"
+            "nextflow": "26.04.3"
         }
     },
     "only essentials": {

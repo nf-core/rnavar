@@ -2,22 +2,19 @@
 // Prepare reference genome files
 //
 
-include { GATK4_CREATESEQUENCEDICTIONARY                      } from '../../../modules/nf-core/gatk4/createsequencedictionary'
-include { GFFREAD                                             } from '../../../modules/nf-core/gffread'
-include { GTF2BED                                             } from '../../../modules/local/gtf2bed'
-include { GUNZIP as GUNZIP_FASTA                              } from '../../../modules/nf-core/gunzip'
-include { GUNZIP as GUNZIP_GTF                                } from '../../../modules/nf-core/gunzip'
-include { REMOVEUNKNOWNREGIONS                                } from '../../../modules/local/removeunknownregions'
-include { SAMTOOLS_FAIDX                                      } from '../../../modules/nf-core/samtools/faidx'
-include { STAR_GENOMEGENERATE                                 } from '../../../modules/nf-core/star/genomegenerate'
-include { STAR_INDEXVERSION                                   } from '../../../modules/nf-core/star/indexversion'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_BCFTOOLS_ANNOTATIONS } from '../../../modules/nf-core/tabix/bgziptabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_DBSNP                } from '../../../modules/nf-core/tabix/bgziptabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_KNOWN_INDELS         } from '../../../modules/nf-core/tabix/bgziptabix'
-include { TABIX_TABIX as TABIX_BCFTOOLS_ANNOTATIONS           } from '../../../modules/nf-core/tabix/tabix'
-include { TABIX_TABIX as TABIX_DBSNP                          } from '../../../modules/nf-core/tabix/tabix'
-include { TABIX_TABIX as TABIX_KNOWN_INDELS                   } from '../../../modules/nf-core/tabix/tabix'
-include { UNTAR                                               } from '../../../modules/nf-core/untar'
+include { GATK4_CREATESEQUENCEDICTIONARY                       } from '../../../modules/nf-core/gatk4/createsequencedictionary'
+include { GFFREAD                                              } from '../../../modules/nf-core/gffread'
+include { GTF2BED                                              } from '../../../modules/local/gtf2bed'
+include { GUNZIP as GUNZIP_FASTA                               } from '../../../modules/nf-core/gunzip'
+include { GUNZIP as GUNZIP_GTF                                 } from '../../../modules/nf-core/gunzip'
+include { HTSLIB_BGZIPTABIX as BGZIPTABIX_BCFTOOLS_ANNOTATIONS } from '../../../modules/nf-core/htslib/bgziptabix'
+include { HTSLIB_BGZIPTABIX as BGZIPTABIX_DBSNP                } from '../../../modules/nf-core/htslib/bgziptabix'
+include { HTSLIB_BGZIPTABIX as BGZIPTABIX_KNOWN_INDELS         } from '../../../modules/nf-core/htslib/bgziptabix'
+include { REMOVEUNKNOWNREGIONS                                 } from '../../../modules/local/removeunknownregions'
+include { SAMTOOLS_FAIDX                                       } from '../../../modules/nf-core/samtools/faidx'
+include { STAR_GENOMEGENERATE                                  } from '../../../modules/nf-core/star/genomegenerate'
+include { STAR_INDEXVERSION                                    } from '../../../modules/nf-core/star/indexversion'
+include { UNTAR                                                } from '../../../modules/nf-core/untar'
 
 workflow PREPARE_GENOME {
     take:
@@ -91,61 +88,76 @@ workflow PREPARE_GENOME {
 
     def ch_exon_bed = 'removeunknownregions' in tools ? REMOVEUNKNOWNREGIONS.out.bed : ch_exon_bed_input
 
-    def ch_bcftools_annotations = bcftools_annotations
-        ? channel.fromPath(bcftools_annotations).collect()
+    def ch_bcftools_annotations_in = bcftools_annotations
+        ? channel.fromPath(bcftools_annotations)
         : channel.value([])
     def ch_bcftools_annotations_tbi = bcftools_annotations_tbi
         ? channel.fromPath(bcftools_annotations_tbi).collect()
         : channel.value([])
 
-    if (!bcftools_annotations_tbi && bcftools_annotations && bcftools_annotations.toString().endsWith(".gz")) {
-        TABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: genome], vcf, [], []] })
-        ch_bcftools_annotations_tbi = TABIX_BCFTOOLS_ANNOTATIONS.out.index.map { _meta, tbi -> [tbi] }.collect()
+    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
+    if (!bcftools_annotations_tbi && bcftools_annotations) {
+        BGZIPTABIX_BCFTOOLS_ANNOTATIONS(
+            ch_bcftools_annotations_in.map { vcf -> [[id: vcf.baseName - '.vcf'], vcf, [], []] },
+            'compress',
+            true,
+            'vcf',
+        )
+        ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.index.map { _meta, tbi -> [tbi] }.collect()
+        ch_bcftools_annotations_vcf = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.output.map { _meta, vcf -> [vcf] }.collect()
     }
-    else if (!bcftools_annotations_tbi && bcftools_annotations) {
-        BGZIPTABIX_BCFTOOLS_ANNOTATIONS(ch_bcftools_annotations.map { vcf -> [[id: genome], vcf] })
-        ch_bcftools_annotations = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_index.map { _meta, file, _index -> [file] }.collect()
-        ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.gz_index.map { _meta, _file, tbi -> [tbi] }.collect()
+    else {
+        ch_bcftools_annotations_vcf = ch_bcftools_annotations_in.collect()
     }
 
-    def ch_dbsnp = dbsnp
-        ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: genome], vcf] }
+    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
+    def ch_dbsnp_in = dbsnp
+        ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
     def ch_dbsnp_tbi = dbsnp_tbi
         ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: genome], tbi] }
         : channel.value([[id: genome], []])
 
-    if (!dbsnp_tbi && dbsnp && (dbsnp.toString().endsWith(".gz") || dbsnp[0].toString().endsWith(".gz"))) {
-        TABIX_DBSNP(ch_dbsnp.map { meta, vcf -> [meta, vcf, [], []] })
-        ch_dbsnp_tbi = TABIX_DBSNP.out.index.map { meta, tbi -> [meta, tbi] }
+    if (!dbsnp_tbi && dbsnp) {
+        BGZIPTABIX_DBSNP(
+            ch_dbsnp_in.map { meta, vcf -> [meta, vcf, [], []] },
+            'compress',
+            true,
+            'vcf',
+        )
+        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.index
+        ch_dbsnp_vcf = BGZIPTABIX_DBSNP.out.output.map { meta, file -> [meta + [id: genome], file] }
     }
-    else if (!dbsnp_tbi && dbsnp) {
-        BGZIPTABIX_DBSNP(ch_dbsnp)
-        ch_dbsnp = BGZIPTABIX_DBSNP.out.gz_index.map { meta, file, _index -> [meta, file] }
-        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.gz_index.map { meta, _file, tbi -> [meta, tbi] }
+    else {
+        ch_dbsnp_vcf = ch_dbsnp_in.map { meta, file -> [meta + [id: genome], file] }
     }
 
-    def ch_known_indels = known_indels
-        ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: genome], vcf] }
+    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
+    def ch_known_indels_in = known_indels
+        ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
     def ch_known_indels_tbi = known_indels_tbi
-        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: genome], tbi] }
+        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[genome], tbi] }
         : channel.value([[id: genome], []])
 
-    if (!known_indels_tbi && known_indels && (known_indels.toString().endsWith(".gz") || known_indels[0].toString().endsWith(".gz"))) {
-        TABIX_KNOWN_INDELS(ch_known_indels.map { meta, vcf -> [meta, vcf, [], []] })
-        ch_known_indels_tbi = TABIX_KNOWN_INDELS.out.index.map { meta, tbi -> [meta, tbi] }
+    if (!known_indels_tbi && known_indels) {
+        BGZIPTABIX_KNOWN_INDELS(
+            ch_known_indels_in.map { meta, vcf -> [meta, vcf, [], []] },
+            'compress',
+            true,
+            'vcf',
+        )
+        ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.index
+        ch_known_indels_vcf = BGZIPTABIX_KNOWN_INDELS.out.output.map { meta, file -> [meta + [id: genome], file] }
     }
-    else if (!known_indels_tbi && known_indels) {
-        BGZIPTABIX_KNOWN_INDELS(ch_known_indels)
-        ch_known_indels = BGZIPTABIX_KNOWN_INDELS.out.gz_index.map { meta, file, _index -> [meta, file] }
-        ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.gz_index.map { meta, _file, tbi -> [meta, tbi] }
+    else {
+        ch_known_indels_vcf = ch_known_indels_in.map { meta, file -> [meta + [id: genome], file] }
     }
 
     // known_sites is made by grouping both the dbsnp and the known indels resources
     // Which can either or both be optional
-    def ch_known_sites = ch_dbsnp
-        .mix(ch_known_indels)
+    def ch_known_sites_vcf = ch_dbsnp_vcf
+        .mix(ch_known_indels_vcf)
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
 
@@ -224,18 +236,18 @@ workflow PREPARE_GENOME {
         .collect()
 
     emit:
-    bcfann           = ch_bcftools_annotations // path: bcftools_annotations.vcf.gz
+    bcfann           = ch_bcftools_annotations_vcf // path: bcftools_annotations.vcf.gz
     bcfann_tbi       = ch_bcftools_annotations_tbi // path: bcftools_annotations.vcf.gz.tbi
-    dbsnp            = ch_dbsnp.collect() // Channel: [meta, dbsnp.vcf.gz]
+    dbsnp            = ch_dbsnp_vcf.collect() // Channel: [meta, dbsnp.vcf.gz]
     dbsnp_tbi        = ch_dbsnp_tbi.collect() // Channel: [meta, dbsnp.vcf.gz.tbi]
     dict             = ch_dict // path: genome.fasta.dict
     exon_bed         = ch_exon_bed // path: exon.bed
     fasta            = ch_fasta // path: genome.fasta
     fasta_fai        = ch_fai // path: genome.fasta.fai
     gtf              = ch_gtf // path: genome.gtf
-    known_indels     = ch_known_indels.collect() // path: {known_indels*}.vcf.gz
+    known_indels     = ch_known_indels_vcf.collect() // path: {known_indels*}.vcf.gz
     known_indels_tbi = ch_known_indels_tbi.collect() // path: {known_indels*}.vcf.gz.tbi
-    known_sites      = ch_known_sites // path: {known_sites*}.vcf.gz
+    known_sites      = ch_known_sites_vcf // path: {known_sites*}.vcf.gz
     known_sites_tbi  = ch_known_sites_tbi // path: {known_sites*}.vcf.gz.tbi
     star_index       = star_index_output // path: star/index/
 }

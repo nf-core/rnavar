@@ -5,33 +5,33 @@
 */
 
 // nf-core
-include { CAT_FASTQ                 } from '../modules/nf-core/cat/fastq'
-include { FASTQC                    } from '../modules/nf-core/fastqc'
-include { GATK4_BASERECALIBRATOR    } from '../modules/nf-core/gatk4/baserecalibrator'
-include { GATK4_BEDTOINTERVALLIST   } from '../modules/nf-core/gatk4/bedtointervallist'
-include { GATK4_COMBINEGVCFS        } from '../modules/nf-core/gatk4/combinegvcfs'
-include { GATK4_HAPLOTYPECALLER     } from '../modules/nf-core/gatk4/haplotypecaller'
-include { GATK4_INTERVALLISTTOOLS   } from '../modules/nf-core/gatk4/intervallisttools'
-include { GATK4_MERGEVCFS           } from '../modules/nf-core/gatk4/mergevcfs'
-include { GATK4_VARIANTFILTRATION   } from '../modules/nf-core/gatk4/variantfiltration'
-include { MOSDEPTH                  } from '../modules/nf-core/mosdepth'
-include { SEQ2HLA                   } from '../modules/nf-core/seq2hla'
-include { TABIX_TABIX as TABIX      } from '../modules/nf-core/tabix/tabix'
-include { TABIX_TABIX as TABIXGVCF  } from '../modules/nf-core/tabix/tabix'
-include { UMITOOLS_EXTRACT          } from '../modules/nf-core/umitools/extract'
+include { CAT_FASTQ                                  } from '../modules/nf-core/cat/fastq'
+include { FASTQC                                     } from '../modules/nf-core/fastqc'
+include { GATK4_BASERECALIBRATOR                     } from '../modules/nf-core/gatk4/baserecalibrator'
+include { GATK4_BEDTOINTERVALLIST                    } from '../modules/nf-core/gatk4/bedtointervallist'
+include { GATK4_COMBINEGVCFS                         } from '../modules/nf-core/gatk4/combinegvcfs'
+include { GATK4_HAPLOTYPECALLER                      } from '../modules/nf-core/gatk4/haplotypecaller'
+include { GATK4_INTERVALLISTTOOLS                    } from '../modules/nf-core/gatk4/intervallisttools'
+include { GATK4_MERGEVCFS                            } from '../modules/nf-core/gatk4/mergevcfs'
+include { GATK4_VARIANTFILTRATION                    } from '../modules/nf-core/gatk4/variantfiltration'
+include { HTSLIB_BGZIPTABIX as TABIX_COMBINEGVCFS    } from '../modules/nf-core/htslib/bgziptabix'
+include { HTSLIB_BGZIPTABIX as TABIX_HAPLOTYPECALLER } from '../modules/nf-core/htslib/bgziptabix'
+include { MOSDEPTH                                   } from '../modules/nf-core/mosdepth'
+include { SEQ2HLA                                    } from '../modules/nf-core/seq2hla'
+include { UMITOOLS_EXTRACT                           } from '../modules/nf-core/umitools/extract'
 
 // local
-include { PREPARE_ALIGNMENT         } from '../subworkflows/local/prepare_alignment'
-include { RECALIBRATE               } from '../subworkflows/local/recalibrate'
-include { SPLITNCIGAR               } from '../subworkflows/local/splitncigar'
-include { VCF_ANNOTATE_ALL          } from '../subworkflows/local/vcf_annotate_all'
+include { PREPARE_ALIGNMENT                          } from '../subworkflows/local/prepare_alignment'
+include { RECALIBRATE                                } from '../subworkflows/local/recalibrate'
+include { SPLITNCIGAR                                } from '../subworkflows/local/splitncigar'
+include { VCF_ANNOTATE_ALL                           } from '../subworkflows/local/vcf_annotate_all'
 
 // nf-core
-include { BAM_MARKDUPLICATES_PICARD } from '../subworkflows/nf-core/bam_markduplicates_picard'
-include { FASTQ_ALIGN_STAR          } from '../subworkflows/nf-core/fastq_align_star'
+include { BAM_MARKDUPLICATES_PICARD                  } from '../subworkflows/nf-core/bam_markduplicates_picard'
+include { FASTQ_ALIGN_STAR                           } from '../subworkflows/nf-core/fastq_align_star'
 
 // local
-include { checkSamplesAfterGrouping } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
+include { checkSamplesAfterGrouping                  } from '../subworkflows/local/utils_nfcore_rnavar_pipeline'
 
 /*
 ========================================================================================
@@ -218,7 +218,12 @@ workflow RNAVAR {
             )
 
             // MODULE: Index the VCF using TABIX
-            TABIXGVCF(GATK4_COMBINEGVCFS.out.combined_gvcf.map { meta, vcf -> [meta, vcf, [], []] })
+            TABIX_COMBINEGVCFS(
+                GATK4_COMBINEGVCFS.out.combined_gvcf.map { meta, vcf -> [meta, vcf, [], []] },
+                'compress',
+                true,
+                'vcf',
+            )
         }
         else {
             // MODULE: MergeVCFS from GATK4
@@ -230,9 +235,14 @@ workflow RNAVAR {
             )
 
             // MODULE: Index the VCF using TABIX
-            TABIX(GATK4_MERGEVCFS.out.vcf.map { meta, vcf -> [meta, vcf, [], []] })
+            TABIX_HAPLOTYPECALLER(
+                GATK4_MERGEVCFS.out.vcf.map { meta, vcf -> [meta, vcf, [], []] },
+                'compress',
+                true,
+                'vcf',
+            )
 
-            def haplotypecaller_vcf_tbi = GATK4_MERGEVCFS.out.vcf.join(TABIX.out.index, failOnDuplicate: true, failOnMismatch: true)
+            def haplotypecaller_vcf_tbi = GATK4_MERGEVCFS.out.vcf.join(TABIX_HAPLOTYPECALLER.out.index, failOnDuplicate: true, failOnMismatch: true)
 
             def final_vcf = channel.empty()
 

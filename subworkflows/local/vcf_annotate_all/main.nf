@@ -46,7 +46,7 @@ workflow VCF_ANNOTATE_ALL {
     }
 
     BCFTOOLS_ANNOTATE(vcf_for_bcfann.filter { 'bcfann' in tools })
-    vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
+    vcf_ann = vcf_ann.mix(BCFTOOLS_ANNOTATE.out.vcf.join(BCFTOOLS_ANNOTATE.out.index, failOnDuplicate: true, failOnMismatch: true))
 
     VCF_ANNOTATE_SNPEFF(vcf.filter { ('merge' in tools || 'snpeff' in tools) }, snpeff_db, snpeff_cache)
     vcf_ann = vcf_ann.mix(VCF_ANNOTATE_SNPEFF.out.vcf_tbi)

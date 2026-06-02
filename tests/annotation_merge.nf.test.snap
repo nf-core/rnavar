@@ -6,7 +6,7 @@
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": "115.2",
                     "perl-math-cdf": "0.1",
-                    "tabix": "1.21"
+                    "tabix": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -20,6 +20,10 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
+                "HTSLIB_BGZIPTABIX": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
                 "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
@@ -31,10 +35,6 @@
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
-                },
-                "TABIX_BGZIPTABIX": {
-                    "bgzip": "1.21",
-                    "tabix": "1.21"
                 }
             },
             [
@@ -124,10 +124,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T16:33:18.559643571",
+        "timestamp": "2026-06-02T10:14:55.066427973",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     },
     "-profile test --tools merge": {
@@ -137,7 +137,7 @@
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": "115.2",
                     "perl-math-cdf": "0.1",
-                    "tabix": "1.21"
+                    "tabix": "1.23.1"
                 },
                 "GATK4_BEDTOINTERVALLIST": {
                     "gatk4": "4.6.2.0"
@@ -151,6 +151,10 @@
                 "GTF2BED": {
                     "Rscript": "3.5.1 (2018-07-02)"
                 },
+                "HTSLIB_BGZIPTABIX": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
                 "REMOVEUNKNOWNREGIONS": {
                     "python": "3.8.3"
                 },
@@ -162,10 +166,6 @@
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
-                },
-                "TABIX_BGZIPTABIX": {
-                    "bgzip": "1.21",
-                    "tabix": "1.21"
                 }
             },
             [
@@ -242,10 +242,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-24T16:32:20.080379635",
+        "timestamp": "2026-06-02T10:14:10.608788984",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.3"
         }
     }
 }

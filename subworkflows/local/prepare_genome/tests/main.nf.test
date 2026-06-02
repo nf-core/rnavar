@@ -48,9 +48,9 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz'
+                input[0] = params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf'
                 input[1] = []
-                input[2] = params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf'
+                input[2] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/vcf/dbsnp_146.hg38.vcf.gz'
                 input[3] = []
                 input[4] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict'
                 input[5] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed'
@@ -59,8 +59,8 @@ nextflow_workflow {
                 input[8] = []
                 input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
                 input[10] = [
-                    params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/vcf/test.rnaseq.vcf.gz',
-                    params.modules_testdata_base_path + '/genomics/sarscov2/illumina/vcf/test2.vcf.gz'
+                    params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/vcf/gnomAD.r2.1.1.vcf.gz',
+                    params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/vcf/mills_and_1000G.indels.vcf.gz'
                 ]
                 input[11] = []
                 input[12] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz'
@@ -79,13 +79,9 @@ nextflow_workflow {
                         if (key == "star_index") {
                             return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
                         }
-                        else if (key in ["known_indels", "known_indels_tbi"]) {
-                            def array = [file(val[0][1].toString()).name, file(val[0][3].toString()).name]
-                            return [key, array.sort().unique()]
-                        }
-                        else if (key in ["known_sites", "known_sites_tbi"]) {
-                            def array = val[0][1].collect{ file(it.toString()).name }
-                            return [key, array.sort().unique() ]
+                        else if (key.startsWith("dbsnp") || key.startsWith("known_")) {
+                            def files = val.flatten().findAll { it instanceof CharSequence }
+                            return [key, files.sort { a, b -> a.tokenize('/').last() <=> b.tokenize('/').last() }]
                         }
                         return [key, val]
                     }
