@@ -192,7 +192,7 @@
                 "variant_calling",
                 "variant_calling/GM12878",
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
-                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.csi"
             ],
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
@@ -223,7 +223,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-02T09:48:52.081515353",
+        "timestamp": "2026-06-02T10:43:17.571263534",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

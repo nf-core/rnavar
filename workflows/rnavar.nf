@@ -14,10 +14,10 @@ include { GATK4_HAPLOTYPECALLER                      } from '../modules/nf-core/
 include { GATK4_INTERVALLISTTOOLS                    } from '../modules/nf-core/gatk4/intervallisttools'
 include { GATK4_MERGEVCFS                            } from '../modules/nf-core/gatk4/mergevcfs'
 include { GATK4_VARIANTFILTRATION                    } from '../modules/nf-core/gatk4/variantfiltration'
+include { HTSLIB_BGZIPTABIX as TABIX_COMBINEGVCFS    } from '../modules/nf-core/htslib/bgziptabix'
+include { HTSLIB_BGZIPTABIX as TABIX_HAPLOTYPECALLER } from '../modules/nf-core/htslib/bgziptabix'
 include { MOSDEPTH                                   } from '../modules/nf-core/mosdepth'
 include { SEQ2HLA                                    } from '../modules/nf-core/seq2hla'
-include { HTSLIB_BGZIPTABIX as TABIX_HAPLOTYPECALLER } from '../modules/nf-core/htslib/bgziptabix'
-include { HTSLIB_BGZIPTABIX as TABIXGVCF             } from '../modules/nf-core/htslib/bgziptabix'
 include { UMITOOLS_EXTRACT                           } from '../modules/nf-core/umitools/extract'
 
 // local
@@ -218,7 +218,7 @@ workflow RNAVAR {
             )
 
             // MODULE: Index the VCF using TABIX
-            TABIXGVCF(
+            TABIX_COMBINEGVCFS(
                 GATK4_COMBINEGVCFS.out.combined_gvcf.map { meta, vcf -> [meta, vcf, [], []] },
                 'compress',
                 true,
