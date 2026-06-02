@@ -15,17 +15,15 @@ workflow PREPARE_ALIGNMENT {
         .branch { meta, reads, index ->
             indexed: index
             return [meta, reads, index]
-            not_indexed_bam: !index && reads.extension == "bam"
-            return [meta, reads]
-            not_indexed_cram: !index && reads.extension == "cram"
+            not_indexed: !index
             return [meta, reads]
         }
 
-    SAMTOOLS_INDEX(alignment_branch.not_indexed_bam.mix(alignment_branch.not_indexed_cram))
+    SAMTOOLS_INDEX(alignment_branch.not_indexed)
 
-    def alignment_out = alignment_branch.indexed.mix(
-        alignment_branch.not_indexed_bam.mix(alignment_branch.not_indexed_cram).join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)
-    )
+    def alignment_out = alignment_branch.indexed
+        .mix(alignment_branch.not_indexed)
+        .join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)
 
     emit:
     reads_index = alignment_out // [ val(meta), path(bam|cram), path(bai|crai) ]
