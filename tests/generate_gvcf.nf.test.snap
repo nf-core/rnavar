@@ -71,7 +71,7 @@
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
                 },
-                "TABIXGVCF": {
+                "TABIX_COMBINEGVCFS": {
                     "htslib": "1.23.1",
                     "xz": "5.8.3"
                 },
@@ -223,7 +223,7 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-01T15:20:48.425975635",
+        "timestamp": "2026-06-02T11:37:11.325648143",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

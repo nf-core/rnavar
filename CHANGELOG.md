@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - [#300](https://github.com/nf-core/rnavar/pull/300) - Update all modules and subworkflows to the latest versions in nf-core/modules
+- [#306](https://github.com/nf-core/rnavar/pull/306) - Upgrade all modules, remove deprecated modules and update config files accordingly.
 
 ### Fixed
 
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#287](https://github.com/nf-core/rnavar/pull/287) - Removed `hook_url` params, cf [tools#4051](https://github.com/nf-core/tools/pull/4051)
 - [#294](https://github.com/nf-core/rnavar/pull/294) - Removed `skip_variantannotation` params
+- [#306](https://github.com/nf-core/rnavar/pull/306) - Remove deprecated `tabix/tabix` and `tabix/bgziptabix` modules
 
 ### Deprecated
 
@@ -45,22 +47,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old name               | New name                  |
 | ---------------------- | ------------------------- |
-| hook_url               |                           |
-| skip_variantannotation |                           |
-|                        | vep_cache_preflight_check |
+| hook_url               | -                         |
+| skip_variantannotation | -                         |
+| -                      | vep_cache_preflight_check |
 
 ### Schema input
 
 | Old name | New name     |
 | -------- | ------------ |
-|          | seq_center   |
-|          | seq_platform |
+| -        | seq_center   |
+| -        | seq_platform |
 
 ### Modules / Subworkflows
 
 | Dependency   | Old name                        | New name                         |
 | ------------ | ------------------------------- | -------------------------------- |
 | Modules      | REMOVE_UNKNOWN_REGIONS          | REMOVEUNKNOWNREGIONS             |
+| Modules      | tabix/bgziptabix                | htslib/bgziptabix                |
+| Modules      | tabix/tabix                     | -                                |
 | Subworkflows | ANNOTATION_CACHE_INITIALISATION | UTILS_ANNOTATION_CACHE           |
 | Subworkflows | DOWNLOAD_CACHE_SNPEFF_VEP       | CACHE_DOWNLOAD_ENSEMBLVEP_SNPEFF |
 
@@ -89,9 +93,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#294](https://github.com/nf-core/rnavar/pull/294) - Workflow outputs for multiqc_files via topic
 - [#297](https://github.com/nf-core/rnavar/pull/297) - Improve nf-test pipeline tests setup
 - [#302](https://github.com/nf-core/rnavar/pull/302) - Template update for nf-core/tools v4.0.1
+- [#306](https://github.com/nf-core/rnavar/pull/306) - Replace `tabix/bgziptabix` and `tabix/tabix` modules by `htslib/bgziptabix`
 - [#310](https://github.com/nf-core/rnavar/pull/310) - Increase nf-test runner disk volume to 40gb
 
 #### Fixed
+
+- [#306](https://github.com/nf-core/rnavar/pull/306) - Fix `prepare_genome` subworkflow to handle `bcftools_annotations` filenames correctly
 
 #### Removed
 
