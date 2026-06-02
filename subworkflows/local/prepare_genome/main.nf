@@ -44,21 +44,22 @@ workflow PREPARE_GENOME {
         ? GUNZIP_FASTA.out.gunzip.collect()
         : channel.fromPath(fasta).map { fasta_ -> [[id: genome], fasta_] }.collect()
 
-    GATK4_CREATESEQUENCEDICTIONARY(ch_fasta.filter { !dict })
+    def run_createsequencedictionary = !dict
+
+    GATK4_CREATESEQUENCEDICTIONARY(ch_fasta.filter { run_createsequencedictionary })
 
     def ch_dict = dict
         ? channel.fromPath(dict).map { dict_ -> [[id: genome], dict_] }.collect()
         : GATK4_CREATESEQUENCEDICTIONARY.out.dict.collect()
 
-    def gtf_input = gtf.toString().endsWith('.gz')
-        ? channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }
-        : channel.empty()
+    def run_gunzip_gtf = gtf.toString().endsWith('.gz')
 
-    GUNZIP_GTF(gtf_input)
+    GUNZIP_GTF(channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.filter { run_gunzip_gtf })
 
-    def ch_gffread_input = gff
-        ? channel.fromPath(gff).map { gff_ -> [[id: genome], gff_] }
-        : channel.empty()
+    def has_gff = gff
+    def ch_gffread_input = channel.value(has_gff ? file(gff) : [])
+        .filter { has_gff }
+        .map { gff_ -> [[id: genome], gff_] }
 
     GFFREAD(ch_gffread_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
 
@@ -68,7 +69,9 @@ workflow PREPARE_GENOME {
             ? GFFREAD.out.gtf.collect()
             : channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.collect()
 
-    GTF2BED(ch_gtf.filter { !exon_bed }, feature_type)
+    def run_gtf2bed = !exon_bed
+
+    GTF2BED(ch_gtf.filter { run_gtf2bed }, feature_type)
 
     def ch_exon_bed_input = exon_bed
         ? channel.fromPath(exon_bed).map { exon_bed_ -> [[id: genome], exon_bed_] }.collect()
@@ -81,68 +84,73 @@ workflow PREPARE_GENOME {
     def ch_bcftools_annotations_in = bcftools_annotations
         ? channel.fromPath(bcftools_annotations)
         : channel.value([])
-    def ch_bcftools_annotations_tbi = bcftools_annotations_tbi
-        ? channel.fromPath(bcftools_annotations_tbi).collect()
-        : channel.value([])
 
-    // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
-    if (!bcftools_annotations_tbi && bcftools_annotations) {
-        BGZIPTABIX_BCFTOOLS_ANNOTATIONS(
-            ch_bcftools_annotations_in.map { vcf -> [[id: vcf.baseName - '.vcf'], vcf, [], []] },
-            'compress',
-            true,
-            'vcf',
-        )
-        ch_bcftools_annotations_tbi = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.index.map { _meta, tbi -> [tbi] }.collect()
-        ch_bcftools_annotations_vcf = BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.output.map { _meta, vcf -> [vcf] }.collect()
-    }
-    else {
-        ch_bcftools_annotations_vcf = ch_bcftools_annotations_in.collect()
-    }
+    def run_bgziptabix_bcfann = !bcftools_annotations_tbi && bcftools_annotations
+
+    BGZIPTABIX_BCFTOOLS_ANNOTATIONS(
+        ch_bcftools_annotations_in.map { vcf -> [[id: vcf.baseName - '.vcf'], vcf, [], []] }.filter { run_bgziptabix_bcfann },
+        'compress',
+        true,
+        'vcf',
+    )
+
+    ch_bcftools_annotations_vcf = run_bgziptabix_bcfann
+        ? BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.output.map { _meta, vcf -> [vcf] }.collect()
+        : ch_bcftools_annotations_in.collect()
+
+    def ch_bcftools_annotations_tbi = run_bgziptabix_bcfann
+        ? BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.index.map { _meta, tbi -> [tbi] }.collect()
+        : bcftools_annotations
+            ? channel.fromPath(bcftools_annotations_tbi).collect()
+            : channel.empty()
 
     // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     def ch_dbsnp_in = dbsnp
         ? channel.fromPath(dbsnp).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
-    def ch_dbsnp_tbi = dbsnp_tbi
-        ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: genome], tbi] }
-        : channel.value([[id: genome], []])
 
-    if (!dbsnp_tbi && dbsnp) {
-        BGZIPTABIX_DBSNP(
-            ch_dbsnp_in.map { meta, vcf -> [meta, vcf, [], []] },
-            'compress',
-            true,
-            'vcf',
-        )
-        ch_dbsnp_tbi = BGZIPTABIX_DBSNP.out.index
-        ch_dbsnp_vcf = BGZIPTABIX_DBSNP.out.output.map { meta, file -> [meta + [id: genome], file] }
-    }
-    else {
-        ch_dbsnp_vcf = ch_dbsnp_in.map { meta, file -> [meta + [id: genome], file] }
-    }
+    def run_bgziptabix_dbsnp = !dbsnp_tbi && dbsnp
+
+    BGZIPTABIX_DBSNP(
+        ch_dbsnp_in.map { meta, vcf -> [meta, vcf, [], []] }.filter { run_bgziptabix_dbsnp },
+        'compress',
+        true,
+        'vcf',
+    )
+
+    ch_dbsnp_vcf = run_bgziptabix_dbsnp
+        ? BGZIPTABIX_DBSNP.out.output.map { meta, file -> [meta + [id: genome], file] }
+        : ch_dbsnp_in.map { meta, file -> [meta + [id: genome], file] }
+
+    def ch_dbsnp_tbi = run_bgziptabix_dbsnp
+        ? BGZIPTABIX_DBSNP.out.index
+        : dbsnp
+            ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: genome], tbi] }.collect()
+            : channel.empty()
 
     // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     def ch_known_indels_in = known_indels
         ? channel.fromPath(known_indels).flatten().map { vcf -> [[id: vcf.baseName - '.vcf'], vcf] }
         : channel.value([[id: genome], []])
-    def ch_known_indels_tbi = known_indels_tbi
-        ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[genome], tbi] }
-        : channel.value([[id: genome], []])
 
-    if (!known_indels_tbi && known_indels) {
-        BGZIPTABIX_KNOWN_INDELS(
-            ch_known_indels_in.map { meta, vcf -> [meta, vcf, [], []] },
-            'compress',
-            true,
-            'vcf',
-        )
-        ch_known_indels_tbi = BGZIPTABIX_KNOWN_INDELS.out.index
-        ch_known_indels_vcf = BGZIPTABIX_KNOWN_INDELS.out.output.map { meta, file -> [meta + [id: genome], file] }
-    }
-    else {
-        ch_known_indels_vcf = ch_known_indels_in.map { meta, file -> [meta + [id: genome], file] }
-    }
+    def run_bgziptabix_known_indels = !known_indels_tbi && known_indels
+
+    BGZIPTABIX_KNOWN_INDELS(
+        ch_known_indels_in.map { meta, vcf -> [meta, vcf, [], []] }.filter { run_bgziptabix_known_indels },
+        'compress',
+        true,
+        'vcf',
+    )
+
+    ch_known_indels_vcf = run_bgziptabix_known_indels
+        ? BGZIPTABIX_KNOWN_INDELS.out.output.map { meta, file -> [meta + [id: genome], file] }
+        : ch_known_indels_in.map { meta, file -> [meta + [id: genome], file] }
+
+    def ch_known_indels_tbi = run_bgziptabix_known_indels
+        ? BGZIPTABIX_KNOWN_INDELS.out.index
+        : known_indels
+            ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: genome], tbi] }.collect()
+            : channel.empty()
 
     // known_sites is made by grouping both the dbsnp and the known indels resources
     // Which can either or both be optional
@@ -156,7 +164,9 @@ workflow PREPARE_GENOME {
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
 
-    SAMTOOLS_FAIDX(ch_fasta.map { meta, _fasta -> [meta, _fasta, []] }.filter { !fasta_fai }, false)
+    def run_faidx = !fasta_fai
+
+    SAMTOOLS_FAIDX(ch_fasta.map { meta, _fasta -> [meta, _fasta, []] }.filter { run_faidx }, false)
 
     def ch_fai = fasta_fai
         ? channel.fromPath(fasta_fai).map { fai_ -> [[id: genome], fai_] }.collect()
@@ -224,8 +234,8 @@ workflow PREPARE_GENOME {
     emit:
     bcfann           = ch_bcftools_annotations_vcf // path: bcftools_annotations.vcf.gz
     bcfann_tbi       = ch_bcftools_annotations_tbi // path: bcftools_annotations.vcf.gz.tbi
-    dbsnp            = ch_dbsnp_vcf.collect() // Channel: [meta, dbsnp.vcf.gz]
-    dbsnp_tbi        = ch_dbsnp_tbi.collect() // Channel: [meta, dbsnp.vcf.gz.tbi]
+    dbsnp            = ch_dbsnp_vcf.collect() // channel: [meta, dbsnp.vcf.gz]
+    dbsnp_tbi        = ch_dbsnp_tbi.collect() // channel: [meta, dbsnp.vcf.gz.tbi]
     dict             = ch_dict // path: genome.fasta.dict
     exon_bed         = ch_exon_bed // path: exon.bed
     fasta            = ch_fasta // path: genome.fasta

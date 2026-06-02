@@ -40,8 +40,7 @@ workflow VCF_ANNOTATE_ALL {
             .map { meta, vcf_, annotation, annotation_index, header_file, columns -> [meta, vcf_, [], annotation, annotation_index, columns, header_file, []] }
     }
     else {
-        vcf_for_bcfann = vcf_for_bcfann
-            .map { meta, vcf_, annotation, annotation_index, header_file -> [meta, vcf_, [], annotation, annotation_index, [], header_file, []] }
+        vcf_for_bcfann = vcf_for_bcfann.map { meta, vcf_, annotation, annotation_index, header_file -> [meta, vcf_, [], annotation, annotation_index, [], header_file, []] }
     }
 
     BCFTOOLS_ANNOTATE(vcf_for_bcfann.filter { 'bcfann' in tools })
