@@ -1,4 +1,5 @@
 def projectDir = new File('.').absolutePath
+def modules_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
 
 nextflow_pipeline {
 
@@ -19,6 +20,25 @@ nextflow_pipeline {
             snapshot: 'stdout',
             snapshot_ignore: 'Downloading plugin',
             snapshot_include: 'annotation-cache',
+        ],
+        [
+            name: "Fails with profile test --dbnsfp and no dbnsfp_tbi",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                dbnsfp: modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/dbsnp_138.hg38.vcf.gz',
+                tools: 'vep'
+            ],
+            failure: true,
+            snapshot: 'stdout',
+            snapshot_include: 'dbnsfp inconsistency',
+        ],
+        [
+            name: "-profile test --tools vep --vep_loftee",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                tools: 'vep',
+                vep_loftee: true,
+            ],
         ],
     ]
 

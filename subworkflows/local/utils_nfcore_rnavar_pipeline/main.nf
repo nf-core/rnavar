@@ -158,7 +158,7 @@ workflow PIPELINE_INITIALISATION {
         error("Expected --umitools_bc_pattern when --tools umitools is specified.")
     }
 
-    if (!('baserecalibrator' in tools) && !dbsnp && !known_indels) {
+    if (('baserecalibrator' in tools) && !dbsnp && !known_indels) {
         error("Known sites are required for performing base recalibration. Supply them with either --dbsnp and/or --known_indels or disable base recalibration with --skip_baserecalibration")
     }
 
@@ -343,19 +343,19 @@ def defineToolsList(bam_csi_index, extract_umi, generate_gvcf, input_skip, input
 
     // opt out tools
     def skip_list = input_skip ? input_skip.tokenize(',') : []
-    if (!('baserecalibrator' in skip_list || skip_baserecalibration)) {
+    if (!('baserecalibrator' in skip_list) && !skip_baserecalibration) {
         tools_list << 'baserecalibrator'
     }
-    if (!('intervallisttools' in skip_list || skip_intervallisttools)) {
+    if (!('intervallisttools' in skip_list) && !skip_intervallisttools) {
         tools_list << 'intervallisttools'
     }
-    if (!('multiqc' in skip_list || skip_multiqc)) {
+    if (!('multiqc' in skip_list) && !skip_multiqc) {
         tools_list << 'multiqc'
     }
-    if (!('removeunknownregions' in skip_list || skip_exon_bed_check)) {
+    if (!('removeunknownregions' in skip_list) && !skip_exon_bed_check) {
         tools_list << 'removeunknownregions'
     }
-    if (!('variantfiltration' in skip_list || skip_variantfiltration)) {
+    if (!('variantfiltration' in skip_list) && !skip_variantfiltration) {
         tools_list << 'variantfiltration'
     }
 
