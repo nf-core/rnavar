@@ -191,7 +191,8 @@
                 "reports/star/GM12878/GM12878.SJ.out.tab",
                 "variant_calling",
                 "variant_calling/GM12878",
-                "variant_calling/GM12878/GM12878.haplotypecaller.combined.g.vcf.gz"
+                "variant_calling/GM12878/GM12878.haplotypecaller.combined.g.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.combined.g.vcf.gz.tbi"
             ],
             [
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
