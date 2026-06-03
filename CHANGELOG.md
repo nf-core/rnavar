@@ -23,9 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - [#293](https://github.com/nf-core/rnavar/pull/293) - Rescue `idxstats` files
-- Fix null guard for `gtf` input in `prepare_genome` subworkflow
-- Fix `null` in merged BAM filenames when intervals are provided to `splitncigar` subworkflow
-- Fix `null` in interval-derived filenames due to unnecessary list wrapping in `interval_list_split`
 - [#293](https://github.com/nf-core/rnavar/pull/293) - No more overwrite of any of the `samtools` statistics files (`idxstats`, `flagstat`, `stats`)
 - [#295](https://github.com/nf-core/rnavar/pull/295) - All tools can be selected or skipped via `params.tools` or `params.skip_tools`
 - [#307](https://github.com/nf-core/rnavar/pull/307) - Add missing `vep_version` parameter and fix `loftee_path` for the VEP LoFTEE plugin

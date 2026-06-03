@@ -111,8 +111,8 @@ workflow RNAVAR {
     GATK4_INTERVALLISTTOOLS(GATK4_BEDTOINTERVALLIST.out.interval_list.filter { 'intervallisttools' in tools })
 
     def interval_list_split = 'intervallisttools' in tools
-        ? GATK4_INTERVALLISTTOOLS.out.interval_list.map { _meta, bed -> bed }.collect()
-        : GATK4_BEDTOINTERVALLIST.out.interval_list.map { _meta, bed -> bed }.collect()
+        ? GATK4_INTERVALLISTTOOLS.out.interval_list.map { _meta, bed -> [bed] }.collect()
+        : GATK4_BEDTOINTERVALLIST.out.interval_list.map { _meta, bed -> [[bed]] }.collect()
 
     // MODULE: HLATyping with Seq2HLA
     SEQ2HLA(reads_preprocessed.filter { 'seq2hla' in tools })
