@@ -29,10 +29,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "reads_index") {
-                            return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
-                        }
-                        return [key, val]
+                        return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                     }
             ).match()
         }
@@ -57,10 +54,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "reads_index") {
-                            return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
-                        }
-                        return [key, val]
+                        return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                     }
             ).match()
         }
@@ -89,10 +83,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "reads_index") {
-                            return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
-                        }
-                        return [key, val]
+                        return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                     }
             ).match()
         }
