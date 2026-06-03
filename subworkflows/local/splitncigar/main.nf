@@ -22,7 +22,7 @@ workflow SPLITNCIGAR {
             .combine(intervals)
             .map { meta, bam_, bai, intervals_ ->
                 [
-                    meta + [interval_count: intervals_ instanceof List ? intervals_.size() : 1],
+                    meta + [interval_count: intervals_ instanceof List ? intervals_.size() : 1, sample: meta.id],
                     bam_,
                     bai,
                     intervals_ instanceof List ? intervals_ : [intervals_],
