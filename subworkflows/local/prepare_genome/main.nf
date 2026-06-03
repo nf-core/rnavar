@@ -165,13 +165,11 @@ workflow PREPARE_GENOME {
         .mix(ch_known_indels_vcf)
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
-        .collect()
 
     def ch_known_sites_tbi = ch_dbsnp_tbi
         .mix(ch_known_indels_tbi)
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
-        .collect()
 
     def run_faidx = !fasta_fai
 
@@ -252,8 +250,8 @@ workflow PREPARE_GENOME {
     gtf              = ch_gtf // path: genome.gtf
     known_indels     = ch_known_indels_vcf.collect() // path: {known_indels*}.vcf.gz
     known_indels_tbi = ch_known_indels_tbi.collect() // path: {known_indels*}.vcf.gz.tbi
-    known_sites      = ch_known_sites_vcf // path: {known_sites*}.vcf.gz
-    known_sites_tbi  = ch_known_sites_tbi // path: {known_sites*}.vcf.gz.tbi
+    known_sites      = ch_known_sites_vcf.collect() // path: {known_sites*}.vcf.gz
+    known_sites_tbi  = ch_known_sites_tbi.collect() // path: {known_sites*}.vcf.gz.tbi
     star_index       = star_index_output // path: star/index/
 }
 
