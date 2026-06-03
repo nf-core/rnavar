@@ -44,10 +44,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "bam_bai") {
-                            return [key, val.collect { [file(it[1].toString()).name + ":md5sum," + bam(it[1]).readsMD5, file(it[2].toString()).name] }]
-                        }
-                        return [key, val]
+                        return [key, val.collect { [file(it[1].toString()).name + ":md5sum," + bam(it[1]).readsMD5, file(it[2].toString()).name] }]
                     }
             ).match()
         }
@@ -86,10 +83,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "bam_bai") {
-                            return [key, val.collect { [file(it[1].toString()).name + ":md5sum," + bam(it[1]).readsMD5, file(it[2].toString()).name] }]
-                        }
-                        return [key, val]
+                        return [key, val.collect { [file(it[1].toString()).name + ":md5sum," + bam(it[1]).readsMD5, file(it[2].toString()).name] }]
                     }
             ).match()
         }
@@ -125,10 +119,7 @@ nextflow_workflow {
             assert workflow.success
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
-                        if (key == "bam_bai") {
-                            return [key, val.collect { [file(it[1].toString()).name + ":md5sum," + bam(it[1]).readsMD5, file(it[2].toString()).name] }]
-                        }
-                        return [key, val]
+                        return [key, val.collect { [file(it[1].toString()).name + ":md5sum," + bam(it[1]).readsMD5, file(it[2].toString()).name] }]
                     }
             ).match()
         }

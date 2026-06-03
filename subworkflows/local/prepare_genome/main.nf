@@ -55,9 +55,11 @@ workflow PREPARE_GENOME {
     def has_gtf = gtf
     def run_gunzip_gtf = has_gtf && gtf.toString().endsWith('.gz')
 
-    GUNZIP_GTF(has_gtf
-        ? channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.filter { run_gunzip_gtf }
-        : channel.empty())
+    GUNZIP_GTF(
+        has_gtf
+            ? channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.filter { run_gunzip_gtf }
+            : channel.empty()
+    )
 
     def has_gff = gff
     def ch_gffread_input = channel.value(has_gff ? file(gff) : [])
