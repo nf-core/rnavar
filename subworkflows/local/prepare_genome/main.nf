@@ -86,7 +86,7 @@ workflow PREPARE_GENOME {
 
     REMOVEUNKNOWNREGIONS(ch_exon_bed_input.join(ch_dict).filter { 'removeunknownregions' in tools })
 
-    def ch_exon_bed = 'removeunknownregions' in tools ? REMOVEUNKNOWNREGIONS.out.bed : ch_exon_bed_input
+    def ch_exon_bed = 'removeunknownregions' in tools ? REMOVEUNKNOWNREGIONS.out.bed.collect() : ch_exon_bed_input
 
     def ch_bcftools_annotations_in = bcftools_annotations
         ? channel.fromPath(bcftools_annotations)
@@ -165,11 +165,13 @@ workflow PREPARE_GENOME {
         .mix(ch_known_indels_vcf)
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
+        .collect()
 
     def ch_known_sites_tbi = ch_dbsnp_tbi
         .mix(ch_known_indels_tbi)
         .collect { _meta, file -> file }
         .map { file -> [[id: genome], file] }
+        .collect()
 
     def run_faidx = !fasta_fai
 
