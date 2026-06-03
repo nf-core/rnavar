@@ -109,7 +109,7 @@ workflow PREPARE_GENOME {
         ? BGZIPTABIX_BCFTOOLS_ANNOTATIONS.out.index.map { _meta, tbi -> [tbi] }.collect()
         : bcftools_annotations
             ? channel.fromPath(bcftools_annotations_tbi).collect()
-            : channel.empty()
+            : channel.value([])
 
     // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     def ch_dbsnp_in = dbsnp
@@ -133,7 +133,7 @@ workflow PREPARE_GENOME {
         ? BGZIPTABIX_DBSNP.out.index
         : dbsnp
             ? channel.fromPath(dbsnp_tbi).flatten().map { tbi -> [[id: genome], tbi] }.collect()
-            : channel.empty()
+            : channel.value([[id: genome], []])
 
     // we use vcf.baseName - '.vcf', because we have to deal with both .vcf and .vcf.gz
     def ch_known_indels_in = known_indels
@@ -157,7 +157,7 @@ workflow PREPARE_GENOME {
         ? BGZIPTABIX_KNOWN_INDELS.out.index
         : known_indels
             ? channel.fromPath(known_indels_tbi).flatten().map { tbi -> [[id: genome], tbi] }.collect()
-            : channel.empty()
+            : channel.value([[id: genome], []])
 
     // known_sites is made by grouping both the dbsnp and the known indels resources
     // Which can either or both be optional
