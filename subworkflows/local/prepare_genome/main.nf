@@ -74,7 +74,9 @@ workflow PREPARE_GENOME {
             : gff
                 ? GFFREAD.out.gtf.collect()
                 : channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.collect()
-        : channel.empty()
+        : has_gff
+            ? GFFREAD.out.gtf.collect()
+            : channel.empty()
 
     def run_gtf2bed = !exon_bed
 
