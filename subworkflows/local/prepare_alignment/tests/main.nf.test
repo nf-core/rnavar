@@ -17,8 +17,8 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [id:'test'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
                 ])
                 input[1] = channel.empty()
                 """
@@ -43,7 +43,7 @@ nextflow_workflow {
                 input[0] = channel.empty()
                 input[1] = channel.of([
                     [id:'test'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
                     []
                 ])
                 """
@@ -67,13 +67,13 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [id:'test'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
                     []
                 ])
                 input[1] = channel.of([
                     [id:'test'],
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
                 ])
                 """
             }

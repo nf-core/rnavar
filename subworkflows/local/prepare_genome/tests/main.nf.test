@@ -17,10 +17,10 @@ nextflow_workflow {
                 input[3] = []
                 input[4] = []
                 input[5] = []
-                input[6] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
+                input[6] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
                 input[7] = []
                 input[8] = []
-                input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
+                input[9] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
                 input[10] = []
                 input[11] = []
                 input[12] = []
@@ -52,18 +52,18 @@ nextflow_workflow {
                 input[1] = []
                 input[2] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/vcf/dbsnp_146.hg38.vcf.gz'
                 input[3] = []
-                input[4] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict'
+                input[4] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict'
                 input[5] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed'
-                input[6] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
-                input[7] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai'
+                input[6] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta'
+                input[7] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai'
                 input[8] = []
-                input[9] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
+                input[9] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.gtf'
                 input[10] = [
                     params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/vcf/gnomAD.r2.1.1.vcf.gz',
                     params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/vcf/mills_and_1000G.indels.vcf.gz'
                 ]
                 input[11] = []
-                input[12] = params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz'
+                input[12] = params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/index/star/star.tar.gz'
                 input[13] = "exon"
                 input[14] = channel.value(true)
                 input[15] = "genome"

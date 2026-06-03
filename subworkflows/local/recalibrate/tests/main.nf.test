@@ -20,21 +20,21 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [ id:'test' ], // meta map
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true),
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.filtered_intervals.interval_list', checkIfExists: true)
                 ])
                 input[1] = channel.value([
                     [id:"genome"],
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
                 input[2] = channel.value([
                     [id:"genome"],
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 input[3] = channel.value([
                     [id:"genome"],
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 ])
                 input[4] = channel.value([
                     [id:"known_sites"],
@@ -60,8 +60,8 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [ id:'test' ], // meta map
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
                 ])
                 .join(GATK4_BASERECALIBRATOR.out.table)
                 .map { meta, bam, bai, table ->
@@ -74,15 +74,15 @@ nextflow_workflow {
                     ]
                 }
                 input[1] = channel.value(
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
                 )
                 input[2] = channel.of([
                     [ id:'genome' ], // meta map
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 input[3] = channel.of([
                     [ id:'genome' ], // meta map
-                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
                 """
             }
