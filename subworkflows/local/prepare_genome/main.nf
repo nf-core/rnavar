@@ -68,13 +68,13 @@ workflow PREPARE_GENOME {
 
     GFFREAD(ch_gffread_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
 
-    def ch_gtf = !has_gtf
-        ? channel.empty()
-        : gtf.toString().endsWith('.gz')
+    def ch_gtf = has_gtf
+        ? gtf.toString().endsWith('.gz')
             ? GUNZIP_GTF.out.gunzip.collect()
             : gff
                 ? GFFREAD.out.gtf.collect()
                 : channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.collect()
+        : channel.empty()
 
     def run_gtf2bed = !exon_bed
 
