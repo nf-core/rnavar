@@ -15,10 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#300](https://github.com/nf-core/rnavar/pull/300) - Update all modules and subworkflows to the latest versions in nf-core/modules
 - [#306](https://github.com/nf-core/rnavar/pull/306) - Upgrade all modules, remove deprecated modules and update config files accordingly.
 - [#311](https://github.com/nf-core/rnavar/pull/311) - Prepare RC 1.3.0
-- [#314](https://github.com/nf-core/rnavar/pull/314) - Simplify alignment branching logic and remove format-specific branches
+- [#314](https://github.com/nf-core/rnavar/pull/314) - Refactor `PREPARE_GENOME` by replacing `if/else` and `channel.empty()` with `.filter()` pattern for conditional module inputs
 - [#314](https://github.com/nf-core/rnavar/pull/314) - Refactor `VCF_ANNOTATE_ALL` to reduce duplication
-- [#314](https://github.com/nf-core/rnavar/pull/314) - Refactor `PREPARE_GENOME`: replace `if/else` and `channel.empty()` with `.filter()` pattern for conditional module inputs
 - [#314](https://github.com/nf-core/rnavar/pull/314) - Simplify `SPLITNCIGAR` by moving else branch to initial assignment
+- [#314](https://github.com/nf-core/rnavar/pull/314) - Simplify `PREPARE_ALIGNMENT` logic and remove format-specific branches
 
 ### Fixed
 
