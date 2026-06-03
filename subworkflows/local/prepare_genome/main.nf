@@ -52,9 +52,12 @@ workflow PREPARE_GENOME {
         ? channel.fromPath(dict).map { dict_ -> [[id: genome], dict_] }.collect()
         : GATK4_CREATESEQUENCEDICTIONARY.out.dict.collect()
 
-    def run_gunzip_gtf = gtf.toString().endsWith('.gz')
+    def has_gtf = gtf
+    def run_gunzip_gtf = has_gtf && gtf.toString().endsWith('.gz')
 
-    GUNZIP_GTF(channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.filter { run_gunzip_gtf })
+    GUNZIP_GTF(has_gtf
+        ? channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.filter { run_gunzip_gtf }
+        : channel.empty())
 
     def has_gff = gff
     def ch_gffread_input = channel.value(has_gff ? file(gff) : [])
@@ -63,11 +66,13 @@ workflow PREPARE_GENOME {
 
     GFFREAD(ch_gffread_input, ch_fasta.map { _meta, fasta_ -> fasta_ })
 
-    def ch_gtf = gtf.toString().endsWith('.gz')
-        ? GUNZIP_GTF.out.gunzip.collect()
-        : gff
-            ? GFFREAD.out.gtf.collect()
-            : channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.collect()
+    def ch_gtf = !has_gtf
+        ? channel.empty()
+        : gtf.toString().endsWith('.gz')
+            ? GUNZIP_GTF.out.gunzip.collect()
+            : gff
+                ? GFFREAD.out.gtf.collect()
+                : channel.fromPath(gtf).map { gtf_ -> [[id: genome], gtf_] }.collect()
 
     def run_gtf2bed = !exon_bed
 

@@ -10,7 +10,7 @@ workflow PREPARE_ALIGNMENT {
     cram // [ val(meta), path(cram), path(crai) ]
 
     main:
-    def alignment_branch = bam
+    def input_reads = bam
         .mix(cram)
         .branch { meta, reads, index ->
             indexed: index
@@ -19,12 +19,8 @@ workflow PREPARE_ALIGNMENT {
             return [meta, reads]
         }
 
-    SAMTOOLS_INDEX(alignment_branch.not_indexed)
-
-    def alignment_out = alignment_branch.indexed
-        .mix(alignment_branch.not_indexed)
-        .join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true)
+    SAMTOOLS_INDEX(input_reads.not_indexed)
 
     emit:
-    reads_index = alignment_out // [ val(meta), path(bam|cram), path(bai|crai) ]
+    reads_index = input_reads.indexed.mix(input_reads.not_indexed).join(SAMTOOLS_INDEX.out.index, failOnMismatch: true, failOnDuplicate: true) // [ val(meta), path(bam|cram), path(bai|crai) ]
 }

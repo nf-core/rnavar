@@ -32,9 +32,6 @@ nextflow_workflow {
                         if (key == "reads_index") {
                             return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
                         }
-                        else if (key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
-                        }
                         return [key, val]
                     }
             ).match()
@@ -62,9 +59,6 @@ nextflow_workflow {
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
                         if (key == "reads_index") {
                             return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
-                        }
-                        else if (key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
                         }
                         return [key, val]
                     }
@@ -97,9 +91,6 @@ nextflow_workflow {
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
                         if (key == "reads_index") {
                             return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
-                        }
-                        else if (key == "versions") {
-                            return [key, val.collect { path(it).yaml }]
                         }
                         return [key, val]
                     }
