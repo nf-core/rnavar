@@ -3,6 +3,43 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## dev
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Dependencies
+
+### Parameters
+
+| Old name | New name |
+| -------- | -------- |
+
+### Modules / Subworkflows
+
+| Dependency | Old name | New name |
+| ---------- | -------- | -------- |
+
+### Plugins
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+
+### Developer section
+
+#### Added
+
+#### Changed
+
+- [#315](https://github.com/nf-core/rnavar/pull/315) - Back to dev
+
+#### Fixed
+
+#### Removed
+
 ## [1.3.0](https://github.com/nf-core/rnavar/releases/tag/1.3.0) - Silent Nostromo
 
 ### Added
