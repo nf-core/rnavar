@@ -175,6 +175,7 @@ workflow PIPELINE_INITIALISATION {
         if (null) {
             validateOptions << [parametersSchema: null]
         }
+        validateOptions << [cli_typecast: false]
         validateParameters(validateOptions)
     }
 
@@ -336,36 +337,13 @@ def genomeExistsError() {
 }
 
 // Define list of tools to run
-def defineToolsList(bam_csi_index, extract_umi, generate_gvcf, input_skip, input_tools, skip_baserecalibration, skip_exon_bed_check, skip_intervallisttools, skip_multiqc, skip_variantfiltration) {
+def defineToolsList(bam_csi_index, input_skip, input_tools) {
 
     // opt in tools
     def tools_list = input_tools ? input_tools.tokenize(',') : []
 
     // opt out tools
     def skip_list = input_skip ? input_skip.tokenize(',') : []
-    if (!('baserecalibrator' in skip_list) && !skip_baserecalibration) {
-        tools_list << 'baserecalibrator'
-    }
-    if (!('intervallisttools' in skip_list) && !skip_intervallisttools) {
-        tools_list << 'intervallisttools'
-    }
-    if (!('multiqc' in skip_list) && !skip_multiqc) {
-        tools_list << 'multiqc'
-    }
-    if (!('removeunknownregions' in skip_list) && !skip_exon_bed_check) {
-        tools_list << 'removeunknownregions'
-    }
-    if (!('variantfiltration' in skip_list) && !skip_variantfiltration) {
-        tools_list << 'variantfiltration'
-    }
-
-    // opt in tools
-    if (extract_umi) {
-        tools_list << 'umitools'
-    }
-    if (generate_gvcf) {
-        tools_list << 'combinegvcfs'
-    }
 
     // Specific tools not to execute depending of params
     // No variantfiltration if bam_csi_index as GATK4_VARIANTFILTRATION does not support csi index
@@ -373,7 +351,7 @@ def defineToolsList(bam_csi_index, extract_umi, generate_gvcf, input_skip, input
         tools_list = tools_list - 'variantfiltration'
     }
 
-    return tools_list.sort()
+    return (tools_list - skip_list).sort().unique()
 }
 
 //

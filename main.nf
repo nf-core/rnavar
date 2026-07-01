@@ -36,25 +36,133 @@ include { getGenomeAttribute               } from 'plugin/nf-core-utils'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
+    PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.dbsnp             = getGenomeAttribute('dbsnp')
-params.dbsnp_tbi         = getGenomeAttribute('dbsnp_tbi')
-params.dict              = getGenomeAttribute('dict')
-params.exon_bed          = getGenomeAttribute('exon_bed')
-params.fasta             = getGenomeAttribute('fasta')
-params.fasta_fai         = getGenomeAttribute('fasta_fai')
-params.gff               = getGenomeAttribute('gff')
-params.gtf               = getGenomeAttribute('gtf')
-params.known_indels      = getGenomeAttribute('known_indels')
-params.known_indels_tbi  = getGenomeAttribute('known_indels_tbi')
-params.snpeff_db         = getGenomeAttribute('snpeff_db')
-params.star_index        = getGenomeAttribute('star')
-params.vep_cache_version = getGenomeAttribute('vep_cache_version')
-params.vep_genome        = getGenomeAttribute('vep_genome')
-params.vep_species       = getGenomeAttribute('vep_species')
+params {
+    // Input options
+    input: Path
+    outdir: String
+    tools: String?
+    skip_tools: String?
+
+    // References
+    snpeff_cache: String = 's3://annotation-cache/snpeff_cache/'
+    vep_cache: String = 's3://annotation-cache/vep_cache/'
+    save_reference: Boolean = false
+    feature_type: String = 'exon'
+
+    // Sequence read information
+    save_merged_fastq: Boolean = false
+    read_length: Integer = 150
+
+    // Alignment
+    aligner: String = 'star'
+    star_twopass: Boolean = true
+    star_ignore_sjdbgtf: Boolean = false
+    star_max_memory_bamsort: Integer = 0
+    star_bins_bamsort: Integer = 50
+    star_max_collapsed_junc: Integer = 1000000
+    star_max_intron_size: Integer?
+    seq_center: String?
+    seq_platform: String = 'illumina'
+    bam_csi_index: Boolean = false
+    save_unaligned: Boolean = false
+    save_align_intermeds: Boolean = false
+
+    // Preprocessing of alignment
+    remove_duplicates: Boolean = false
+    umitools_extract_method: String = 'string'
+    umitools_bc_pattern: String?
+    umitools_bc_pattern2: String?
+    umitools_umi_separator: String?
+
+    // Variant calling
+    no_intervals: Boolean = false
+
+    // Variant annotation
+    bcftools_annotations: String?
+    bcftools_annotations_tbi: String?
+    bcftools_columns: String?
+    bcftools_header_lines: String?
+    download_cache: Boolean = false
+    dbnsfp: String?
+    dbnsfp_consequence: String?
+    dbnsfp_fields: String = "rs_dbSNP,HGVSc_VEP,HGVSp_VEP,1000Gp3_EAS_AF,1000Gp3_AMR_AF,LRT_score,GERP++_RS,gnomAD_exomes_AF"
+    dbnsfp_tbi: String?
+    outdir_cache: String?
+    spliceai_indel: String?
+    spliceai_indel_tbi: String?
+    spliceai_snv: String?
+    spliceai_snv_tbi: String?
+    vep_custom_args: String = "--everything --filter_common --per_gene --total_length --offline --format vcf"
+    vep_dbnsfp: Boolean?
+    vep_include_fasta: Boolean = false
+    vep_loftee: Boolean?
+    vep_version: String = "115.2-1"
+    vep_out_format: String = "vcf"
+    vep_cache_preflight_check: Boolean = false
+    vep_spliceai: Boolean?
+    vep_spliceregion: Boolean?
+
+    // GATK intervallist parameters
+    gatk_interval_scatter_count: Integer = 25
+
+    // GATK haplotypecaller parameters
+    gatk_hc_call_conf: Integer = 20
+    generate_gvcf: Boolean = false
+
+    //GATK variant filter parameters
+    gatk_vf_window_size: Integer = 35
+    gatk_vf_cluster_size: Integer = 3
+    gatk_vf_fs_filter: Float = 30.0
+    gatk_vf_qd_filter: Float = 2.0
+
+    // MultiQC options
+    multiqc_config: Path?
+    multiqc_title: String?
+    multiqc_logo: Path?
+    multiqc_methods_description: String?
+    max_multiqc_email_size: String = '25.MB'
+
+    // Boilerplate options
+    email: String?
+    email_on_fail: String?
+    plaintext_email: Boolean = false
+    help: Boolean = false
+    help_full: Boolean = false
+    show_hidden: Boolean = false
+    version: Boolean = false
+    modules_testdata_base_path: String = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+
+    // Config options
+    config_profile_name: String?
+    config_profile_description: String?
+    config_profile_contact: String?
+    config_profile_url: String?
+
+    // Schema validation default options
+    validate_params: Boolean = true
+
+    // GENOME PARAMETER VALUES
+    genomes: Map = [:]
+    dbsnp: Path? = getGenomeAttribute('dbsnp')
+    dbsnp_tbi: Path? = getGenomeAttribute('dbsnp_tbi')
+    dict: Path? = getGenomeAttribute('dict')
+    exon_bed: Path? = getGenomeAttribute('exon_bed')
+    fasta: Path = getGenomeAttribute('fasta')
+    fasta_fai: Path? = getGenomeAttribute('fasta_fai')
+    gff: Path? = getGenomeAttribute('gff')
+    gtf: Path? = getGenomeAttribute('gtf')
+    known_indels: Path? = getGenomeAttribute('known_indels')
+    known_indels_tbi: Path? = getGenomeAttribute('known_indels_tbi')
+    snpeff_db: String? = getGenomeAttribute('snpeff_db')
+    star_index: Path? = getGenomeAttribute('star')
+    vep_cache_version: Integer? = getGenomeAttribute('vep_cache_version')
+    vep_genome: String? = getGenomeAttribute('vep_genome')
+    vep_species: String? = getGenomeAttribute('vep_species')
+}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,15 +175,8 @@ workflow {
     main:
     def tools = defineToolsList(
         params.bam_csi_index,
-        params.extract_umi,
-        params.generate_gvcf,
         params.skip_tools,
         params.tools,
-        params.skip_baserecalibration,
-        params.skip_exon_bed_check,
-        params.skip_intervallisttools,
-        params.skip_multiqc,
-        params.skip_variantfiltration,
     )
 
     // SUBWORKFLOW: Run initialisation tasks
