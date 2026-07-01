@@ -1,5 +1,7 @@
 lint:
   nf_test_content: false
+  nextflow_config: false # TODO: Remove when tools supports parameter types
+  schema_params: false # TODO: Remove when tools supports parameter types
 nf_core_version: 4.0.2
 repository_type: pipeline
 template:
