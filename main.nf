@@ -32,7 +32,7 @@ include { softwareVersionsToYAML           } from 'plugin/nf-core-utils'
 include { defineToolsList                  } from './subworkflows/local/utils_nfcore_rnavar_pipeline'
 
 // references
-include { getGenomeAttribute               } from 'plugin/nf-core-utils'
+// getGenomeAttribute defined locally to avoid circular reference with params.genomes
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,8 +48,9 @@ params {
     skip_tools: String?
 
     // References
-    snpeff_cache: String = 's3://annotation-cache/snpeff_cache/'
-    vep_cache: String = 's3://annotation-cache/vep_cache/'
+    igenomes_base: String?
+    snpeff_cache: String?
+    vep_cache: String?
     save_reference: Boolean = false
     feature_type: String = 'exon'
 
@@ -147,21 +148,21 @@ params {
 
     // GENOME PARAMETER VALUES
     genomes: Map = [:]
-    dbsnp: Path? = getGenomeAttribute('dbsnp')
-    dbsnp_tbi: Path? = getGenomeAttribute('dbsnp_tbi')
-    dict: Path? = getGenomeAttribute('dict')
-    exon_bed: Path? = getGenomeAttribute('exon_bed')
-    fasta: Path = getGenomeAttribute('fasta')
-    fasta_fai: Path? = getGenomeAttribute('fasta_fai')
-    gff: Path? = getGenomeAttribute('gff')
-    gtf: Path? = getGenomeAttribute('gtf')
-    known_indels: Path? = getGenomeAttribute('known_indels')
-    known_indels_tbi: Path? = getGenomeAttribute('known_indels_tbi')
-    snpeff_db: String? = getGenomeAttribute('snpeff_db')
-    star_index: Path? = getGenomeAttribute('star')
-    vep_cache_version: Integer? = getGenomeAttribute('vep_cache_version')
-    vep_genome: String? = getGenomeAttribute('vep_genome')
-    vep_species: String? = getGenomeAttribute('vep_species')
+    dbsnp: String? = getGenomeAttribute(params.genomes, 'dbsnp')
+    dbsnp_tbi: String? = getGenomeAttribute(params.genomes, 'dbsnp_tbi')
+    dict: String? = getGenomeAttribute(params.genomes, 'dict')
+    exon_bed: String? = getGenomeAttribute(params.genomes, 'exon_bed')
+    fasta: String? = getGenomeAttribute(params.genomes, 'fasta')
+    fasta_fai: String? = getGenomeAttribute(params.genomes, 'fasta_fai')
+    gff: String? = getGenomeAttribute(params.genomes, 'gff')
+    gtf: String? = getGenomeAttribute(params.genomes, 'gtf')
+    known_indels: String? = getGenomeAttribute(params.genomes, 'known_indels')
+    known_indels_tbi: String? = getGenomeAttribute(params.genomes, 'known_indels_tbi')
+    snpeff_db: String? = getGenomeAttribute(params.genomes, 'snpeff_db')
+    star_index: String? = getGenomeAttribute(params.genomes, 'star')
+    vep_cache_version: Integer? = getGenomeAttribute(params.genomes, 'vep_cache_version')
+    vep_genome: String? = getGenomeAttribute(params.genomes, 'vep_genome')
+    vep_species: String? = getGenomeAttribute(params.genomes, 'vep_species')
 }
 
 /*
@@ -183,7 +184,6 @@ workflow {
     PIPELINE_INITIALISATION(
         params.version,
         params.validate_params,
-        params.monochrome_logs,
         args,
         params.outdir,
         params.input,
@@ -407,6 +407,16 @@ workflow NFCORE_RNAVAR {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// Get attribute from genome config file e.g. fasta
+//
+def getGenomeAttribute(genomes, attribute) {
+    if (genomes && genomes.containsKey(attribute)) {
+        return genomes[attribute]
+    }
+    return null
+}
 
 // Get workflow summary for MultiQC
 def paramsSummaryMultiqc(summary_params) {

@@ -8,19 +8,13 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { checkCondaChannels   } from 'plugin/nf-core-utils'
-include { checkConfigProvided  } from 'plugin/nf-core-utils'
-include { checkProfileProvided } from 'plugin/nf-core-utils'
-include { completionEmail      } from 'plugin/nf-core-utils'
-include { completionSummary    } from 'plugin/nf-core-utils'
-include { dumpParametersToJSON } from 'plugin/nf-core-utils'
-include { getWorkflowVersion   } from 'plugin/nf-core-utils'
-
-include { paramsHelp           } from 'plugin/nf-schema'
-include { paramsSummaryLog     } from 'plugin/nf-schema'
-include { paramsSummaryMap     } from 'plugin/nf-schema'
-include { samplesheetToList    } from 'plugin/nf-schema'
-include { validateParameters   } from 'plugin/nf-schema'
+include { UTILS_NFSCHEMA_PLUGIN   } from '../../nf-core/utils_nfschema_plugin'
+include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
+include { UTILS_NFCORE_PIPELINE   } from '../../nf-core/utils_nfcore_pipeline'
+include { paramsSummaryMap        } from 'plugin/nf-schema'
+include { samplesheetToList       } from 'plugin/nf-schema'
+include { completionEmail         } from 'plugin/nf-core-utils'
+include { completionSummary       } from 'plugin/nf-core-utils'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +26,6 @@ workflow PIPELINE_INITIALISATION {
     take:
     version // boolean: Display version and exit
     validate_params // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs // boolean: Disable ANSI colour codes in log output
     nextflow_cli_args // array: List of positional nextflow CLI args
     outdir // string: The output directory where the results will be saved
     input // string: Path to input samplesheet
@@ -51,37 +44,28 @@ workflow PIPELINE_INITIALISATION {
 
     ch_versions = channel.empty()
 
-    // Print workflow version and exit on --version
-    if (version) {
-        log.info("${workflow.manifest.name} ${getWorkflowVersion()}")
-        System.exit(0)
-    }
+    //
+    // Print version and exit if required and dump pipeline parameters to JSON file
+    //
+    UTILS_NEXTFLOW_PIPELINE(
+        version,
+        true,
+        outdir,
+        workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1,
+    )
 
-    // Dump pipeline parameters to a JSON file
-    if (outdir) {
-        dumpParametersToJSON(outdir, params)
-    }
-
-    // When running with Conda, warn if channels have not been set-up appropriately
-    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        checkCondaChannels()
-    }
-
-    checkConfigProvided()
-
+    //
     // Validate parameters and generate parameter summary to stdout
     //
-
     def before_text = ""
-    def extra_text = ""
     def after_text = ""
     before_text = """
 -\033[2m----------------------------------------------------\033[0m-
-                                        \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
+                                    \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
 \033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
 \033[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         \033[0;33m}  {\033[0m
 \033[0;34m  | \\| |       \\__, \\__/ |  \\ |___     \033[0;32m\\`-._,-`-,\033[0m
-                                        \033[0;32m`._,._,\'\033[0m
+                                    \033[0;32m`._,._,\'\033[0m
 \033[0;35m  nf-core/rnavar ${workflow.manifest.version}\033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
@@ -92,61 +76,45 @@ workflow PIPELINE_INITIALISATION {
 * Software dependencies
     https://github.com/nf-core/rnavar/blob/master/CITATIONS.md
 """
-    if (monochrome_logs) {
-        before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
-    }
 
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
-    if (help || help_full) {
-        help_options = [
-            beforeText: before_text,
-            afterText: after_text,
-            command: command,
-            showHidden: show_hidden,
-            fullHelp: help_full,
-        ]
-        if (null) {
-            help_options << [parametersSchema: null]
-        }
-        log.info(
-            paramsHelp(
-                help_options,
-                params.help instanceof String && params.help != "true" ? params.help : "",
-            )
-        )
-        exit(0)
-    }
-
-    checkProfileProvided(nextflow_cli_args)
+    UTILS_NFSCHEMA_PLUGIN(
+        workflow,
+        validate_params,
+        null,
+        help,
+        help_full,
+        show_hidden,
+        before_text,
+        after_text,
+        command,
+        false,
+    )
 
     //
-    // Print parameter summary to stdout. This will display the parameters
-    // that differ from the default given in the JSON schema
+    // Check config provided to the pipeline
     //
+    UTILS_NFCORE_PIPELINE(
+        nextflow_cli_args
+    )
 
-    summary_options = [:]
-    if (null) {
-        summary_options << [parametersSchema: null]
-    }
-    log.info(before_text)
-    log.info(paramsSummaryLog(summary_options, workflow))
-
-    extra_text = """
+    //
+    // Extra informations
+    //
+    def extra_text = """
 \033[1;37mExtra informations\033[0m
 \033[0;34m  Tools selected to be run  :\033[0;32m ${tools.join(",")} \033[0m
 -\033[2m----------------------------------------------------\033[0m-
 """
-
-    if (monochrome_logs) {
+    if (params.monochrome_logs) {
         extra_text = extra_text.replaceAll(/\033\[[0-9;]*m/, '')
     }
-
     log.info(extra_text)
 
-    log.info(after_text)
-
+    //
     // Fails for missing params
+    //
     if (gtf && gff) {
         error("Using both --gtf and --gff is not supported. Please use only one of these parameters")
     }
@@ -167,24 +135,13 @@ workflow PIPELINE_INITIALISATION {
     }
 
     //
-    // Validate the parameters using nextflow_schema.json or the schema
-    // given via the validation.parametersSchema configuration option
-    //
-    if (validate_params) {
-        validateOptions = [:]
-        if (null) {
-            validateOptions << [parametersSchema: null]
-        }
-        validateOptions << [cli_typecast: false]
-        validateParameters(validateOptions)
-    }
-
-    //
     // Custom validation for pipeline parameters
     //
     validateInputParameters()
 
-    // Create channel from input file provided through input
+    //
+    // Create channel from input file provided through params.input
+    //
     def samplesheetList = samplesheetToList(input, "${projectDir}/assets/schema_input.json")
     def bool_align = samplesheetList.find { _meta, fastq_1, _fastq_2, _bam, _bai, _cram, _crai, _vcf, _tbi ->
         fastq_1
@@ -275,6 +232,16 @@ def validateInputSamplesheet(input) {
 }
 
 //
+// Exit pipeline if incorrect --genome key provided
+//
+def genomeExistsError() {
+    if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
+        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" + "  Currently, the available genome keys are:\n" + "  ${params.genomes.keySet().join(", ")}\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        error(error_string)
+    }
+}
+
+//
 // Function to check samples are internally consistent after being grouped
 //
 def checkSamplesAfterGrouping(input) {
@@ -290,7 +257,7 @@ def checkSamplesAfterGrouping(input) {
     def tbi_list = tbis.findAll { it -> it != [] }
 
     def alignment_file_list = bam_list + cram_list
-    if (alignment_file_list.size() > 1) {
+    if (alignment_file_list.size > 1) {
         error("Please check input samplesheet -> Multiple BAM/CRAM files per sample are not supported: ${metas[0].id}")
     }
 
@@ -326,16 +293,6 @@ def checkSamplesAfterGrouping(input) {
     return [metas[0], fastqs, bam_list[0] ?: [], bai_list[0] ?: [], cram_list[0] ?: [], crai_list[0] ?: [], vcf_list[0] ?: [], tbi_list[0] ?: []]
 }
 
-//
-// Exit pipeline if incorrect --genome key provided
-//
-def genomeExistsError() {
-    if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
-        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" + "  Currently, the available genome keys are:\n" + "  ${params.genomes.keySet().join(", ")}\n" + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        error(error_string)
-    }
-}
-
 // Define list of tools to run
 def defineToolsList(bam_csi_index, input_skip, input_tools) {
 
@@ -358,9 +315,6 @@ def defineToolsList(bam_csi_index, input_skip, input_tools) {
 // Generate methods description for MultiQC
 //
 def toolCitationText() {
-    // TODO nf-core: Optionally add in-text citation tools to this list.
-    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "Tool (Foo et al. 2023)" : "",
-    // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
         "Tools used in the workflow included:",
         "FastQC (Andrews 2010),",
@@ -372,9 +326,6 @@ def toolCitationText() {
 }
 
 def toolBibliographyText() {
-    // TODO nf-core: Optionally add bibliographic entries to this list.
-    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
-    // Uncomment function in methodsDescriptionText to render in MultiQC report
     def reference_text = [
         "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).</li>",
         "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>",
@@ -384,16 +335,11 @@ def toolBibliographyText() {
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert  to a named map so can be used as with familiar NXF ${workflow} variable syntax in the MultiQC YML file
     def meta = [:]
     meta.workflow = workflow.toMap()
     meta["manifest_map"] = workflow.manifest.toMap()
 
-    // Pipeline DOI
     if (meta.manifest_map.doi) {
-        // Using a loop to handle multiple DOIs
-        // Removing `https://doi.org/` to handle pipelines using DOIs vs DOI resolvers
-        // Removing ` ` since the manifest.doi is a string and not a proper list
         def temp_doi_ref = ""
         def manifest_doi = meta.manifest_map.doi.tokenize(",")
         manifest_doi.each { doi_ref ->
@@ -406,13 +352,8 @@ def methodsDescriptionText(mqc_methods_yaml) {
     }
     meta["nodoi_text"] = meta.manifest_map.doi ? "" : "<li>If available, make sure to update the text to include the Zenodo DOI of version of the pipeline used. </li>"
 
-    // Tool references
     meta["tool_citations"] = ""
     meta["tool_bibliography"] = ""
-
-    // TODO nf-core: Only uncomment below if logic in toolCitationText/toolBibliographyText has been filled!
-    // meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
-    // meta["tool_bibliography"] = toolBibliographyText()
 
     def methods_text = mqc_methods_yaml.text
 
