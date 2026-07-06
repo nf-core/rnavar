@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Added
 
-- Add `AGENTS.md` file with nf-core agent instructions
+- [#317](https://github.com/nf-core/rnavar/pull/317) - Add `AGENTS.md` file with nf-core agent instructions
 
 #### Changed
 
