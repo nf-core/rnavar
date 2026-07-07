@@ -72,10 +72,12 @@
             [
                 "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ],
-            "LoFTEE CSQ fields present: true",
+            [
+                "test_VEP.ann.vcf.gz:header.contains(|LoF|),true"
+            ],
             "No warnings"
         ],
-        "timestamp": "2026-07-07T11:56:24.609794682",
+        "timestamp": "2026-07-07T13:45:28.758898064",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.4"

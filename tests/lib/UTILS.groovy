@@ -59,13 +59,9 @@ class UTILS {
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.tokenize('/').last() + ":md5," + cram(absolutePath(file), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.tokenize('/').last() + ":md5," + path(absolutePath(file)).vcf.variantsMD5 })
 
-            // Check for LoFTEE annotations if requested
-            if (scenario.check_loftee && !vcf_files.isEmpty()) {
-                def vcf_file = vcf_files.find { it.toString().contains('VEP') }
-                if (vcf_file) {
-                    def has_loftee = path(absolutePath(vcf_file)).vcf.header.toString().contains('|LoF|')
-                    assertion.add("LoFTEE CSQ fields present: ${has_loftee}")
-                }
+            // Check for specific VCF header fields if requested
+            if (scenario.vcf_header_check) {
+                assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.tokenize('/').last() + ":header.contains(${scenario.vcf_header_check})," + path(absolutePath(file)).vcf.header.toString().contains(scenario.vcf_header_check) })
             }
         }
 
