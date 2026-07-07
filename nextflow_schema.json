@@ -31,7 +31,7 @@
                 "tools": {
                     "type": "string",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'umitools', 'bcfann', 'snpeff', 'vep', 'riker' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'umitools', 'riker', 'bcfann', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
                     "help_text": "List of opt-in tools to be used in addition to variant calling: currently umitools to remove UMIs from the reads with UMI-tools, hlatyping with Seq2HLA, riker for QC metrics, and a choice of annotation tools.",
                     "pattern": "^((umitools|seq2hla|riker|bcfann|snpeff|vep|merge)*(,)*)*$",
                     "hidden": true
