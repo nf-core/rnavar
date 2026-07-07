@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Parameter   | Old default | New default |
 | ----------- | ----------- | ----------- |
-| vep_version | 115.2-1     | 116.0-1     |
+| vep_version | 115.2-1     | 116.0-0     |
 
 ### Modules / Subworkflows
 
