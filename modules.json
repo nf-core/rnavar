@@ -114,6 +114,12 @@
                         "installed_by": ["bam_markduplicates_picard"],
                         "patch": "modules/nf-core/picard/markduplicates/picard-markduplicates.diff"
                     },
+                    "riker/multi": {
+                        "branch": "master",
+                        "git_sha": "89b094a1b914b1e0844b4c0cc901cda5eddd569b",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/riker/multi/riker-multi.diff"
+                    },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",

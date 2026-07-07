@@ -63,6 +63,7 @@
 | Mosdepth   | 0.3.10  |
 | MultiQC    | 1.33    |
 | Picard     | 3.4.0   |
+| Riker      | 0.4.0   |
 | SAMtools   | 1.22.1  |
 | Seq2HLA    | 2.3     |
 | SnpEff     | 5.3.0a  |

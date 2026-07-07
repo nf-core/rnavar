@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [#319](https://github.com/nf-core/rnavar/pull/319) - Add riker multi for QC metrics on BAM files
+
 ### Changed
 
 - [#318](https://github.com/nf-core/rnavar/pull/318) - Update all modules
@@ -18,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency  | Old version | New version |
 | ----------- | ----------- | ----------- |
 | ensembl-vep | 115.2       | 116.0       |
+| riker       |             | 0.4.0       |
 
 ### Parameters
 

@@ -182,8 +182,33 @@ If you update images or graphics, follow the nf-core [style guidelines](https://
 
 ## Pipeline specific contribution guidelines
 
-### Updating VEP modules
+### Adding or updating modules/tools
+
+When adding or updating a module/tool, you **must** update the dependencies table in `CHANGELOG.md` with the tool name and version.
+When adding or updating a tool, you **must** update the tools table in `README.md` with the tool name and version.
+
+#### Updating VEP modules
 
 When updating `ensemblvep/vep` module, always update the `vep_version` parameter to match the new VEP version. This parameter is used by the LoFTEE plugin to locate the VEP installation path (e.g. `/opt/conda/share/ensembl-vep-${vep_version}`).
 
 Also update `vep_cache_version` in `conf/igenomes.config` for available genomes, based on what's available on [annotation-cache](https://annotation-cache.github.io/ensemblvep/). Not all genomes may have a cache for the new version — only update those that do.
+
+### Updating parameters default values
+
+When updating a default value for a parameter, you **must** add an entry to the Parameters table in `CHANGELOG.md` with the old and new values.
+
+### Renaming parameters
+
+When renaming a parameter, you **must** add an entry to the Parameters table in `CHANGELOG.md` with the old and new names.
+
+### Adding or renaming subworkflows
+
+When adding or renaming a module or subworkflow, you **must** add an entry to the Subworkflows table in `CHANGELOG.md`.
+
+### Adding or updating plugins
+
+When adding or updating a plugin, you **must** add an entry to the Plugins table in `CHANGELOG.md` with the old and new versions.
+
+### Developer section in CHANGELOG
+
+When making changes that are only relevant to developers (e.g. CI improvements, test updates, code refactoring), add an entry to the Developer section in `CHANGELOG.md`.
