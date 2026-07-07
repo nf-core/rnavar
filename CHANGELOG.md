@@ -9,14 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- [#318](https://github.com/nf-core/rnavar/pull/318) - Update all modules
+
 ### Fixed
 
 ### Dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| ensembl-vep | 115.2       | 116.0       |
 
 ### Parameters
 
 | Old name | New name |
 | -------- | -------- |
+
+| Parameter   | Old default | New default |
+| ----------- | ----------- | ----------- |
+| vep_version | 115.2-1     | 116.0-0     |
 
 ### Modules / Subworkflows
 
@@ -39,6 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#315](https://github.com/nf-core/rnavar/pull/315) - Back to dev
 
 #### Fixed
+
+- [#318](https://github.com/nf-core/rnavar/pull/318) - Fix LoFTEE test to validate CSQ fields instead of asserting nothing
 
 #### Removed
 

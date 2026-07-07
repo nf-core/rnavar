@@ -17,12 +17,12 @@
                     },
                     "ensemblvep/download": {
                         "branch": "master",
-                        "git_sha": "251885fdb29eca03523d326aca5c827d1f6bdfeb",
+                        "git_sha": "db055f5f8c726a924bf51dadce3978da3bbdad7e",
                         "installed_by": ["cache_download_ensemblvep_snpeff"]
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "251885fdb29eca03523d326aca5c827d1f6bdfeb",
+                        "git_sha": "db055f5f8c726a924bf51dadce3978da3bbdad7e",
                         "installed_by": ["vcf_annotate_ensemblvep"]
                     },
                     "fastqc": {
@@ -59,7 +59,7 @@
                     },
                     "gatk4/haplotypecaller": {
                         "branch": "master",
-                        "git_sha": "b73338eca19d798eb0ef6ed112ef4d27a30d2871",
+                        "git_sha": "7abcc95130dd0388f696002a99adeb59eca54471",
                         "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
@@ -94,7 +94,7 @@
                     },
                     "htslib/bgziptabix": {
                         "branch": "master",
-                        "git_sha": "54e41f4ed3aead45054380a9befeb927612ffc91",
+                        "git_sha": "22edd7ce9462025093b25e3b55006f7720ff0d8e",
                         "installed_by": ["vcf_annotate_snpeff"]
                     },
                     "mosdepth": {

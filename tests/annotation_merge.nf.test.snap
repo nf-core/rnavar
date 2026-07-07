@@ -4,7 +4,7 @@
             12,
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": "115.2",
+                    "ensemblvep": "116.0",
                     "perl-math-cdf": "0.1",
                     "tabix": "1.23.1"
                 },
@@ -124,10 +124,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-02T10:14:55.066427973",
+        "timestamp": "2026-07-07T10:38:20.020420284",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.4"
         }
     },
     "-profile test --tools merge": {
@@ -135,7 +135,7 @@
             11,
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": "115.2",
+                    "ensemblvep": "116.0",
                     "perl-math-cdf": "0.1",
                     "tabix": "1.23.1"
                 },
@@ -242,10 +242,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-02T10:14:10.608788984",
+        "timestamp": "2026-07-07T10:37:27.116657992",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.4"
         }
     }
 }
