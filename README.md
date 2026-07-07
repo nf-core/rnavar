@@ -55,7 +55,7 @@
 | BCFTools   | 1.22    |
 | BEDTools   | 2.31.1  |
 | cat        | 9.5     |
-| EnsemblVEP | 115.2   |
+| EnsemblVEP | 116.0   |
 | FastQC     | 0.12.1  |
 | GATK       | 4.6.2.0 |
 | GffRead    | 0.12.7  |

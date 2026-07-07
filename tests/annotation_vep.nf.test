@@ -39,6 +39,7 @@ nextflow_pipeline {
                 tools: 'vep',
                 vep_loftee: true,
             ],
+            check_loftee: true,
         ],
     ]
 

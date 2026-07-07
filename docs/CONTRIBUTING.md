@@ -182,4 +182,8 @@ If you update images or graphics, follow the nf-core [style guidelines](https://
 
 ## Pipeline specific contribution guidelines
 
-<!-- TODO nf-core: Add any pipeline specific contribution guidelines here, such as coding styles, procedures, checklists etc. -->
+### Updating VEP modules
+
+When updating `ensemblvep/vep` module, always update the `vep_version` parameter to match the new VEP version. This parameter is used by the LoFTEE plugin to locate the VEP installation path (e.g. `/opt/conda/share/ensembl-vep-${vep_version}`).
+
+Also update `vep_cache_version` in `conf/igenomes.config` for available genomes, based on what's available on [annotation-cache](https://annotation-cache.github.io/ensemblvep/). Not all genomes may have a cache for the new version — only update those that do.

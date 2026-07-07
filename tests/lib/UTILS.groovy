@@ -58,6 +58,15 @@ class UTILS {
             assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.tokenize('/').last() + ":stats" + bam(absolutePath(file)).getStatistics() })
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.tokenize('/').last() + ":md5," + cram(absolutePath(file), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.tokenize('/').last() + ":md5," + path(absolutePath(file)).vcf.variantsMD5 })
+
+            // Check for LoFTEE annotations if requested
+            if (scenario.check_loftee && !vcf_files.isEmpty()) {
+                def vcf_file = vcf_files.find { it.toString().contains('VEP') }
+                if (vcf_file) {
+                    def has_loftee = path(absolutePath(vcf_file)).vcf.header.toString().contains('|LoF|')
+                    assertion.add("LoFTEE CSQ fields present: ${has_loftee}")
+                }
+            }
         }
 
         // If we have a snapshot options in scenario then we allow to capture either stderr, stdout or both
