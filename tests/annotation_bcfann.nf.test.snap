@@ -1,0 +1,130 @@
+{
+    "-profile test --tools bcfann": {
+        "content": [
+            9,
+            {
+                "BCFTOOLS_ANNOTATE": {
+                    "bcftools": "1.23.1"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "REMOVEUNKNOWNREGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.23.1"
+                },
+                "STAR_INDEXVERSION": {
+                    "star": "2.7.11b"
+                }
+            },
+            [
+                "annotation",
+                "annotation/test",
+                "annotation/test/test_BCF.ann.vcf.gz",
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            "No BAM files",
+            "No unstable recal BAM files",
+            "No CRAM files",
+            [
+                "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-03-25T15:15:10.920014756",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
+        }
+    },
+    "-profile test --tools bcfann --bcftools_columns": {
+        "content": [
+            9,
+            {
+                "BCFTOOLS_ANNOTATE": {
+                    "bcftools": "1.23.1"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "REMOVEUNKNOWNREGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.23.1"
+                },
+                "STAR_INDEXVERSION": {
+                    "star": "2.7.11b"
+                }
+            },
+            [
+                "annotation",
+                "annotation/test",
+                "annotation/test/test_BCF.ann.vcf.gz",
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "reports",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_report.html"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f"
+            ],
+            "No BAM files",
+            "No unstable recal BAM files",
+            "No CRAM files",
+            [
+                "test_BCF.ann.vcf.gz:md5,bc7bf3ee9e8430e064c539eb81e59bf9"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-03-25T15:15:49.575544351",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.0"
+        }
+    }
+}

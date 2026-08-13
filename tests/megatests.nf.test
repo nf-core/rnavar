@@ -1,0 +1,29 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "./megatests.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-85b98d51c6bdcbbe9780490d6484c4e50c3c182c/" // 1.0.0
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-6a5ca7896f12ffc3b8a8c97c21cd0abcd7bf2e36/" // 1.1.0
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-564a754458622cf4b564b2515b6a6d29160fc190/" // 1.1.1
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-0a9036c82b6a596015793a18ab089552140e3965/" // 1.2.0
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-2cbf0469363ca72cc98218e7ae0886bc1bd1fd8f/" // 1.2.1
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-ea2c7b6286f5ae18f5b51dc0af6b5330ecd6a13a/" // 1.2.2
+    // def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-9db0282668a2c66d23f220bba2c720e0b8a78008/" // 1.2.3
+    def path_s3_bucket = "s3://nf-core-awsmegatests/rnavar/results-5e72bcb5520e00422750c978d4153b38f1fd7312/" // 1.3.0dev
+
+    test("Megatests - 1.3.0dev") {
+        then {
+            def all_files     = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            def versions      = getAllFilesFromPath(path_s3_bucket, noSignRequest: true, include: ['pipeline_info/nf_core_rnavar_software_mqc_versions.yml'])
+            def versions_file = downloadFromS3("${path_s3_bucket}${versions[0]}").toString()
+            assert snapshot(
+                all_files,
+                path(versions_file),
+                path(versions_file).yaml,
+            ).match()
+        }
+    }
+}

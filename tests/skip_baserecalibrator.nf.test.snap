@@ -1,0 +1,420 @@
+{
+    "-profile test --skip_baserecalibration": {
+        "content": [
+            37,
+            {
+                "CAT_FASTQ": {
+                    "cat": "9.5"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.4.0"
+                },
+                "REMOVEUNKNOWNREGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.23.1"
+                },
+                "STAR_ALIGN": {
+                    "gawk": "5.1.0",
+                    "samtools": "1.21",
+                    "star": "2.7.11b"
+                },
+                "STAR_INDEXVERSION": {
+                    "star": "2.7.11b"
+                },
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
+                "UNTAR": {
+                    "untar": "1.34"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/GM12878",
+                "preprocessing/GM12878/GM12878.md.bam",
+                "preprocessing/GM12878/GM12878.md.bam.bai",
+                "reports",
+                "reports/fastqc",
+                "reports/fastqc/GM12878",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.zip",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.zip",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_general_stats.txt",
+                "reports/multiqc/multiqc_data/multiqc_picard_dups.txt",
+                "reports/multiqc/multiqc_data/multiqc_samtools_idxstats.txt",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_data/multiqc_star.txt",
+                "reports/multiqc/multiqc_data/picard_MarkIlluminaAdapters_histogram.txt",
+                "reports/multiqc/multiqc_data/picard_MeanQualityByCycle_histogram.txt",
+                "reports/multiqc/multiqc_data/picard_MeanQualityByCycle_histogram_1.txt",
+                "reports/multiqc/multiqc_data/picard_QualityScoreDistribution_histogram.txt",
+                "reports/multiqc/multiqc_data/picard_deduplication.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
+                "reports/multiqc/multiqc_data/star_alignment_plot.txt",
+                "reports/multiqc/multiqc_data/star_summary_table.txt",
+                "reports/multiqc/multiqc_plots",
+                "reports/multiqc/multiqc_plots/pdf",
+                "reports/multiqc/multiqc_plots/pdf/picard_deduplication-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/picard_deduplication-pct.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/star_alignment_plot-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/star_alignment_plot-pct.pdf",
+                "reports/multiqc/multiqc_plots/pdf/star_summary_table.pdf",
+                "reports/multiqc/multiqc_plots/png",
+                "reports/multiqc/multiqc_plots/png/picard_deduplication-cnt.png",
+                "reports/multiqc/multiqc_plots/png/picard_deduplication-pct.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/star_alignment_plot-cnt.png",
+                "reports/multiqc/multiqc_plots/png/star_alignment_plot-pct.png",
+                "reports/multiqc/multiqc_plots/png/star_summary_table.png",
+                "reports/multiqc/multiqc_plots/svg",
+                "reports/multiqc/multiqc_plots/svg/picard_deduplication-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/picard_deduplication-pct.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/star_alignment_plot-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
+                "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
+                "reports/multiqc/multiqc_report.html",
+                "reports/picard",
+                "reports/picard/GM12878",
+                "reports/picard/GM12878/GM12878.md.metrics.txt",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.aligned.flagstat",
+                "reports/samtools/GM12878/GM12878.aligned.idxstats",
+                "reports/samtools/GM12878/GM12878.aligned.stats",
+                "reports/samtools/GM12878/GM12878.md.flagstat",
+                "reports/samtools/GM12878/GM12878.md.idxstats",
+                "reports/samtools/GM12878/GM12878.md.stats",
+                "reports/star",
+                "reports/star/GM12878",
+                "reports/star/GM12878/GM12878.Log.final.out",
+                "reports/star/GM12878/GM12878.Log.out",
+                "reports/star/GM12878/GM12878.Log.progress.out",
+                "reports/star/GM12878/GM12878.SJ.out.tab",
+                "variant_calling",
+                "variant_calling/GM12878",
+                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
+            ],
+            [
+                "multiqc_citations.txt:md5,ca2184e168cc68367f244272041e555a",
+                "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
+                "multiqc_samtools_idxstats.txt:md5,d9ce0c513a2340b020e96fe41d3303db",
+                "multiqc_star.txt:md5,7e6521313553e98304f39d749df30dc6",
+                "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,e8abee3ffa074be49451932a24eb68c0",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,e8abee3ffa074be49451932a24eb68c0",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,82ac2d760371f532bb6b7e0f3f5aaea7",
+                "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
+                "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+            ],
+            [
+                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            "No unstable recal BAM files",
+            "No CRAM files",
+            [
+                "GM12878.haplotypecaller.filtered.vcf.gz:md5,67f7f698de6cc6f2434980d50512314a",
+                "GM12878.haplotypecaller.vcf.gz:md5,788d0be7399c53d01a9c841729a1542"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-06-01T15:49:35.215119673",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test --skip_baserecalibration no known sites": {
+        "content": [
+            37,
+            {
+                "CAT_FASTQ": {
+                    "cat": "9.5"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
+                },
+                "GATK4_BEDTOINTERVALLIST": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_HAPLOTYPECALLER": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_INTERVALLISTTOOLS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_MERGEVCFS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_SPLITNCIGARREADS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_VARIANTFILTRATION": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GFFREAD": {
+                    "gffread": "0.12.7"
+                },
+                "GTF2BED": {
+                    "Rscript": "3.5.1 (2018-07-02)"
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.4.0"
+                },
+                "REMOVEUNKNOWNREGIONS": {
+                    "python": "3.8.3"
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": "1.23.1"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.23.1"
+                },
+                "STAR_ALIGN": {
+                    "gawk": "5.1.0",
+                    "samtools": "1.21",
+                    "star": "2.7.11b"
+                },
+                "STAR_INDEXVERSION": {
+                    "star": "2.7.11b"
+                },
+                "TABIX_HAPLOTYPECALLER": {
+                    "htslib": "1.23.1",
+                    "xz": "5.8.3"
+                },
+                "UNTAR": {
+                    "untar": "1.34"
+                }
+            },
+            [
+                "pipeline_info",
+                "pipeline_info/nf_core_rnavar_software_mqc_versions.yml",
+                "preprocessing",
+                "preprocessing/GM12878",
+                "preprocessing/GM12878/GM12878.md.bam",
+                "preprocessing/GM12878/GM12878.md.bam.bai",
+                "reports",
+                "reports/fastqc",
+                "reports/fastqc/GM12878",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_1_fastqc.zip",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.html",
+                "reports/fastqc/GM12878/GM12878_2_fastqc.zip",
+                "reports/multiqc",
+                "reports/multiqc/multiqc_data",
+                "reports/multiqc/multiqc_data/llms-full.txt",
+                "reports/multiqc/multiqc_data/multiqc.log",
+                "reports/multiqc/multiqc_data/multiqc.parquet",
+                "reports/multiqc/multiqc_data/multiqc_citations.txt",
+                "reports/multiqc/multiqc_data/multiqc_data.json",
+                "reports/multiqc/multiqc_data/multiqc_general_stats.txt",
+                "reports/multiqc/multiqc_data/multiqc_picard_dups.txt",
+                "reports/multiqc/multiqc_data/multiqc_samtools_idxstats.txt",
+                "reports/multiqc/multiqc_data/multiqc_software_versions.txt",
+                "reports/multiqc/multiqc_data/multiqc_sources.txt",
+                "reports/multiqc/multiqc_data/multiqc_star.txt",
+                "reports/multiqc/multiqc_data/picard_MarkIlluminaAdapters_histogram.txt",
+                "reports/multiqc/multiqc_data/picard_MeanQualityByCycle_histogram.txt",
+                "reports/multiqc/multiqc_data/picard_MeanQualityByCycle_histogram_1.txt",
+                "reports/multiqc/multiqc_data/picard_QualityScoreDistribution_histogram.txt",
+                "reports/multiqc/multiqc_data/picard_deduplication.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
+                "reports/multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
+                "reports/multiqc/multiqc_data/star_alignment_plot.txt",
+                "reports/multiqc/multiqc_data/star_summary_table.txt",
+                "reports/multiqc/multiqc_plots",
+                "reports/multiqc/multiqc_plots/pdf",
+                "reports/multiqc/multiqc_plots/pdf/picard_deduplication-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/picard_deduplication-pct.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.pdf",
+                "reports/multiqc/multiqc_plots/pdf/star_alignment_plot-cnt.pdf",
+                "reports/multiqc/multiqc_plots/pdf/star_alignment_plot-pct.pdf",
+                "reports/multiqc/multiqc_plots/pdf/star_summary_table.pdf",
+                "reports/multiqc/multiqc_plots/png",
+                "reports/multiqc/multiqc_plots/png/picard_deduplication-cnt.png",
+                "reports/multiqc/multiqc_plots/png/picard_deduplication-pct.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.png",
+                "reports/multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.png",
+                "reports/multiqc/multiqc_plots/png/star_alignment_plot-cnt.png",
+                "reports/multiqc/multiqc_plots/png/star_alignment_plot-pct.png",
+                "reports/multiqc/multiqc_plots/png/star_summary_table.png",
+                "reports/multiqc/multiqc_plots/svg",
+                "reports/multiqc/multiqc_plots/svg/picard_deduplication-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/picard_deduplication-pct.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Raw_Counts-log.svg",
+                "reports/multiqc/multiqc_plots/svg/star_alignment_plot-cnt.svg",
+                "reports/multiqc/multiqc_plots/svg/star_alignment_plot-pct.svg",
+                "reports/multiqc/multiqc_plots/svg/star_summary_table.svg",
+                "reports/multiqc/multiqc_report.html",
+                "reports/picard",
+                "reports/picard/GM12878",
+                "reports/picard/GM12878/GM12878.md.metrics.txt",
+                "reports/samtools",
+                "reports/samtools/GM12878",
+                "reports/samtools/GM12878/GM12878.aligned.flagstat",
+                "reports/samtools/GM12878/GM12878.aligned.idxstats",
+                "reports/samtools/GM12878/GM12878.aligned.stats",
+                "reports/samtools/GM12878/GM12878.md.flagstat",
+                "reports/samtools/GM12878/GM12878.md.idxstats",
+                "reports/samtools/GM12878/GM12878.md.stats",
+                "reports/star",
+                "reports/star/GM12878",
+                "reports/star/GM12878/GM12878.Log.final.out",
+                "reports/star/GM12878/GM12878.Log.out",
+                "reports/star/GM12878/GM12878.Log.progress.out",
+                "reports/star/GM12878/GM12878.SJ.out.tab",
+                "variant_calling",
+                "variant_calling/GM12878",
+                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.filtered.vcf.gz.tbi",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz",
+                "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
+            ],
+            [
+                "multiqc_citations.txt:md5,ca2184e168cc68367f244272041e555a",
+                "multiqc_picard_dups.txt:md5,3c2ee70029b964a56b5eb0b2473eb147",
+                "multiqc_samtools_idxstats.txt:md5,d9ce0c513a2340b020e96fe41d3303db",
+                "multiqc_star.txt:md5,7e6521313553e98304f39d749df30dc6",
+                "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt:md5,e8abee3ffa074be49451932a24eb68c0",
+                "samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt:md5,e8abee3ffa074be49451932a24eb68c0",
+                "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,82ac2d760371f532bb6b7e0f3f5aaea7",
+                "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
+                "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+            ],
+            [
+                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923"
+            ],
+            "No unstable recal BAM files",
+            "No CRAM files",
+            [
+                "GM12878.haplotypecaller.filtered.vcf.gz:md5,432a68d6b71a1dd4e95408dbac84a9fb",
+                "GM12878.haplotypecaller.vcf.gz:md5,5e9e93f172b3d88abe560565c8dee5ce"
+            ],
+            "No warnings"
+        ],
+        "timestamp": "2026-06-01T15:51:54.921004725",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    }
+}

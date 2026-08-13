@@ -1,0 +1,66 @@
+name: removeunknownregions
+description: Remove unknown regions from a bed file
+keywords:
+  - bed
+  - remove
+  - regions
+tools:
+  - remove_unknown_regions:
+      description: |
+        Remove unknown regions from a bed file using a custom python script
+      homepage: https://nf-co.re/modules/remove_unknown_regions
+      documentation: https://nf-co.re/modules/remove_unknown_regions
+      licence:
+        - "MIT"
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - bed:
+        type: file
+        description: bed input file
+        ontologies: []
+    - dict:
+        type: file
+        description: dict input file
+        ontologies: []
+output:
+  bed:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'sample1', single_end:false ]
+      - "*.bed":
+          type: file
+          description: output bed file
+          pattern: ".bed"
+          ontologies: []
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - python:
+          type: string
+          description: The name of the tool
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - python:
+          type: string
+          description: The name of the tool
+      - python --version | sed 's/Python //g':
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"

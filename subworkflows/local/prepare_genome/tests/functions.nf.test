@@ -1,0 +1,151 @@
+
+nextflow_function {
+
+    name "Test Functions"
+    script "../main.nf"
+    function "isCompatibleStarIndex"
+
+    test("Test Function isCompatibleStarIndex - matching numbers") {
+
+        when {
+            function {
+                """
+                input[0] = "020101" // index version
+                input[1] = "020101" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - diff numbers i>m") {
+
+        when {
+            function {
+                """
+                input[0] = "020101" // index version
+                input[1] = "010101" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - diff numbers i<m") {
+
+        when {
+            function {
+                """
+                input[0] = "010101" // index version
+                input[1] = "020101" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert !function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - matching strings") {
+
+        when {
+            function {
+                """
+                input[0] = "2.7.11b" // index version
+                input[1] = "2.7.11b" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - diff strings i>m") {
+
+        when {
+            function {
+                """
+                input[0] = "2.7.11b" // index version
+                input[1] = "2.7.4a" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - diff strings i<m") {
+
+        when {
+            function {
+                """
+                input[0] = "2.5.1a" // index version
+                input[1] = "2.7.11b" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert !function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - i=number;m=string") {
+
+        when {
+            function {
+                """
+                input[0] = "0211001" // index version
+                input[1] = "2.7.11b" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert !function.result
+        }
+
+    }
+
+    test("Test Function isCompatibleStarIndex - i=string;m=number") {
+
+        when {
+            function {
+                """
+                input[0] = "2.7.11b" // index version
+                input[1] = "0211001" // minimal allowed version
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result
+        }
+
+    }
+}

@@ -1,0 +1,119 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: prepare_genome
+description: Build necessary reference genome index and related files so that the analysis pipeline can run
+keywords:
+  - references
+  - genome
+  - index
+  - fasta
+components:
+  - gatk4/createsequencedictionary
+  - gffread
+  - gtf2bed
+  - gunzip
+  - removeunknownregions
+  - samtools/faidx
+  - star/genomegenerate
+  - star/indexversion
+  - tabix/bgziptabix
+  - tabix/tabix
+  - untar
+input:
+  - bcftools_annotations:
+      description: |
+        // params[path]: params.bcftools_annotations
+  - bcftools_annotations_tbi:
+      description: |
+        // params[path]: params.bcftools_annotations_tbi
+  - dbsnp:
+      description: |
+        // params[path]: params.dbsnp
+  - dbsnp_tbi:
+      description: |
+        // params[path]: params.dbsnp_tbi
+  - dict:
+      description: |
+        // params[path]: params.dict
+  - exon_bed:
+      description: |
+        // params[path]: params.exon_bed
+  - fasta:
+      description: |
+        // params[path]: params.fasta
+  - fasta_fai:
+      description: |
+        // params[path]: params.fasta_fai
+  - gff:
+      description: |
+        // params[path]: params.gff
+  - gtf:
+      description: |
+        // params[path]: params.gtf
+  - known_indels:
+      description: |
+        // params[path]: params.known_indels
+  - known_indels_tbi:
+      description: |
+        // params[path]: params.known_indels_tbi
+  - star_index:
+      description: |
+        // params[path]: params.star_index
+  - feature_type:
+      description: |
+        // params[val]: params.feature_type
+  - skip_exon_bed_check:
+      description: |
+        // params[boolean]: params.skip_exon_bed_check
+  - align:
+      description: |
+        // boolean: The pipeline needs aligner indices or not
+  - genome:
+      description: |
+        // params[val]: params.genome
+output:
+  - bcfann:
+      description: |
+        Structure: [ path(bcftools_annotations.vcf.gz) ]
+  - bcfann_tbi:
+      description: |
+        Structure: [ path(bcftools_annotations.vcf.gz.tbi) ]
+  - dbsnp:
+      description: |
+        Structure: [ val(meta), path(dbsnp.vcf.gz) ]
+  - dbsnp_tbi:
+      description: |
+        Structure: [ val(meta), path(dbsnp.vcf.gz.tbi) ]
+  - dict:
+      description: |
+        Structure: [ path(genome.fasta.dict) ]
+  - exon_bed:
+      description: |
+        Structure: [ path(exon.bed) ]
+  - fasta:
+      description: |
+        Structure: [ path(genome.fasta) ]
+  - fasta_fai:
+      description: |
+        Structure: [ path(genome.fasta.fai) ]
+  - gtf:
+      description: |
+        Structure: [ path(genome.gtf) ]
+  - known_indels:
+      description: |
+        Structure: [ path(known_indels*.vcf.gz) ]
+  - known_indels_tbi:
+      description: |
+        Structure: [ path(known_indels*.vcf.gz.tbi) ]
+  - known_sites:
+      description: |
+        Structure: [ path(known_sites*.vcf.gz) ]
+  - known_sites_tbi:
+      description: |
+        Structure: [ path(known_sites*.vcf.gz.tbi) ]
+  - star_index:
+      description: |
+        Structure: [ path(star/index) ]
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"
