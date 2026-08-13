@@ -15,10 +15,10 @@
                 "Please check https://annotation-cache.github.io/ to create a request for it."
             ]
         ],
-        "timestamp": "2026-03-25T13:39:12.807034052",
+        "timestamp": "2026-08-14T09:21:40.985116625",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "25.10.4"
         }
     }
 }
