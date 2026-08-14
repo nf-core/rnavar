@@ -57,13 +57,14 @@ workflow VCF_ANNOTATE_ALL {
         vep_cache_version,
         vep_cache,
         vep_extra_files,
+        [[], []],
     )
 
     vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
     tab_ann = tab_ann.mix(VCF_ANNOTATE_MERGE.out.tab)
     json_ann = json_ann.mix(VCF_ANNOTATE_MERGE.out.json)
 
-    VCF_ANNOTATE_ENSEMBLVEP(vcf.map { meta, vcf_ -> [meta, vcf_, []] }.filter { 'vep' in tools }, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
+    VCF_ANNOTATE_ENSEMBLVEP(vcf.map { meta, vcf_ -> [meta, vcf_, []] }.filter { 'vep' in tools }, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files, [[], []])
 
     vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
     tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)

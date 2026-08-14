@@ -216,7 +216,7 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir // path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    multiqc_report // string: Path to MultiQC report
+    multiqc_report //  string: Path to MultiQC report
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")

@@ -4,7 +4,7 @@
             9,
             {
                 "ENSEMBLVEP_VEP": {
-                    "ensemblvep": "116.0",
+                    "ensemblvep": "116.1",
                     "perl-math-cdf": "0.1",
                     "tabix": "1.23.1"
                 },
@@ -24,7 +24,7 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
@@ -77,10 +77,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-07-07T13:45:28.758898064",
+        "timestamp": "2026-08-14T10:16:49.999666943",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.4"
+            "nextflow": "26.04.6"
         }
     },
     "Fails with profile test --dbnsfp and no dbnsfp_tbi": {
@@ -98,10 +98,10 @@
                 "Execution halted due to dbnsfp inconsistency."
             ]
         ],
-        "timestamp": "2026-05-27T13:41:05.4340626",
+        "timestamp": "2026-08-14T09:22:18.891126413",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.2"
+            "nextflow": "25.10.4"
         }
     },
     "-profile test --tools vep --vep_cache_version 1": {
@@ -120,10 +120,10 @@
                 "Please check https://annotation-cache.github.io/ to create a request for it."
             ]
         ],
-        "timestamp": "2025-12-16T12:47:40.688024513",
+        "timestamp": "2026-08-14T09:21:59.542404095",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
         }
     }
 }

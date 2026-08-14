@@ -174,9 +174,9 @@ workflow RNAVAR {
             // Recalibrates the base qualities of the input reads based on the recalibration table produced by the GATK BaseRecalibrator tool.
             RECALIBRATE(
                 applybqsr_bam_bai_interval,
-                dict.map { _meta, dict_ -> [dict_] },
-                fasta_fai,
                 fasta,
+                fasta_fai,
+                dict,
             )
 
             bam_variant_calling = RECALIBRATE.out.bam
