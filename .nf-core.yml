@@ -1,6 +1,11 @@
 lint:
+  files_exist:
+    - .github/workflows/linting_comment.yml
+  files_unchanged:
+    - .github/workflows/branch.yml
+    - .github/workflows/linting.yml
   nf_test_content: false
-nf_core_version: 4.0.3
+nf_core_version: 4.1.0
 repository_type: pipeline
 template:
   author: Praveen Raj, Maxime U Garcia, Nicolas Vannieuwkerke
