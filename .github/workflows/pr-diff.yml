@@ -38,12 +38,12 @@ jobs:
         if: steps.restore-baseline.outputs.cache-matched-key != ''
         uses: mribeirodantas/nf-diff@main
         with:
-          setup-java: 'false'
-          setup-nextflow: 'false'
-          last: 'true'
+          setup-java: "false"
+          setup-nextflow: "false"
+          last: "true"
           published-a: baseline-results
           published-b: pr-results
-          diff-dag: 'true'
+          diff-dag: "true"
           format: md
-          comment-pr: 'true'
-          upload-artifact: 'true'
+          comment-pr: "true"
+          upload-artifact: "true"
