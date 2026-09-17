@@ -3,8 +3,7 @@ name: PR nf-diff Check
 on:
   pull_request:
     branches:
-      - main
-      - master
+      - dev
 
 permissions:
   contents: read
@@ -33,7 +32,7 @@ jobs:
 
       - name: Run pipeline on PR
         run: |
-          nextflow run . -profile test --outdir pr-results
+          nextflow run . -profile test,docker --outdir pr-results
 
       - name: Run nf-diff against baseline
         if: steps.restore-baseline.outputs.cache-matched-key != ''

@@ -3,8 +3,7 @@ name: Update Baseline Run
 on:
   push:
     branches:
-      - main
-      - master
+      - dev
   workflow_dispatch:
 
 jobs:
@@ -18,7 +17,7 @@ jobs:
 
       - name: Run baseline pipeline
         run: |
-          nextflow run . -profile test --outdir baseline-results
+          nextflow run . -profile test,docker --outdir baseline-results
 
       - name: Cache baseline run and outputs
         uses: actions/cache/save@v4
