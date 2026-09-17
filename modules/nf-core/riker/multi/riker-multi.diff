@@ -1,0 +1,59 @@
+Changes in component 'nf-core/riker/multi'
+'modules/nf-core/riker/multi/meta.yml' is unchanged
+'modules/nf-core/riker/multi/environment.yml' is unchanged
+Changes in 'riker/multi/main.nf':
+--- modules/nf-core/riker/multi/main.nf
++++ modules/nf-core/riker/multi/main.nf
+@@ -12,27 +12,27 @@
+     tuple val(meta2), path(fasta), path(fai)
+ 
+     output:
+-    tuple val(meta), path("*.alignment-metrics.txt"),          emit: alignment_metrics,         optional: true
+-    tuple val(meta), path("*.base-distribution-by-cycle.txt"), emit: base_dist,                 optional: true
+-    tuple val(meta), path("*.error-indel.txt"),                emit: error_indel,               optional: true
+-    tuple val(meta), path("*.error-mismatch.txt"),             emit: error_mismatch,            optional: true
+-    tuple val(meta), path("*.error-overlap.txt"),              emit: error_overlap,             optional: true
+-    tuple val(meta), path("*.gcbias-detail.txt"),              emit: gcbias_detail,             optional: true
+-    tuple val(meta), path("*.gcbias-summary.txt"),             emit: gcbias_summary,            optional: true
+-    tuple val(meta), path("*.hybcap-metrics.txt"),             emit: hybcap_metrics,            optional: true
+-    tuple val(meta), path("*.hybcap-per-base.txt*"),           emit: hybcap_per_base,           optional: true
+-    tuple val(meta), path("*.hybcap-per-target.txt"),          emit: hybcap_per_target,         optional: true
+-    tuple val(meta), path("*.isize-histogram.txt"),            emit: isize_histogram,           optional: true
+-    tuple val(meta), path("*.isize-metrics.txt"),              emit: isize_metrics,             optional: true
+-    tuple val(meta), path("*.mean-quality-by-cycle.txt"),      emit: mean_qual,                 optional: true
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.alignment-metrics.txt"),          emit: alignment_metrics,         optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.base-distribution-by-cycle.txt"), emit: base_dist,                 optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.error-indel.txt"),                emit: error_indel,               optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.error-mismatch.txt"),             emit: error_mismatch,            optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.error-overlap.txt"),              emit: error_overlap,             optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.gcbias-detail.txt"),              emit: gcbias_detail,             optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.gcbias-summary.txt"),             emit: gcbias_summary,            optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.hybcap-metrics.txt"),             emit: hybcap_metrics,            optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.hybcap-per-base.txt*"),           emit: hybcap_per_base,           optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.hybcap-per-target.txt"),          emit: hybcap_per_target,         optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.isize-histogram.txt"),            emit: isize_histogram,           optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.isize-metrics.txt"),              emit: isize_metrics,             optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.mean-quality-by-cycle.txt"),      emit: mean_qual,                 optional: true, topic: multiqc_files
+     tuple val(meta), path("*.pdf"),                            emit: pdf,                       optional: true
+-    tuple val(meta), path("*.quality-score-distribution.txt"), emit: qual_dist,                 optional: true
+-    tuple val(meta), path("*.rna-biotype.txt"),                emit: rna_biotype,               optional: true
+-    tuple val(meta), path("*.rna-insert-size-histogram.txt"),  emit: rna_insert_size_histogram, optional: true
+-    tuple val(meta), path("*.rna-insert-size.txt"),            emit: rna_insert_size,           optional: true
+-    tuple val(meta), path("*.rna-metrics.txt"),                emit: rna_metrics,               optional: true
+-    tuple val(meta), path("*.wgs-coverage.txt"),               emit: wgs_coverage,              optional: true
+-    tuple val(meta), path("*.wgs-metrics.txt"),                emit: wgs_metrics,               optional: true
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.quality-score-distribution.txt"), emit: qual_dist,                 optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.rna-biotype.txt"),                emit: rna_biotype,               optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.rna-insert-size-histogram.txt"),  emit: rna_insert_size_histogram, optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.rna-insert-size.txt"),            emit: rna_insert_size,           optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.rna-metrics.txt"),                emit: rna_metrics,               optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.wgs-coverage.txt"),               emit: wgs_coverage,              optional: true, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('riker'), path("*.wgs-metrics.txt"),                emit: wgs_metrics,               optional: true, topic: multiqc_files
+     tuple val("${task.process}"), val('riker'), eval("riker --version 2>&1 | sed 's/riker //'") , topic: versions, emit: versions_riker
+ 
+     when:
+
+'modules/nf-core/riker/multi/tests/main.nf.test' is unchanged
+'modules/nf-core/riker/multi/tests/nextflow.config' is unchanged
+'modules/nf-core/riker/multi/tests/main.nf.test.snap' is unchanged
+************************************************************

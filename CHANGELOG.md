@@ -3,6 +3,64 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## dev
+
+### Added
+
+- [#319](https://github.com/nf-core/rnavar/pull/319) - Add riker multi for QC metrics on BAM files
+
+### Changed
+
+- [#318](https://github.com/nf-core/rnavar/pull/318) - Update all modules
+- [#320](https://github.com/nf-core/rnavar/pull/320) - Update all modules
+
+### Fixed
+
+### Dependencies
+
+| Dependency  | Old version | New version |
+| ----------- | ----------- | ----------- |
+| ensembl-vep | 115.2       | 116.1       |
+| htslib      | 1.23.1      | 1.24        |
+| riker       |             | 0.4.0       |
+| samtools    | 1.23.1      | 1.24        |
+
+### Parameters
+
+| Old name | New name |
+| -------- | -------- |
+
+| Parameter   | Old default | New default |
+| ----------- | ----------- | ----------- |
+| vep_version | 115.2-1     | 116.1-0     |
+
+### Modules / Subworkflows
+
+| Dependency | Old name | New name |
+| ---------- | -------- | -------- |
+
+### Plugins
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+
+### Developer section
+
+#### Added
+
+- [#317](https://github.com/nf-core/rnavar/pull/317) - Add `AGENTS.md` file with nf-core agent instructions
+
+#### Changed
+
+- [#315](https://github.com/nf-core/rnavar/pull/315) - Back to dev
+- [#320](https://github.com/nf-core/rnavar/pull/320) - Template update for nf-core/tools v4.0.3
+
+#### Fixed
+
+- [#318](https://github.com/nf-core/rnavar/pull/318) - Fix LoFTEE test to validate CSQ fields instead of asserting nothing
+
+#### Removed
+
 ## [1.3.0](https://github.com/nf-core/rnavar/releases/tag/1.3.0) - Silent Nostromo
 
 ### Added

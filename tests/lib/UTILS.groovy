@@ -58,6 +58,11 @@ class UTILS {
             assertion.add(recal_bam_files.isEmpty() ? 'No unstable recal BAM files' : recal_bam_files.collect { file -> file.tokenize('/').last() + ":stats" + bam(absolutePath(file)).getStatistics() })
             assertion.add(cram_files.isEmpty() ? 'No CRAM files' : cram_files.collect { file -> file.tokenize('/').last() + ":md5," + cram(absolutePath(file), fasta).readsMD5 })
             assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.tokenize('/').last() + ":md5," + path(absolutePath(file)).vcf.variantsMD5 })
+
+            // Check for specific VCF header fields if requested
+            if (scenario.vcf_header_check) {
+                assertion.add(vcf_files.isEmpty() ? 'No VCF files' : vcf_files.collect { file -> file.tokenize('/').last() + ":header.contains(${scenario.vcf_header_check})," + path(absolutePath(file)).vcf.header.toString().contains(scenario.vcf_header_check) })
+            }
         }
 
         // If we have a snapshot options in scenario then we allow to capture either stderr, stdout or both

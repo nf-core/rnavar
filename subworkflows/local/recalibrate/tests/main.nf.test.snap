@@ -40,14 +40,14 @@
                     },
                     "RECALIBRATE:BAM_STATS_SAMTOOLS:SAMTOOLS_STATS",
                     "samtools",
-                    "test.stats:md5,f9edb58a16396d0ef2a145ca83284f4f"
+                    "test.stats:md5,67736e9a96dc06039ca4a2698d50f18f"
                 ]
             ]
         ],
-        "timestamp": "2026-03-25T12:09:05.580866499",
+        "timestamp": "2026-08-13T17:56:11.992442801",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.4"
         }
     }
 }

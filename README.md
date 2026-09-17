@@ -13,7 +13,7 @@
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
 [![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.3-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.3)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -55,7 +55,7 @@
 | BCFTools   | 1.22    |
 | BEDTools   | 2.31.1  |
 | cat        | 9.5     |
-| EnsemblVEP | 115.2   |
+| EnsemblVEP | 116.0   |
 | FastQC     | 0.12.1  |
 | GATK       | 4.6.2.0 |
 | GffRead    | 0.12.7  |
@@ -63,6 +63,7 @@
 | Mosdepth   | 0.3.10  |
 | MultiQC    | 1.33    |
 | Picard     | 3.4.0   |
+| Riker      | 0.4.0   |
 | SAMtools   | 1.22.1  |
 | Seq2HLA    | 2.3     |
 | SnpEff     | 5.3.0a  |

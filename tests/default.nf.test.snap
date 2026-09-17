@@ -46,25 +46,25 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -75,7 +75,7 @@
                     "star": "2.7.11b"
                 },
                 "TABIX_HAPLOTYPECALLER": {
-                    "htslib": "1.23.1",
+                    "htslib": "1.24",
                     "xz": "5.8.3"
                 },
                 "UNTAR": {
@@ -229,10 +229,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-01T15:11:17.30142612",
+        "timestamp": "2026-08-13T16:44:55.21048164",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.4"
         }
     },
     "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
@@ -240,7 +240,7 @@
             44,
             {
                 "BGZIPTABIX_DBSNP": {
-                    "htslib": "1.23.1",
+                    "htslib": "1.24",
                     "xz": "5.8.3"
                 },
                 "CAT_FASTQ": {
@@ -286,25 +286,25 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -315,7 +315,7 @@
                     "star": "2.7.11b"
                 },
                 "TABIX_HAPLOTYPECALLER": {
-                    "htslib": "1.23.1",
+                    "htslib": "1.24",
                     "xz": "5.8.3"
                 },
                 "UNTAR": {
@@ -469,10 +469,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-01T15:16:24.785378337",
+        "timestamp": "2026-08-13T16:49:09.707005936",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.4"
         }
     },
     "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
@@ -480,7 +480,7 @@
             44,
             {
                 "BGZIPTABIX_KNOWN_INDELS": {
-                    "htslib": "1.23.1",
+                    "htslib": "1.24",
                     "xz": "5.8.3"
                 },
                 "CAT_FASTQ": {
@@ -526,25 +526,25 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_FLAGSTAT": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_IDXSTATS": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_INDEX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_MERGE": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_SORT": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "STAR_ALIGN": {
                     "gawk": "5.1.0",
@@ -555,7 +555,7 @@
                     "star": "2.7.11b"
                 },
                 "TABIX_HAPLOTYPECALLER": {
-                    "htslib": "1.23.1",
+                    "htslib": "1.24",
                     "xz": "5.8.3"
                 },
                 "UNTAR": {
@@ -709,10 +709,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-06-01T15:13:51.233835616",
+        "timestamp": "2026-08-13T16:47:05.06417573",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.4"
         }
     }
 }

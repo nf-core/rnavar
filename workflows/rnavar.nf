@@ -17,6 +17,7 @@ include { GATK4_VARIANTFILTRATION                    } from '../modules/nf-core/
 include { HTSLIB_BGZIPTABIX as TABIX_COMBINEGVCFS    } from '../modules/nf-core/htslib/bgziptabix'
 include { HTSLIB_BGZIPTABIX as TABIX_HAPLOTYPECALLER } from '../modules/nf-core/htslib/bgziptabix'
 include { MOSDEPTH                                   } from '../modules/nf-core/mosdepth'
+include { RIKER_MULTI                                } from '../modules/nf-core/riker/multi'
 include { SEQ2HLA                                    } from '../modules/nf-core/seq2hla'
 include { UMITOOLS_EXTRACT                           } from '../modules/nf-core/umitools/extract'
 
@@ -173,9 +174,9 @@ workflow RNAVAR {
             // Recalibrates the base qualities of the input reads based on the recalibration table produced by the GATK BaseRecalibrator tool.
             RECALIBRATE(
                 applybqsr_bam_bai_interval,
-                dict.map { _meta, dict_ -> [dict_] },
-                fasta_fai,
                 fasta,
+                fasta_fai,
+                dict,
             )
 
             bam_variant_calling = RECALIBRATE.out.bam
@@ -183,6 +184,13 @@ workflow RNAVAR {
         else {
             bam_variant_calling = SPLITNCIGAR.out.bam_bai
         }
+
+        // MODULE: Riker multi for QC metrics
+        // Runs QC metrics on BAM files using riker
+        RIKER_MULTI(
+            bam_variant_calling.combine(gtf).combine(exon_bed).map { meta, bam, bai, _meta_gtf, gtf_, _meta_exon_bed, exon_bed_ -> [meta, bam, bai, [], [], [], [], [], [], gtf_, [], exon_bed_] }.filter { 'riker' in tools },
+            fasta.join(fasta_fai).collect(),
+        )
 
         def haplotypecaller_interval_bam = bam_variant_calling
             .combine(interval_list_split)

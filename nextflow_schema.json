@@ -31,9 +31,9 @@
                 "tools": {
                     "type": "string",
                     "fa_icon": "fas fa-hammer",
-                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'umitools', 'bcfann', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
-                    "help_text": "List of opt-in tools to be used in addition to variant calling: currently umitools to remove UMIs from the reads with UMI-tools, hlatyping with Seq2HLA, and a choice of annotation tools.",
-                    "pattern": "^((umitools|seq2hla|bcfann|snpeff|vep|merge)*(,)*)*$",
+                    "description": "Specify which additional tools RNAvar should use. Values can be 'seq2hla', 'umitools', 'riker', 'bcfann', 'snpeff', 'vep' or 'merge'. If you specify 'merge', the pipeline runs both snpeff and VEP annotation.",
+                    "help_text": "List of opt-in tools to be used in addition to variant calling: currently umitools to remove UMIs from the reads with UMI-tools, hlatyping with Seq2HLA, riker for QC metrics, and a choice of annotation tools.",
+                    "pattern": "^((umitools|seq2hla|riker|bcfann|snpeff|vep|merge)*(,)*)*$",
                     "hidden": true
                 },
                 "skip_tools": {
@@ -360,7 +360,7 @@
                 },
                 "vep_version": {
                     "type": "string",
-                    "default": "115.2-1",
+                    "default": "116.1-0",
                     "fa_icon": "fas fa-toolbox",
                     "description": "Should reflect the VEP version used in the container.",
                     "help_text": "Used by the loftee plugin which needs the full path to the VEP installation (e.g. `/opt/conda/share/ensembl-vep-${vep_version}`). Update this when the VEP container version changes."

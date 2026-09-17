@@ -22,7 +22,7 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
@@ -57,10 +57,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T15:15:10.920014756",
+        "timestamp": "2026-08-13T16:24:28.690295105",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.4"
         }
     },
     "-profile test --tools bcfann --bcftools_columns": {
@@ -86,7 +86,7 @@
                     "python": "3.8.3"
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.23.1"
+                    "samtools": "1.24"
                 },
                 "STAR_INDEXVERSION": {
                     "star": "2.7.11b"
@@ -121,10 +121,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-03-25T15:15:49.575544351",
+        "timestamp": "2026-08-13T16:25:04.414073524",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.03.0"
+            "nextflow": "26.04.4"
         }
     }
 }
