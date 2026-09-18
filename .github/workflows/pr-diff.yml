@@ -36,6 +36,7 @@ jobs:
 
       - name: Run nf-diff against baseline
         if: steps.restore-baseline.outputs.cache-matched-key != ''
+        id: nfdiff
         uses: mribeirodantas/nf-diff@main
         with:
           setup-java: "false"
@@ -45,5 +46,46 @@ jobs:
           published-b: pr-results
           diff-dag: "true"
           format: md
-          comment-pr: "true"
+          comment-pr: "false"
           upload-artifact: "true"
+
+      # The full markdown report (diff-all covers outputs/logs/DAG) can exceed
+      # GitHub's PR-comment character limit, so the comment stays a short
+      # preview and links to the uploaded artifact for the complete report.
+      - name: Prepare simplified PR comment
+        id: prepare-comment
+        if: always() && steps.restore-baseline.outputs.cache-matched-key != ''
+        env:
+          REPORT_PATH: ${{ steps.nfdiff.outputs.report-path }}
+          ARTIFACT_URL: ${{ steps.nfdiff.outputs.artifact-url }}
+        run: |
+          set -uo pipefail
+          if [ -z "${REPORT_PATH:-}" ] || [ ! -f "$REPORT_PATH" ]; then
+            echo "nf-diff report not found; skipping PR comment."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          {
+            echo '<!-- nf-diff -->'
+            echo '## nf-diff report'
+            echo
+            if [ -n "${ARTIFACT_URL:-}" ]; then
+              echo "📊 **[Download the full interactive HTML report](${ARTIFACT_URL})**"
+              echo "_Includes the complete comparison: published outputs, task outputs/logs, and DAG wiring._"
+              echo
+            fi
+            echo '### Preview'
+            echo
+            head -n 40 "$REPORT_PATH"
+            echo
+            echo '> Preview only. Download the artifact above for the full report.'
+          } > pr-comment-body.md
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on pull request
+        if: always() && steps.prepare-comment.outputs.ready == 'true'
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: nf-diff
+          path: pr-comment-body.md
