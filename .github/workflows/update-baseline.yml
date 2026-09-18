@@ -1,0 +1,29 @@
+name: Update Baseline Run
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Nextflow
+        uses: nf-core/setup-nextflow@v2
+
+      - name: Run baseline pipeline
+        run: |
+          nextflow run . -profile test,docker --outdir baseline-results
+
+      - name: Cache baseline run and outputs
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .nextflow
+            .lineage
+            baseline-results
+          key: nf-baseline-${{ github.sha }}

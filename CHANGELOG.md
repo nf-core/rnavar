@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [#325](https://github.com/nf-core/rnavar/pull/325) - Add nf-diff workflows to compare Docker-based pipeline test results with a baseline refreshed on updates to `dev`
 - [#319](https://github.com/nf-core/rnavar/pull/319) - Add riker multi for QC metrics on BAM files
 
 ### Changed
