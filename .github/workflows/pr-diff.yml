@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write   # Required to post/update the PR comment
+  pull-requests: write # Required to post/update the PR comment
 
 jobs:
   diff:
@@ -44,11 +44,11 @@ jobs:
         if: steps.restore-baseline.outputs.cache-matched-key != ''
         uses: mribeirodantas/nf-diff@main
         with:
-          setup-java: 'false'       # Nextflow & Java already set up above
-          setup-nextflow: 'false'
-          last: 'true'              # Compares baseline (run 1 back) vs PR (latest run)
+          setup-java: "false" # Nextflow & Java already set up above
+          setup-nextflow: "false"
+          last: "true" # Compares baseline (run 1 back) vs PR (latest run)
           published-a: baseline-results
           published-b: pr-results
           format: md
-          comment-pr: 'true'        # Posts or updates a sticky comment on the PR
-          upload-artifact: 'true'   # Uploads report as an artifact
+          comment-pr: "true" # Posts or updates a sticky comment on the PR
+          upload-artifact: "true" # Uploads report as an artifact
