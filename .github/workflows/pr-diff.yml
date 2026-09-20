@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
+  pull-requests: write   # Required to post/update the PR comment
 
 jobs:
   diff:
@@ -18,6 +18,10 @@ jobs:
       - name: Set up Nextflow
         uses: nf-core/setup-nextflow@v2
 
+      - name: Enable Nextflow lineage
+        run: printf '%s\n' 'lineage.enabled = true' > lineage.config
+
+      # 1. Fetch latest baseline from main
       - name: Restore baseline from main
         uses: actions/cache/restore@v4
         id: restore-baseline
@@ -30,20 +34,21 @@ jobs:
           restore-keys: |
             nf-baseline-
 
+      # 2. Run pipeline with PR code
       - name: Run pipeline on PR
         run: |
-          nextflow run . -profile test,docker --outdir pr-results
+          nextflow run . -profile test,docker -c lineage.config --outdir pr-results
 
+      # 3. Compare PR run against baseline (only if baseline cache was restored)
       - name: Run nf-diff against baseline
         if: steps.restore-baseline.outputs.cache-matched-key != ''
         uses: mribeirodantas/nf-diff@main
         with:
-          setup-java: "false"
-          setup-nextflow: "false"
-          last: "true"
+          setup-java: 'false'       # Nextflow & Java already set up above
+          setup-nextflow: 'false'
+          last: 'true'              # Compares baseline (run 1 back) vs PR (latest run)
           published-a: baseline-results
           published-b: pr-results
-          diff-dag: "true"
           format: md
-          comment-pr: "true"
-          upload-artifact: "true"
+          comment-pr: 'true'        # Posts or updates a sticky comment on the PR
+          upload-artifact: 'true'   # Uploads report as an artifact
