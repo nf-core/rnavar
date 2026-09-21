@@ -15,9 +15,12 @@ jobs:
       - name: Set up Nextflow
         uses: nf-core/setup-nextflow@v2
 
+      - name: Enable Nextflow lineage
+        run: printf '%s\n' 'lineage.enabled = true' > lineage.config
+
       - name: Run baseline pipeline
         run: |
-          nextflow run . -profile test,docker --outdir baseline-results
+          nextflow run . -profile test,docker -c lineage.config --outdir baseline-results
 
       - name: Cache baseline run and outputs
         uses: actions/cache/save@v4
