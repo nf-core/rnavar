@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [#325](https://github.com/nf-core/rnavar/pull/325) - Add nf-diff workflows to compare Docker-based pipeline test results with a baseline refreshed on updates to `dev`
 - [#319](https://github.com/nf-core/rnavar/pull/319) - Add riker multi for QC metrics on BAM files
 
 ### Changed
@@ -50,11 +49,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Added
 
 - [#317](https://github.com/nf-core/rnavar/pull/317) - Add `AGENTS.md` file with nf-core agent instructions
+- [#325](https://github.com/nf-core/rnavar/pull/325) - Add nf-diff workflows to compare Docker-based pipeline test results with a baseline refreshed on updates to `dev`
 
 #### Changed
 
 - [#315](https://github.com/nf-core/rnavar/pull/315) - Back to dev
 - [#320](https://github.com/nf-core/rnavar/pull/320) - Template update for nf-core/tools v4.0.3
+- [#327](https://github.com/nf-core/rnavar/pull/327) - Update nf-diff
 
 #### Fixed
 
