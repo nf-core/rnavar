@@ -39,6 +39,28 @@ jobs:
         run: |
           nextflow run . -profile test,docker -c lineage.config --outdir pr-results
 
+      # 2b. On failure, collect logs and upload as a downloadable artifact
+      - name: Collect logs on failure
+        if: failure()
+        run: |
+          mkdir -p pipeline-logs
+          # Top-level Nextflow log
+          cp -f .nextflow.log pipeline-logs/ 2>/dev/null || true
+          # Per-task command logs, flattened with the work hash in the filename
+          find work -type f \( -name '.command.log' -o -name '.command.err' -o -name '.command.out' \) 2>/dev/null | while read -r f; do
+            hash=$(basename "$(dirname "$f")")
+            cp -f "$f" "pipeline-logs/${hash}_$(basename "$f")"
+          done
+
+      - name: Upload logs artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-logs-${{ github.run_id }}
+          path: pipeline-logs
+          if-no-files-found: warn
+          retention-days: 14
+
       # 3. Compare PR run against baseline (only if baseline cache was restored)
       - name: Run nf-diff against baseline
         if: steps.restore-baseline.outputs.cache-matched-key != ''
