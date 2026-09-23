@@ -37,10 +37,6 @@ process FASTQC {
     def fastqc_memory_arg = fastqc_memory ? "--memory ${fastqc_memory}" : ''
 
     """
-    # TEMP: intentional failure to test nf-diff GH action failure path — REMOVE ME
-    echo "Forcing FASTQC to fail on purpose (nf-diff failure test)" >&2
-    exit 1
-
     printf "%s %s\\n" ${rename_to} | while read old_name new_name; do
         [ -f "\${new_name}" ] || ln -s \$old_name \$new_name
     done
