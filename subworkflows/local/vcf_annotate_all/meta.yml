@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: vcf_annotate_all
+description: Perform annotation with bcftools_annotate, ensemblvep and snpeff and then bgzip + tabix index the resulting VCF file
+keywords:
+  - vcf
+  - annotation
+  - ensemblvep
+  - snpeff
+components:
+  - bcftools/annotate
+  - vcf_annotate_ensemblvep
+  - vcf_annotate_snpeff
+input:
+  - vcf:
+      description: |
+        vcf file to annotate
+        Structure: [ val(meta), path(vcf), [path(custom_file1), path(custom_file2)... (optional)] ]
+  - fasta:
+      description: |
+        Reference genome fasta file (optional)
+        Structure: [ val(meta2), path(fasta) ]
+  - tools:
+      description: |
+        Reference genome fasta file (optional)
+        Structure: [ val(meta2), path(fasta) ]
+  - snpeff_db:
+      type: string
+      description: db to use
+  - snpeff_cache:
+      description: |
+        the root cache folder for snpeff (optional)
+        Structure: [ val(meta3), path(cache) ]
+  - vep_genome:
+      type: string
+      description: genome to use
+  - vep_species:
+      type: string
+      description: species to use
+  - vep_cache_version:
+      type: integer
+      description: cache version to use
+  - vep_cache:
+      description: |
+        the root cache folder for ensemblvep (optional)
+        Structure: [ val(meta3), path(cache) ]
+  - vep_extra_files:
+      description: |
+        any extra files needed by plugins for ensemblvep (optional)
+        Structure: [ path(file1), path(file2)... ]
+  - bcftools_annotations:
+      description: |
+        annotations files needed by bcftools annotate
+  - bcftools_annotations_index:
+      description: |
+        annotations_index files needed by bcftools annotate
+  - bcftools_columns:
+      description: |
+        columns files needed by bcftools annotate
+  - bcftools_header_lines:
+      description: |
+        header_lines files needed by bcftools annotate
+output:
+  - vcf_ann:
+      description: |
+        Compressed vcf file + tabix index
+        Structure: [ val(meta), path(vcf), path(tbi) ]
+  - tab:
+      description: |
+        tab file
+        Structure: [ val(meta), path(tab) ]
+  - json:
+      description: |
+        json file
+        Structure: [ val(meta), path(json) ]
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"

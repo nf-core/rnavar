@@ -10,3 +10,6 @@ null/
 .lineage/
 .nf-test/
 .nf-test.log
+.nf-test*
+modules/nf-core/**/tests/
+subworkflows/nf-core/**/tests/

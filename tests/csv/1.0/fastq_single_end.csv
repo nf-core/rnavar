@@ -1,0 +1,2 @@
+sample,fastq_1
+GM12878,https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/illumina/fastq/test_rnaseq_1.fastq.gz
