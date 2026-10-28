@@ -11,19 +11,19 @@ nextflow_pipeline {
             params: [],
         ],
         [
-            name: "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false",
+            name: "-profile test --dbsnp null --dbsnp_tbi null --known_indels_tbi null",
             params: [
-                dbsnp: false,
-                dbsnp_tbi: false,
-                known_indels_tbi: false,
+                dbsnp: null,
+                dbsnp_tbi: null,
+                known_indels_tbi: null,
             ],
         ],
         [
-            name: "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false",
+            name: "-profile test --dbsnp_tbi null --known_indels null --known_indels_tbi null",
             params: [
-                dbsnp_tbi: false,
-                known_indels: false,
-                known_indels_tbi: false,
+                dbsnp_tbi: null,
+                known_indels: null,
+                known_indels_tbi: null,
             ],
         ],
     ]
