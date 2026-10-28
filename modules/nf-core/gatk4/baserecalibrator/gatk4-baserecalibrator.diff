@@ -1,0 +1,18 @@
+Changes in component 'nf-core/gatk4/baserecalibrator'
+'modules/nf-core/gatk4/baserecalibrator/meta.yml' is unchanged
+'modules/nf-core/gatk4/baserecalibrator/environment.yml' is unchanged
+Changes in 'gatk4/baserecalibrator/main.nf':
+--- modules/nf-core/gatk4/baserecalibrator/main.nf
++++ modules/nf-core/gatk4/baserecalibrator/main.nf
+@@ -17,6 +17,7 @@
+ 
+     output:
+     tuple val(meta), path("*.table"), emit: table
++    tuple val(meta), val("${task.process}"), val('gatk4'), path("*.table"), topic: multiqc_files
+     tuple val("${task.process}"), val('gatk4'), eval("gatk --version | sed -n '/GATK.*v/s/.*v//p'"), topic: versions, emit: versions_gatk4
+ 
+     when:
+
+'modules/nf-core/gatk4/baserecalibrator/tests/main.nf.test' is unchanged
+'modules/nf-core/gatk4/baserecalibrator/tests/main.nf.test.snap' is unchanged
+************************************************************

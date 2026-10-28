@@ -1,0 +1,91 @@
+nextflow_workflow {
+
+    name "Test Subworkflow PREPARE_ALIGNMENT"
+    script "../main.nf"
+    workflow "PREPARE_ALIGNMENT"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "subworkflows/prepare_alignment"
+    tag "samtools/convert"
+    tag "samtools/index"
+
+    test("[bam, bai]") {
+        when {
+
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.empty()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
+                    }
+            ).match()
+        }
+    }
+
+    test("[cram, []]") {
+        when {
+
+            workflow {
+                """
+                input[0] = channel.empty()
+                input[1] = channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    []
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
+                    }
+            ).match()
+        }
+    }
+
+    test("[bam, []], [cram, crai]") {
+        when {
+
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.rna.paired_end.sorted.bam', checkIfExists: true),
+                    []
+                ])
+                input[1] = channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/cram/test.rna.paired_end.sorted.cram.crai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                sanitizeOutput(workflow.out).collectEntries { key, val ->
+                        return [key, val.collect { [file(it[1].toString()).name, file(it[2].toString()).name] }]
+                    }
+            ).match()
+        }
+    }
+}

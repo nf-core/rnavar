@@ -1,0 +1,29 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    def test_scenario = [
+        [
+            name: "-profile test --input fastq_multiple.csv",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/fastq_multiple.csv",
+            ],
+        ],
+        [
+            name: "-profile test --input fastq_multiple_pair_end.csv",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/fastq_multiple_pair_end.csv",
+            ],
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}

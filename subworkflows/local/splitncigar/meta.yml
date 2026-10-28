@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: splitncigar
+description: Perform GATK4_SPLITNCIGARREADS without or without intervals merge and index the resulting BAM files
+keywords:
+  - bam
+  - gatk4
+  - splitncigarreads
+components:
+  - gatk4/splitncigarreads
+  - samtools/merge
+  - samtools/index
+input:
+  - bam:
+      description: |
+        bam to splitncigarreads (mandatory)
+        Structure: [ val(meta), list[path(bam)], list[path(bai)] ]
+  - fasta:
+      description: |
+        Reference genome fasta file (mandatory)
+        Structure: [ val(meta2), path(fasta) ]
+  - fai:
+      description: |
+        Reference genome fasta index file (mandatory)
+        Structure: [ val(meta3), path(fai) ]
+  - dict:
+      description: |
+        Reference genome fasta dict file (mandatory)
+        Structure: [ val(meta4), path(dict) ]
+  - intervals:
+      description: |
+        interval files
+        Structure: [ list[path(interval_list)] ]
+output:
+  - bam_bai:
+      description: |
+        Compressed bam + bam index
+        Structure: [ val(meta), path(bam), path(bai) ]
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"

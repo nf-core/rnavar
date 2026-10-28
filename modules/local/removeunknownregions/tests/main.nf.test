@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process REMOVEUNKNOWNREGIONS"
+    script "../main.nf"
+    process "REMOVEUNKNOWNREGIONS"
+
+    test("bed+dict") {
+
+        when {
+            process {
+                """
+                input[0] = channel.value([
+                    [id:'genome'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(sanitizeOutput(process.out)).match()
+        }
+    }
+
+    test("bed+dict - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = channel.value([
+                    [id:'genome'],
+                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.bed', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + '/genomics/homo_sapiens/genome/genome.dict', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(sanitizeOutput(process.out)).match()
+        }
+    }
+}
