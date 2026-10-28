@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency  | Old version | New version |
 | ----------- | ----------- | ----------- |
 | ensembl-vep | 115.2       | 116.1       |
+| fastqc      | 0.12.1      | 0.13.0      |
 | htslib      | 1.23.1      | 1.24        |
 | multiqc     | 1.34        | 1.35        |
 | riker       |             | 0.4.0       |

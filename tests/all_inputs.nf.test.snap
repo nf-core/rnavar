@@ -7,7 +7,7 @@
                     "cat": "9.5"
                 },
                 "FASTQC": {
-                    "fastqc": "0.12.1"
+                    "fastqc": "0.13.0"
                 },
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -274,10 +274,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-08-13T17:59:34.932924182",
+        "timestamp": "2026-10-28T17:08:43.950656689",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.4"
+            "nextflow": "26.10.0"
         }
     }
 }
