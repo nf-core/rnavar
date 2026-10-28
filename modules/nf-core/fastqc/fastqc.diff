@@ -1,0 +1,23 @@
+Changes in component 'nf-core/fastqc'
+'modules/nf-core/fastqc/meta.yml' is unchanged
+'modules/nf-core/fastqc/environment.yml' is unchanged
+Changes in 'fastqc/main.nf':
+--- modules/nf-core/fastqc/main.nf
++++ modules/nf-core/fastqc/main.nf
+@@ -11,8 +11,8 @@
+     tuple val(meta), path(reads, stageAs: '?/*')
+ 
+     output:
+-    tuple val(meta), path("*.html"), emit: html
+-    tuple val(meta), path("*.zip"), emit: zip
++    tuple val(meta), val("${task.process}"), val('fastqc'), path("*.html"), emit: html, topic: multiqc_files
++    tuple val(meta), val("${task.process}"), val('fastqc'), path("*.zip"), emit: zip, topic: multiqc_files
+     tuple val("${task.process}"), val('fastqc'), eval('fastqc --version | sed "/FastQC v/!d; s/.*v//"'), emit: versions_fastqc, topic: versions
+ 
+     when:
+
+'modules/nf-core/fastqc/.conda-lock/linux_amd64-bd-5cb1a2fa2f18c7c2_1.txt' is unchanged
+'modules/nf-core/fastqc/.conda-lock/linux_arm64-bd-e455e32f745abe68_1.txt' is unchanged
+'modules/nf-core/fastqc/tests/main.nf.test' is unchanged
+'modules/nf-core/fastqc/tests/main.nf.test.snap' is unchanged
+************************************************************

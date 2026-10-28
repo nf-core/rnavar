@@ -1,0 +1,24 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    def test_scenario = [
+        [
+            name: "-profile test --input all.csv",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/all.csv",
+            ],
+            ignoreFiles: '**/*.recal.bam',
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}

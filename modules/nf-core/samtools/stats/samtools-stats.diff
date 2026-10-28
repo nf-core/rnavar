@@ -1,0 +1,19 @@
+Changes in component 'nf-core/samtools/stats'
+'modules/nf-core/samtools/stats/meta.yml' is unchanged
+'modules/nf-core/samtools/stats/environment.yml' is unchanged
+Changes in 'samtools/stats/main.nf':
+--- modules/nf-core/samtools/stats/main.nf
++++ modules/nf-core/samtools/stats/main.nf
+@@ -12,7 +12,7 @@
+     tuple val(meta2), path(fasta), path(fai)
+ 
+     output:
+-    tuple val(meta), path("*.stats"), emit: stats
++    tuple val(meta), val("${task.process}"), val('samtools'), path("*.stats"), topic: multiqc_files, emit: stats
+     tuple val("${task.process}"), val('samtools'), eval('samtools version | sed "1!d;s/.* //"'), emit: versions_samtools, topic: versions
+ 
+     when:
+
+'modules/nf-core/samtools/stats/tests/main.nf.test' is unchanged
+'modules/nf-core/samtools/stats/tests/main.nf.test.snap' is unchanged
+************************************************************
