@@ -77,7 +77,7 @@ nextflow_workflow {
             assert snapshot(
                 sanitizeOutput(workflow.out).collectEntries { key, val ->
                         if (key == "star_index") {
-                            return [key, val.collect { [path(it[1]).list().collect { file(it.toString()).name }] }]
+                            return [key, val.collect { [it[1].collect { file(it.toString()).name }] }]
                         }
                         else if (key.startsWith("dbsnp") || key.startsWith("known_")) {
                             def files = val.flatten().findAll { it instanceof CharSequence }

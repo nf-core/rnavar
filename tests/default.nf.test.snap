@@ -7,7 +7,7 @@
                     "cat": "9.5"
                 },
                 "FASTQC": {
-                    "fastqc": "0.12.1"
+                    "fastqc": "0.13.0"
                 },
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -229,13 +229,13 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-08-13T16:44:55.21048164",
+        "timestamp": "2026-10-28T17:12:17.479442035",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.4"
+            "nextflow": "26.10.0"
         }
     },
-    "-profile test --dbsnp_tbi false --known_indels false --known_indels_tbi false": {
+    "-profile test --dbsnp_tbi null --known_indels null --known_indels_tbi null": {
         "content": [
             44,
             {
@@ -247,7 +247,7 @@
                     "cat": "9.5"
                 },
                 "FASTQC": {
-                    "fastqc": "0.12.1"
+                    "fastqc": "0.13.0"
                 },
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -469,13 +469,13 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-08-13T16:49:09.707005936",
+        "timestamp": "2026-10-28T17:38:08.204357389",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.4"
+            "nextflow": "26.10.0"
         }
     },
-    "-profile test --dbsnp false --dbsnp_tbi false --known_indels_tbi false": {
+    "-profile test --dbsnp null --dbsnp_tbi null --known_indels_tbi null": {
         "content": [
             44,
             {
@@ -487,7 +487,7 @@
                     "cat": "9.5"
                 },
                 "FASTQC": {
-                    "fastqc": "0.12.1"
+                    "fastqc": "0.13.0"
                 },
                 "GATK4_APPLYBQSR": {
                     "gatk4": "4.6.2.0"
@@ -709,10 +709,10 @@
             ],
             "No warnings"
         ],
-        "timestamp": "2026-08-13T16:47:05.06417573",
+        "timestamp": "2026-10-28T17:36:25.519606004",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.4"
+            "nextflow": "26.10.0"
         }
     }
 }

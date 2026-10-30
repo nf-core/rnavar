@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#318](https://github.com/nf-core/rnavar/pull/318) - Update all modules
 - [#320](https://github.com/nf-core/rnavar/pull/320) - Update all modules
 - [#323](https://github.com/nf-core/rnavar/pull/323) - Template update for nf-core/tools v4.1.0
+- [#331](https://github.com/nf-core/rnavar/pull/331) - Template update for nf-core/tools v4.2.1
 
 ### Fixed
 
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Dependency  | Old version | New version |
 | ----------- | ----------- | ----------- |
 | ensembl-vep | 115.2       | 116.1       |
+| fastqc      | 0.12.1      | 0.13.0      |
 | htslib      | 1.23.1      | 1.24        |
 | multiqc     | 1.34        | 1.35        |
 | riker       |             | 0.4.0       |

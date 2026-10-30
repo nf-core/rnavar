@@ -4,7 +4,7 @@ Changes in component 'nf-core/fastqc'
 Changes in 'fastqc/main.nf':
 --- modules/nf-core/fastqc/main.nf
 +++ modules/nf-core/fastqc/main.nf
-@@ -11,8 +11,8 @@
+@@ -14,8 +14,8 @@
      tuple val(meta), path(reads, stageAs: '?/*')
  
      output:
@@ -16,8 +16,8 @@ Changes in 'fastqc/main.nf':
  
      when:
 
-'modules/nf-core/fastqc/.conda-lock/linux_amd64-bd-5cb1a2fa2f18c7c2_1.txt' is unchanged
-'modules/nf-core/fastqc/.conda-lock/linux_arm64-bd-e455e32f745abe68_1.txt' is unchanged
+'modules/nf-core/fastqc/.conda-lock/linux_amd64-bd-b342db7b694c9af4_1.txt' is unchanged
+'modules/nf-core/fastqc/.conda-lock/linux_arm64-bd-7c8a53b986d9a000_1.txt' is unchanged
 'modules/nf-core/fastqc/tests/main.nf.test' is unchanged
 'modules/nf-core/fastqc/tests/main.nf.test.snap' is unchanged
 ************************************************************
