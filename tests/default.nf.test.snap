@@ -221,7 +221,7 @@
                 "GM12878.haplotypecaller.filtered.vcf.gz:variantsMD5,d7724ad12ffb8b5d3a98763e52e20c22",
                 "GM12878.haplotypecaller.vcf.gz:variantsMD5,cc54a8cbfe0d47239cf12298d5da3b48"
             ],
-            "No WARN lines"
+            "No warnings"
         ],
         "timestamp": "2026-11-02T15:46:06.463037247",
         "meta": {
@@ -455,7 +455,7 @@
                 "GM12878.haplotypecaller.filtered.vcf.gz:variantsMD5,d7724ad12ffb8b5d3a98763e52e20c22",
                 "GM12878.haplotypecaller.vcf.gz:variantsMD5,cc54a8cbfe0d47239cf12298d5da3b48"
             ],
-            "No WARN lines"
+            "No warnings"
         ],
         "timestamp": "2026-11-02T15:49:16.541355116",
         "meta": {
@@ -689,7 +689,7 @@
                 "GM12878.haplotypecaller.filtered.vcf.gz:variantsMD5,e07e47b682fcfc37b72c7979ba927bb4",
                 "GM12878.haplotypecaller.vcf.gz:variantsMD5,9e7855f2382cb9fa20cda4e16fa603b3"
             ],
-            "No WARN lines"
+            "No warnings"
         ],
         "timestamp": "2026-11-02T15:47:39.082677667",
         "meta": {
