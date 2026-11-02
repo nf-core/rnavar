@@ -4,23 +4,17 @@ nextflow_pipeline {
 
     name "Test pipeline"
     script "../main.nf"
-    tag "pipeline"
-    tag "pipeline_rnavar"
 
     def test_scenario = [
         [
-            name: "-profile test --extract_umi",
             params: [
                 extract_umi: true,
                 input: "${projectDir}/tests/csv/1.0/fastq_single_end.csv",
                 umitools_bc_pattern: "NNNXC",
             ],
-            ignoreFiles: '**/*.recal.bam',
+            readsStatsPatterns: ['**/*.recal.bam'],
         ],
     ]
 
-    // Generate tests for each scenario
-    test_scenario.each { scenario ->
-        test(scenario.name, UTILS.getTest(scenario))
-    }
+    pipelineTests(delegate, test_scenario)
 }

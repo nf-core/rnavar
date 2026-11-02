@@ -1,0 +1,9 @@
+# Pipeline-level test definition for nf-core/rnavar, read by the nft-pipelines-utils nf-test plugin
+pipeline: rnavar
+profile: test
+
+snapshot:
+  ignoreFile: tests/.nftignore
+  readsMD5Patterns: ["**/*.{bam,cram}"]
+  variantsMD5Patterns: ["**/*.vcf{,.gz}"]
+  referenceFasta: https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta

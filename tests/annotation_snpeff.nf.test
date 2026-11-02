@@ -4,26 +4,20 @@ nextflow_pipeline {
 
     name "Test pipeline"
     script "../main.nf"
-    tag "pipeline"
-    tag "pipeline_rnavar"
 
     def test_scenario = [
         [
-            name: "-profile test --tools snpeff --snpeff_db na",
             params: [
                 input: "${projectDir}/tests/csv/1.0/vcf.csv",
                 snpeff_db: "na",
                 tools: 'snpeff',
             ],
             failure: true,
-            snapshot: 'stdout',
-            snapshot_ignore: 'Downloading plugin',
-            snapshot_include: 'annotation-cache',
+            snapshotStd: ['stdout'],
+            logIgnore: ['Downloading plugin'],
+            stdInclude: ['annotation-cache'],
         ],
     ]
 
-    // Generate tests for each scenario
-    test_scenario.each { scenario ->
-        test(scenario.name, UTILS.getTest(scenario))
-    }
+    pipelineTests(delegate, test_scenario)
 }
