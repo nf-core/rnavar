@@ -200,6 +200,8 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
+                "GM12878.md.bam:readsMD5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:readsMD5,1078c5aa688c49bc1b15aea0801cfe44",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,c1e12cf18f996c0729fa37b0ca17ca24",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
@@ -215,21 +217,13 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,2c00bf09584c6eef7d052c8ed14f3948",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
+                "GM12878.haplotypecaller.filtered.vcf.gz:variantsMD5,d7724ad12ffb8b5d3a98763e52e20c22",
+                "GM12878.haplotypecaller.vcf.gz:variantsMD5,cc54a8cbfe0d47239cf12298d5da3b48"
             ],
-            [
-                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44"
-            ],
-            "No unstable recal BAM files",
-            "No CRAM files",
-            [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
-                "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
-            ],
-            "No warnings"
+            "No WARN lines"
         ],
-        "timestamp": "2026-10-28T17:12:17.479442035",
+        "timestamp": "2026-11-02T15:46:06.463037247",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.10.0"
@@ -440,6 +434,8 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
+                "GM12878.md.bam:readsMD5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:readsMD5,1078c5aa688c49bc1b15aea0801cfe44",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,dfacb0327c15b3d267c21f197034dc3b",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,c1e12cf18f996c0729fa37b0ca17ca24",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
@@ -455,21 +451,13 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,2c00bf09584c6eef7d052c8ed14f3948",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
+                "GM12878.haplotypecaller.filtered.vcf.gz:variantsMD5,d7724ad12ffb8b5d3a98763e52e20c22",
+                "GM12878.haplotypecaller.vcf.gz:variantsMD5,cc54a8cbfe0d47239cf12298d5da3b48"
             ],
-            [
-                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44"
-            ],
-            "No unstable recal BAM files",
-            "No CRAM files",
-            [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,d7724ad12ffb8b5d3a98763e52e20c22",
-                "GM12878.haplotypecaller.vcf.gz:md5,cc54a8cbfe0d47239cf12298d5da3b48"
-            ],
-            "No warnings"
+            "No WARN lines"
         ],
-        "timestamp": "2026-10-28T17:38:08.204357389",
+        "timestamp": "2026-11-02T15:49:16.541355116",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.10.0"
@@ -680,6 +668,8 @@
                 "variant_calling/GM12878/GM12878.haplotypecaller.vcf.gz.tbi"
             ],
             [
+                "GM12878.md.bam:readsMD5,3a9888b45f85aa1d7515e0aad8215923",
+                "GM12878.recal.bam:readsMD5,1078c5aa688c49bc1b15aea0801cfe44",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Count.txt:md5,489af228231ffe43ecbc5877d9bb5b6a",
                 "gatk-base-recalibrator-quality-scores-plot_Pre-recalibration_Percent.txt:md5,ee7391c5c8bc1ade5190367c818a7108",
                 "multiqc_citations.txt:md5,cf0010a27fe09ed8eabf89422df32550",
@@ -695,21 +685,13 @@
                 "samtools-idxstats-mapped-reads-plot_Raw_Counts.txt:md5,2c00bf09584c6eef7d052c8ed14f3948",
                 "star_alignment_plot.txt:md5,112fac650331136449a83b6764ec8f1d",
                 "star_summary_table.txt:md5,028b492d7fb5104dd0de21be819402aa",
-                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d"
+                "GM12878.SJ.out.tab:md5,414fe118e884fddedd742cdac913803d",
+                "GM12878.haplotypecaller.filtered.vcf.gz:variantsMD5,e07e47b682fcfc37b72c7979ba927bb4",
+                "GM12878.haplotypecaller.vcf.gz:variantsMD5,9e7855f2382cb9fa20cda4e16fa603b3"
             ],
-            [
-                "GM12878.md.bam:md5,3a9888b45f85aa1d7515e0aad8215923",
-                "GM12878.recal.bam:md5,1078c5aa688c49bc1b15aea0801cfe44"
-            ],
-            "No unstable recal BAM files",
-            "No CRAM files",
-            [
-                "GM12878.haplotypecaller.filtered.vcf.gz:md5,e07e47b682fcfc37b72c7979ba927bb4",
-                "GM12878.haplotypecaller.vcf.gz:md5,9e7855f2382cb9fa20cda4e16fa603b3"
-            ],
-            "No warnings"
+            "No WARN lines"
         ],
-        "timestamp": "2026-10-28T17:36:25.519606004",
+        "timestamp": "2026-11-02T15:47:39.082677667",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.10.0"
