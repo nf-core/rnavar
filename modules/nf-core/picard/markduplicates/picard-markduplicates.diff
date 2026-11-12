@@ -1,0 +1,20 @@
+Changes in component 'nf-core/picard/markduplicates'
+'modules/nf-core/picard/markduplicates/meta.yml' is unchanged
+'modules/nf-core/picard/markduplicates/environment.yml' is unchanged
+Changes in 'picard/markduplicates/main.nf':
+--- modules/nf-core/picard/markduplicates/main.nf
++++ modules/nf-core/picard/markduplicates/main.nf
+@@ -15,7 +15,7 @@
+     tuple val(meta), path("*.bam"), emit: bam, optional: true
+     tuple val(meta), path("*.bai"), emit: bai, optional: true
+     tuple val(meta), path("*.cram"), emit: cram, optional: true
+-    tuple val(meta), path("*.metrics.txt"), emit: metrics
++    tuple val(meta), val("${task.process}"), val('picard'), path("*.metrics.txt"), topic: multiqc_files, emit: metrics
+     tuple val("${task.process}"), val('picard'), eval("picard MarkDuplicates --version 2>&1 | sed -n 's/.*Version://p'"), topic: versions, emit: versions_picard
+ 
+     when:
+
+'modules/nf-core/picard/markduplicates/tests/main.nf.test' is unchanged
+'modules/nf-core/picard/markduplicates/tests/nextflow.config' is unchanged
+'modules/nf-core/picard/markduplicates/tests/main.nf.test.snap' is unchanged
+************************************************************

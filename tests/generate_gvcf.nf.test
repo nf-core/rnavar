@@ -1,0 +1,21 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    def test_scenario = [
+        [
+            name: "-profile test --generate_gvcf",
+            params: [
+                generate_gvcf   : true,
+            ],
+        ],
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}

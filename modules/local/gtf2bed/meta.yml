@@ -1,0 +1,66 @@
+name: gtf2bed
+description: convert GTF to bed
+keywords:
+  - gtf
+  - bed
+  - conversion
+tools:
+  - gtf2bed:
+      description: |
+        Convert a GTF to bed via a custom R script
+      homepage: https://nf-co.re/modules/gtf2bed
+      documentation: https://nf-co.re/modules/gtf2bed
+      licence:
+        - "MIT"
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - gtf:
+        type: file
+        description: gtf input file
+        ontologies: []
+  - feature_type:
+      type: string
+      description: |
+        type of feature
+output:
+  bed:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'sample1', single_end:false ]
+      - "*.bed":
+          type: file
+          description: output bed file
+          pattern: ".bed"
+          ontologies: []
+  versions_rscript:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - Rscript:
+          type: string
+          description: The name of the tool
+      - Rscript --version 2>&1 | sed 's/R scripting front-end version //':
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - Rscript:
+          type: string
+          description: The name of the tool
+      - Rscript --version 2>&1 | sed 's/R scripting front-end version //':
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@maxulysse"
+maintainers:
+  - "@maxulysse"

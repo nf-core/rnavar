@@ -1,0 +1,32 @@
+def projectDir = new File('.').absolutePath
+
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+    tag "pipeline_rnavar"
+
+    def test_scenario = [
+        [
+            name: "-profile test --tools bcfann",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                tools: "bcfann",
+            ],
+        ],
+            [
+            name: "-profile test --tools bcfann --bcftools_columns",
+            params: [
+                input: "${projectDir}/tests/csv/1.0/vcf.csv",
+                bcftools_columns: "${projectDir}/tests/config/bcfann_test_columns.txt",
+                tools: "bcfann",
+            ],
+        ]
+    ]
+
+    // Generate tests for each scenario
+    test_scenario.each { scenario ->
+        test(scenario.name, UTILS.getTest(scenario))
+    }
+}
