@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#320](https://github.com/nf-core/rnavar/pull/320) - Update all modules
 - [#323](https://github.com/nf-core/rnavar/pull/323) - Template update for nf-core/tools v4.1.0
 - [#331](https://github.com/nf-core/rnavar/pull/331) - Template update for nf-core/tools v4.2.1
+- [#336](https://github.com/nf-core/rnavar/pull/336) - Template update for nf-core/tools v4.2.2
 
 ### Fixed
 
